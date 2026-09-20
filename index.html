@@ -312,7 +312,8 @@ async function submitSuggestion(e){
 }
 async function loadContributions(){
   const selected=document.getElementById("fundraiserSelect")?.value||"";
-  const filter=selected?"&fundraiser_id=eq."+encodeURIComponent(selected):"";\n  const r=await fetch(SUPABASE_URL+"/rest/v1/contributions?select=id,name,amount,message,created_at,fundraiser_id&order=created_at.desc"+filter,{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
+  const filter=selected?"&fundraiser_id=eq."+encodeURIComponent(selected):"";
+  const r=await fetch(SUPABASE_URL+"/rest/v1/contributions?select=id,name,amount,message,created_at,fundraiser_id&order=created_at.desc"+filter,{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
   if(!r.ok)return;
   const rows=await r.json();
   const total=rows.reduce((s,x)=>s+Number(x.amount||0),0);
