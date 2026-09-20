@@ -31,3 +31,24 @@ on public.reservations
 for delete
 to anon
 using (true);
+
+-- Fonction serveur pour déréserver un cadeau en vérifiant le prénom
+create or replace function public.cancel_reservation(p_gift_id text, p_name text)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  deleted boolean;
+begin
+  delete from public.reservations
+  where gift_id = p_gift_id
+    and lower(trim(name)) = lower(trim(p_name))
+  returning true into deleted;
+
+  return coalesce(deleted, false);
+end;
+$$;
+
+grant execute on function public.cancel_reservation(text, text) to anon;
