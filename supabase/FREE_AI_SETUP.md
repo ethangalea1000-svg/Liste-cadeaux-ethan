@@ -1,24 +1,25 @@
-# Recherche IA gratuite des cadeaux
+# Recherche Web + IA gratuite
 
-Le site utilise une combinaison **Tavily + OpenRouter** côté serveur :
+La recherche intégrée du site utilise :
 
-- **Tavily** : recherche Web en temps réel.
-- **OpenRouter `openrouter/free`** : analyse et synthèse avec des modèles gratuits.
+- **SearXNG** pour rechercher gratuitement sur le Web et les images.
+- **Hugging Face Inference Providers** pour analyser et comparer les résultats.
 
-Tavily propose actuellement 1 000 crédits API gratuits par mois sans carte bancaire. citeturn295926search11
+SearXNG fournit une API HTTP de recherche et peut retourner des résultats JSON ; la liste publique de SearXNG recense les instances disponibles. citeturn885927search0turn885927search5
 
-OpenRouter propose actuellement des modèles gratuits et le routeur `openrouter/free` ; son offre gratuite indique 50 requêtes par jour. citeturn295926search0turn295926search1turn295926search2
+Hugging Face fournit une API compatible OpenAI pour les Inference Providers et chaque compte gratuit dispose actuellement de crédits mensuels limités ; la limite peut évoluer. citeturn862079search0turn647418search0
 
-## Secrets Supabase
+## Secret Supabase
 
-Dans Supabase → Edge Functions → Secrets, ajoute :
+Le seul secret nécessaire dans la configuration actuelle est :
 
 ```text
-TAVILY_API_KEY=ta_cle_tavily
-OPENROUTER_API_KEY=ta_cle_openrouter
+HF_TOKEN=ton_token_hugging_face
 ```
 
-Ces clés restent côté serveur.
+Il doit être enregistré dans **Supabase → Edge Functions → Secrets**.
+
+La fonction ne met jamais le token dans `index.html`.
 
 ## Fonction
 
@@ -26,7 +27,7 @@ Ces clés restent côté serveur.
 supabase/functions/gift-search/index.ts
 ```
 
-Endpoint utilisé par le site :
+Endpoint :
 
 ```text
 https://ckasbsnzxgwfwfnctioe.supabase.co/functions/v1/gift-search
@@ -34,24 +35,26 @@ https://ckasbsnzxgwfwfnctioe.supabase.co/functions/v1/gift-search
 
 ## Fonctionnement
 
-Quand on clique sur **Comparer les prix** :
+Quand tu cliques sur **🔎 Comparer les prix et vérifier les sites disponibles** :
 
-1. Tavily recherche plusieurs requêtes sur le Web.
-2. Les résultats sont regroupés.
-3. Le modèle gratuit d’OpenRouter analyse les résultats.
-4. Le site affiche directement dans la fiche :
+1. La fonction cherche le cadeau sur un moteur SearXNG public.
+2. Elle effectue une recherche générale en français et une recherche d'images.
+3. Les résultats Web sont envoyés à Hugging Face.
+4. Le modèle analyse les résultats sans inventer les prix ou les disponibilités.
+5. La carte affiche directement :
    - produit identifié ;
    - résumé ;
-   - offres ;
-   - prix ;
-   - disponibilité quand elle est vérifiable ;
+   - offres trouvées ;
+   - prix visibles ;
+   - disponibilité lorsque le résultat la permet ;
    - liens ;
-   - sources.
+   - sources ;
+   - images.
 
-Il n'y a donc plus de nouvel onglet vers un service d'IA.
+Il n'y a pas de nouvel onglet vers une IA.
 
-### Limites du gratuit
+## À savoir
 
-Les quotas gratuits sont limités. OpenRouter indique actuellement 50 requêtes par jour sur son offre Free, tandis que Tavily fournit 1 000 crédits API gratuits par mois. citeturn295926search1turn295926search11
+Les instances SearXNG publiques peuvent être temporairement indisponibles ou limiter les requêtes. La fonction possède une seconde instance publique de secours.
 
-Si le quota est atteint, le site affiche une erreur au lieu de faire payer automatiquement une requête.
+Le crédit Hugging Face gratuit n’est pas illimité. La documentation actuelle indique **0,10 $ de crédits mensuels pour les comptes Free**, avec possibilité d'acheter des crédits supplémentaires. Le site n'effectue aucun achat automatiquement. citeturn647418search0
