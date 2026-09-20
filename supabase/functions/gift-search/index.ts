@@ -56,6 +56,17 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "Méthode non autorisée." }, 405);
 
+  const providedKey = req.headers.get("apikey") || "";
+  const publishableKeysRaw = Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") || "";
+  let publishableOk = false;
+  try {
+    const keys = JSON.parse(publishableKeysRaw);
+    publishableOk = Object.values(keys).includes(providedKey);
+  } catch {
+    publishableOk = false;
+  }
+  if (!publishableOk) return json({ error: "Accès refusé." }, 401);
+
   const geminiKey = Deno.env.get("GEMINI_API_KEY");
   if (!geminiKey) {
     return json({
