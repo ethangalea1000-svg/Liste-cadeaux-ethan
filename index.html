@@ -32,16 +32,20 @@ const gifts=[
 {id:"rpi5",cat:"Informatique",title:"Raspberry Pi 5 — kit complet",price:"≈129–200 €",desc:"Configuration visée : 8 Go, SSD NVMe, alimentation 27 W et refroidissement actif."},
 {id:"arduino",cat:"Électronique",title:"Arduino Starter Kit",price:"≈90–100 €",desc:"Kit de démarrage pour apprendre l’électronique et la programmation embarquée."},
 {id:"hackropole",cat:"Cybersécurité",title:"Hackropole",price:"Gratuit",desc:"Plateforme française d’exercices de cybersécurité et de sensibilisation."}];
-let reservations={};
+let reservations={};let loadSeq=0;
 const grid=document.getElementById("grid"),search=document.getElementById("search"),category=document.getElementById("category"),toast=document.getElementById("toast");
 [...new Set(gifts.map(g=>g.cat))].sort().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;category.appendChild(o)});
 function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
 function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 async function loadReservations(){
+ const seq=++loadSeq;
  if(!SUPABASE_READY){reservations={};render();showToast("Supabase n’est pas encore configuré.");return}
- const r=await fetch(SUPABASE_URL+"/rest/v1/reservations?select=gift_id,name",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
- if(!r.ok){const detail=await r.text();console.error("Supabase GET",r.status,detail);showToast("Supabase : erreur "+r.status);throw new Error("GET "+r.status+" "+detail)}
- const rows=await r.json();reservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));render();
+ const r=await fetch(SUPABASE_URL+"/rest/v1/reservations?select=gift_id,name&_t="+Date.now(),{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
+ if(!r.ok){const detail=await r.text();console.error("Supabase GET",r.status,detail);showToast("Supabase : erreur "+r.status);return}
+ const rows=await r.json();
+ if(seq!==loadSeq)return;
+ reservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));
+ render();
 }
 async function unreserveGift(id,currentName){
  if(!SUPABASE_READY){showToast("Configure Supabase avant de déréserver.");return}
@@ -53,8 +57,11 @@ async function unreserveGift(id,currentName){
    method:"DELETE",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Prefer:"return=minimal"}
  });
  if(!r.ok){const detail=await r.text();console.error("Supabase DELETE",r.status,detail);showToast("Supabase : erreur "+r.status);return}
+ delete reservations[id];
+ loadSeq++;
+ render();
  showToast("Cadeau déréservé.");
- await loadReservations();
+ setTimeout(loadReservations,1200);
 }
 async function reserveGift(id){
  if(!SUPABASE_READY){showToast("Configure Supabase avant de réserver.");return}
