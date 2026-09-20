@@ -40,7 +40,7 @@ function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;","
 async function loadReservations(){
  if(!SUPABASE_READY){reservations={};render();showToast("Supabase n’est pas encore configuré.");return}
  const r=await fetch(SUPABASE_URL+"/rest/v1/reservations?select=gift_id,name",{headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY}});
- if(!r.ok)throw new Error("load");
+ if(!r.ok){const detail=await r.text();console.error("Supabase GET",r.status,detail);throw new Error("GET "+r.status+" "+detail)}
  const rows=await r.json();reservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));render();
 }
 async function reserveGift(id){
@@ -48,7 +48,7 @@ async function reserveGift(id){
  const name=prompt("Prénom de la personne qui réserve ce cadeau :")?.trim();if(!name)return;
  const r=await fetch(SUPABASE_URL+"/rest/v1/reservations",{method:"POST",headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({gift_id:id,name})});
  if(r.status===409){showToast("Ce cadeau vient d’être réservé.");}
- else if(!r.ok){showToast("Erreur lors de la réservation.");}
+ else if(!r.ok){const detail=await r.text();console.error("Supabase INSERT",r.status,detail);showToast("Erreur "+r.status+" — vérifie les droits Supabase.");return}
  else showToast("Réservation enregistrée pour tout le monde.");
  await loadReservations();
 }
