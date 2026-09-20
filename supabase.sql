@@ -328,3 +328,38 @@ grant usage, select on sequence public.community_reactions_id_seq to anon;
 -- MessageBox privée: aucune lecture publique
 revoke select on table public.messages from anon;
 grant insert on table public.messages to anon;
+
+
+-- Suppression des messages de la communauté avec vérification du prénom côté site
+grant delete on table public.community_posts to anon;
+
+drop policy if exists "Public can delete community posts" on public.community_posts;
+create policy "Public can delete community posts"
+on public.community_posts
+for delete
+to anon
+using (true);
+
+
+-- Réactions : chaque nouvelle réaction enregistre le prénom
+alter table public.community_reactions
+add column if not exists name text not null default 'Ancien';
+
+drop policy if exists "Public can react" on public.community_reactions;
+create policy "Public can react"
+on public.community_reactions
+for insert
+to anon
+with check (
+  char_length(trim(name)) between 1 and 50
+  and emoji in ('❤️','👍','😂','🎉','😮')
+);
+
+drop policy if exists "Public can delete reactions" on public.community_reactions;
+create policy "Public can delete reactions"
+on public.community_reactions
+for delete
+to anon
+using (true);
+
+grant delete on table public.community_reactions to anon;
