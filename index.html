@@ -53,12 +53,13 @@ async function unreserveGift(id,currentName){
  if(!name)return;
  if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
  if(!confirm("Déréserver ce cadeau ?"))return;
- const r=await fetch(SUPABASE_URL+"/rest/v1/reservations?gift_id=eq."+encodeURIComponent(id),{
-   method:"DELETE",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json","Prefer":"return=representation"}
+ const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/cancel_reservation",{
+   method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
+   body:JSON.stringify({p_gift_id:id,p_name:name})
  });
- if(!r.ok){const detail=await r.text();console.error("Supabase DELETE",r.status,detail);showToast("Déréservation impossible ("+r.status+").");return}
- const deletedRows=await r.json().catch(()=>[]);
- if(!Array.isArray(deletedRows)||deletedRows.length===0){showToast("Le cadeau n’a pas été trouvé dans la base.");return}
+ if(!r.ok){const detail=await r.text();console.error("Supabase RPC DELETE",r.status,detail);showToast("Déréservation impossible ("+r.status+").");return}
+ const result=await r.json().catch(()=>false);
+ if(result!==true){showToast("Le prénom ne correspond pas à la réservation.");return}
  delete reservations[id];
  loadSeq++;
  render();
