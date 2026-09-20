@@ -137,12 +137,7 @@ async function deleteIdea(id,name){
   if(!r.ok){console.error("delete idea",r.status,await r.text());showToast("Impossible de supprimer l’idée.");return}
   showToast("Idée supprimée.");loadIdeas();
 }
-async function loadMessages(){
-  const r=await fetch(SUPABASE_URL+"/rest/v1/messages?select=id,name,message,created_at&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
-  if(!r.ok)return;
-  const rows=await r.json(),list=document.getElementById("messagesList");list.innerHTML="";
-  rows.slice(0,10).forEach(x=>{const li=document.createElement("li");li.innerHTML="<div><strong>"+escapeHtml(x.name)+"</strong><br><small>"+escapeHtml(x.message)+"</small></div><div class=\"item-actions\"><button class=\"delete-btn\">Supprimer</button></div>";li.querySelector("button").onclick=()=>deleteMessage(x.id,x.name);list.appendChild(li)});
-}
+async function loadMessages(){ return; }
 async function submitMessage(e){
   e.preventDefault();
   const body={name:document.getElementById("messageName").value.trim(),message:document.getElementById("messageText").value.trim()};
@@ -151,12 +146,7 @@ async function submitMessage(e){
   if(!r.ok){console.error("message",r.status,await r.text());showToast("Impossible d’envoyer le message.");return}
   document.getElementById("messageForm").reset();showToast("Message envoyé.");loadMessages();
 }
-async function deleteMessage(id,name){
-  if(!confirm("Supprimer ce message ?"))return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_message",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
-  if(!r.ok){console.error("delete message",r.status,await r.text());showToast("Impossible de supprimer le message.");return}
-  showToast("Message supprimé.");loadMessages();
-}
+async function deleteMessage(){ return; }
 async function loadSuggestions(){
   const r=await fetch(SUPABASE_URL+"/rest/v1/gift_suggestions?select=id,name,gift_name,link,message,created_at&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
   if(!r.ok)return;
