@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">enfantIAges — PlayBac Presse</title>
+  <desc id="desc">Visuel de référence pour le projet enfantIAges de PlayBac Presse.</desc>
+  <rect width="1200" height="750" rx="36" fill="#e63b93"/>
+  <circle cx="1030" cy="120" r="170" fill="#f8a6d0" opacity=".35"/>
+  <circle cx="145" cy="650" r="220" fill="#ffffff" opacity=".12"/>
+  <text x="90" y="120" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" fill="#fff">PLAYBAC PRESSE</text>
+  <text x="90" y="360" font-family="Arial, Helvetica, sans-serif" font-size="110" font-weight="900" fill="#fff">enfantIAges</text>
+  <text x="94" y="430" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600" fill="#fff">Les enfants aussi ont réponse à vos questions.</text>
+  <text x="94" y="510" font-family="Arial, Helvetica, sans-serif" font-size="25" fill="#fff">Visuel de référence · campagne PlayBac Presse</text>
+</svg>
