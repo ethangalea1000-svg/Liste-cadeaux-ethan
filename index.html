@@ -223,7 +223,7 @@ async function submitFundraiser(e){
   document.getElementById("fundraiserForm").reset();
   showToast("Cagnotte envoyée pour validation.");
 }
-\nasync function deleteSuggestion(id,currentName){
+async function deleteSuggestion(id,currentName){
   const name=prompt("Pour supprimer cette idée, écris exactement le prénom/nom utilisé lors de son envoi :")?.trim();
   if(!name)return;
   if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
