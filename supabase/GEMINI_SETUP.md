@@ -1,48 +1,59 @@
-# Mise en place de la recherche IA
+# Recherche IA des cadeaux avec Perplexity
 
-Le site utilise une Supabase Edge Function pour appeler Gemini côté serveur. La clé Gemini n'est jamais mise dans `index.html`.
+Le site utilise une **Supabase Edge Function** pour appeler l’**API Agent de Perplexity** côté serveur. La clé Perplexity n’est jamais placée dans `index.html`.
+
+L’API Agent de Perplexity permet d’utiliser la recherche Web avec des presets et des outils de recherche. La documentation actuelle présente notamment `pro-search` et le tool `web_search`. citeturn644179search0turn644179search2
 
 ## 1. Secret Supabase
 
 Dans Supabase → Edge Functions → Secrets, ajoute :
 
 ```text
-GEMINI_API_KEY=ta_cle_gemini
+PERPLEXITY_API_KEY=ta_cle_perplexity
 ```
 
-Supabase recommande de conserver les clés tierces dans les secrets des Edge Functions et non dans le code envoyé au navigateur. 
+La clé doit rester côté serveur.
 
 ## 2. Déployer la fonction
 
-Déploie le dossier :
+Déploie :
 
 ```text
 supabase/functions/gift-search/index.ts
 ```
 
-avec la configuration de `supabase/config.toml`.
+avec :
 
-L'URL obtenue sera :
+```text
+supabase/config.toml
+```
+
+L’endpoint utilisé par le site est :
 
 ```text
 https://ckasbsnzxgwfwfnctioe.supabase.co/functions/v1/gift-search
 ```
 
-## 3. Ce que fait l'API
+## 3. Résultat
 
-La fonction appelle Gemini avec la recherche Google Web et Google Images. Elle renvoie au site :
+Quand on clique sur le bouton de comparaison dans une fiche cadeau, le navigateur appelle la fonction Supabase.
 
-- une vérification du produit ;
-- un résumé ;
-- les offres et prix trouvés ;
-- la disponibilité lorsqu'elle est vérifiable ;
-- les sources ;
-- les images trouvées et leurs pages sources.
+La fonction demande à Perplexity de :
 
-Le site affiche ensuite les résultats directement dans la fiche du cadeau, sans ouvrir un nouvel onglet.
+- rechercher largement sur le Web ;
+- vérifier le produit avec le nom et la description ;
+- privilégier les vendeurs disponibles en France ;
+- comparer les prix visibles ;
+- vérifier la disponibilité quand elle est identifiable ;
+- retourner des liens et des sources ;
+- rechercher des pages d’images pertinentes.
+
+Le résultat est ensuite **affiché directement dans la carte du cadeau**, sans ouvrir Perplexity dans un nouvel onglet.
 
 ### Important
 
-Ne mets jamais la clé Gemini dans GitHub, dans `index.html` ou dans un fichier public.
+Ne mets jamais la clé `PERPLEXITY_API_KEY` dans GitHub, dans `index.html` ou dans un fichier public.
 
-Google documente le grounding avec Google Search pour accéder au Web en temps réel et obtenir des citations ; la recherche d'images est disponible avec Gemini 3.1 Flash Image. Supabase documente l'utilisation de secrets dans les Edge Functions.
+Perplexity documente actuellement l’Agent API comme adapté aux workflows avec outils, et son outil `web_search` permet de filtrer les résultats et d’appliquer un contexte géographique. citeturn644179search0turn644179search2
+
+> Note : l’ancien Sonar API évolue vers l’Agent API ; l’annonce Perplexity indique un retrait des endpoints Sonar le 27 septembre 2026. citeturn521260search1
