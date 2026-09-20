@@ -21,3 +21,13 @@ with check (char_length(trim(name)) between 1 and 50);
 -- Autorisations PostgREST pour les visiteurs non connectés
 grant usage on schema public to anon;
 grant select, insert on table public.reservations to anon;
+
+-- Autoriser la déréservation depuis le site
+grant delete on table public.reservations to anon;
+
+drop policy if exists "Public can cancel reservations" on public.reservations;
+create policy "Public can cancel reservations"
+on public.reservations
+for delete
+to anon
+using (true);
