@@ -65,32 +65,30 @@ async function load(){
 async function toggleReaction(postId,emoji){
   const name=prompt("Pour ajouter ou retirer cette réaction, écris ton prénom :")?.trim();
   if(!name)return;
-  const filter="post_id=eq."+encodeURIComponent(postId)+"&emoji=eq."+encodeURIComponent(emoji)+"&name=eq."+encodeURIComponent(name);
-  const existing=await fetch(SUPABASE_URL+"/rest/v1/community_reactions?select=id&"+filter,{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
-  if(!existing.ok){showToast("Impossible de vérifier la réaction.");return}
-  const rows=await existing.json();
-  if(rows.length){
-    const r=await fetch(SUPABASE_URL+"/rest/v1/community_reactions?"+filter,{method:"DELETE",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
-    if(!r.ok){showToast("Impossible de retirer la réaction.");return}
-    showToast("Réaction retirée.");
-  }else{
-    const r=await fetch(SUPABASE_URL+"/rest/v1/community_reactions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({post_id:postId,emoji:emoji,name:name})});
-    if(!r.ok){console.error("reaction",r.status,await r.text());showToast("Impossible d’ajouter la réaction.");return}
-    showToast("Réaction ajoutée.");
-  }
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/toggle_reaction",{
+    method:"POST",
+    cache:"no-store",
+    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
+    body:JSON.stringify({p_post_id:postId,p_emoji:emoji,p_name:name})
+  });
+  if(!r.ok){const detail=await r.text();console.error("reaction",r.status,detail);showToast("Réaction impossible ("+r.status+").");return}
+  const result=await r.json().catch(()=>null);
+  showToast(result==="removed"?"Réaction retirée.":"Réaction ajoutée.");
   load();
 }
 async function deletePost(postId,currentName){
-  const name=prompt("Pour supprimer ce message, écris le prénom utilisé lors de sa publication :")?.trim();
+  const name=prompt("Pour supprimer ce message et ses fichiers, écris le prénom utilisé lors de sa publication :")?.trim();
   if(!name)return;
   if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
-  if(!confirm("Supprimer ce message ?"))return;
-  const filter="id=eq."+encodeURIComponent(postId)+"&name=eq."+encodeURIComponent(name);
-  const r=await fetch(SUPABASE_URL+"/rest/v1/community_posts?"+filter,{
-    method:"DELETE",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}
+  if(!confirm("Supprimer ce message, ses liens et ses fichiers ?"))return;
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_community_post",{
+    method:"POST",
+    cache:"no-store",
+    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
+    body:JSON.stringify({p_id:postId,p_name:name})
   });
   if(!r.ok){const detail=await r.text();console.error("delete post",r.status,detail);showToast("Suppression impossible ("+r.status+").");return}
-  showToast("Message supprimé.");
+  showToast("Message, liens et fichiers supprimés.");
   load();
 }
 document.getElementById("postForm").addEventListener("submit",async e=>{
