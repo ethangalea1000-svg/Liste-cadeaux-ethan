@@ -84,9 +84,12 @@ const gifts=[
 {id:"hackropole",cat:"Cybersécurité",title:"Hackropole",price:"Gratuit",desc:"Plateforme française d’exercices de cybersécurité et de sensibilisation.",buy:"hackropole"}];
 
 function aiSearchUrl(g){
-  const prompt='Recherche sur le web en France ce produit : "'+g.title+'".\n'
-    +'Trouve des offres d’achat récentes et fiables, compare les prix affichés, vérifie si c’est bien le même produit/modèle, indique les boutiques et donne les liens sources. '
-    +'Cherche aussi une image représentative du produit. Ne propose pas une alternative différente sans le signaler.';
+  const prompt='Recherche ce cadeau sur le Web au sens large, en priorité en France : "'+g.title+'".\n'
+    +'Contexte et légende/description : "'+g.desc+'".\n'
+    +'Explore un maximum de sources pertinentes disponibles sur le Web : site officiel du fabricant/éditeur, grandes enseignes, marketplaces, comparateurs, revendeurs spécialisés, presse et fiches produit. '
+    +'Vérifie que le produit trouvé correspond exactement au nom et à la description, cherche les offres d’achat récentes, compare les prix, frais de livraison et disponibilité lorsque ces informations sont accessibles, '
+    +'donne les boutiques et les liens sources. Cherche également des images pertinentes du produit en utilisant le nom ET la légende/description pour éviter les mauvaises correspondances. '
+    +'Distingue clairement les informations vérifiées des informations incertaines et ne propose pas une alternative différente sans le signaler.';
   return "https://www.perplexity.ai/search?q="+encodeURIComponent(prompt);
 }
 function q(v){return encodeURIComponent(v)}
@@ -111,7 +114,14 @@ function shoppingLinks(g){
     {label:"Fnac",url:"https://www.fnac.com/SearchResult/ResultList.aspx?Search="+query}
   ];
 }
-function productImageUrl(g){return "https://tse1.mm.bing.net/th?q="+q(g.title+" produit")+"&w=600&h=400&c=7&rs=1&p=0";}
+function productImageUrl(g){
+  const imageQuery=g.title+" "+g.desc+" image produit officiel couverture photo";
+  return "https://tse1.mm.bing.net/th?q="+q(imageQuery)+"&w=800&h=500&c=7&rs=1&p=0";
+}
+function imageSearchUrl(g){
+  const query=g.title+" "+g.desc+" image produit officiel";
+  return "https://www.google.com/search?tbm=isch&q="+encodeURIComponent(query);
+}
 
 let reservations={};let loadSeq=0;
 const grid=document.getElementById("grid"),search=document.getElementById("search"),category=document.getElementById("category"),toast=document.getElementById("toast");
@@ -274,7 +284,7 @@ function render(){
  grid.innerHTML="";
  if(!filtered.length)grid.innerHTML='<div class="empty">Aucun cadeau ne correspond à ta recherche.</div>';
  filtered.forEach(g=>{const who=reservations[g.id],card=document.createElement("article");card.className="card";const shops=shoppingLinks(g);const imageUrl=productImageUrl(g);card.innerHTML=`
-<div class="image-wrap"><img class="product-image" src="${imageUrl}" alt="Image de ${escapeHtml(g.title)}" loading="lazy" onerror="this.style.display='none'"><div class="image-label">Image automatique</div></div>
+<div class="image-wrap"><img class="product-image" src="${imageUrl}" alt="Image de ${escapeHtml(g.title)} — ${escapeHtml(g.desc)}" loading="lazy" onerror="this.style.display='none'"><div class="image-label">Image auto · nom + légende</div></div>
 <div class="top"><div class="cat">${g.cat}</div><div class="title">${g.title}</div><div class="desc">${g.desc}</div><div class="shop-title">🛒 Où chercher / acheter</div><button class="ai-search" type="button">🤖 Chercher avec l’IA</button><div class="ai-note">Recherche Web IA avec sources et offres récentes.</div><div class="shop-links">${shops.map(s=>'<a class="'+(s.cls||"")+'" href="'+s.url+'" target="_blank" rel="noopener noreferrer">'+s.label+'</a>').join("")}</div><div class="offer-note">Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.</div></div><div class="bottom"><div class="price">${g.price} <small>prix indicatif</small></div><div class="row"><button class="reserve ${who?"done":""}" ${who?"disabled":""}>${who?"✓ Réservé":"Réserver"}</button><button class="link copy-gift">Copier</button></div>${who?`<div class="reserved">Réservé par : ${escapeHtml(who)}</div><button class="link unreserve" style="width:100%;margin-top:8px">Déréserver</button>`:""}</div>`;card.querySelector(".ai-search").addEventListener("click",()=>{window.open(aiSearchUrl(g),"_blank","noopener");});card.querySelector(".reserve").addEventListener("click",()=>reserveGift(g.id));card.querySelector(".copy-gift").addEventListener("click",()=>{navigator.clipboard?.writeText(location.href+"#"+g.id);showToast("Lien copié.")});if(who){card.querySelector(".unreserve").addEventListener("click",()=>unreserveGift(g.id,who))}grid.appendChild(card)});
  document.getElementById("countAll").textContent=gifts.length;document.getElementById("countReserved").textContent=Object.keys(reservations).length;document.getElementById("countAvailable").textContent=gifts.length-Object.keys(reservations).length;
 }
