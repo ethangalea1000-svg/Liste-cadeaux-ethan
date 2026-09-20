@@ -346,22 +346,81 @@ revoke select on table public.messages from anon;
 grant insert on table public.messages to anon;
 
 
--- Suppression des messages de la communauté avec vérification du prénom côté site
-grant delete on table public.community_posts to anon;
+-- =====================================================
+-- SUPPRESSION SÉCURISÉE DES MESSAGES + FICHIERS
+-- =====================================================
+
+revoke delete on table public.community_posts from anon;
 
 drop policy if exists "Public can delete community posts" on public.community_posts;
-create policy "Public can delete community posts"
-on public.community_posts
-for delete
-to anon
-using (true);
+
+create or replace function public.delete_community_post(
+  p_id bigint,
+  p_name text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, storage
+as $
+declare
+  post_name text;
+  files jsonb;
+  file_item jsonb;
+  file_path text;
+begin
+  select name, attachments
+  into post_name, files
+  from public.community_posts
+  where id = p_id;
+
+  if post_name is null
+     or lower(trim(post_name)) <> lower(trim(p_name))
+  then
+    return false;
+  end if;
+
+  for file_item in
+    select value
+    from jsonb_array_elements(coalesce(files, '[]'::jsonb))
+  loop
+    file_path := regexp_replace(
+      file_item->>'url',
+      '^.*/storage/v1/object/public/community-files/',
+      ''
+    );
+
+    if file_path is not null and file_path <> '' then
+      delete from storage.objects
+      where bucket_id = 'community-files'
+        and name = file_path;
+    end if;
+  end loop;
+
+  delete from public.community_posts
+  where id = p_id;
+
+  return true;
+end;
+$;
+
+grant execute
+on function public.delete_community_post(bigint, text)
+to anon;
 
 
--- Réactions : chaque nouvelle réaction enregistre le prénom
+-- =====================================================
+-- RÉACTIONS AVEC VÉRIFICATION DU PRÉNOM
+-- =====================================================
+
 alter table public.community_reactions
 add column if not exists name text not null default 'Ancien';
 
+revoke delete on table public.community_reactions from anon;
+
 drop policy if exists "Public can react" on public.community_reactions;
+drop policy if exists "Public can delete reactions" on public.community_reactions;
+
 create policy "Public can react"
 on public.community_reactions
 for insert
@@ -371,14 +430,46 @@ with check (
   and emoji in ('❤️','👍','😂','🎉','😮')
 );
 
-drop policy if exists "Public can delete reactions" on public.community_reactions;
-create policy "Public can delete reactions"
-on public.community_reactions
-for delete
-to anon
-using (true);
+create or replace function public.toggle_reaction(
+  p_post_id bigint,
+  p_emoji text,
+  p_name text
+)
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $
+declare
+  reaction_id bigint;
+begin
+  if char_length(trim(p_name)) < 1
+     or char_length(trim(p_name)) > 50
+     or p_emoji not in ('❤️','👍','😂','🎉','😮')
+  then
+    raise exception 'invalid reaction';
+  end if;
 
-grant delete on table public.community_reactions to anon;
+  delete from public.community_reactions
+  where post_id = p_post_id
+    and emoji = p_emoji
+    and lower(trim(name)) = lower(trim(p_name))
+  returning id into reaction_id;
+
+  if reaction_id is not null then
+    return 'removed';
+  end if;
+
+  insert into public.community_reactions(post_id, emoji, name)
+  values (p_post_id, p_emoji, trim(p_name));
+
+  return 'added';
+end;
+$;
+
+grant execute
+on function public.toggle_reaction(bigint, text, text)
+to anon;
 
   
 -- =====================================================
