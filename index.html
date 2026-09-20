@@ -39,6 +39,28 @@
   <div class="form-note"><span id="contribCount">0</span> participation(s) enregistrée(s)</div>
   <ul class="mini-list" id="contribList"></ul>
 </div>
+</section>
+<section class="forms">
+<div class="panel">
+<h2>💡 Boîte à idées</h2>
+<p>Une idée pour améliorer le site ? Elle sera visible avec ton prénom.</p>
+<form id="ideaForm" class="form-grid">
+<input id="ideaName" maxlength="50" required placeholder="Ton prénom *">
+<textarea id="ideaText" maxlength="500" required placeholder="Ton idée *"></textarea>
+<div class="form-actions"><button class="send" type="submit">Envoyer mon idée</button></div>
+</form>
+<ul class="mini-list" id="ideasList"></ul>
+</div>
+<div class="panel">
+<h2>💬 Boîte à messages pour Ethan</h2>
+<p>Écris un message à Ethan. Il n'est pas affiché aux autres visiteurs.</p>
+<form id="messageForm" class="form-grid">
+<input id="messageName" maxlength="50" required placeholder="Ton prénom *">
+<textarea id="messageText" maxlength="500" required placeholder="Ton message *"></textarea>
+<div class="form-actions"><button class="send" type="submit">Envoyer le message</button></div>
+<p class="form-note">Le message est conservé dans Supabase et n'est pas affiché publiquement.</p>
+</form>
+</div>
 </section><div class="foot"><strong>Réservations partagées :</strong> les réservations sont enregistrées en ligne. Tous les visiteurs voient les mêmes réservations.</div></main><div class="toast" id="toast"></div>
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
@@ -105,17 +127,23 @@ async function reserveGift(id){
 }
 
 
-async function deleteSuggestion(id,name){
-  if(!confirm("Supprimer cette suggestion ?"))return;
+async function deleteSuggestion(id,currentName){
+  const name=prompt("Pour supprimer cette proposition, écris le prénom utilisé lors de la proposition :")?.trim();
+  if(!name)return;
+  if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
+  if(!confirm("Supprimer cette proposition ?"))return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_gift_suggestion",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
-  if(!r.ok){console.error("delete suggestion",r.status,await r.text());showToast("Impossible de supprimer la suggestion.");return}
-  showToast("Suggestion supprimée.");loadSuggestions();
+  if(!r.ok){console.error("delete suggestion",r.status,await r.text());showToast("Impossible de supprimer la proposition.");return}
+  showToast("Proposition supprimée.");loadSuggestions();
 }
-async function deleteContribution(id,name){
-  if(!confirm("Retirer cette participation ?"))return;
+async function deleteContribution(id,currentName){
+  const name=prompt("Pour retirer cette donation, écris le prénom utilisé lors de la donation :")?.trim();
+  if(!name)return;
+  if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
+  if(!confirm("Retirer cette donation ?"))return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_contribution",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
-  if(!r.ok){console.error("delete contribution",r.status,await r.text());showToast("Impossible de retirer la participation.");return}
-  showToast("Participation retirée.");loadContributions();
+  if(!r.ok){console.error("delete contribution",r.status,await r.text());showToast("Impossible de retirer la donation.");return}
+  showToast("Donation retirée.");loadContributions();
 }
 async function loadIdeas(){
   const r=await fetch(SUPABASE_URL+"/rest/v1/ideas?select=id,name,idea,created_at&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
@@ -138,14 +166,6 @@ async function deleteIdea(id,name){
   showToast("Idée supprimée.");loadIdeas();
 }
 async function loadMessages(){ return; }
-async function submitMessage(e){
-  e.preventDefault();
-  const body={name:document.getElementById("messageName").value.trim(),message:document.getElementById("messageText").value.trim()};
-  if(!body.name||!body.message)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/messages",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
-  if(!r.ok){console.error("message",r.status,await r.text());showToast("Impossible d’envoyer le message.");return}
-  document.getElementById("messageForm").reset();showToast("Message envoyé.");loadMessages();
-}
 async function deleteMessage(){ return; }
 async function loadSuggestions(){
   const r=await fetch(SUPABASE_URL+"/rest/v1/gift_suggestions?select=id,name,gift_name,link,message,created_at&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
