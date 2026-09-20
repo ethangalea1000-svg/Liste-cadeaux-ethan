@@ -280,6 +280,22 @@ create table if not exists public.community_posts (
   created_at timestamptz not null default now()
 );
 
+alter table public.community_posts
+add column if not exists link text;
+
+alter table public.community_posts
+add column if not exists attachments jsonb not null default '[]'::jsonb;
+
+alter table public.community_posts
+drop constraint if exists community_posts_attachments_check;
+
+alter table public.community_posts
+add constraint community_posts_attachments_check
+check (
+  jsonb_typeof(attachments) = 'array'
+  and jsonb_array_length(attachments) <= 5
+);
+
 alter table public.community_posts enable row level security;
 
 drop policy if exists "Public can view community posts" on public.community_posts;
@@ -363,3 +379,54 @@ to anon
 using (true);
 
 grant delete on table public.community_reactions to anon;
+
+  
+-- =====================================================
+-- STOCKAGE PUBLIC : GIFS, IMAGES, DOCUMENTS, VIDEOS...
+-- =====================================================
+
+insert into storage.buckets (
+  id,
+  name,
+  public,
+  file_size_limit,
+  allowed_mime_types
+)
+values (
+  'community-files',
+  'community-files',
+  true,
+  6291456,
+  array[
+    'image/*',
+    'video/*',
+    'audio/*',
+    'application/pdf',
+    'text/plain',
+    'text/csv',
+    'application/rtf',
+    'application/zip',
+    'application/x-7z-compressed',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+  ]::text[]
+)
+on conflict (id) do update
+set
+  public = true,
+  file_size_limit = 6291456,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Public can upload community files" on storage.objects;
+create policy "Public can upload community files"
+on storage.objects
+for insert
+to anon
+with check (
+  bucket_id = 'community-files'
+  and name like 'community/%'
+);
