@@ -6,7 +6,7 @@
 <title>Communauté — La liste d’Ethan</title>
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#6b7280;--line:#e6e8ef;--accent:#5b5ce2;--shadow:0 10px 30px rgba(20,25,50,.08)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}a{color:inherit}.hero{padding:28px 20px;background:linear-gradient(135deg,#17192a,#393b73);color:#fff}.wrap{max-width:900px;margin:auto}.hero-row{display:flex;justify-content:space-between;gap:15px;align-items:center}.back{background:#ffffff1f;padding:9px 12px;border-radius:10px;text-decoration:none;font-weight:700}.panel{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.form{display:grid;gap:10px}.form input,.form textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit}.form textarea{min-height:90px;resize:vertical}.send{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 15px;font-weight:700;cursor:pointer}.note{font-size:12px;color:var(--muted)}.posts{display:grid;gap:12px;margin-top:18px}.post{border:1px solid var(--line);border-radius:14px;padding:15px}.meta{font-size:12px;color:var(--muted);margin-bottom:6px}.message{white-space:pre-wrap;line-height:1.5}.reactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.reaction{border:1px solid var(--line);background:#f8f8fb;border-radius:999px;padding:7px 10px;cursor:pointer}.danger{border:1px solid #f0c8c8;background:#fff0f0;color:#a33;border-radius:10px;padding:7px 10px;cursor:pointer;font-weight:700}.post-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.empty{text-align:center;color:var(--muted);padding:20px}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transition:.2s}.toast.show{opacity:1}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}a{color:inherit}.hero{padding:28px 20px;background:linear-gradient(135deg,#17192a,#393b73);color:#fff}.wrap{max-width:900px;margin:auto}.hero-row{display:flex;justify-content:space-between;gap:15px;align-items:center}.back{background:#ffffff1f;padding:9px 12px;border-radius:10px;text-decoration:none;font-weight:700}.panel{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.form{display:grid;gap:10px}.form input,.form textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit}.form textarea{min-height:90px;resize:vertical}.send{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 15px;font-weight:700;cursor:pointer}.note{font-size:12px;color:var(--muted)}.posts{display:grid;gap:12px;margin-top:18px}.post{border:1px solid var(--line);border-radius:14px;padding:15px}.meta{font-size:12px;color:var(--muted);margin-bottom:6px}.message{white-space:pre-wrap;line-height:1.5}.reactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.reaction{border:1px solid var(--line);background:#f8f8fb;border-radius:999px;padding:7px 10px;cursor:pointer}.attachments{display:grid;gap:8px;margin-top:12px}.attachment-img{max-width:100%;max-height:360px;border-radius:12px;border:1px solid var(--line)}.attachment-link{display:inline-block;padding:9px 11px;background:#f4f4f8;border-radius:10px;text-decoration:none}.post-link{margin-top:10px}.danger{border:1px solid #f0c8c8;background:#fff0f0;color:#a33;border-radius:10px;padding:7px 10px;cursor:pointer;font-weight:700}.post-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.empty{text-align:center;color:var(--muted);padding:20px}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transition:.2s}.toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -17,7 +17,10 @@
 <form id="postForm" class="form">
 <input id="name" maxlength="50" required placeholder="Ton prénom *">
 <textarea id="message" maxlength="500" required placeholder="Ton message *"></textarea>
-<button class="send" type="submit">Publier</button>
+<input id="link" type="url" maxlength="500" placeholder="Lien (optionnel)">
+<input id="files" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.txt,.csv,.rtf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.7z">
+<div class="note">Images, GIF, vidéos, PDF et documents courants. 6 Mo maximum par fichier. N’envoie pas de document privé ou sensible.</div>
+<button class="send" type="submit">Publier</button>Publier</button>
 <div class="note">Les messages de cette page sont publics. Pour supprimer ton message ou ta réaction, le prénom utilisé doit être vérifié.</div>
 </form>
 </section>
@@ -35,7 +38,7 @@ function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 async function load(){
  const [pr,rr]=await Promise.all([
-  fetch(SUPABASE_URL+"/rest/v1/community_posts?select=id,name,message,created_at&order=created_at.desc&limit=50",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}}),
+  fetch(SUPABASE_URL+"/rest/v1/community_posts?select=id,name,message,link,attachments,created_at&order=created_at.desc&limit=50",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}}),
   fetch(SUPABASE_URL+"/rest/v1/community_reactions?select=post_id,emoji,name",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}})
  ]);
  if(!pr.ok){postsEl.innerHTML='<div class="empty">Impossible de charger la discussion.</div>';return}
@@ -47,7 +50,13 @@ async function load(){
  posts.forEach(p=>{
   const c=counts[p.id]||{};
   const box=document.createElement("article");box.className="post";
-  box.innerHTML='<div class="meta"><strong>'+esc(p.name)+'</strong> · '+new Date(p.created_at).toLocaleString("fr-FR")+'</div><div class="message">'+esc(p.message)+'</div><div class="reactions">'+["❤️","👍","😂","🎉","😮"].map(e=>'<button class="reaction" data-e="'+e+'">'+e+' '+(c[e]||0)+'</button>').join("")+'</div><div class="post-actions"><button class="danger delete-post">Supprimer ce message</button></div>';
+  const atts=Array.isArray(p.attachments)?p.attachments:[];
+  const attachmentsHtml=atts.map(a=>a.type&&a.type.startsWith("image/")?
+    '<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer"><img class="attachment-img" src="'+esc(a.url)+'" alt="'+esc(a.name||"image")+'"></a>':
+    '<a class="attachment-link" href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">📎 '+esc(a.name||"Fichier")+'</a>'
+  ).join("");
+  const linkHtml=p.link?'<div class="post-link">🔗 <a href="'+esc(p.link)+'" target="_blank" rel="noopener noreferrer">'+esc(p.link)+'</a></div>':"";
+  box.innerHTML='<div class="meta"><strong>'+esc(p.name)+'</strong> · '+new Date(p.created_at).toLocaleString("fr-FR")+'</div><div class="message">'+esc(p.message)+'</div>'+linkHtml+(attachmentsHtml?'<div class="attachments">'+attachmentsHtml+'</div>':"")+'<div class="reactions">'+["❤️","👍","😂","🎉","😮"].map(e=>'<button class="reaction" data-e="'+e+'">'+e+' '+(c[e]||0)+'</button>').join("")+'</div><div class="post-actions"><button class="danger delete-post">Supprimer ce message</button></div>';
   box.querySelectorAll(".reaction").forEach(b=>b.onclick=()=>toggleReaction(p.id,b.dataset.e));
   box.querySelector(".delete-post").onclick=()=>deletePost(p.id,p.name);
   postsEl.appendChild(box);
@@ -86,9 +95,26 @@ async function deletePost(postId,currentName){
 }
 document.getElementById("postForm").addEventListener("submit",async e=>{
  e.preventDefault();
- const body={name:document.getElementById("name").value.trim(),message:document.getElementById("message").value.trim()};
+ const name=document.getElementById("name").value.trim();
+ const message=document.getElementById("message").value.trim();
+ const link=document.getElementById("link").value.trim();
+ const files=[...document.getElementById("files").files];
+ if(!name||!message)return;
+ if(files.length>5){showToast("Maximum 5 fichiers par message.");return}
+ if(files.some(file=>file.size>6*1024*1024)){showToast("Chaque fichier doit faire au maximum 6 Mo.");return}
+ const attachments=[];
+ for(const file of files){
+   const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+   const path="community/"+Date.now()+"-"+crypto.randomUUID()+"-"+safe;
+   const up=await fetch(SUPABASE_URL+"/storage/v1/object/community-files/"+encodeURIComponent(path).replace(/%2F/g,"/"),{
+     method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":file.type||"application/octet-stream","x-upsert":"false"},body:file
+   });
+   if(!up.ok){const detail=await up.text();console.error("Storage upload",up.status,detail);showToast("Upload impossible pour "+file.name);return}
+   attachments.push({name:file.name,type:file.type||"application/octet-stream",url:SUPABASE_URL+"/storage/v1/object/public/community-files/"+path});
+ }
+ const body={name,message,link:link||null,attachments};
  const r=await fetch(SUPABASE_URL+"/rest/v1/community_posts",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
- if(!r.ok){showToast("Impossible de publier.");return}
+ if(!r.ok){const detail=await r.text();console.error("community post",r.status,detail);showToast("Impossible de publier le message.");return}
  document.getElementById("postForm").reset();showToast("Message publié.");load();
 });
 load();setInterval(load,5000);
