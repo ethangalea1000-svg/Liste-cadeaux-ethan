@@ -128,13 +128,13 @@ async function reserveGift(id){
 
 
 async function deleteSuggestion(id,currentName){
-  const name=prompt("Pour supprimer cette proposition, écris le prénom utilisé lors de la proposition :")?.trim();
+  const name=prompt("Pour supprimer cette idée, écris exactement le prénom/nom utilisé lors de son envoi :")?.trim();
   if(!name)return;
   if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
   if(!confirm("Supprimer cette proposition ?"))return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_gift_suggestion",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
   if(!r.ok){console.error("delete suggestion",r.status,await r.text());showToast("Impossible de supprimer la proposition.");return}
-  showToast("Proposition supprimée.");loadSuggestions();
+  showToast("Idée supprimée.");loadSuggestions();
 }
 async function deleteContribution(id,currentName){
   const name=prompt("Pour retirer cette donation, écris le prénom utilisé lors de la donation :")?.trim();
