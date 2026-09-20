@@ -362,7 +362,7 @@ returns boolean
 language plpgsql
 security definer
 set search_path = public, storage
-as $
+as $delete$
 declare
   post_name text;
   files jsonb;
@@ -402,7 +402,7 @@ begin
 
   return true;
 end;
-$;
+$delete$;
 
 grant execute
 on function public.delete_community_post(bigint, text)
@@ -439,7 +439,7 @@ returns text
 language plpgsql
 security definer
 set search_path = public
-as $
+as $delete$
 declare
   reaction_id bigint;
 begin
@@ -465,7 +465,7 @@ begin
 
   return 'added';
 end;
-$;
+$delete$;
 
 grant execute
 on function public.toggle_reaction(bigint, text, text)
