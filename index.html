@@ -165,6 +165,28 @@ async function deleteIdea(id,name){
   if(!r.ok){console.error("delete idea",r.status,await r.text());showToast("Impossible de supprimer l’idée.");return}
   showToast("Idée supprimée.");loadIdeas();
 }
+async function submitMessage(e){
+  e.preventDefault();
+  const body={
+    name:document.getElementById("messageName").value.trim(),
+    message:document.getElementById("messageText").value.trim()
+  };
+  if(!body.name||!body.message)return;
+  const r=await fetch(SUPABASE_URL+"/rest/v1/messages",{
+    method:"POST",
+    cache:"no-store",
+    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},
+    body:JSON.stringify(body)
+  });
+  if(!r.ok){
+    const detail=await r.text();
+    console.error("Supabase message",r.status,detail);
+    showToast("Impossible d’envoyer le message ("+r.status+").");
+    return;
+  }
+  document.getElementById("messageForm").reset();
+  showToast("Message envoyé à Ethan.");
+}
 async function loadMessages(){ return; }
 async function deleteMessage(){ return; }
 async function loadSuggestions(){
