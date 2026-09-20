@@ -43,6 +43,19 @@ async function loadReservations(){
  if(!r.ok){const detail=await r.text();console.error("Supabase GET",r.status,detail);showToast("Supabase : erreur "+r.status);throw new Error("GET "+r.status+" "+detail)}
  const rows=await r.json();reservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));render();
 }
+async function unreserveGift(id,currentName){
+ if(!SUPABASE_READY){showToast("Configure Supabase avant de déréserver.");return}
+ const name=prompt("Pour déréserver, indique le prénom utilisé lors de la réservation :")?.trim();
+ if(!name)return;
+ if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
+ if(!confirm("Déréserver ce cadeau ?"))return;
+ const r=await fetch(SUPABASE_URL+"/rest/v1/reservations?gift_id=eq."+encodeURIComponent(id)+"&name=eq."+encodeURIComponent(currentName),{
+   method:"DELETE",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Prefer:"return=minimal"}
+ });
+ if(!r.ok){const detail=await r.text();console.error("Supabase DELETE",r.status,detail);showToast("Supabase : erreur "+r.status);return}
+ showToast("Cadeau déréservé.");
+ await loadReservations();
+}
 async function reserveGift(id){
  if(!SUPABASE_READY){showToast("Configure Supabase avant de réserver.");return}
  const name=prompt("Prénom de la personne qui réserve ce cadeau :")?.trim();if(!name)return;
@@ -57,7 +70,7 @@ function render(){
  const filtered=gifts.filter(g=>(!q||(g.title+" "+g.desc+" "+g.cat).toLowerCase().includes(q))&&(cat==="all"||g.cat===cat));
  grid.innerHTML="";
  if(!filtered.length)grid.innerHTML='<div class="empty">Aucun cadeau ne correspond à ta recherche.</div>';
- filtered.forEach(g=>{const who=reservations[g.id],card=document.createElement("article");card.className="card";card.innerHTML=`<div class="top"><div class="cat">${g.cat}</div><div class="title">${g.title}</div><div class="desc">${g.desc}</div></div><div class="bottom"><div class="price">${g.price} <small>prix indicatif</small></div><div class="row"><button class="reserve ${who?"done":""}" ${who?"disabled":""}>${who?"✓ Réservé":"Réserver"}</button><button class="link">Copier</button></div>${who?`<div class="reserved">Réservé par : ${escapeHtml(who)}</div>`:""}</div>`;card.querySelector(".reserve").addEventListener("click",()=>reserveGift(g.id));card.querySelector(".link").addEventListener("click",()=>{navigator.clipboard?.writeText(location.href+"#"+g.id);showToast("Lien copié.")});grid.appendChild(card)});
+ filtered.forEach(g=>{const who=reservations[g.id],card=document.createElement("article");card.className="card";card.innerHTML=`<div class="top"><div class="cat">${g.cat}</div><div class="title">${g.title}</div><div class="desc">${g.desc}</div></div><div class="bottom"><div class="price">${g.price} <small>prix indicatif</small></div><div class="row"><button class="reserve ${who?"done":""}" ${who?"disabled":""}>${who?"✓ Réservé":"Réserver"}</button><button class="link">Copier</button></div>${who?`<div class="reserved">Réservé par : ${escapeHtml(who)}</div><button class="link unreserve" style="width:100%;margin-top:8px">Déréserver</button>`:""}</div>`;card.querySelector(".reserve").addEventListener("click",()=>reserveGift(g.id));card.querySelector(".link").addEventListener("click",()=>{navigator.clipboard?.writeText(location.href+"#"+g.id);showToast("Lien copié.")});if(who){card.querySelector(".unreserve").addEventListener("click",()=>unreserveGift(g.id,who))}grid.appendChild(card)});
  document.getElementById("countAll").textContent=gifts.length;document.getElementById("countReserved").textContent=Object.keys(reservations).length;document.getElementById("countAvailable").textContent=gifts.length-Object.keys(reservations).length;
 }
 search.addEventListener("input",render);category.addEventListener("change",render);
