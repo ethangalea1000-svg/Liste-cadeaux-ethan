@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administration — La liste d’Ethan</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#6b7280;--line:#e6e8ef;--accent:#5b5ce2;--ok:#14804a;--danger:#a33;--shadow:0 10px 30px rgba(20,25,50,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}.hero{padding:28px 20px;background:linear-gradient(135deg,#17192a,#393b73);color:#fff}.wrap{max-width:900px;margin:auto}.hero-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.back{color:#fff;text-decoration:none;background:#ffffff1f;padding:9px 12px;border-radius:10px;font-weight:700}.panel{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.form{display:grid;gap:10px}.form input{padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}.primary{background:var(--accent);color:#fff}.approve{background:#e8f6ef;color:var(--ok)}.reject{background:#fff0f0;color:var(--danger)}.list{display:grid;gap:12px;margin-top:18px}.item{border:1px solid var(--line);border-radius:14px;padding:15px}.meta{color:var(--muted);font-size:12px;margin-bottom:7px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.hidden{display:none}.empty{color:var(--muted);padding:16px 0}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transition:.2s}.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap hero-row"><div><strong>🔐 Administration</strong><div style="margin-top:6px;color:#e8e9f2">Validation des suggestions</div></div><a class="back" href="index.html">← Liste</a></div></header>
+<main class="wrap">
+<section id="loginPanel" class="panel">
+<h2>Accès administrateur</h2>
+<form id="loginForm" class="form">
+<input id="password" type="password" minlength="8" required placeholder="Mot de passe admin">
+<button class="btn primary" type="submit">Ouvrir</button>
+<div style="color:#6b7280;font-size:12px">Le mot de passe n'est pas enregistré dans cette page.</div>
+</form>
+</section>
+<section id="adminPanel" class="panel hidden">
+<h2>Suggestions en attente</h2>
+<div id="list" class="list"></div>
+</section>
+</main>
+<div id="toast" class="toast"></div>
+<script>
+const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
+let adminPassword="";
+const list=document.getElementById("list"),toast=document.getElementById("toast");
+function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+async function loadPending(){
+ const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_list_pending_suggestions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_password:adminPassword})});
+ if(!r.ok){showToast("Mot de passe incorrect ou accès refusé.");return false}
+ const rows=await r.json();list.innerHTML="";
+ if(!rows.length){list.innerHTML='<div class="empty">Aucune suggestion en attente.</div>';return true}
+ rows.forEach(x=>{
+  const d=document.createElement("article");d.className="item";
+  d.innerHTML='<div class="meta"><strong>'+esc(x.name||"Anonyme")+'</strong> · '+new Date(x.created_at).toLocaleString("fr-FR")+'</div><div><strong>'+esc(x.gift_name)+'</strong></div>'+(x.message?'<div style="margin-top:6px">'+esc(x.message)+'</div>':"")+(x.link?'<div style="margin-top:8px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener noreferrer">Voir le lien</a></div>':"")+'<div class="actions"><button class="btn approve">✓ Valider</button><button class="btn reject">✕ Refuser</button></div>';
+  d.querySelector(".approve").onclick=()=>setStatus(x.id,"approved");
+  d.querySelector(".reject").onclick=()=>setStatus(x.id,"rejected");
+  list.appendChild(d);
+ });
+ return true;
+}
+async function setStatus(id,status){
+ const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_set_suggestion_status",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_password:adminPassword,p_status:status})});
+ if(!r.ok){showToast("Action refusée.");return}
+ showToast(status==="approved"?"Suggestion validée.":"Suggestion refusée.");loadPending();
+}
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ adminPassword=document.getElementById("password").value;
+ if(await loadPending()){document.getElementById("loginPanel").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");}
+});
+</script>
+</body>
+</html>
