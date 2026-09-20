@@ -62,15 +62,19 @@ async function load(){
   postsEl.appendChild(box);
  });
 }
+async function rpcPost(path,body){
+  const headers={apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Accept":"application/json"};
+  let r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+path,{method:"POST",cache:"no-store",headers,body:JSON.stringify(body)});
+  if(r.status===401){
+    const retryHeaders={...headers,Authorization:"Bearer "+SUPABASE_ANON_KEY};
+    r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+path,{method:"POST",cache:"no-store",headers:retryHeaders,body:JSON.stringify(body)});
+  }
+  return r;
+}
 async function toggleReaction(postId,emoji){
   const name=prompt("Pour ajouter ou retirer cette réaction, écris ton prénom :")?.trim();
   if(!name)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/toggle_reaction",{
-    method:"POST",
-    cache:"no-store",
-    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
-    body:JSON.stringify({p_post_id:postId,p_emoji:emoji,p_name:name})
-  });
+  const r=await rpcPost("toggle_reaction",{p_post_id:postId,p_emoji:emoji,p_name:name});
   if(!r.ok){const detail=await r.text();console.error("reaction",r.status,detail);showToast("Réaction impossible ("+r.status+").");return}
   const result=await r.json().catch(()=>null);
   showToast(result==="removed"?"Réaction retirée.":"Réaction ajoutée.");
@@ -81,16 +85,19 @@ async function deletePost(postId,currentName){
   if(!name)return;
   if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
   if(!confirm("Supprimer ce message, ses liens et ses fichiers ?"))return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_community_post",{
-    method:"POST",
-    cache:"no-store",
-    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
-    body:JSON.stringify({p_id:postId,p_name:name})
-  });
-  if(!r.ok){const detail=await r.text();console.error("delete post",r.status,detail);showToast("Suppression impossible ("+r.status+").");return}
+  const r=await rpcPost("delete_community_post",{p_id:postId,p_name:name});
+  if(!r.ok){
+    const detail=await r.text();
+    console.error("delete post",r.status,detail);
+    let msg="Suppression impossible ("+r.status+").";
+    if(detail){try{const j=JSON.parse(detail);if(j.message)msg+=" "+j.message}catch(e){}}
+    showToast(msg.slice(0,180));
+    return;
+  }
   showToast("Message, liens et fichiers supprimés.");
   load();
 }
+
 document.getElementById("postForm").addEventListener("submit",async e=>{
  e.preventDefault();
  const name=document.getElementById("name").value.trim();
