@@ -10,7 +10,7 @@
 </style>
 </head>
 <body>
-<header class="hero"><div class="wrap hero-row"><div><strong>🔐 Administration</strong><div style="margin-top:6px;color:#e8e9f2">Validation des suggestions</div></div><a class="back" href="index.html">← Liste</a></div></header>
+<header class="hero"><div class="wrap hero-row"><div><strong>🔐 Administration</strong><div style="margin-top:6px;color:#e8e9f2">Validation des suggestions et des cagnottes</div></div><a class="back" href="index.html">← Liste</a></div></header>
 <main class="wrap">
 <section id="loginPanel" class="panel">
 <h2>Accès administrateur</h2>
@@ -23,6 +23,8 @@
 <section id="adminPanel" class="panel hidden">
 <h2>Suggestions en attente</h2>
 <div id="list" class="list"></div>
+<h2 style="margin-top:28px">Cagnottes en attente</h2>
+<div id="fundraiserList" class="list"></div>
 </section>
 </main>
 <div id="toast" class="toast"></div>
@@ -37,7 +39,7 @@ async function loadPending(){
  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_list_pending_suggestions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_password:adminPassword})});
  if(!r.ok){showToast("Mot de passe incorrect ou accès refusé.");return false}
  const rows=await r.json();list.innerHTML="";
- if(!rows.length){list.innerHTML='<div class="empty">Aucune suggestion en attente.</div>';return true}
+ if(!rows.length){list.innerHTML='<div class="empty">Aucune suggestion en attente.</div>';loadPendingFundraisers();return true}
  rows.forEach(x=>{
   const d=document.createElement("article");d.className="item";
   d.innerHTML='<div class="meta"><strong>'+esc(x.name||"Anonyme")+'</strong> · '+new Date(x.created_at).toLocaleString("fr-FR")+'</div><div><strong>'+esc(x.gift_name)+'</strong></div>'+(x.message?'<div style="margin-top:6px">'+esc(x.message)+'</div>':"")+(x.link?'<div style="margin-top:8px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener noreferrer">Voir le lien</a></div>':"")+'<div class="actions"><button class="btn approve">✓ Valider</button><button class="btn reject">✕ Refuser</button></div>';
@@ -45,8 +47,29 @@ async function loadPending(){
   d.querySelector(".reject").onclick=()=>setStatus(x.id,"rejected");
   list.appendChild(d);
  });
+ loadPendingFundraisers();
  return true;
 }
+async function loadPendingFundraisers(){
+ const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_list_pending_fundraisers",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_password:adminPassword})});
+ if(!r.ok){showToast("Impossible de charger les cagnottes.");return}
+ const rows=await r.json(),box=document.getElementById("fundraiserList");box.innerHTML="";
+ if(!rows.length){box.innerHTML='<div class="empty">Aucune cagnotte en attente.</div>';return}
+ rows.forEach(x=>{
+  const d=document.createElement("article");d.className="item";
+  d.innerHTML='<div class="meta">'+new Date(x.created_at).toLocaleString("fr-FR")+'</div><div><strong>'+esc(x.title)+'</strong></div>'+(x.description?'<div style="margin-top:6px">'+esc(x.description)+'</div>':"")+'<div style="margin-top:8px"><strong>Objectif :</strong> '+Number(x.goal_amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</div><div class="actions"><button class="btn approve">✓ Valider</button><button class="btn reject">✕ Refuser</button></div>';
+  d.querySelector(".approve").onclick=()=>setFundraiserStatus(x.id,"approved");
+  d.querySelector(".reject").onclick=()=>setFundraiserStatus(x.id,"rejected");
+  box.appendChild(d);
+ });
+}
+async function setFundraiserStatus(id,status){
+ const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_set_fundraiser_status",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_password:adminPassword,p_status:status})});
+ if(!r.ok){showToast("Action refusée.");return}
+ showToast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");
+ loadPendingFundraisers();
+}
+
 async function setStatus(id,status){
  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_set_suggestion_status",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_password:adminPassword,p_status:status})});
  if(!r.ok){showToast("Action refusée.");return}
@@ -55,7 +78,7 @@ async function setStatus(id,status){
 document.getElementById("loginForm").addEventListener("submit",async e=>{
  e.preventDefault();
  adminPassword=document.getElementById("password").value;
- if(await loadPending()){document.getElementById("loginPanel").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");}
+ if(await loadPending()){document.getElementById("loginPanel").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");loadPendingFundraisers();}
 });
 </script>
 </body>
