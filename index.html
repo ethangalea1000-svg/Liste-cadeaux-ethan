@@ -13,6 +13,9 @@
 <header class="hero"><div class="wrap"><span class="tag">🎁 Noël & Anniversaire 2026</span><h1>La liste d’Ethan</h1><p>Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Réinitialiser les réservations</button></div></div></header>
 <main class="wrap"><section class="toolbar"><input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats"><div class="stat"><b id="countAll">0</b><span>cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span>disponibles</span></div><div class="stat"><b id="countReserved">0</b><span>réservés sur cet appareil</span></div></section><section class="grid" id="grid"></section><div class="foot"><strong>Important :</strong> cette version fonctionne sans compte et garde les réservations dans le navigateur (localStorage). Pour que les réservations soient réellement partagées entre téléphone, PC et famille, il faudra connecter le site à une petite base de données.</div></main><div class="toast" id="toast"></div>
 <script>
+const SUPABASE_URL="YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY="YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_READY=!SUPABASE_URL.includes("YOUR_")&&!SUPABASE_ANON_KEY.includes("YOUR_");
 const gifts=[
 {id:"ezio",cat:"Jeux vidéo",title:"Assassin’s Creed: The Ezio Collection",price:"20–25 €",desc:"Collection Switch : Assassin’s Creed II, Brotherhood et Revelations."},
 {id:"mauvais-perdants",cat:"Jeux de société",title:"Monopoly Mauvais Perdants",price:"20–45 €",desc:"Une version décalée du Monopoly où perdre peut devenir avantageux."},
@@ -29,15 +32,36 @@ const gifts=[
 {id:"rpi5",cat:"Informatique",title:"Raspberry Pi 5 — kit complet",price:"≈129–200 €",desc:"Configuration visée : 8 Go, SSD NVMe, alimentation 27 W et refroidissement actif."},
 {id:"arduino",cat:"Électronique",title:"Arduino Starter Kit",price:"≈90–100 €",desc:"Kit de démarrage pour apprendre l’électronique et la programmation embarquée."},
 {id:"hackropole",cat:"Cybersécurité",title:"Hackropole",price:"Gratuit",desc:"Plateforme française d’exercices de cybersécurité et de sensibilisation."}];
-const stateKey="ethan_wishlist_reservations_v1";let reservations=JSON.parse(localStorage.getItem(stateKey)||"{}");
+let reservations={};
 const grid=document.getElementById("grid"),search=document.getElementById("search"),category=document.getElementById("category"),toast=document.getElementById("toast");
 [...new Set(gifts.map(g=>g.cat))].sort().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;category.appendChild(o)});
-function save(){localStorage.setItem(stateKey,JSON.stringify(reservations))}
 function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
 function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function render(){const q=search.value.trim().toLowerCase(),cat=category.value,filtered=gifts.filter(g=>(!q||(g.title+" "+g.desc+" "+g.cat).toLowerCase().includes(q))&&(cat==="all"||g.cat===cat));grid.innerHTML="";if(!filtered.length)grid.innerHTML='<div class="empty">Aucun cadeau ne correspond à ta recherche.</div>';filtered.forEach(g=>{const who=reservations[g.id],card=document.createElement("article");card.className="card";card.innerHTML=`<div class="top"><div class="cat">${g.cat}</div><div class="title">${g.title}</div><div class="desc">${g.desc}</div></div><div class="bottom"><div class="price">${g.price} <small>prix indicatif</small></div><div class="row"><button class="reserve ${who?"done":""}" ${who?"disabled":""}>${who?"✓ Réservé":"Réserver"}</button><button class="link">Copier</button></div>${who?`<div class="reserved">Réservé par : ${escapeHtml(who)}</div>`:""}</div>`;card.querySelector(".reserve").addEventListener("click",()=>{const name=prompt("Prénom de la personne qui réserve ce cadeau :");if(!name)return;reservations[g.id]=name.trim();save();render();showToast("Cadeau réservé.")});card.querySelector(".link").addEventListener("click",()=>{navigator.clipboard?.writeText(location.href+"#"+g.id);showToast("Lien copié.")});grid.appendChild(card)});document.getElementById("countAll").textContent=gifts.length;document.getElementById("countReserved").textContent=Object.keys(reservations).length;document.getElementById("countAvailable").textContent=gifts.length-Object.keys(reservations).length}
+async function loadReservations(){
+ if(!SUPABASE_READY){reservations={};render();showToast("Supabase n’est pas encore configuré.");return}
+ const r=await fetch(SUPABASE_URL+"/rest/v1/reservations?select=gift_id,name",{headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY}});
+ if(!r.ok)throw new Error("load");
+ const rows=await r.json();reservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));render();
+}
+async function reserveGift(id){
+ if(!SUPABASE_READY){showToast("Configure Supabase avant de réserver.");return}
+ const name=prompt("Prénom de la personne qui réserve ce cadeau :")?.trim();if(!name)return;
+ const r=await fetch(SUPABASE_URL+"/rest/v1/reservations",{method:"POST",headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({gift_id:id,name})});
+ if(r.status===409){showToast("Ce cadeau vient d’être réservé.");}
+ else if(!r.ok){showToast("Erreur lors de la réservation.");}
+ else showToast("Réservation enregistrée pour tout le monde.");
+ await loadReservations();
+}
+function render(){
+ const q=search.value.trim().toLowerCase(),cat=category.value;
+ const filtered=gifts.filter(g=>(!q||(g.title+" "+g.desc+" "+g.cat).toLowerCase().includes(q))&&(cat==="all"||g.cat===cat));
+ grid.innerHTML="";
+ if(!filtered.length)grid.innerHTML='<div class="empty">Aucun cadeau ne correspond à ta recherche.</div>';
+ filtered.forEach(g=>{const who=reservations[g.id],card=document.createElement("article");card.className="card";card.innerHTML=\`<div class="top"><div class="cat">\${g.cat}</div><div class="title">\${g.title}</div><div class="desc">\${g.desc}</div></div><div class="bottom"><div class="price">\${g.price} <small>prix indicatif</small></div><div class="row"><button class="reserve \${who?"done":""}" \${who?"disabled":""}>\${who?"✓ Réservé":"Réserver"}</button><button class="link">Copier</button></div>\${who?\`<div class="reserved">Réservé par : \${escapeHtml(who)}</div>\`:""}</div>\`;card.querySelector(".reserve").addEventListener("click",()=>reserveGift(g.id));card.querySelector(".link").addEventListener("click",()=>{navigator.clipboard?.writeText(location.href+"#"+g.id);showToast("Lien copié.")});grid.appendChild(card)});
+ document.getElementById("countAll").textContent=gifts.length;document.getElementById("countReserved").textContent=Object.keys(reservations).length;document.getElementById("countAvailable").textContent=gifts.length-Object.keys(reservations).length;
+}
 search.addEventListener("input",render);category.addEventListener("change",render);
 document.getElementById("shareBtn").addEventListener("click",async()=>{const data={title:"Liste d’Ethan — Noël & Anniversaire 2026",url:location.href};if(navigator.share){try{await navigator.share(data)}catch{}}else{await navigator.clipboard?.writeText(location.href);showToast("Lien de la liste copié.")}});
-document.getElementById("resetBtn").addEventListener("click",()=>{if(confirm("Effacer toutes les réservations enregistrées sur cet appareil ?")){reservations={};save();render();showToast("Réservations réinitialisées.")}});
-render();
+document.getElementById("resetBtn").addEventListener("click",()=>showToast("Les réservations sont maintenant partagées en ligne."));
+render();loadReservations();setInterval(loadReservations,5000);
 </script></body></html>
