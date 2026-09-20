@@ -133,11 +133,10 @@ create table if not exists public.messages (
   created_at timestamptz not null default now()
 );
 alter table public.messages enable row level security;
-drop policy if exists "Public can view messages" on public.messages;
-create policy "Public can view messages" on public.messages for select to anon using (true);
 drop policy if exists "Public can create messages" on public.messages;
 create policy "Public can create messages" on public.messages for insert to anon with check (char_length(trim(name)) between 1 and 50 and char_length(trim(message)) between 1 and 500);
-grant select, insert on table public.messages to anon;
+revoke select on table public.messages from anon;
+grant insert on table public.messages to anon;
 grant usage, select on sequence public.messages_id_seq to anon;
 
 -- Retrait sécurisé des propositions
