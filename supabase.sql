@@ -17,3 +17,7 @@ create policy "Public can create reservations"
 on public.reservations for insert
 to anon
 with check (char_length(trim(name)) between 1 and 50);
+
+-- Autorisations PostgREST pour les visiteurs non connectés
+grant usage on schema public to anon;
+grant select, insert on table public.reservations to anon;
