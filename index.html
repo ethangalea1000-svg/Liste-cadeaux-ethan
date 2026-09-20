@@ -83,7 +83,13 @@ const gifts=[
 {id:"arduino",cat:"Électronique",title:"Arduino Starter Kit",price:"≈90–100 €",desc:"Kit de démarrage pour apprendre l’électronique et la programmation embarquée."},
 {id:"hackropole",cat:"Cybersécurité",title:"Hackropole",price:"Gratuit",desc:"Plateforme française d’exercices de cybersécurité et de sensibilisation.",buy:"hackropole"}];
 
-function aiSearchUrl(g){\n  const prompt="Recherche sur le web en France ce produit : \\""+g.title+"\\".\\n"+"Trouve des offres d’achat récentes et fiables, compare les prix affichés, vérifie si c’est bien le même produit/modèle, indique les boutiques et donne les liens sources. Cherche aussi une image représentative du produit. Ne propose pas une alternative différente sans le signaler.";\n  return "https://www.perplexity.ai/search?q="+encodeURIComponent(prompt);\n}\nfunction q(v){return encodeURIComponent(v)}
+function aiSearchUrl(g){
+  const prompt='Recherche sur le web en France ce produit : "'+g.title+'".\n'
+    +'Trouve des offres d’achat récentes et fiables, compare les prix affichés, vérifie si c’est bien le même produit/modèle, indique les boutiques et donne les liens sources. '
+    +'Cherche aussi une image représentative du produit. Ne propose pas une alternative différente sans le signaler.';
+  return "https://www.perplexity.ai/search?q="+encodeURIComponent(prompt);
+}
+function q(v){return encodeURIComponent(v)}
 function shoppingLinks(g){
   const query=q(g.title);
   if(g.buy==="official") return [
