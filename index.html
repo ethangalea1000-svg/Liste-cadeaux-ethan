@@ -331,7 +331,8 @@ async function submitContribution(e){
   const amount=Number(document.getElementById("contribAmount").value);
   if(!Number.isFinite(amount)||amount<1||amount>5000){showToast("Montant entre 1 € et 5 000 €.");return}
   const fundraiserId=Number(document.getElementById("fundraiserSelect").value);
-  if(!Number.isInteger(fundraiserId)){showToast("Choisis une cagnotte.");return}\n  const body={name:document.getElementById("contribName").value.trim(),amount:amount,message:document.getElementById("contribMessage").value.trim()||null,fundraiser_id:fundraiserId};
+  if(!Number.isInteger(fundraiserId)){showToast("Choisis une cagnotte.");return}
+  const body={name:document.getElementById("contribName").value.trim(),amount:amount,message:document.getElementById("contribMessage").value.trim()||null,fundraiser_id:fundraiserId};
   const r=await fetch(SUPABASE_URL+"/rest/v1/contributions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
   if(!r.ok){console.error("Supabase contribution",r.status,await r.text());showToast("Impossible d’enregistrer la participation.");return}
   document.getElementById("contribForm").reset();showToast("Participation enregistrée.");loadContributions();
