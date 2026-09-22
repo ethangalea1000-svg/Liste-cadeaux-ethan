@@ -88,8 +88,8 @@ async function suggestionStatus(id,status){try{await rpc("admin_set_suggestion_s
 
 async function loadFundraisers(){
  try{
-  const rows=await rpc("admin_list_pending_fundraisers",{});
-  $("fundraisersList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta">'+date(x.created_at)+'</div><div><strong>'+esc(x.title)+'</strong></div>'+(x.description?'<div class="message">'+esc(x.description)+'</div>':"")+'<div style="margin-top:8px"><span class="badge">Objectif '+Number(x.goal_amount).toLocaleString("fr-FR",{minimumFractionDigits:2})+' €</span></div><div class="actions"><button class="btn success" onclick="fundraiserStatus('+x.id+',\'approved\')">✓ Valider</button><button class="btn danger" onclick="fundraiserStatus('+x.id+',\'rejected\')">✕ Refuser</button><button class="btn danger" onclick="deleteItem(\'admin_delete_fundraiser\','+x.id+',\'Cagnotte supprimée.\')">🗑 Supprimer</button></div></article>').join(""):empty("Aucune cagnotte en attente.");
+  const rows=await rpc("admin_list_all_fundraisers",{});
+  $("fundraisersList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta">'+date(x.created_at)+' · <span class="badge">'+esc(x.status)+'</span></div><div><strong>'+esc(x.title)+'</strong></div>'+(x.description?'<div class="message">'+esc(x.description)+'</div>':"")+'<div style="margin-top:8px"><span class="badge">Objectif '+Number(x.goal_amount).toLocaleString("fr-FR",{minimumFractionDigits:2})+' €</span></div><div class="actions"><button class="btn success" onclick="fundraiserStatus('+x.id+',\'approved\')">✓ Valider</button><button class="btn danger" onclick="fundraiserStatus('+x.id+',\'rejected\')">✕ Refuser</button><button class="btn danger" onclick="deleteItem(\'admin_delete_fundraiser\','+x.id+',\'Cagnotte supprimée.\')">🗑 Supprimer</button></div></article>').join(""):empty("Aucune cagnotte en attente.");
  }catch(e){toast(e.message)}
 }
 async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_status",{p_id:id,p_status:status});toast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");loadFundraisers()}catch(e){toast(e.message)}}
