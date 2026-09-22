@@ -576,20 +576,13 @@ with check (
 grant select, insert on table public.contributions to anon;
 
 -- Validation des nouvelles cagnottes par l’administrateur
-create or replace function public.admin_list_pending_fundraisers(p_password text)
+create or replace function public.admin_list_pending_fundraisers()
 returns setof public.fundraisers
 language plpgsql
 security definer
 set search_path = public
 as $fundadmin$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   return query
   select *
@@ -611,13 +604,6 @@ security definer
 set search_path = public
 as $fundstatus$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   if p_status not in ('approved','rejected') then
     raise exception 'invalid status';
@@ -638,20 +624,13 @@ grant execute on function public.admin_set_fundraiser_status(bigint, text) to an
 -- TABLEAU ADMINISTRATEUR : MESSAGES, IDÉES, PARTICIPATIONS, COMMUNAUTÉ
 -- =====================================================
 
-create or replace function public.admin_list_messages(p_password text)
+create or replace function public.admin_list_messages()
 returns setof public.messages
 language plpgsql
 security definer
 set search_path = public
 as $adminmsg$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   return query
   select *
@@ -663,20 +642,13 @@ $adminmsg$;
 grant execute on function public.admin_list_messages() to anon;
 
 
-create or replace function public.admin_list_ideas(p_password text)
+create or replace function public.admin_list_ideas()
 returns setof public.ideas
 language plpgsql
 security definer
 set search_path = public
 as $adminidea$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   return query
   select *
@@ -688,7 +660,7 @@ $adminidea$;
 grant execute on function public.admin_list_ideas() to anon;
 
 
-create or replace function public.admin_list_contributions(p_password text)
+create or replace function public.admin_list_contributions()
 returns table (
   id bigint,
   name text,
@@ -703,13 +675,6 @@ security definer
 set search_path = public
 as $admincontrib$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   return query
   select
@@ -729,20 +694,13 @@ $admincontrib$;
 grant execute on function public.admin_list_contributions() to anon;
 
 
-create or replace function public.admin_list_community_posts(p_password text)
+create or replace function public.admin_list_community_posts()
 returns setof public.community_posts
 language plpgsql
 security definer
 set search_path = public
 as $admincommunity$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   return query
   select *
@@ -763,13 +721,6 @@ security definer
 set search_path = public
 as $adminmsgdel$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   delete from public.messages where id = p_id;
   return found;
@@ -788,13 +739,6 @@ security definer
 set search_path = public
 as $adminideadel$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   delete from public.ideas where id = p_id;
   return found;
@@ -813,13 +757,6 @@ security definer
 set search_path = public
 as $admincontribdel$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   delete from public.contributions where id = p_id;
   return found;
@@ -842,13 +779,6 @@ declare
   file_item jsonb;
   file_path text;
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   select attachments
   into files
