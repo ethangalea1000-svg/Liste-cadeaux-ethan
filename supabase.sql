@@ -199,20 +199,6 @@ $$;
 grant execute on function public.delete_message(bigint,text) to anon;
 
 
--- Compte administrateur pour la validation des suggestions
-create extension if not exists pgcrypto;
-
-create table if not exists public.site_admin (
-  id boolean primary key default true,
-  password_hash text not null
-);
-
-insert into public.site_admin (id,password_hash)
-values (true, extensions.crypt('CHANGE_ME_ADMIN_PASSWORD', extensions.gen_salt('bf')))
-on conflict (id) do nothing;
-
-revoke all on table public.site_admin from anon;
-
 create or replace function public.admin_list_pending_suggestions(p_password text)
 returns setof public.gift_suggestions
 language plpgsql
@@ -236,12 +222,11 @@ begin
 end;
 $$;
 
-grant execute on function public.admin_list_pending_suggestions(text) to anon;
+grant execute on function public.admin_list_pending_suggestions() to anon;
 
 create or replace function public.admin_set_suggestion_status(
   p_id bigint,
-  p_password text,
-  p_status text
+    p_status text
 )
 returns boolean
 language plpgsql
@@ -270,7 +255,7 @@ begin
 end;
 $$;
 
-grant execute on function public.admin_set_suggestion_status(bigint,text,text) to anon;
+grant execute on function public.admin_set_suggestion_status(bigint, text) to anon;
 
 -- Discussion publique
 create table if not exists public.community_posts (
@@ -628,12 +613,11 @@ begin
 end;
 $fundadmin$;
 
-grant execute on function public.admin_list_pending_fundraisers(text) to anon;
+grant execute on function public.admin_list_pending_fundraisers() to anon;
 
 create or replace function public.admin_set_fundraiser_status(
   p_id bigint,
-  p_password text,
-  p_status text
+    p_status text
 )
 returns boolean
 language plpgsql
@@ -662,7 +646,7 @@ begin
 end;
 $fundstatus$;
 
-grant execute on function public.admin_set_fundraiser_status(bigint, text, text) to anon;
+grant execute on function public.admin_set_fundraiser_status(bigint, text) to anon;
 
 -- =====================================================
 -- TABLEAU ADMINISTRATEUR : MESSAGES, IDÉES, PARTICIPATIONS, COMMUNAUTÉ
@@ -690,7 +674,7 @@ begin
 end;
 $adminmsg$;
 
-grant execute on function public.admin_list_messages(text) to anon;
+grant execute on function public.admin_list_messages() to anon;
 
 
 create or replace function public.admin_list_ideas(p_password text)
@@ -715,7 +699,7 @@ begin
 end;
 $adminidea$;
 
-grant execute on function public.admin_list_ideas(text) to anon;
+grant execute on function public.admin_list_ideas() to anon;
 
 
 create or replace function public.admin_list_contributions(p_password text)
@@ -756,7 +740,7 @@ begin
 end;
 $admincontrib$;
 
-grant execute on function public.admin_list_contributions(text) to anon;
+grant execute on function public.admin_list_contributions() to anon;
 
 
 create or replace function public.admin_list_community_posts(p_password text)
@@ -781,13 +765,12 @@ begin
 end;
 $admincommunity$;
 
-grant execute on function public.admin_list_community_posts(text) to anon;
+grant execute on function public.admin_list_community_posts() to anon;
 
 
 create or replace function public.admin_delete_message(
   p_id bigint,
-  p_password text
-)
+  )
 returns boolean
 language plpgsql
 security definer
@@ -807,13 +790,12 @@ begin
 end;
 $adminmsgdel$;
 
-grant execute on function public.admin_delete_message(bigint,text) to anon;
+grant execute on function public.admin_delete_message(bigint) to anon;
 
 
 create or replace function public.admin_delete_idea(
   p_id bigint,
-  p_password text
-)
+  )
 returns boolean
 language plpgsql
 security definer
@@ -833,13 +815,12 @@ begin
 end;
 $adminideadel$;
 
-grant execute on function public.admin_delete_idea(bigint,text) to anon;
+grant execute on function public.admin_delete_idea(bigint) to anon;
 
 
 create or replace function public.admin_delete_contribution(
   p_id bigint,
-  p_password text
-)
+  )
 returns boolean
 language plpgsql
 security definer
@@ -859,13 +840,12 @@ begin
 end;
 $admincontribdel$;
 
-grant execute on function public.admin_delete_contribution(bigint,text) to anon;
+grant execute on function public.admin_delete_contribution(bigint) to anon;
 
 
 create or replace function public.admin_delete_community_post(
   p_id bigint,
-  p_password text
-)
+  )
 returns boolean
 language plpgsql
 security definer
@@ -915,4 +895,4 @@ begin
 end;
 $admincommunitydel$;
 
-grant execute on function public.admin_delete_community_post(bigint,text) to anon;
+grant execute on function public.admin_delete_community_post(bigint) to anon;
