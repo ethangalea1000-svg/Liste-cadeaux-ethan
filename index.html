@@ -83,17 +83,17 @@ const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
 const SUPABASE_READY=!SUPABASE_URL.includes("YOUR_")&&!SUPABASE_ANON_KEY.includes("YOUR_");
 const gifts=[
-{id:"ezio",cat:"Jeux vidéo",title:"Assassin’s Creed: The Ezio Collection",price:"20–25 €",desc:"Collection Switch : Assassin’s Creed II, Brotherhood et Revelations."},
-{id:"mauvais-perdants",cat:"Jeux de société",title:"Monopoly Mauvais Perdants",price:"20–45 €",desc:"Une version décalée du Monopoly où perdre peut devenir avantageux."},
-{id:"speed",cat:"Jeux de société",title:"Monopoly Speed",price:"20–44 €",desc:"Une partie beaucoup plus rapide, pensée pour des sessions courtes."},
-{id:"turing",cat:"Jeux de société",title:"Monopoly Alan Turing",price:"≈45 €",desc:"Édition thématique autour d’Alan Turing, prix variable selon le vendeur."},
-{id:"actu",cat:"Presse",title:"L’Actu",price:"≈9,99 €/mois",desc:"Abonnement presse d’actualité pour adolescents."},
+{id:"ezio",cat:"Jeux vidéo",title:"Assassin’s Creed: The Ezio Collection",price:"20–25 €",desc:"Collection Switch : Assassin’s Creed II, Brotherhood et Revelations.",buy:"ezio"},
+{id:"mauvais-perdants",cat:"Jeux de société",title:"Monopoly Mauvais Perdants",price:"20–45 €",desc:"Une version décalée du Monopoly où perdre peut devenir avantageux.",buy:"mauvais-perdants"},
+{id:"speed",cat:"Jeux de société",title:"Monopoly Speed",price:"20–44 €",desc:"Une partie beaucoup plus rapide, pensée pour des sessions courtes.",buy:"speed"},
+{id:"turing",cat:"Jeux de société",title:"Monopoly Alan Turing",price:"≈45 €",desc:"Édition thématique autour d’Alan Turing, prix variable selon le vendeur.",buy:"turing"},
+{id:"actu",cat:"Presse",title:"L’Actu",price:"≈9,99 €/mois",desc:"Abonnement presse d’actualité pour adolescents.",buy:"actu"},
 {id:"eco",cat:"Presse",title:"L’ÉCO",price:"à partir de 9,99 €/mois",desc:"Hebdomadaire économique PlayBac Presse pour les 15–20 ans, destiné notamment à la 2nde–Bac+2.",image:"https://www.playbacpresse.fr/uploads/media/subscription_page/f36f704875c966e961402c1f9bf4cd96a71006f2.png",buy:"eco"},
-{id:"docs-actu",cat:"Presse",title:"Les Docs de L’Actu",price:"≈49 €/an",desc:"Magazine thématique de découverte et de culture générale."},
+{id:"docs-actu",cat:"Presse",title:"Les Docs de L’Actu",price:"≈49 €/an",desc:"Magazine thématique de découverte et de culture générale.",buy:"docs-actu"},
 {id:"enfantiages",cat:"IA & numérique",title:"enfantIAges",price:"À voir",desc:"Campagne PlayBac Presse liée au Petit Quotidien : des enfants répondent à des questions habituellement posées à l’IA.",buy:"enfantiages",image:"assets/enfantiages.svg"},
-{id:"ducktoon",cat:"BD",title:"Ducktoon",price:"≈48–72 €/an",desc:"Abonnement BD/webtoon Disney autour de personnages comme Picsou, Mickey et Donald."},
+{id:"ducktoon",cat:"BD",title:"Ducktoon",price:"≈48–72 €/an",desc:"Abonnement BD/webtoon Disney autour de personnages comme Picsou, Mickey et Donald.",buy:"ducktoon"},
 {id:"tryhackme",cat:"Cybersécurité",title:"TryHackMe Premium",price:"100 €/an",desc:"Parcours et labs de cybersécurité pour apprendre la sécurité informatique.",buy:"tryhackme"},
-{id:"white-house",cat:"Construction",title:"Puzzle 3D Maison Blanche",price:"≈7–34 €",desc:"Maquette 3D, avec plusieurs modèles possibles selon le niveau et le fabricant."},
+{id:"white-house",cat:"Construction",title:"Puzzle 3D Maison Blanche",price:"≈7–34 €",desc:"Maquette 3D, avec plusieurs modèles possibles selon le niveau et le fabricant.",buy:"white-house"},
 {id:"flipper",cat:"Cybersécurité",title:"Flipper Zero — kit complet",price:"≈235–280 €",desc:"Outil polyvalent d’apprentissage matériel et de sécurité. Usage uniquement autorisé sur ses propres systèmes."},
 {id:"rpi5",cat:"Informatique",title:"Raspberry Pi 5 — kit complet",price:"≈129–200 €",desc:"Configuration visée : 8 Go, SSD NVMe, alimentation 27 W et refroidissement actif."},
 {id:"arduino",cat:"Électronique",title:"Arduino Starter Kit",price:"≈90–100 €",desc:"Kit de démarrage pour apprendre l’électronique et la programmation embarquée."},
@@ -175,27 +175,26 @@ async function runAiSearch(g,card,mode="compare"){
 function q(v){return encodeURIComponent(v)}
 function shoppingLinks(g){
   const query=q(g.title);
-  if(g.buy==="eco") return [
-    {label:"PlayBac Presse",url:"https://www.playbacpresse.fr/abonnements-l-eco",cls:"official"},
-    {label:"Comparer",url:aiSearchUrl(g),cls:"featured-shop"}
-  ];
-  if(g.buy==="enfantiages") return [
-    {label:"Site officiel",url:"https://www.playbacpresse.fr/enfantiages",cls:"official"},
-    {label:"Comparer / vérifier",url:aiSearchUrl(g),cls:"featured-shop"}
-  ];
-  if(g.buy==="tryhackme") return [
-    {label:"TryHackMe",url:"https://tryhackme.com/pricing",cls:"official"},
-    {label:"Comparer",url:aiSearchUrl(g),cls:"featured-shop"}
-  ];
-  if(g.buy==="hackropole") return [
-    {label:"Hackropole",url:"https://hackropole.fr/",cls:"official"},
-    {label:"Comparer",url:aiSearchUrl(g),cls:"featured-shop"}
-  ];
+  const official=(label,url)=>({label,url,cls:"official"});
+  const compare={label:"Comparer",url:aiSearchUrl(g),cls:"featured-shop"};
+  if(g.buy==="ezio") return [official("Ubisoft", "https://www.ubisoft.com/fr-fr/game/assassins-creed/the-ezio-collection"), compare];
+  if(g.buy==="mauvais-perdants") return [official("Hasbro", "https://instructions.hasbro.com/fr-fr/instruction/monopoly-for-sore-losers-board-game-for-ages-8-and-up"), compare];
+  if(g.buy==="speed") return [official("Hasbro", "https://instructions.hasbro.com/fr-fr/instruction/monopoly-speed-board-game-for-kids-ages-8-and-up"), compare];
+  if(g.buy==="turing") return [official("Winning Moves", "https://www.winningmoves.fr/boutique/"), compare];
+  if(g.buy==="actu") return [official("PlayBac Presse", "https://www.playbacpresse.fr/abonnements-l-actu"), compare];
+  if(g.buy==="eco") return [official("PlayBac Presse", "https://www.playbacpresse.fr/abonnements-l-eco"), compare];
+  if(g.buy==="docs-actu") return [official("PlayBac Presse", "https://www.playbacpresse.fr/magazines-thematiques/l-actu"), compare];
+  if(g.buy==="enfantiages") return [official("PlayBac Presse", "https://www.playbacpresse.fr/enfantiages"), compare];
+  if(g.buy==="ducktoon") return [official("Ducktoon", "https://www.ducktoon.com/collections/nos-offres-abonnements"), compare];
+  if(g.buy==="tryhackme") return [official("TryHackMe", "https://tryhackme.com/pricing"), compare];
+  if(g.buy==="white-house") return [official("Wrebbit3D", "https://wrebbit3dpuzzle.com/products/white-house"), compare];
+  if(g.buy==="flipper") return [official("Flipper", "https://flipper.net/"), compare];
+  if(g.buy==="rpi5") return [official("Raspberry Pi", "https://www.raspberrypi.com/products/"), compare];
+  if(g.buy==="arduino") return [official("Arduino Store", "https://store.arduino.cc/collections/arduino-starter-kit-collection"), compare];
+  if(g.buy==="hackropole") return [official("Hackropole", "https://hackropole.fr/"), compare];
   return [
-    {label:"Amazon",url:"https://www.amazon.fr/s?k="+query},
-    {label:"Google Shopping",url:"https://www.google.com/search?tbm=shop&q="+query},
-    {label:"eBay",url:"https://www.ebay.fr/sch/i.html?_nkw="+query},
-    {label:"Fnac",url:"https://www.fnac.com/SearchResult/ResultList.aspx?Search="+query}
+    {label:"Recherche officielle",url:"https://www.google.com/search?q="+query+"+site%3Aofficiel",cls:"official"},
+    compare
   ];
 }
 function productImageUrl(g){
