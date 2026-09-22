@@ -132,7 +132,7 @@ async function deleteCommunity(id){
 }
 function showAnnouncement(){$("announcementBox").classList.remove("hidden");$("announcementMessage").focus()}
 function hideAnnouncement(){$("announcementBox").classList.add("hidden")}
-async function publishAnnouncement(){const message=$("announcementMessage").value.trim(),link=$("announcementLink").value.trim();if(!message){toast("Écris le texte de l’annonce.");return}if(link&&!/^https?:\\/\\//i.test(link)){toast("Le lien doit commencer par https:// ou http://");return}try{await rpc("admin_create_announcement",{p_message:message,p_link:link||null});$("announcementMessage").value="";$("announcementLink").value="";hideAnnouncement();toast("Annonce publiée dans la communauté.");loadCommunity()}catch(e){toast(e.message)}}
+async function publishAnnouncement(){const message=$("announcementMessage").value.trim(),link=$("announcementLink").value.trim();if(!message){toast("Écris le texte de l’annonce.");return}if(link&&!/^https?:\/\//i.test(link)){toast("Le lien doit commencer par https:// ou http://");return}try{await rpc("admin_create_announcement",{p_message:message,p_link:link||null});$("announcementMessage").value="";$("announcementLink").value="";hideAnnouncement();toast("Annonce publiée dans la communauté.");loadCommunity()}catch(e){toast(e.message)}}
 async function refreshAll(){await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity()])}
 
 document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
