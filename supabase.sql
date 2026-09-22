@@ -663,3 +663,256 @@ end;
 $fundstatus$;
 
 grant execute on function public.admin_set_fundraiser_status(bigint, text, text) to anon;
+
+-- =====================================================
+-- TABLEAU ADMINISTRATEUR : MESSAGES, IDÉES, PARTICIPATIONS, COMMUNAUTÉ
+-- =====================================================
+
+create or replace function public.admin_list_messages(p_password text)
+returns setof public.messages
+language plpgsql
+security definer
+set search_path = public
+as $adminmsg$
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  return query
+  select *
+  from public.messages
+  order by created_at desc;
+end;
+$adminmsg$;
+
+grant execute on function public.admin_list_messages(text) to anon;
+
+
+create or replace function public.admin_list_ideas(p_password text)
+returns setof public.ideas
+language plpgsql
+security definer
+set search_path = public
+as $adminidea$
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  return query
+  select *
+  from public.ideas
+  order by created_at desc;
+end;
+$adminidea$;
+
+grant execute on function public.admin_list_ideas(text) to anon;
+
+
+create or replace function public.admin_list_contributions(p_password text)
+returns table (
+  id bigint,
+  name text,
+  amount numeric,
+  message text,
+  created_at timestamptz,
+  fundraiser_id bigint,
+  fundraiser_title text
+)
+language plpgsql
+security definer
+set search_path = public
+as $admincontrib$
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  return query
+  select
+    c.id,
+    c.name,
+    c.amount,
+    c.message,
+    c.created_at,
+    c.fundraiser_id,
+    f.title
+  from public.contributions c
+  left join public.fundraisers f on f.id = c.fundraiser_id
+  order by c.created_at desc;
+end;
+$admincontrib$;
+
+grant execute on function public.admin_list_contributions(text) to anon;
+
+
+create or replace function public.admin_list_community_posts(p_password text)
+returns setof public.community_posts
+language plpgsql
+security definer
+set search_path = public
+as $admincommunity$
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  return query
+  select *
+  from public.community_posts
+  order by created_at desc;
+end;
+$admincommunity$;
+
+grant execute on function public.admin_list_community_posts(text) to anon;
+
+
+create or replace function public.admin_delete_message(
+  p_id bigint,
+  p_password text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $adminmsgdel$
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  delete from public.messages where id = p_id;
+  return found;
+end;
+$adminmsgdel$;
+
+grant execute on function public.admin_delete_message(bigint,text) to anon;
+
+
+create or replace function public.admin_delete_idea(
+  p_id bigint,
+  p_password text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $adminideadel$
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  delete from public.ideas where id = p_id;
+  return found;
+end;
+$adminideadel$;
+
+grant execute on function public.admin_delete_idea(bigint,text) to anon;
+
+
+create or replace function public.admin_delete_contribution(
+  p_id bigint,
+  p_password text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $admincontribdel$
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  delete from public.contributions where id = p_id;
+  return found;
+end;
+$admincontribdel$;
+
+grant execute on function public.admin_delete_contribution(bigint,text) to anon;
+
+
+create or replace function public.admin_delete_community_post(
+  p_id bigint,
+  p_password text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, storage
+as $admincommunitydel$
+declare
+  files jsonb;
+  file_item jsonb;
+  file_path text;
+begin
+  if not exists (
+    select 1 from public.site_admin
+    where id = true
+      and crypt(p_password, password_hash) = password_hash
+  ) then
+    raise exception 'unauthorized';
+  end if;
+
+  select attachments
+  into files
+  from public.community_posts
+  where id = p_id;
+
+  if files is null then
+    return false;
+  end if;
+
+  for file_item in
+    select value
+    from jsonb_array_elements(coalesce(files, '[]'::jsonb))
+  loop
+    file_path := regexp_replace(
+      file_item->>'url',
+      '^.*/storage/v1/object/public/community-files/',
+      ''
+    );
+
+    if file_path is not null and file_path <> '' then
+      delete from storage.objects
+      where bucket_id = 'community-files'
+        and name = file_path;
+    end if;
+  end loop;
+
+  delete from public.community_posts where id = p_id;
+  return found;
+end;
+$admincommunitydel$;
+
+grant execute on function public.admin_delete_community_post(bigint,text) to anon;
