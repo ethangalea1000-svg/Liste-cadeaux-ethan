@@ -196,8 +196,10 @@ async function loadReservations(){
  if(!r.ok){const detail=await r.text();console.error("Supabase GET",r.status,detail);showToast("Supabase : erreur "+r.status);return}
  const rows=await r.json();
  if(seq!==loadSeq)return;
- reservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));
- render();
+ const nextReservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));
+ const changed=JSON.stringify(nextReservations)!==JSON.stringify(reservations);
+ reservations=nextReservations;
+ if(changed)render();
 }
 async function unreserveGift(id,currentName){
  if(!SUPABASE_READY){showToast("Configure Supabase avant de déréserver.");return}
