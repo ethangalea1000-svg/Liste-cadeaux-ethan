@@ -17,19 +17,10 @@
 </style>
 </head>
 <body>
-<header class="hero"><div class="wrap hero-row"><div><div style="font-size:12px;opacity:.8">🔐 CENTRE DE GESTION</div><h1>La liste d’Ethan</h1></div><a class="back" href="index.html">← Retour à la liste</a></div></header>
+<header class="hero"><div class="wrap hero-row"><div><div style="font-size:12px;opacity:.8">⚙️ CENTRE DE GESTION</div><h1>La liste d’Ethan</h1></div><a class="back" href="index.html">← Retour à la liste</a></div></header>
 
 <main class="wrap">
-<section id="loginPanel" class="panel login">
-  <h2>Connexion</h2>
-  <p style="color:var(--muted)">Un seul mot de passe pour gérer les propositions, messages et participations.</p>
-  <form id="loginForm">
-    <input id="password" type="password" minlength="8" required placeholder="Mot de passe administrateur" autocomplete="current-password">
-    <button class="btn primary" style="margin-top:10px;width:100%" type="submit">Ouvrir le centre de gestion</button>
-  </form>
-</section>
-
-<section id="dashboard" class="hidden">
+<section id="dashboard">
   <div class="stats">
     <div class="stat"><b id="countSuggestions">0</b><span>À valider</span></div>
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
@@ -60,7 +51,6 @@
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
-let adminPassword="";
 
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
@@ -76,55 +66,55 @@ function empty(text){return '<div class="empty">'+esc(text)+'</div>'}
 
 async function loadSuggestions(){
  try{
-  const rows=await rpc("admin_list_pending_suggestions",{p_password:adminPassword});
+  const rows=await rpc("admin_list_pending_suggestions",{});
   $("countSuggestions").textContent=rows.length;$("suggestions").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta">'+esc(x.name||"Anonyme")+' · '+date(x.created_at)+'</div><div><strong>'+esc(x.gift_name)+'</strong></div>'+(x.message?'<div class="message">'+esc(x.message)+'</div>':"")+(x.link?'<div style="margin-top:8px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">Voir le lien</a></div>':"")+'<div class="actions"><button class="btn success" onclick="suggestionStatus('+x.id+',\'approved\')">✓ Valider</button><button class="btn danger" onclick="suggestionStatus('+x.id+',\'rejected\')">✕ Refuser</button></div></article>').join(""):empty("Aucune suggestion en attente.");
  }catch(e){toast(e.message)}
 }
-async function suggestionStatus(id,status){try{await rpc("admin_set_suggestion_status",{p_id:id,p_password:adminPassword,p_status:status});toast(status==="approved"?"Suggestion validée.":"Suggestion refusée.");loadSuggestions()}catch(e){toast(e.message)}}
+async function suggestionStatus(id,status){try{await rpc("admin_set_suggestion_status",{p_id:id,p_status:status});toast(status==="approved"?"Suggestion validée.":"Suggestion refusée.");loadSuggestions()}catch(e){toast(e.message)}}
 
 async function loadFundraisers(){
  try{
-  const rows=await rpc("admin_list_pending_fundraisers",{p_password:adminPassword});
+  const rows=await rpc("admin_list_pending_fundraisers",{});
   $("fundraisersList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta">'+date(x.created_at)+'</div><div><strong>'+esc(x.title)+'</strong></div>'+(x.description?'<div class="message">'+esc(x.description)+'</div>':"")+'<div style="margin-top:8px"><span class="badge">Objectif '+Number(x.goal_amount).toLocaleString("fr-FR",{minimumFractionDigits:2})+' €</span></div><div class="actions"><button class="btn success" onclick="fundraiserStatus('+x.id+',\'approved\')">✓ Valider</button><button class="btn danger" onclick="fundraiserStatus('+x.id+',\'rejected\')">✕ Refuser</button></div></article>').join(""):empty("Aucune cagnotte en attente.");
  }catch(e){toast(e.message)}
 }
-async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_status",{p_id:id,p_password:adminPassword,p_status:status});toast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");loadFundraisers()}catch(e){toast(e.message)}}
+async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_status",{p_id:id,p_status:status});toast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");loadFundraisers()}catch(e){toast(e.message)}}
 
 async function loadMessages(){
  try{
-  const rows=await rpc("admin_list_messages",{p_password:adminPassword});
+  const rows=await rpc("admin_list_messages",{});
   $("countMessages").textContent=rows.length;
   $("messagesList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div class="message">'+esc(x.message)+'</div><div class="actions"><button class="btn danger" onclick="deleteItem(\'admin_delete_message\','+x.id+',\'Message supprimé.\')">Supprimer</button></div></article>').join(""):empty("Aucun message.");
  }catch(e){toast(e.message)}
 }
 async function loadIdeas(){
  try{
-  const rows=await rpc("admin_list_ideas",{p_password:adminPassword});
+  const rows=await rpc("admin_list_ideas",{});
   $("countIdeas").textContent=rows.length;
   $("ideasList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div class="message">'+esc(x.idea)+'</div><div class="actions"><button class="btn danger" onclick="deleteItem(\'admin_delete_idea\','+x.id+',\'Idée supprimée.\')">Supprimer</button></div></article>').join(""):empty("Aucune idée.");
  }catch(e){toast(e.message)}
 }
 async function loadContributions(){
  try{
-  const rows=await rpc("admin_list_contributions",{p_password:adminPassword});
+  const rows=await rpc("admin_list_contributions",{});
   $("countContributions").textContent=rows.length;
   $("contributionsList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div><strong>'+Number(x.amount).toLocaleString("fr-FR",{minimumFractionDigits:2})+' €</strong>'+(x.fundraiser_title?' · '+esc(x.fundraiser_title):"")+'</div>'+(x.message?'<div class="message">'+esc(x.message)+'</div>':"")+'<div class="actions"><button class="btn danger" onclick="deleteItem(\'admin_delete_contribution\','+x.id+',\'Participation supprimée.\')">Supprimer</button></div></article>').join(""):empty("Aucune participation.");
  }catch(e){toast(e.message)}
 }
 async function loadCommunity(){
  try{
-  const rows=await rpc("admin_list_community_posts",{p_password:adminPassword});
+  const rows=await rpc("admin_list_community_posts",{});
   $("countCommunity").textContent=rows.length;
   $("communityList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div class="message">'+esc(x.message)+'</div>'+(x.link?'<div style="margin-top:8px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">Ouvrir le lien</a></div>':"")+'<div class="actions"><button class="btn danger" onclick="deleteCommunity('+x.id+')">Supprimer le message</button></div></article>').join(""):empty("Aucun message communautaire.");
  }catch(e){toast(e.message)}
 }
 async function deleteItem(fn,id,msg){
  if(!confirm("Supprimer définitivement cet élément ?"))return;
- try{await rpc(fn,{p_id:id,p_password:adminPassword});toast(msg);refreshAll()}catch(e){toast(e.message)}
+ try{await rpc(fn,{p_id:id});toast(msg);refreshAll()}catch(e){toast(e.message)}
 }
 async function deleteCommunity(id){
  if(!confirm("Supprimer définitivement ce message et ses fichiers éventuels ?"))return;
- try{await rpc("admin_delete_community_post",{p_id:id,p_password:adminPassword});toast("Message communautaire supprimé.");loadCommunity()}catch(e){toast(e.message)}
+ try{await rpc("admin_delete_community_post",{p_id:id});toast("Message communautaire supprimé.");loadCommunity()}catch(e){toast(e.message)}
 }
 async function refreshAll(){await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity()])}
 
@@ -134,16 +124,8 @@ document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>
  btn.classList.add("active");$(btn.dataset.tab).classList.add("active");
 }));
 
-$("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();adminPassword=$("password").value;
- try{
-  await loadSuggestions();
-  const test=await rpc("admin_list_messages",{p_password:adminPassword});
-  $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");
-  $("countMessages").textContent=test.length;
-  await Promise.all([loadFundraisers(),loadIdeas(),loadContributions(),loadCommunity()]);
-  toast("Centre de gestion ouvert.");
- }catch(e){console.error("Admin login",e);toast(e.message||"Mot de passe incorrect ou accès refusé.");}
+window.addEventListener("DOMContentLoaded",()=>{
+  refreshAll();
 });
 </script>
 </body>
