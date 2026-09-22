@@ -564,6 +564,21 @@ with check (
 grant select, insert on table public.contributions to anon;
 
 -- Validation des nouvelles cagnottes par l’administrateur
+create or replace function public.admin_list_all_fundraisers()
+returns setof public.fundraisers
+language plpgsql
+security definer
+set search_path = public
+as $fundall$
+begin
+  return query
+  select * from public.fundraisers
+  order by created_at desc;
+end;
+$fundall$;
+
+grant execute on function public.admin_list_all_fundraisers() to anon;
+
 create or replace function public.admin_list_pending_fundraisers()
 returns setof public.fundraisers
 language plpgsql
