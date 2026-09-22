@@ -21,7 +21,8 @@
 
 <main class="wrap">
 <section id="dashboard">
-  <div style="display:flex;justify-content:flex-end;margin-top:18px"><button class="btn primary" onclick="showDiagnostic()">🔧 Tester Supabase</button></div>\n  <div class="stats">
+  <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" onclick="showAnnouncement()">📢 Faire une annonce</button><button class="btn" onclick="showDiagnostic()">🔧 Tester Supabase</button></div>
+<div id="announcementBox" class="panel hidden" style="margin-top:12px"><div class="section-head"><h2>📢 Nouvelle annonce</h2><button class="btn" onclick="hideAnnouncement()">Fermer</button></div><div style="display:grid;gap:10px"><input id="announcementMessage" maxlength="500" placeholder="Texte de l’annonce…"><input id="announcementLink" maxlength="500" placeholder="Lien facultatif (https://…)"><div class="actions"><button class="btn primary" onclick="publishAnnouncement()">Publier l’annonce</button></div></div></div>\n  <div class="stats">
     <div class="stat"><b id="countSuggestions">0</b><span>À valider</span></div>
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
     <div class="stat"><b id="countIdeas">0</b><span>Idées</span></div>
@@ -129,6 +130,9 @@ async function deleteCommunity(id){
  if(!confirm("Supprimer définitivement ce message et ses fichiers éventuels ?"))return;
  try{await rpc("admin_delete_community_post",{p_id:id});toast("Message communautaire supprimé.");loadCommunity()}catch(e){toast(e.message)}
 }
+function showAnnouncement(){$("announcementBox").classList.remove("hidden");$("announcementMessage").focus()}
+function hideAnnouncement(){$("announcementBox").classList.add("hidden")}
+async function publishAnnouncement(){const message=$("announcementMessage").value.trim(),link=$("announcementLink").value.trim();if(!message){toast("Écris le texte de l’annonce.");return}if(link&&!/^https?:\\/\\//i.test(link)){toast("Le lien doit commencer par https:// ou http://");return}try{await rpc("admin_create_announcement",{p_message:message,p_link:link||null});$("announcementMessage").value="";$("announcementLink").value="";hideAnnouncement();toast("Annonce publiée dans la communauté.");loadCommunity()}catch(e){toast(e.message)}}
 async function refreshAll(){await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity()])}
 
 document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
