@@ -22,7 +22,7 @@
 <main class="wrap">
 <section id="dashboard">
   <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" onclick="showAnnouncement()">📢 Faire une annonce</button><button class="btn" onclick="showDiagnostic()">🔧 Tester Supabase</button></div>
-<div id="announcementBox" class="panel hidden" style="margin-top:12px"><div class="section-head"><h2>📢 Nouvelle annonce</h2><button class="btn" onclick="hideAnnouncement()">Fermer</button></div><div style="display:grid;gap:10px"><input id="announcementMessage" maxlength="500" placeholder="Texte de l’annonce…"><input id="announcementLink" maxlength="500" placeholder="Lien facultatif (https://…)"><div class="actions"><button class="btn primary" onclick="publishAnnouncement()">Publier l’annonce</button></div></div></div>\n  <div class="stats">
+<div id="announcementBox" class="panel hidden" style="margin-top:12px"><div class="section-head"><h2>📢 Nouvelle annonce</h2><button class="btn" onclick="hideAnnouncement()">Fermer</button></div><div style="display:grid;gap:10px"><input id="announcementMessage" maxlength="500" placeholder="Texte de l’annonce…"><input id="announcementLink" maxlength="500" placeholder="Lien facultatif (https://…)"><div class="actions"><button class="btn primary" onclick="publishAnnouncement()">Publier l’annonce</button></div></div></div><div class="stats">
     <div class="stat"><b id="countSuggestions">0</b><span>À valider</span></div>
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
     <div class="stat"><b id="countIdeas">0</b><span>Idées</span></div>
@@ -44,7 +44,7 @@
   <section id="ideas" class="section"><div class="section-head"><h2>Boîte à idées</h2><button class="btn" onclick="loadIdeas()">↻ Actualiser</button></div><div id="ideasList" class="list"></div></section>
   <section id="contributions" class="section"><div class="section-head"><h2>Participations aux cagnottes</h2><button class="btn" onclick="loadContributions()">↻ Actualiser</button></div><div id="contributionsList" class="list"></div></section>
   <section id="community" class="section"><div class="section-head"><h2>Messages de la communauté</h2><button class="btn" onclick="loadCommunity()">↻ Actualiser</button></div><div id="communityList" class="list"></div></section>
-  <section id="fundraisers" class="section"><div class="section-head"><h2>Cagnottes à valider</h2><button class="btn" onclick="loadFundraisers()">↻ Actualiser</button></div><div id="fundraisersList" class="list"></div></section>
+  <section id="fundraisers" class="section"><div class="section-head"><h2>Gestion des cagnottes</h2><button class="btn" onclick="loadFundraisers()">↻ Actualiser</button></div><div id="fundraisersList" class="list"></div></section>
 </section>
 </main>
 <div id="diagnostic" class="panel" style="margin:20px 0;display:none"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><strong>🔧 Diagnostic Supabase</strong><div id="diagnosticStatus" class="meta" style="margin-top:4px">Prêt à tester la connexion.</div></div><button class="btn primary" onclick="runDiagnostic()">Tester la connexion</button></div><div id="diagnosticList" style="margin-top:12px"></div></div>
