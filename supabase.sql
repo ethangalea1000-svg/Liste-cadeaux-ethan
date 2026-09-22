@@ -199,20 +199,13 @@ $$;
 grant execute on function public.delete_message(bigint,text) to anon;
 
 
-create or replace function public.admin_list_pending_suggestions(p_password text)
+create or replace function public.admin_list_pending_suggestions()
 returns setof public.gift_suggestions
 language plpgsql
 security definer
 set search_path = public
 as $$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   return query
   select *
@@ -234,13 +227,6 @@ security definer
 set search_path = public
 as $$
 begin
-  if not exists (
-    select 1 from public.site_admin
-    where id = true
-      and extensions.crypt(p_password, password_hash) = password_hash
-  ) then
-    raise exception 'unauthorized';
-  end if;
 
   if p_status not in ('approved','rejected') then
     raise exception 'invalid status';
