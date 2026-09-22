@@ -531,18 +531,6 @@ with check (
 grant select, insert on table public.fundraisers to anon;
 grant usage, select on sequence public.fundraisers_id_seq to anon;
 
--- Cagnotte initiale pour l'ordinateur du lycée (entrée en seconde)
-insert into public.fundraisers (title, description, goal_amount, status)
-select
-  '💻 Ordinateur pour le lycée — Seconde',
-  'Cagnotte indicative pour aider à financer un ordinateur utile pour le lycée en seconde. Aucun paiement n’est effectué sur ce site.',
-  1000.00,
-  'approved'
-where not exists (
-  select 1 from public.fundraisers
-  where lower(title) = lower('💻 Ordinateur pour le lycée — Seconde')
-);
-
 -- Rattachement facultatif des participations à une cagnotte
 alter table public.contributions
 add column if not exists fundraiser_id bigint references public.fundraisers(id) on delete set null;
@@ -713,7 +701,7 @@ grant execute on function public.admin_list_community_posts() to anon;
 
 
 create or replace function public.admin_delete_message(
-  p_id bigint,
+  p_id bigint
   )
 returns boolean
 language plpgsql
@@ -731,7 +719,7 @@ grant execute on function public.admin_delete_message(bigint) to anon;
 
 
 create or replace function public.admin_delete_idea(
-  p_id bigint,
+  p_id bigint
   )
 returns boolean
 language plpgsql
@@ -749,7 +737,7 @@ grant execute on function public.admin_delete_idea(bigint) to anon;
 
 
 create or replace function public.admin_delete_contribution(
-  p_id bigint,
+  p_id bigint
   )
 returns boolean
 language plpgsql
@@ -767,7 +755,7 @@ grant execute on function public.admin_delete_contribution(bigint) to anon;
 
 
 create or replace function public.admin_delete_community_post(
-  p_id bigint,
+  p_id bigint
   )
 returns boolean
 language plpgsql
