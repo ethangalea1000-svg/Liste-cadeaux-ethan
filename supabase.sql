@@ -800,3 +800,44 @@ end;
 $admincommunitydel$;
 
 grant execute on function public.admin_delete_community_post(bigint) to anon;
+
+
+-- =====================================================
+-- OUTILS ADMIN : SUPPRESSION + ANNONCES
+-- =====================================================
+
+create or replace function public.admin_delete_suggestion(p_id bigint)
+returns boolean language plpgsql security definer set search_path=public as $admsuggdel$
+begin
+  delete from public.gift_suggestions where id=p_id;
+  return found;
+end;
+$admsuggdel$;
+grant execute on function public.admin_delete_suggestion(bigint) to anon;
+
+create or replace function public.admin_delete_fundraiser(p_id bigint)
+returns boolean language plpgsql security definer set search_path=public as $admfunddel$
+begin
+  delete from public.fundraisers where id=p_id;
+  return found;
+end;
+$admfunddel$;
+grant execute on function public.admin_delete_fundraiser(bigint) to anon;
+
+create or replace function public.admin_create_announcement(p_message text,p_link text default null)
+returns bigint language plpgsql security definer set search_path=public as $admannounce$
+declare new_id bigint;
+begin
+  if char_length(trim(coalesce(p_message,''))) < 1 or char_length(trim(p_message)) > 500 then
+    raise exception 'invalid announcement';
+  end if;
+  if p_link is not null and char_length(trim(p_link)) > 500 then
+    raise exception 'invalid announcement link';
+  end if;
+  insert into public.community_posts(name,message,link)
+  values ('📢 Ethan',trim(p_message),nullif(trim(p_link),''))
+  returning id into new_id;
+  return new_id;
+end;
+$admannounce$;
+grant execute on function public.admin_create_announcement(text,text) to anon;
