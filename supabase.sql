@@ -208,7 +208,7 @@ create table if not exists public.site_admin (
 );
 
 insert into public.site_admin (id,password_hash)
-values (true, crypt('CHANGE_ME_ADMIN_PASSWORD', gen_salt('bf')))
+values (true, extensions.crypt('CHANGE_ME_ADMIN_PASSWORD', extensions.gen_salt('bf')))
 on conflict (id) do nothing;
 
 revoke all on table public.site_admin from anon;
@@ -223,7 +223,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -252,7 +252,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -615,7 +615,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -644,7 +644,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -678,7 +678,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -703,7 +703,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -736,7 +736,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -769,7 +769,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -797,7 +797,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -823,7 +823,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -849,7 +849,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
@@ -879,7 +879,7 @@ begin
   if not exists (
     select 1 from public.site_admin
     where id = true
-      and crypt(p_password, password_hash) = password_hash
+      and extensions.crypt(p_password, password_hash) = password_hash
   ) then
     raise exception 'unauthorized';
   end if;
