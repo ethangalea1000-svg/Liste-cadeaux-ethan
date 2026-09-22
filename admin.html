@@ -21,7 +21,7 @@
 
 <main class="wrap">
 <section id="dashboard">
-  <div class="stats">
+  <div style="display:flex;justify-content:flex-end;margin-top:18px"><button class="btn primary" onclick="showDiagnostic()">🔧 Tester Supabase</button></div>\n  <div class="stats">
     <div class="stat"><b id="countSuggestions">0</b><span>À valider</span></div>
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
     <div class="stat"><b id="countIdeas">0</b><span>Idées</span></div>
@@ -46,6 +46,7 @@
   <section id="fundraisers" class="section"><div class="section-head"><h2>Cagnottes à valider</h2><button class="btn" onclick="loadFundraisers()">↻ Actualiser</button></div><div id="fundraisersList" class="list"></div></section>
 </section>
 </main>
+<div id="diagnostic" class="panel" style="margin:20px 0;display:none"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><strong>🔧 Diagnostic Supabase</strong><div id="diagnosticStatus" class="meta" style="margin-top:4px">Prêt à tester la connexion.</div></div><button class="btn primary" onclick="runDiagnostic()">Tester la connexion</button></div><div id="diagnosticList" style="margin-top:12px"></div></div>
 <div id="toast" class="toast"></div>
 
 <script>
@@ -59,10 +60,22 @@ function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");set
 async function rpc(name,body){
  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
  const data=await r.json().catch(()=>null);
- if(!r.ok)throw new Error(data?.message||data?.hint||data?.error||"Action refusée");
+ if(!r.ok)throw new Error(data?.message||data?.hint||data?.details||data?.error||("HTTP "+r.status+" "+r.statusText));
  return data;
 }
 function empty(text){return '<div class="empty">'+esc(text)+'</div>'}
+function showDiagnostic(){$("diagnostic").style.display="block"}
+async function runDiagnostic(){
+ showDiagnostic();
+ const tests=["admin_list_pending_suggestions","admin_list_pending_fundraisers","admin_list_messages","admin_list_ideas","admin_list_contributions","admin_list_community_posts"];
+ $("diagnosticStatus").textContent="Test en cours…"; $("diagnosticList").innerHTML="";
+ const results=[];
+ for(const fn of tests){
+  try{const data=await rpc(fn,{});results.push('<div style="padding:9px;border-bottom:1px solid var(--line)">✅ <strong>'+esc(fn)+'</strong> — OK ('+(Array.isArray(data)?data.length:"réponse reçue")+')</div>')}
+  catch(e){results.push('<div style="padding:9px;border-bottom:1px solid var(--line)">❌ <strong>'+esc(fn)+'</strong><div class="message" style="font-size:13px">Erreur : '+esc(e.message)+'</div></div>')}
+ }
+ $("diagnosticList").innerHTML=results.join(""); $("diagnosticStatus").textContent="Diagnostic terminé.";
+}
 
 async function loadSuggestions(){
  try{
