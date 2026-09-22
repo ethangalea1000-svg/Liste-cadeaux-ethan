@@ -3,82 +3,147 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Administration — La liste d’Ethan</title>
+<title>Centre de gestion — Liste d’Ethan</title>
 <style>
-:root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#6b7280;--line:#e6e8ef;--accent:#5b5ce2;--ok:#14804a;--danger:#a33;--shadow:0 10px 30px rgba(20,25,50,.08)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}.hero{padding:28px 20px;background:linear-gradient(135deg,#17192a,#393b73);color:#fff}.wrap{max-width:900px;margin:auto}.hero-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.back{color:#fff;text-decoration:none;background:#ffffff1f;padding:9px 12px;border-radius:10px;font-weight:700}.panel{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.form{display:grid;gap:10px}.form input{padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}.primary{background:var(--accent);color:#fff}.approve{background:#e8f6ef;color:var(--ok)}.reject{background:#fff0f0;color:var(--danger)}.list{display:grid;gap:12px;margin-top:18px}.item{border:1px solid var(--line);border-radius:14px;padding:15px}.meta{color:var(--muted);font-size:12px;margin-bottom:7px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.hidden{display:none}.empty{color:var(--muted);padding:16px 0}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transition:.2s}.toast.show{opacity:1}
+:root{--bg:#f4f6fb;--card:#fff;--text:#161a2b;--muted:#687084;--line:#e3e7ef;--accent:#5856d6;--ok:#14804a;--okbg:#e8f7ef;--danger:#b33a3a;--dangerbg:#fff0f0;--bluebg:#eef2ff;--shadow:0 10px 35px rgba(25,30,60,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.wrap{max-width:1100px;margin:auto;padding:0 16px}
+.hero{background:linear-gradient(135deg,#15182a,#4c4a9e);color:#fff;padding:24px 0}.hero-row{display:flex;align-items:center;justify-content:space-between;gap:15px}.hero h1{margin:4px 0 0;font-size:25px}.back{color:#fff;text-decoration:none;background:#ffffff20;padding:9px 12px;border-radius:10px;font-weight:800}
+.login{max-width:480px;margin:45px auto}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;font:inherit}.btn{border:0;border-radius:11px;padding:10px 14px;font-weight:800;cursor:pointer}.primary{background:var(--accent);color:#fff}.danger{background:var(--dangerbg);color:var(--danger)}.success{background:var(--okbg);color:var(--ok)}
+.hidden{display:none}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.stat b{font-size:24px;display:block}.stat span{color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:5px;margin-bottom:15px}.tab{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-weight:800;cursor:pointer;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.section{display:none}.section.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.section-head h2{margin:0}.list{display:grid;gap:12px}.item{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.meta{font-size:12px;color:var(--muted);margin-bottom:7px}.message{white-space:pre-wrap;line-height:1.5;margin-top:8px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--bluebg);font-size:11px;font-weight:800}.empty{padding:28px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:15px}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 15px;border-radius:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:20}.toast.show{opacity:1;transform:none}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.hero-row{align-items:flex-start}.hero h1{font-size:21px}}
+@media(max-width:450px){.stats{grid-template-columns:1fr 1fr}.panel{padding:15px}}
 </style>
 </head>
 <body>
-<header class="hero"><div class="wrap hero-row"><div><strong>🔐 Administration</strong><div style="margin-top:6px;color:#e8e9f2">Validation des suggestions et des cagnottes</div></div><a class="back" href="index.html">← Liste</a></div></header>
+<header class="hero"><div class="wrap hero-row"><div><div style="font-size:12px;opacity:.8">🔐 CENTRE DE GESTION</div><h1>La liste d’Ethan</h1></div><a class="back" href="index.html">← Retour à la liste</a></div></header>
+
 <main class="wrap">
-<section id="loginPanel" class="panel">
-<h2>Accès administrateur</h2>
-<form id="loginForm" class="form">
-<input id="password" type="password" minlength="8" required placeholder="Mot de passe admin">
-<button class="btn primary" type="submit">Ouvrir</button>
-<div style="color:#6b7280;font-size:12px">Le mot de passe n'est pas enregistré dans cette page.</div>
-</form>
+<section id="loginPanel" class="panel login">
+  <h2>Connexion</h2>
+  <p style="color:var(--muted)">Un seul mot de passe pour gérer les propositions, messages et participations.</p>
+  <form id="loginForm">
+    <input id="password" type="password" minlength="8" required placeholder="Mot de passe administrateur" autocomplete="current-password">
+    <button class="btn primary" style="margin-top:10px;width:100%" type="submit">Ouvrir le centre de gestion</button>
+  </form>
 </section>
-<section id="adminPanel" class="panel hidden">
-<h2>Suggestions en attente</h2>
-<div id="list" class="list"></div>
-<h2 style="margin-top:28px">Cagnottes en attente</h2>
-<div id="fundraiserList" class="list"></div>
+
+<section id="dashboard" class="hidden">
+  <div class="stats">
+    <div class="stat"><b id="countSuggestions">0</b><span>À valider</span></div>
+    <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
+    <div class="stat"><b id="countIdeas">0</b><span>Idées</span></div>
+    <div class="stat"><b id="countContributions">0</b><span>Participations</span></div>
+    <div class="stat"><b id="countCommunity">0</b><span>Communauté</span></div>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="pending">À valider</button>
+    <button class="tab" data-tab="messages">Messages</button>
+    <button class="tab" data-tab="ideas">Idées</button>
+    <button class="tab" data-tab="contributions">Participations</button>
+    <button class="tab" data-tab="community">Communauté</button>
+    <button class="tab" data-tab="fundraisers">Cagnottes</button>
+  </nav>
+
+  <section id="pending" class="section active"><div class="section-head"><h2>Suggestions à valider</h2><button class="btn" onclick="refreshAll()">↻ Actualiser</button></div><div id="suggestions" class="list"></div></section>
+  <section id="messages" class="section"><div class="section-head"><h2>Messages privés</h2><button class="btn" onclick="loadMessages()">↻ Actualiser</button></div><div id="messagesList" class="list"></div></section>
+  <section id="ideas" class="section"><div class="section-head"><h2>Boîte à idées</h2><button class="btn" onclick="loadIdeas()">↻ Actualiser</button></div><div id="ideasList" class="list"></div></section>
+  <section id="contributions" class="section"><div class="section-head"><h2>Participations aux cagnottes</h2><button class="btn" onclick="loadContributions()">↻ Actualiser</button></div><div id="contributionsList" class="list"></div></section>
+  <section id="community" class="section"><div class="section-head"><h2>Messages de la communauté</h2><button class="btn" onclick="loadCommunity()">↻ Actualiser</button></div><div id="communityList" class="list"></div></section>
+  <section id="fundraisers" class="section"><div class="section-head"><h2>Cagnottes à valider</h2><button class="btn" onclick="loadFundraisers()">↻ Actualiser</button></div><div id="fundraisersList" class="list"></div></section>
 </section>
 </main>
 <div id="toast" class="toast"></div>
+
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
 let adminPassword="";
-const list=document.getElementById("list"),toast=document.getElementById("toast");
-function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-async function loadPending(){
- const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_list_pending_suggestions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_password:adminPassword})});
- if(!r.ok){showToast("Mot de passe incorrect ou accès refusé.");return false}
- const rows=await r.json();list.innerHTML="";
- if(!rows.length){list.innerHTML='<div class="empty">Aucune suggestion en attente.</div>';loadPendingFundraisers();return true}
- rows.forEach(x=>{
-  const d=document.createElement("article");d.className="item";
-  d.innerHTML='<div class="meta"><strong>'+esc(x.name||"Anonyme")+'</strong> · '+new Date(x.created_at).toLocaleString("fr-FR")+'</div><div><strong>'+esc(x.gift_name)+'</strong></div>'+(x.message?'<div style="margin-top:6px">'+esc(x.message)+'</div>':"")+(x.link?'<div style="margin-top:8px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener noreferrer">Voir le lien</a></div>':"")+'<div class="actions"><button class="btn approve">✓ Valider</button><button class="btn reject">✕ Refuser</button></div>';
-  d.querySelector(".approve").onclick=()=>setStatus(x.id,"approved");
-  d.querySelector(".reject").onclick=()=>setStatus(x.id,"rejected");
-  list.appendChild(d);
- });
- loadPendingFundraisers();
- return true;
-}
-async function loadPendingFundraisers(){
- const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_list_pending_fundraisers",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_password:adminPassword})});
- if(!r.ok){showToast("Impossible de charger les cagnottes.");return}
- const rows=await r.json(),box=document.getElementById("fundraiserList");box.innerHTML="";
- if(!rows.length){box.innerHTML='<div class="empty">Aucune cagnotte en attente.</div>';return}
- rows.forEach(x=>{
-  const d=document.createElement("article");d.className="item";
-  d.innerHTML='<div class="meta">'+new Date(x.created_at).toLocaleString("fr-FR")+'</div><div><strong>'+esc(x.title)+'</strong></div>'+(x.description?'<div style="margin-top:6px">'+esc(x.description)+'</div>':"")+'<div style="margin-top:8px"><strong>Objectif :</strong> '+Number(x.goal_amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</div><div class="actions"><button class="btn approve">✓ Valider</button><button class="btn reject">✕ Refuser</button></div>';
-  d.querySelector(".approve").onclick=()=>setFundraiserStatus(x.id,"approved");
-  d.querySelector(".reject").onclick=()=>setFundraiserStatus(x.id,"rejected");
-  box.appendChild(d);
- });
-}
-async function setFundraiserStatus(id,status){
- const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_set_fundraiser_status",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_password:adminPassword,p_status:status})});
- if(!r.ok){showToast("Action refusée.");return}
- showToast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");
- loadPendingFundraisers();
-}
 
-async function setStatus(id,status){
- const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/admin_set_suggestion_status",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_password:adminPassword,p_status:status})});
- if(!r.ok){showToast("Action refusée.");return}
- showToast(status==="approved"?"Suggestion validée.":"Suggestion refusée.");loadPending();
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function date(v){return v?new Date(v).toLocaleString("fr-FR"):""}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2300)}
+async function rpc(name,body){
+ const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
+ const data=await r.json().catch(()=>null);
+ if(!r.ok)throw new Error(data?.message||data?.hint||data?.error||"Action refusée");
+ return data;
 }
-document.getElementById("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();
- adminPassword=document.getElementById("password").value;
- if(await loadPending()){document.getElementById("loginPanel").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");loadPendingFundraisers();}
+function empty(text){return '<div class="empty">'+esc(text)+'</div>'}
+
+async function loadSuggestions(){
+ try{
+  const rows=await rpc("admin_list_pending_suggestions",{p_password:adminPassword});
+  $("countSuggestions").textContent=rows.length;$("suggestions").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta">'+esc(x.name||"Anonyme")+' · '+date(x.created_at)+'</div><div><strong>'+esc(x.gift_name)+'</strong></div>'+(x.message?'<div class="message">'+esc(x.message)+'</div>':"")+(x.link?'<div style="margin-top:8px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">Voir le lien</a></div>':"")+'<div class="actions"><button class="btn success" onclick="suggestionStatus('+x.id+',\'approved\')">✓ Valider</button><button class="btn danger" onclick="suggestionStatus('+x.id+',\'rejected\')">✕ Refuser</button></div></article>').join(""):empty("Aucune suggestion en attente.");
+ }catch(e){toast(e.message)}
+}
+async function suggestionStatus(id,status){try{await rpc("admin_set_suggestion_status",{p_id:id,p_password:adminPassword,p_status:status});toast(status==="approved"?"Suggestion validée.":"Suggestion refusée.");loadSuggestions()}catch(e){toast(e.message)}}
+
+async function loadFundraisers(){
+ try{
+  const rows=await rpc("admin_list_pending_fundraisers",{p_password:adminPassword});
+  $("fundraisersList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta">'+date(x.created_at)+'</div><div><strong>'+esc(x.title)+'</strong></div>'+(x.description?'<div class="message">'+esc(x.description)+'</div>':"")+'<div style="margin-top:8px"><span class="badge">Objectif '+Number(x.goal_amount).toLocaleString("fr-FR",{minimumFractionDigits:2})+' €</span></div><div class="actions"><button class="btn success" onclick="fundraiserStatus('+x.id+',\'approved\')">✓ Valider</button><button class="btn danger" onclick="fundraiserStatus('+x.id+',\'rejected\')">✕ Refuser</button></div></article>').join(""):empty("Aucune cagnotte en attente.");
+ }catch(e){toast(e.message)}
+}
+async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_status",{p_id:id,p_password:adminPassword,p_status:status});toast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");loadFundraisers()}catch(e){toast(e.message)}}
+
+async function loadMessages(){
+ try{
+  const rows=await rpc("admin_list_messages",{p_password:adminPassword});
+  $("countMessages").textContent=rows.length;
+  $("messagesList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div class="message">'+esc(x.message)+'</div><div class="actions"><button class="btn danger" onclick="deleteItem(\'admin_delete_message\','+x.id+',\'Message supprimé.\')">Supprimer</button></div></article>').join(""):empty("Aucun message.");
+ }catch(e){toast(e.message)}
+}
+async function loadIdeas(){
+ try{
+  const rows=await rpc("admin_list_ideas",{p_password:adminPassword});
+  $("countIdeas").textContent=rows.length;
+  $("ideasList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div class="message">'+esc(x.idea)+'</div><div class="actions"><button class="btn danger" onclick="deleteItem(\'admin_delete_idea\','+x.id+',\'Idée supprimée.\')">Supprimer</button></div></article>').join(""):empty("Aucune idée.");
+ }catch(e){toast(e.message)}
+}
+async function loadContributions(){
+ try{
+  const rows=await rpc("admin_list_contributions",{p_password:adminPassword});
+  $("countContributions").textContent=rows.length;
+  $("contributionsList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div><strong>'+Number(x.amount).toLocaleString("fr-FR",{minimumFractionDigits:2})+' €</strong>'+(x.fundraiser_title?' · '+esc(x.fundraiser_title):"")+'</div>'+(x.message?'<div class="message">'+esc(x.message)+'</div>':"")+'<div class="actions"><button class="btn danger" onclick="deleteItem(\'admin_delete_contribution\','+x.id+',\'Participation supprimée.\')">Supprimer</button></div></article>').join(""):empty("Aucune participation.");
+ }catch(e){toast(e.message)}
+}
+async function loadCommunity(){
+ try{
+  const rows=await rpc("admin_list_community_posts",{p_password:adminPassword});
+  $("countCommunity").textContent=rows.length;
+  $("communityList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="meta"><strong>'+esc(x.name)+'</strong> · '+date(x.created_at)+'</div><div class="message">'+esc(x.message)+'</div>'+(x.link?'<div style="margin-top:8px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">Ouvrir le lien</a></div>':"")+'<div class="actions"><button class="btn danger" onclick="deleteCommunity('+x.id+')">Supprimer le message</button></div></article>').join(""):empty("Aucun message communautaire.");
+ }catch(e){toast(e.message)}
+}
+async function deleteItem(fn,id,msg){
+ if(!confirm("Supprimer définitivement cet élément ?"))return;
+ try{await rpc(fn,{p_id:id,p_password:adminPassword});toast(msg);refreshAll()}catch(e){toast(e.message)}
+}
+async function deleteCommunity(id){
+ if(!confirm("Supprimer définitivement ce message et ses fichiers éventuels ?"))return;
+ try{await rpc("admin_delete_community_post",{p_id:id,p_password:adminPassword});toast("Message communautaire supprimé.");loadCommunity()}catch(e){toast(e.message)}
+}
+async function refreshAll(){await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity()])}
+
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+ btn.classList.add("active");$(btn.dataset.tab).classList.add("active");
+}));
+
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();adminPassword=$("password").value;
+ try{
+  await loadSuggestions();
+  const test=await rpc("admin_list_messages",{p_password:adminPassword});
+  $("loginPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");
+  $("countMessages").textContent=test.length;
+  await Promise.all([loadFundraisers(),loadIdeas(),loadContributions(),loadCommunity()]);
+  toast("Centre de gestion ouvert.");
+ }catch(e){toast("Mot de passe incorrect ou accès refusé.");}
 });
 </script>
 </body>
