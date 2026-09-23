@@ -1492,6 +1492,9 @@ on conflict (id) do update set
  image=excluded.image,official_label=excluded.official_label,official_url=excluded.official_url,
  funding_note=excluded.funding_note,updated_at=now();
 
+-- Le type de retour de cette fonction a évolué : suppression obligatoire avant recréation.
+drop function if exists public.get_private_gifts(text);
+
 create or replace function public.get_private_gifts(p_code text)
 returns table (
   id text,sort_order integer,cat text,title text,price text,description text,image text,
