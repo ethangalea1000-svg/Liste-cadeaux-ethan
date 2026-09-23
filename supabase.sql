@@ -1436,4 +1436,6 @@ $$;
 grant execute on function public.cancel_private_reservation(text,text,text) to anon;
 
 -- Les anciennes fonctions/règles publiques ne sont plus utilisées par le site.
-revoke execute on function public.cancel_reservation(text,text) from anon;
+revoke execute on function public.cancel_reservation(text,text) from anon, authenticated;
+
+notify pgrst, 'reload schema';
