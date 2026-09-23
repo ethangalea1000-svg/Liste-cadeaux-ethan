@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Mes données — Liste d’Ethan",
+  "version": "1.0.0",
+  "description": "Exporte l'activité effectuée sur la liste d’Ethan. L’extension ne surveille pas Google ni les autres sites.",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "Mes données — Liste d’Ethan",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://ethangalea1000-svg.github.io/Liste-cadeaux-ethan/*"],
+      "js": ["site-tracker.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
