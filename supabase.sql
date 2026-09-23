@@ -1321,7 +1321,7 @@ begin
   group by d.day
   order by d.day;
 end;
-$daily$;;
+$daily$;
 
 grant execute on function public.admin_activity_daily() to anon;
 
@@ -1358,7 +1358,7 @@ begin
     count(*) filter (where entity_type = 'Réaction') as reactions
   from public.audit_logs;
 end;
-$summary$;;
+$summary$;
 
 grant execute on function public.admin_activity_summary() to anon;
 
