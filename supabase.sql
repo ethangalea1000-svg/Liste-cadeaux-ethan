@@ -1319,7 +1319,7 @@ begin
   left join public.audit_logs a
     on a.created_at::date = d.day
   group by d.day
-  order by d.day;;
+  order by d.day;
 end;
 $daily$;;
 
@@ -1356,7 +1356,7 @@ begin
     count(*) filter (where entity_type = 'Communauté') as community,
     count(*) filter (where entity_type = 'Cagnotte') as fundraisers,
     count(*) filter (where entity_type = 'Réaction') as reactions
-  from public.audit_logs;;
+  from public.audit_logs;
 end;
 $summary$;;
 
@@ -1622,9 +1622,9 @@ begin
     greatest(g.target_amount-coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0),0)::numeric,
     (select count(*) from public.gift_contributions c where c.gift_id=g.id),
     (select r.name from public.reservations r where r.gift_id=g.id limit 1)
-  from public.gift_catalog g order by g.sort_order,g.id;;
+  from public.gift_catalog g order by g.sort_order,g.id;
 end;
-$$;;
+$;
 
 grant execute on function public.admin_list_gift_catalog() to anon;
 
@@ -1680,9 +1680,9 @@ begin
   return query
   select c.id,c.gift_id,g.title,c.name,c.amount,c.message,c.created_at
   from public.gift_contributions c left join public.gift_catalog g on g.id=c.gift_id
-  order by c.created_at desc;;
+  order by c.created_at desc;
 end;
-$$;;
+$;
 
 grant execute on function public.admin_list_gift_contributions() to anon;
 
@@ -1709,9 +1709,9 @@ as $$
 begin
   perform public.assert_admin_header();
   return query
-  select id,label,code,active,is_admin,created_at,last_used_at from public.list_access_codes order by created_at desc;;
+  select id,label,code,active,is_admin,created_at,last_used_at from public.list_access_codes order by created_at desc;
 end;
-$$;;
+$;
 
 grant execute on function public.admin_list_access_codes() to anon;
 
