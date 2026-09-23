@@ -24,12 +24,13 @@
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
     <div class="stat"><b id="countIdeas">0</b><span>Idées</span></div>
     <div class="stat"><b id="countContributions">0</b><span>Participations</span></div>
-    <div class="stat"><b id="countCommunity">0</b><span>Communauté</span></div><div class="stat"><b id="countActivity">0</b><span>Actions enregistrées</span></div><div class="stat"><b id="countVisits">0</b><span>Visites enregistrées</span></div>
+    <div class="stat"><b id="countCommunity">0</b><span>Communauté</span></div><div class="stat"><b id="countActivity">0</b><span>Actions enregistrées</span></div><div class="stat"><b id="countVisits">0</b><span>Visites enregistrées</span></div><div class="stat"><b id="countPeople">0</b><span>Personnes</span></div>
   </div>
 
   <nav class="tabs">
     <button class="tab active" data-tab="pending">À valider</button>
     <button class="tab" data-tab="messages">Messages</button>
+    <button class="tab" data-tab="people">👥 Personnes</button>
     <button class="tab" data-tab="ideas">Idées</button>
     <button class="tab" data-tab="contributions">Participations</button>
     <button class="tab" data-tab="community">Communauté</button>
@@ -37,6 +38,7 @@
   </nav>
 
   <section id="pending" class="section active"><div class="section-head"><h2>Suggestions à valider</h2><button class="btn" onclick="refreshAll()">↻ Actualiser</button></div><div id="suggestions" class="list"></div></section>
+  <section id="people" class="section"><div class="section-head"><div><h2>👥 Personnes</h2><div class="meta">Profils enregistrés et résumé de leurs activités sur le site.</div></div><button class="btn" onclick="loadPeople()">↻ Actualiser</button></div><div id="peopleList" class="list"></div></section>
   <section id="messages" class="section"><div class="section-head"><h2>Messages privés</h2><button class="btn" onclick="loadMessages()">↻ Actualiser</button></div><div id="messagesList" class="list"></div></section>
   <section id="ideas" class="section"><div class="section-head"><h2>Boîte à idées</h2><button class="btn" onclick="loadIdeas()">↻ Actualiser</button></div><div id="ideasList" class="list"></div></section>
   <section id="contributions" class="section"><div class="section-head"><h2>Participations aux cagnottes</h2><button class="btn" onclick="loadContributions()">↻ Actualiser</button></div><div id="contributionsList" class="list"></div></section>
@@ -100,6 +102,13 @@ async function loadFundraisers(){
 }
 async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_status",{p_id:id,p_status:status});toast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");loadFundraisers()}catch(e){toast(e.message)}}
 
+async function loadPeople(){
+ try{
+  const rows=await rpc("admin_list_guest_profiles",{});
+  $("countPeople").textContent=rows.length;
+  $("peopleList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(x.avatar||"👤")+'</div><div><strong>'+esc(x.name)+'</strong><div class="meta" style="margin:3px 0 0">'+esc(x.relation)+'</div></div></div>'+(x.bio?'<div class="message">'+esc(x.bio)+'</div>':"")+'<div class="actions"><span class="badge">💬 '+Number(x.messages_count||0)+' message(s)</span><span class="badge">💡 '+Number(x.ideas_count||0)+' idée(s)</span><span class="badge">🎁 '+Number(x.suggestions_count||0)+' suggestion(s)</span><span class="badge">💶 '+Number(x.contributions_count||0)+' participation(s)</span><span class="badge">💬 '+Number(x.community_count||0)+' publication(s)</span></div><div class="meta" style="margin-top:10px">Profil mis à jour le '+date(x.updated_at)+'</div></article>').join(""):empty("Aucun profil enregistré pour le moment.");
+ }catch(e){toast(e.message)}
+}
 async function loadMessages(){
  try{
   const rows=await rpc("admin_list_messages",{});
@@ -171,7 +180,7 @@ function renderActivityBars(s){
  const max=Math.max(1,...items.map(x=>Number(x[1]||0)));
  $("activityBars").innerHTML=items.map(([label,val])=>'<div class="bar-row"><span>'+label+'</span><div class="bar-track"><div class="bar-fill" style="width:'+((Number(val||0)/max)*100)+'%"></div></div><b>'+Number(val||0)+'</b></div>').join("");
 }
-async function refreshAll(){await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity()])}
+async function refreshAll(){await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople()])}
 
 document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
