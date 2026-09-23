@@ -8,7 +8,7 @@
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#6b7280;--line:#e6e8ef;--accent:#5b5ce2;--ok:#14804a;--shadow:0 10px 30px rgba(20,25,50,.08)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}a{color:inherit}.hero{padding:48px 20px 32px;background:linear-gradient(135deg,#17192a,#393b73);color:#fff}.wrap{max-width:1100px;margin:auto}.tag{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffffff24;font-size:13px}h1{font-size:clamp(32px,6vw,52px);line-height:1.03;margin:16px 0 12px}.hero p{max-width:720px;color:#e8e9f2;font-size:17px;line-height:1.55}.topnav{position:absolute;right:20px;top:20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.topnav a{padding:9px 12px;border-radius:10px;background:#ffffff1f;color:#fff;text-decoration:none;font-weight:700;font-size:13px}.topnav a:hover{background:#ffffff30}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}button,.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:#fff;color:#23254f}.secondary{background:#ffffff1f;color:#fff}main{padding:28px 20px 60px}.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}input,select{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 13px;font:inherit;outline:none}input{flex:1;min-width:220px}.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px;box-shadow:var(--shadow)}.stat b{display:block;font-size:19px}.stat span{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}.top{padding:18px 18px 10px}.cat{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--accent)}.title{font-size:20px;font-weight:800;margin:7px 0}.desc{color:var(--muted);line-height:1.45;font-size:14px;min-height:58px}.bottom{margin-top:auto;padding:14px 18px 18px;border-top:1px solid var(--line)}.price{font-size:18px;font-weight:850;margin-bottom:12px}.price small{font-size:12px;color:var(--muted);font-weight:500}.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.reserve{background:var(--accent);color:#fff;flex:1}.reserve.done{background:#e8f6ef;color:var(--ok);cursor:default}.link{background:#f0f1f6;color:#303345}.reserved{font-size:13px;color:var(--ok);margin:8px 0 0}.empty{padding:35px;text-align:center;color:var(--muted);grid-column:1/-1}.foot{margin-top:30px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px;color:var(--muted);font-size:13px;line-height:1.5}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:.2s}.toast.show{opacity:1;transform:none}.product-image{width:100%;height:190px;object-fit:contain;background:#fff;padding:12px;border-bottom:1px solid var(--line)}.image-wrap{position:relative;background:#fff}.image-label{position:absolute;left:12px;bottom:10px;background:#17192ad9;color:#fff;border-radius:999px;padding:5px 9px;font-size:11px}.shop-title{font-size:12px;text-transform:uppercase;font-weight:800;color:var(--muted);margin:12px 0 7px}.shop-links{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.shop-links a{background:#f4f5f8;border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-size:12px;text-decoration:none;font-weight:700}.shop-links a:hover{background:#eaebf2}.official{background:#edf7ff!important;border-color:#c9e5ff!important}.offer-note{font-size:11px;color:var(--muted);margin:-3px 0 10px}.featured-shop{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.ai-search{display:block;width:100%;margin:8px 0 10px;background:#eef0ff;border:1px solid #d9dcff;color:#30338a;border-radius:10px;padding:9px 10px;font-weight:800;cursor:pointer}.ai-search:hover{background:#e4e6ff}.compare-search{display:block;width:100%;margin:8px 0 10px;background:#edf8ef;border:1px solid #c8e8cf;color:#12652b;border-radius:10px;padding:9px 10px;font-weight:800;cursor:pointer}.compare-search:hover{background:#e4f5e7}.ai-results{margin-top:12px;border:1px solid #dfe2ef;border-radius:14px;background:#fbfbfe;padding:12px;display:none}.ai-results.show{display:block}.ai-loading{font-size:13px;color:var(--muted)}.ai-summary{font-size:13px;line-height:1.5;margin:8px 0}.ai-offers{display:grid;gap:7px;margin-top:8px}.ai-offer{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px}.ai-offer-main{min-width:0}.ai-shop{font-weight:800}.ai-price{font-weight:800;white-space:nowrap}.ai-status{font-size:11px;color:var(--muted)}.ai-open{background:var(--accent);color:#fff;border-radius:8px;padding:6px 8px;text-decoration:none;font-size:11px;font-weight:800;white-space:nowrap}.ai-images{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}.ai-image-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.ai-image-card img{width:100%;height:100px;object-fit:cover;display:block}.ai-image-card a{display:block;padding:6px 7px;font-size:10px;text-decoration:none}.ai-sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.ai-source{font-size:11px;background:#f2f3f7;border-radius:8px;padding:6px 8px;text-decoration:none}.ai-meta{font-size:10px;color:var(--muted);margin-top:9px}.ai-error{color:#a33;background:#fff0f0;border:1px solid #f0c8c8;border-radius:10px;padding:9px;font-size:12px}.ai-google-suggestions{margin-top:10px;border-top:1px solid var(--line);padding-top:9px}.ai-google-suggestions iframe{width:100%;height:78px;border:0;border-radius:8px;background:#fff}.ai-note{font-size:11px;color:var(--muted);margin:0 0 8px}
-.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;margin-top:30px}.panel{min-width:0;overflow:hidden}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h2{margin:0 0 8px;font-size:22px}.panel p{color:var(--muted);line-height:1.5;font-size:14px}.form-grid{display:grid;gap:10px;margin-top:14px}.form-grid input,.form-grid select,.form-grid textarea{width:100%;min-width:0;max-width:100%}.form-grid textarea{min-height:90px;resize:vertical}.form-actions{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}.send{background:var(--accent);color:#fff}.fundraisers-main{margin-top:30px}.fundraisers-main .panel{padding:22px}.fundraiser-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:18px}.fundraiser-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(180deg,#fff,#fafaff);box-shadow:0 6px 18px rgba(20,25,50,.05)}.fundraiser-title{font-weight:850;font-size:17px}.progress{height:9px;background:#eceef5;border-radius:999px;overflow:hidden;margin:9px 0}.progress>span{display:block;height:100%;background:var(--accent);border-radius:999px}.fundraiser-meta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}.contrib-total{font-size:30px;font-weight:850;margin:8px 0}.mini-list{margin:14px 0 0;padding:0;list-style:none}.mini-list li{padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}.mini-list small{color:var(--muted)}.form-note{font-size:12px;color:var(--muted);margin-top:8px}.delete-btn{background:#fff0f0;color:#a33;border:1px solid #f0c8c8;padding:7px 10px;border-radius:9px;font-size:12px}.mini-list li{align-items:flex-start;min-width:0}.mini-list li>div:first-child{min-width:0;overflow-wrap:anywhere}.mini-list .item-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.item-actions button,.item-actions a{white-space:nowrap}.gift-funding{margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fafbff}.funding-bar{height:8px;background:#e8eaf2;border-radius:99px;overflow:hidden;margin:7px 0}.funding-bar span{display:block;height:100%;background:var(--accent);border-radius:99px}.funding-meta{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}.gift-contribute{margin-top:9px;background:#14804a;color:#fff;width:100%}.access-gate{max-width:620px;margin:0 auto 28px}.access-gate .access-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow)}.access-gate h2{margin:0 0 8px;font-size:25px}.access-gate p{color:var(--muted);line-height:1.55}.access-form{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:16px}.access-form input{min-width:0;width:100%}.access-form button{background:var(--accent);color:#fff}.access-note{font-size:12px;color:var(--muted);margin-top:10px}.access-status{margin-top:10px;font-size:13px}.private-locked{display:none!important}main.locked>:not(#accessGate){display:none!important}@media(max-width:600px){.access-form{grid-template-columns:1fr}.access-form button{width:100%}}</style></head>
+.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;margin-top:30px}.panel{min-width:0;overflow:hidden}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h2{margin:0 0 8px;font-size:22px}.panel p{color:var(--muted);line-height:1.5;font-size:14px}.form-grid{display:grid;gap:10px;margin-top:14px}.form-grid input,.form-grid select,.form-grid textarea{width:100%;min-width:0;max-width:100%}.form-grid textarea{min-height:90px;resize:vertical}.form-actions{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}.send{background:var(--accent);color:#fff}.fundraisers-main{margin-top:30px}.fundraisers-main .panel{padding:22px}.fundraiser-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:18px}.fundraiser-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(180deg,#fff,#fafaff);box-shadow:0 6px 18px rgba(20,25,50,.05)}.fundraiser-title{font-weight:850;font-size:17px}.progress{height:9px;background:#eceef5;border-radius:999px;overflow:hidden;margin:9px 0}.progress>span{display:block;height:100%;background:var(--accent);border-radius:999px}.fundraiser-meta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}.contrib-total{font-size:30px;font-weight:850;margin:8px 0}.mini-list{margin:14px 0 0;padding:0;list-style:none}.mini-list li{padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}.mini-list small{color:var(--muted)}.form-note{font-size:12px;color:var(--muted);margin-top:8px}.delete-btn{background:#fff0f0;color:#a33;border:1px solid #f0c8c8;padding:7px 10px;border-radius:9px;font-size:12px}.mini-list li{align-items:flex-start;min-width:0}.mini-list li>div:first-child{min-width:0;overflow-wrap:anywhere}.mini-list .item-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.item-actions button,.item-actions a{white-space:nowrap}.identity-badge{display:inline-block;margin-top:8px;padding:7px 10px;border-radius:10px;background:#eef0ff;color:#34358b;font-size:12px;font-weight:800}.gift-funding{margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fafbff}.funding-bar{height:8px;background:#e8eaf2;border-radius:99px;overflow:hidden;margin:7px 0}.funding-bar span{display:block;height:100%;background:var(--accent);border-radius:99px}.funding-meta{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}.gift-contribute{margin-top:9px;background:#14804a;color:#fff;width:100%}.access-gate{max-width:620px;margin:0 auto 28px}.access-gate .access-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow)}.access-gate h2{margin:0 0 8px;font-size:25px}.access-gate p{color:var(--muted);line-height:1.55}.access-form{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:16px}.access-form input{min-width:0;width:100%}.access-form button{background:var(--accent);color:#fff}.access-note{font-size:12px;color:var(--muted);margin-top:10px}.access-status{margin-top:10px;font-size:13px}.private-locked{display:none!important}main.locked>:not(#accessGate){display:none!important}@media(max-width:600px){.access-form{grid-template-columns:1fr}.access-form button{width:100%}}</style></head>
 <body>
 <header class="hero"><div class="wrap"><nav class="topnav"><a href="communaute.html">💬 Communauté</a><a href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag">🎁 Noël & Anniversaire 2026</span><h1>La liste d’Ethan</h1><p>Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button></div></div></header>
 <main class="wrap locked" id="mainContent"><section id="accessGate" class="access-gate"><div class="access-card"><h2>🔐 Liste privée</h2><p>Cette liste est réservée aux personnes autorisées par Ethan. Entre ton code d’invitation pour afficher les cadeaux.</p><form id="listAccessForm" class="access-form"><input id="listAccessCode" type="password" inputmode="text" autocomplete="off" maxlength="64" placeholder="Code d’invitation *" required><button type="submit">Accéder à la liste</button></form><div id="accessStatus" class="access-status" aria-live="polite"></div><div class="access-note">Le contenu des cadeaux n’est chargé qu’après vérification du code.</div></div></section><section class="toolbar"><input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats"><div class="stat"><b id="countAll">0</b><span>cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span>disponibles</span></div><div class="stat"><b id="countReserved">0</b><span>réservés au total</span></div></section><section class="grid" id="grid"></section><section class="fundraisers-main">
@@ -31,7 +31,7 @@
   <h2>💡 Proposer un cadeau</h2>
   <p>Tu as une idée qui n’est pas encore dans la liste ? Propose-la ici.</p>
   <form id="suggestForm" class="form-grid">
-    <input id="suggestName" maxlength="50" required placeholder="Ton prénom *">
+    <div class="identity-badge">👤 Identité automatique : <span id="suggestNameAuto"></span></div>
     <input id="suggestGift" maxlength="120" required placeholder="Nom du cadeau *">
     <input id="suggestLink" type="url" maxlength="300" placeholder="Lien vers le cadeau (optionnel)">
     <textarea id="suggestMessage" maxlength="500" placeholder="Pourquoi ce cadeau ? (optionnel)"></textarea>
@@ -45,7 +45,7 @@
   <p>Choisis une cagnotte puis indique le montant prévu. Cela enregistre une participation annoncée, pas un paiement.</p>
   <form id="contribForm" class="form-grid">
     <select id="fundraiserSelect" required><option value="">Chargement des cagnottes…</option></select>
-    <input id="contribName" maxlength="50" required placeholder="Ton prénom *">
+    <div class="identity-badge">👤 Identité automatique : <span id="contribNameAuto"></span></div>
     <input id="contribAmount" type="number" min="1" max="5000" step="0.01" required placeholder="Montant en € *">
     <input id="contribMessage" maxlength="250" placeholder="Message (optionnel)">
     <div class="form-actions"><button class="send" type="submit">Participer</button></div>
@@ -61,7 +61,7 @@
 <h2>👤 Me présenter</h2>
 <p>Tu viens sur le site ? Tu peux créer une petite fiche pour qu’Ethan sache plus facilement qui tu es.</p>
 <form id="profileForm" class="form-grid">
-<input id="profileName" maxlength="50" required placeholder="Ton prénom *">
+<div class="identity-badge">👤 Identité automatique : <span id="profileNameAuto"></span></div>
 <select id="profileRelation" required>
 <option value="">Qui es-tu pour Ethan ? *</option>
 <option>Ami(e)</option>
@@ -80,7 +80,7 @@
 <h2>💬 Boîte à messages pour Ethan</h2>
 <p>Écris un message à Ethan. Il n'est pas affiché aux autres visiteurs.</p>
 <form id="messageForm" class="form-grid">
-<input id="messageName" maxlength="50" required placeholder="Ton prénom *">
+<div class="identity-badge">👤 Identité automatique : <span id="messageNameAuto"></span></div>
 <textarea id="messageText" maxlength="500" required placeholder="Ton message *"></textarea>
 <div class="form-actions"><button class="send" type="submit">Envoyer le message</button></div>
 <p class="form-note">Le message est conservé dans Supabase et n'est pas affiché publiquement.</p>
@@ -92,7 +92,7 @@
 <h2>💡 Boîte à idées</h2>
 <p>Une idée pour améliorer le site ? Elle sera visible avec ton prénom.</p>
 <form id="ideaForm" class="form-grid">
-<input id="ideaName" maxlength="50" required placeholder="Ton prénom *">
+<div class="identity-badge">👤 Identité automatique : <span id="ideaNameAuto"></span></div>
 <textarea id="ideaText" maxlength="500" required placeholder="Ton idée *"></textarea>
 <div class="form-actions"><button class="send" type="submit">Envoyer mon idée</button></div>
 </form>
@@ -202,6 +202,12 @@ let reservations={};let loadSeq=0;
 const mainContent=document.getElementById("mainContent"),accessGate=document.getElementById("accessGate"),accessForm=document.getElementById("listAccessForm"),accessInput=document.getElementById("listAccessCode"),accessStatus=document.getElementById("accessStatus");
 const grid=document.getElementById("grid"),search=document.getElementById("search"),category=document.getElementById("category"),toast=document.getElementById("toast");
 function privateRpc(name,body){return fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)})}
+function currentVisitorName(){return String(accessLabel||"").trim()}
+function updateIdentityLabels(){
+  const name=currentVisitorName()||"Visiteur autorisé";
+  ["suggestNameAuto","contribNameAuto","profileNameAuto","messageNameAuto","ideaNameAuto"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=name});
+}
+
 function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
 function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 async function loadGiftCatalog(){
@@ -234,9 +240,9 @@ async function loadReservations(){
 }
 async function unreserveGift(id,currentName){
  if(!authorized||!accessCode){showToast("Accès requis.");return}
- const name=prompt("Pour déréserver, indique le prénom utilisé lors de la réservation :")?.trim();
- if(!name)return;
- if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
+ const name=currentVisitorName();
+ if(!name){showToast("Identité non disponible.");return}
+ if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Ce cadeau a été réservé par une autre personne.");return}
  if(!confirm("Déréserver ce cadeau ?"))return;
  const r=await privateRpc("cancel_private_reservation",{p_code:accessCode,p_gift_id:id,p_name:name});
  const result=await r.json().catch(()=>false);
@@ -250,7 +256,7 @@ async function unreserveGift(id,currentName){
 }
 async function reserveGift(id){
  if(!authorized||!accessCode){showToast("Accès requis.");return}
- const name=prompt("Prénom de la personne qui réserve ce cadeau :")?.trim();if(!name)return;
+ const name=currentVisitorName();if(!name){showToast("Identité non disponible.");return}
  const r=await privateRpc("reserve_private_gift",{p_code:accessCode,p_gift_id:id,p_name:name});
  const result=await r.json().catch(()=>null);
  if(r.status===409){showToast("Ce cadeau vient d’être réservé.");return}
@@ -280,6 +286,7 @@ async function unlockSite(code){
   sessionStorage.setItem("birthday_list_access",accessCode);
   if(history.replaceState)history.replaceState(null,"",location.pathname+location.hash);
   accessStatus.textContent=accessLabel?"✅ Accès autorisé pour "+accessLabel+".":"✅ Accès autorisé.";
+  updateIdentityLabels();
   accessGate.classList.add("private-locked");
   mainContent.classList.remove("locked");
   await Promise.all([loadReservations(),loadFundraisers(),loadSuggestions(),loadContributions(),loadIdeas(),loadMessages()]);
@@ -296,6 +303,7 @@ function lockSite(message){
   mainContent.classList.add("locked");
   accessGate.classList.remove("private-locked");
   accessStatus.textContent=message||"Entre ton code d’invitation.";
+  updateIdentityLabels();
   grid.innerHTML="";
   category.innerHTML='<option value="all">Toutes les catégories</option>';
 }
@@ -349,8 +357,7 @@ async function submitFundraiser(e){
   showToast("Cagnotte envoyée pour validation.");
 }
 async function deleteSuggestion(id,currentName){
-  const name=prompt("Pour supprimer cette idée, écris exactement le prénom/nom utilisé lors de son envoi :")?.trim();
-  if(!name)return;
+  const name=currentVisitorName(); if(!name){showToast("Identité non disponible.");return}
   if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
   if(!confirm("Supprimer cette proposition ?"))return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_gift_suggestion",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
@@ -358,8 +365,7 @@ async function deleteSuggestion(id,currentName){
   showToast("Idée supprimée.");loadSuggestions();
 }
 async function deleteContribution(id,currentName){
-  const name=prompt("Pour retirer cette donation, écris le prénom utilisé lors de la donation :")?.trim();
-  if(!name)return;
+  const name=currentVisitorName(); if(!name){showToast("Identité non disponible.");return}
   if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
   if(!confirm("Retirer cette donation ?"))return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_contribution",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
@@ -375,7 +381,7 @@ async function loadIdeas(){
 }
 async function submitIdea(e){
   e.preventDefault();
-  const body={name:document.getElementById("ideaName").value.trim(),idea:document.getElementById("ideaText").value.trim()};
+  const body={name:currentVisitorName(),idea:document.getElementById("ideaText").value.trim()};
   if(!body.name||!body.idea)return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/ideas",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
   if(!r.ok){console.error("idea",r.status,await r.text());showToast("Impossible d’envoyer l’idée.");return}
@@ -390,7 +396,7 @@ async function deleteIdea(id,name){
 async function submitProfile(e){
   e.preventDefault();
   const body={
-    p_name:document.getElementById("profileName").value.trim(),
+    p_name:currentVisitorName(),
     p_relation:document.getElementById("profileRelation").value,
     p_avatar:document.getElementById("profileAvatar").value.trim(),
     p_bio:document.getElementById("profileBio").value.trim()
@@ -408,7 +414,7 @@ async function submitProfile(e){
 async function submitMessage(e){
   e.preventDefault();
   const body={
-    name:document.getElementById("messageName").value.trim(),
+    name:currentVisitorName(),
     message:document.getElementById("messageText").value.trim()
   };
   if(!body.name||!body.message)return;
@@ -445,7 +451,7 @@ async function loadSuggestions(){
 async function submitSuggestion(e){
   e.preventDefault();
   const body={
-    name:document.getElementById("suggestName").value.trim()||null,
+    name:currentVisitorName()||null,
     gift_name:document.getElementById("suggestGift").value.trim(),
     link:document.getElementById("suggestLink").value.trim()||null,
     message:document.getElementById("suggestMessage").value.trim()||null
@@ -478,7 +484,7 @@ async function submitContribution(e){
   if(!Number.isFinite(amount)||amount<1||amount>5000){showToast("Montant entre 1 € et 5 000 €.");return}
   const fundraiserId=Number(document.getElementById("fundraiserSelect").value);
   if(!Number.isInteger(fundraiserId)){showToast("Choisis une cagnotte.");return}
-  const body={name:document.getElementById("contribName").value.trim(),amount:amount,message:document.getElementById("contribMessage").value.trim()||null,fundraiser_id:fundraiserId};
+  const body={name:currentVisitorName(),amount:amount,message:document.getElementById("contribMessage").value.trim()||null,fundraiser_id:fundraiserId};
   const r=await fetch(SUPABASE_URL+"/rest/v1/contributions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
   if(!r.ok){console.error("Supabase contribution",r.status,await r.text());showToast("Impossible d’enregistrer la participation.");return}
   document.getElementById("contribForm").reset();showToast("Participation enregistrée.");loadContributions();
@@ -488,7 +494,7 @@ async function contributeToGift(g){
  if(!g.allowContributions){showToast("Les participations ne sont pas activées pour ce cadeau.");return}
  const remaining=Number(g.remainingAmount||0);
  if(remaining<=0){showToast("Ce cadeau est déjà entièrement financé.");return}
- const name=prompt("Ton prénom :")?.trim(); if(!name)return;
+ const name=currentVisitorName(); if(!name){showToast("Identité non disponible.");return}
  const amountRaw=prompt("Combien veux-tu mettre sur ce cadeau ? (maximum "+remaining.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €)")?.replace(",",".").trim();
  if(!amountRaw)return;
  const amount=Number(amountRaw);
