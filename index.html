@@ -503,6 +503,50 @@ async function removeMyGiftContributions(g){
  await loadReservations();
 }
 
+async function manageMyGiftContributions(g,card){
+ if(!authorized||!accessCode){showToast("Accès requis.");return}
+ if(!g.allowContributions){showToast("Les participations ne sont pas activées.");return}
+
+ const old=card.querySelector(".gift-manage");
+ if(old){old.remove();return}
+
+ try{
+   const r=await privateRpc("list_private_gift_contributions",{p_code:accessCode,p_gift_id:g.id});
+   const rows=await r.json().catch(()=>[]);
+   if(!r.ok||!Array.isArray(rows)){showToast("Impossible de charger tes participations.");return}
+   if(!rows.length){showToast("Aucune participation trouvée.");return}
+
+   const box=document.createElement("div");
+   box.className="gift-manage";
+   box.innerHTML='<strong>Mes participations</strong>'+rows.map(x=>{
+     const amount=Number(x.amount||0).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2});
+     const date=x.created_at?new Date(x.created_at).toLocaleString("fr-FR"):"";
+     const message=x.message?'<div style="margin-top:4px;color:var(--muted)">'+escapeHtml(x.message)+'</div>':"";
+     return '<div class="gift-manage-row"><div><strong>'+amount+' €</strong><div style="color:var(--muted)">'+escapeHtml(date)+'</div>'+message+'</div><button type="button" data-id="'+x.id+'">Retirer</button></div>';
+   }).join("");
+
+   box.querySelectorAll("button[data-id]").forEach(btn=>{
+     btn.addEventListener("click",async()=>{
+       const id=Number(btn.dataset.id);
+       if(!Number.isFinite(id))return;
+       if(!confirm("Retirer uniquement cette participation de "+Number((rows.find(x=>x.id===id)||{}).amount||0).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" € ?"))return;
+       const rr=await privateRpc("delete_one_private_gift_contribution",{p_code:accessCode,p_contribution_id:id});
+       const result=await rr.json().catch(()=>false);
+       if(!rr.ok||result!==true){showToast("Impossible de retirer cette participation.");return}
+       showToast("Participation retirée.");
+       await loadGiftCatalog();
+       await loadReservations();
+     });
+   });
+
+   const insertAfter=card.querySelector(".gift-manage-contrib");
+   (insertAfter?.parentElement||card.querySelector(".gift-funding")||card).appendChild(box);
+ }catch(e){
+   console.error("manage gift contributions",e);
+   showToast("Impossible de charger tes participations.");
+ }
+}
+
 async function contributeToGift(g){
  if(!authorized||!accessCode){showToast("Accès requis.");return}
  if(!g.allowContributions){showToast("Les participations ne sont pas activées pour ce cadeau.");return}
@@ -532,13 +576,13 @@ function render(){
    const shops=shoppingLinks(g);const imageUrl=productImageUrl(g);
    const target=Number(g.targetAmount||0),funded=Number(g.contributedAmount||0),remaining=Math.max(Number(g.remainingAmount||0),0);
    const pct=target>0?Math.min(100,funded/target*100):0;
-   const fundingHtml=target>0?'<div class="gift-funding"><div><strong>💶 Financement</strong> · '+funded.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € / '+target.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</div><div class="funding-bar"><span style="width:'+pct+'%"></span></div><div class="funding-meta"><span>'+ (remaining>0?remaining.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € restant(s)': 'Objectif atteint') +'</span><span>'+Number(g.contributionCount||0)+' participation(s) · '+Number(g.participantCount||0)+' participant(s)</span></div>'+(g.fundingNote?'<div class="form-note">'+escapeHtml(g.fundingNote)+'</div>':"")+(g.allowContributions&&remaining>0&&!who?'<button class="gift-contribute" type="button">💶 Participer à ce cadeau</button>':"")+(g.allowContributions&&Number(g.myContributionCount||0)>0&&!who?'<button class="gift-remove-contrib" type="button">↩️ Retirer mes participations</button>':"")+'</div>':'';
+   const fundingHtml=target>0?'<div class="gift-funding"><div><strong>💶 Financement</strong> · '+funded.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € / '+target.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</div><div class="funding-bar"><span style="width:'+pct+'%"></span></div><div class="funding-meta"><span>'+ (remaining>0?remaining.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € restant(s)': 'Objectif atteint') +'</span><span>'+Number(g.contributionCount||0)+' participation(s) · '+Number(g.participantCount||0)+' participant(s)</span></div>'+(g.fundingNote?'<div class="form-note">'+escapeHtml(g.fundingNote)+'</div>':"")+(g.allowContributions&&remaining>0&&!who?'<button class="gift-contribute" type="button">💶 Participer à ce cadeau</button>':"")+(g.allowContributions&&Number(g.myContributionCount||0)>0&&!who?'<button class="gift-manage-contrib" type="button">💶 Mes participations</button>':"")+'</div>':'';
    const reserveHtml=who?'<div class="reserved">Réservé par : '+escapeHtml(who)+'</div><button class="link unreserve" style="width:100%;margin-top:8px">Déréserver</button>':(g.allowReservation&&funded<=0?'<button class="reserve">Réserver</button>':"");
    card.innerHTML=`
 <div class="image-wrap"><img class="product-image" src="${imageUrl}" alt="Image de ${escapeHtml(g.title)} — ${escapeHtml(g.desc)}" loading="lazy" onerror="this.style.display='none'"><div class="image-label">Image auto · nom + légende</div></div><button class="ai-search image-search" type="button">🖼️ Chercher les images liées</button>
 <div class="top"><div class="cat">${escapeHtml(g.cat)}</div><div class="title">${escapeHtml(g.title)}</div><div class="desc">${escapeHtml(g.desc)}</div><div class="shop-title">🛒 Recherche intelligente</div><button class="compare-search compare-offers" type="button">🔎 Comparer les prix et vérifier les sites disponibles</button><button class="ai-search ai-web-search" type="button">🤖 Chercher sur le Web avec l’IA</button><div class="ai-note">Les résultats s’affichent directement ici : offres, disponibilité, sources et images.</div><div class="ai-results"></div><div class="shop-links">${shops.map(s=>'<a class="'+(s.cls||"")+'" href="'+s.url+'" target="_blank" rel="noopener noreferrer">'+s.label+'</a>').join("")}</div><div class="offer-note">Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.</div>${fundingHtml}</div>
 <div class="bottom"><div class="price">${escapeHtml(g.price)} <small>prix indicatif</small></div><div class="row">${reserveHtml}<button class="link copy-gift">Copier</button></div></div>`;
-   const contribBtn=card.querySelector(".gift-contribute");if(contribBtn)contribBtn.addEventListener("click",()=>contributeToGift(g));const removeContribBtn=card.querySelector(".gift-remove-contrib");if(removeContribBtn)removeContribBtn.addEventListener("click",()=>removeMyGiftContributions(g));
+   const contribBtn=card.querySelector(".gift-contribute");if(contribBtn)contribBtn.addEventListener("click",()=>contributeToGift(g));const manageContribBtn=card.querySelector(".gift-manage-contrib");if(manageContribBtn)manageContribBtn.addEventListener("click",()=>manageMyGiftContributions(g,card));
    card.querySelector(".compare-offers").addEventListener("click",()=>runAiSearch(g,card,"compare"));
    card.querySelector(".ai-web-search").addEventListener("click",()=>runAiSearch(g,card,"search"));
    if(aiCache.has(g.id))restoreAiResult(g,card);
