@@ -1624,7 +1624,7 @@ begin
     (select r.name from public.reservations r where r.gift_id=g.id limit 1)
   from public.gift_catalog g order by g.sort_order,g.id;
 end;
-$;
+$$;
 
 grant execute on function public.admin_list_gift_catalog() to anon;
 
@@ -1682,7 +1682,7 @@ begin
   from public.gift_contributions c left join public.gift_catalog g on g.id=c.gift_id
   order by c.created_at desc;
 end;
-$;
+$$;
 
 grant execute on function public.admin_list_gift_contributions() to anon;
 
@@ -1711,7 +1711,7 @@ begin
   return query
   select id,label,code,active,is_admin,created_at,last_used_at from public.list_access_codes order by created_at desc;
 end;
-$;
+$$;
 
 grant execute on function public.admin_list_access_codes() to anon;
 
