@@ -1677,6 +1677,85 @@ $$;
 
 grant execute on function public.admin_delete_gift(text) to anon;
 
+create or replace function public.list_private_gift_contributions(
+  p_code text,
+  p_gift_id text
+)
+returns table(
+  id bigint,
+  amount numeric,
+  message text,
+  created_at timestamptz
+)
+language plpgsql
+security definer
+set search_path = public
+as $privategiftlist$
+declare
+  v_name text;
+begin
+  select label
+  into v_name
+  from public.list_access_codes
+  where active = true
+    and code = trim(coalesce(p_code, ''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode = '42501';
+  end if;
+
+  return query
+  select
+    c.id,
+    c.amount,
+    c.message,
+    c.created_at
+  from public.gift_contributions c
+  where c.gift_id = p_gift_id
+    and lower(trim(c.name)) = lower(trim(v_name))
+  order by c.created_at desc, c.id desc;
+end;
+$privategiftlist$;
+
+grant execute on function public.list_private_gift_contributions(text,text) to anon;
+
+
+create or replace function public.delete_one_private_gift_contribution(
+  p_code text,
+  p_contribution_id bigint
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $privategiftdeleteone$
+declare
+  v_name text;
+  v_deleted integer;
+begin
+  select label
+  into v_name
+  from public.list_access_codes
+  where active = true
+    and code = trim(coalesce(p_code, ''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode = '42501';
+  end if;
+
+  delete from public.gift_contributions
+  where id = p_contribution_id
+    and lower(trim(name)) = lower(trim(v_name));
+
+  get diagnostics v_deleted = row_count;
+  return v_deleted > 0;
+end;
+$privategiftdeleteone$;
+
+grant execute on function public.delete_one_private_gift_contribution(text,bigint) to anon;
+
 create or replace function public.delete_private_gift_contribution(
   p_code text,
   p_gift_id text
