@@ -1286,6 +1286,8 @@ $$;
 
 grant execute on function public.authorize_list_access(text) to anon;
 
+drop function if exists public.get_private_gifts(text);
+
 create or replace function public.get_private_gifts(p_code text)
 returns table (
   id text,sort_order integer,cat text,title text,price text,description text,image text,
