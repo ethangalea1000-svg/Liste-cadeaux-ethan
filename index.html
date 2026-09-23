@@ -274,9 +274,9 @@ async function unlockSite(code){
   }
   accessCode=code;
   accessLabel=data.label||"";
-  const loaded=await loadGiftCatalog();
-  if(!loaded)return false;
   authorized=true;
+  const loaded=await loadGiftCatalog();
+  if(!loaded){lockSite("La liste est momentanément indisponible.");return false;}
   sessionStorage.setItem("birthday_list_access",accessCode);
   if(history.replaceState)history.replaceState(null,"",location.pathname+location.hash);
   accessStatus.textContent=accessLabel?"✅ Accès autorisé pour "+accessLabel+".":"✅ Accès autorisé.";
