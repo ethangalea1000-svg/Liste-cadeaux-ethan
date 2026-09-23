@@ -220,7 +220,7 @@ async function loadGiftCatalog(){
     showToast("La liste des cadeaux n’est pas disponible pour le moment.");
     return false;
   }
-  gifts=rows.map(x=>({id:x.id,cat:x.cat,title:x.title,price:x.price,desc:x.description,image:x.image||null,official_label:x.official_label||"",official_url:x.official_url||"",targetAmount:Number(x.target_amount||0),allowContributions:x.allow_contributions!==false,allowReservation:x.allow_reservation!==false,fundingNote:x.funding_note||"",contributedAmount:Number(x.contributed_amount||0),remainingAmount:Number(x.remaining_amount||0),contributionCount:Number(x.contribution_count||0),participantCount:Number(x.participant_count||0),reservedBy:x.reserved_by||""}));
+  gifts=rows.map(x=>({id:x.id,cat:x.cat,title:x.title,price:x.price,desc:x.description,image:x.image||null,official_label:x.official_label||"",official_url:x.official_url||"",targetAmount:Number(x.target_amount||0),allowContributions:x.allow_contributions!==false,allowReservation:x.allow_reservation!==false,fundingNote:x.funding_note||"",contributedAmount:Number(x.contributed_amount||0),remainingAmount:Number(x.remaining_amount||0),contributionCount:Number(x.contribution_count||0),participantCount:Number(x.participant_count||0),myContributionCount:Number(x.my_contribution_count||0),myContributedAmount:Number(x.my_contributed_amount||0),reservedBy:x.reserved_by||""}));
   category.innerHTML='<option value="all">Toutes les catégories</option>';
   [...new Set(gifts.map(g=>g.cat))].sort().forEach(catName=>{const o=document.createElement("option");o.value=catName;o.textContent=catName;category.appendChild(o)});
   render();
