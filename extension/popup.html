@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mes données</title>
+<style>
+body{font-family:system-ui;margin:0;padding:16px;width:300px;background:#f6f7fb;color:#151827}
+h1{font-size:18px;margin:0 0 8px}
+p{font-size:12px;color:#687084;line-height:1.45}
+button{width:100%;margin-top:8px;padding:10px;border:0;border-radius:10px;font-weight:700;cursor:pointer;background:#5856d6;color:white}
+.secondary{background:#eef0ff;color:#30338a}
+#status{margin-top:10px;font-size:12px}
+</style>
+<h1>Mes données</h1>
+<p>Cette extension permet d'exporter uniquement l'activité enregistrée sur la liste d’Ethan.</p>
+<button id="export">Exporter mes données</button>
+<button id="takeout" class="secondary">Ouvrir Google Takeout</button>
+<div id="status"></div>
+<script src="popup.js"></script>
+</html>
