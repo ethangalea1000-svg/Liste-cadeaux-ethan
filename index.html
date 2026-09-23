@@ -8,10 +8,10 @@
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#6b7280;--line:#e6e8ef;--accent:#5b5ce2;--ok:#14804a;--shadow:0 10px 30px rgba(20,25,50,.08)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}a{color:inherit}.hero{padding:48px 20px 32px;background:linear-gradient(135deg,#17192a,#393b73);color:#fff}.wrap{max-width:1100px;margin:auto}.tag{display:inline-block;padding:7px 11px;border-radius:999px;background:#ffffff24;font-size:13px}h1{font-size:clamp(32px,6vw,52px);line-height:1.03;margin:16px 0 12px}.hero p{max-width:720px;color:#e8e9f2;font-size:17px;line-height:1.55}.topnav{position:absolute;right:20px;top:20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.topnav a{padding:9px 12px;border-radius:10px;background:#ffffff1f;color:#fff;text-decoration:none;font-weight:700;font-size:13px}.topnav a:hover{background:#ffffff30}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}button,.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:#fff;color:#23254f}.secondary{background:#ffffff1f;color:#fff}main{padding:28px 20px 60px}.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}input,select{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 13px;font:inherit;outline:none}input{flex:1;min-width:220px}.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px;box-shadow:var(--shadow)}.stat b{display:block;font-size:19px}.stat span{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}.top{padding:18px 18px 10px}.cat{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--accent)}.title{font-size:20px;font-weight:800;margin:7px 0}.desc{color:var(--muted);line-height:1.45;font-size:14px;min-height:58px}.bottom{margin-top:auto;padding:14px 18px 18px;border-top:1px solid var(--line)}.price{font-size:18px;font-weight:850;margin-bottom:12px}.price small{font-size:12px;color:var(--muted);font-weight:500}.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.reserve{background:var(--accent);color:#fff;flex:1}.reserve.done{background:#e8f6ef;color:var(--ok);cursor:default}.link{background:#f0f1f6;color:#303345}.reserved{font-size:13px;color:var(--ok);margin:8px 0 0}.empty{padding:35px;text-align:center;color:var(--muted);grid-column:1/-1}.foot{margin-top:30px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px;color:var(--muted);font-size:13px;line-height:1.5}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:.2s}.toast.show{opacity:1;transform:none}.product-image{width:100%;height:190px;object-fit:contain;background:#fff;padding:12px;border-bottom:1px solid var(--line)}.image-wrap{position:relative;background:#fff}.image-label{position:absolute;left:12px;bottom:10px;background:#17192ad9;color:#fff;border-radius:999px;padding:5px 9px;font-size:11px}.shop-title{font-size:12px;text-transform:uppercase;font-weight:800;color:var(--muted);margin:12px 0 7px}.shop-links{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.shop-links a{background:#f4f5f8;border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-size:12px;text-decoration:none;font-weight:700}.shop-links a:hover{background:#eaebf2}.official{background:#edf7ff!important;border-color:#c9e5ff!important}.offer-note{font-size:11px;color:var(--muted);margin:-3px 0 10px}.featured-shop{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.ai-search{display:block;width:100%;margin:8px 0 10px;background:#eef0ff;border:1px solid #d9dcff;color:#30338a;border-radius:10px;padding:9px 10px;font-weight:800;cursor:pointer}.ai-search:hover{background:#e4e6ff}.compare-search{display:block;width:100%;margin:8px 0 10px;background:#edf8ef;border:1px solid #c8e8cf;color:#12652b;border-radius:10px;padding:9px 10px;font-weight:800;cursor:pointer}.compare-search:hover{background:#e4f5e7}.ai-results{margin-top:12px;border:1px solid #dfe2ef;border-radius:14px;background:#fbfbfe;padding:12px;display:none}.ai-results.show{display:block}.ai-loading{font-size:13px;color:var(--muted)}.ai-summary{font-size:13px;line-height:1.5;margin:8px 0}.ai-offers{display:grid;gap:7px;margin-top:8px}.ai-offer{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 10px}.ai-offer-main{min-width:0}.ai-shop{font-weight:800}.ai-price{font-weight:800;white-space:nowrap}.ai-status{font-size:11px;color:var(--muted)}.ai-open{background:var(--accent);color:#fff;border-radius:8px;padding:6px 8px;text-decoration:none;font-size:11px;font-weight:800;white-space:nowrap}.ai-images{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}.ai-image-card{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.ai-image-card img{width:100%;height:100px;object-fit:cover;display:block}.ai-image-card a{display:block;padding:6px 7px;font-size:10px;text-decoration:none}.ai-sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.ai-source{font-size:11px;background:#f2f3f7;border-radius:8px;padding:6px 8px;text-decoration:none}.ai-meta{font-size:10px;color:var(--muted);margin-top:9px}.ai-error{color:#a33;background:#fff0f0;border:1px solid #f0c8c8;border-radius:10px;padding:9px;font-size:12px}.ai-google-suggestions{margin-top:10px;border-top:1px solid var(--line);padding-top:9px}.ai-google-suggestions iframe{width:100%;height:78px;border:0;border-radius:8px;background:#fff}.ai-note{font-size:11px;color:var(--muted);margin:0 0 8px}
-.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;margin-top:30px}.panel{min-width:0;overflow:hidden}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h2{margin:0 0 8px;font-size:22px}.panel p{color:var(--muted);line-height:1.5;font-size:14px}.form-grid{display:grid;gap:10px;margin-top:14px}.form-grid input,.form-grid select,.form-grid textarea{width:100%;min-width:0;max-width:100%}.form-grid textarea{min-height:90px;resize:vertical}.form-actions{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}.send{background:var(--accent);color:#fff}.fundraisers-main{margin-top:30px}.fundraisers-main .panel{padding:22px}.fundraiser-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:18px}.fundraiser-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(180deg,#fff,#fafaff);box-shadow:0 6px 18px rgba(20,25,50,.05)}.fundraiser-title{font-weight:850;font-size:17px}.progress{height:9px;background:#eceef5;border-radius:999px;overflow:hidden;margin:9px 0}.progress>span{display:block;height:100%;background:var(--accent);border-radius:999px}.fundraiser-meta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}.contrib-total{font-size:30px;font-weight:850;margin:8px 0}.mini-list{margin:14px 0 0;padding:0;list-style:none}.mini-list li{padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}.mini-list small{color:var(--muted)}.form-note{font-size:12px;color:var(--muted);margin-top:8px}.delete-btn{background:#fff0f0;color:#a33;border:1px solid #f0c8c8;padding:7px 10px;border-radius:9px;font-size:12px}.mini-list li{align-items:flex-start;min-width:0}.mini-list li>div:first-child{min-width:0;overflow-wrap:anywhere}.mini-list .item-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.item-actions button,.item-actions a{white-space:nowrap}</style></head>
+.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;margin-top:30px}.panel{min-width:0;overflow:hidden}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.panel h2{margin:0 0 8px;font-size:22px}.panel p{color:var(--muted);line-height:1.5;font-size:14px}.form-grid{display:grid;gap:10px;margin-top:14px}.form-grid input,.form-grid select,.form-grid textarea{width:100%;min-width:0;max-width:100%}.form-grid textarea{min-height:90px;resize:vertical}.form-actions{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}.send{background:var(--accent);color:#fff}.fundraisers-main{margin-top:30px}.fundraisers-main .panel{padding:22px}.fundraiser-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:18px}.fundraiser-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(180deg,#fff,#fafaff);box-shadow:0 6px 18px rgba(20,25,50,.05)}.fundraiser-title{font-weight:850;font-size:17px}.progress{height:9px;background:#eceef5;border-radius:999px;overflow:hidden;margin:9px 0}.progress>span{display:block;height:100%;background:var(--accent);border-radius:999px}.fundraiser-meta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}.contrib-total{font-size:30px;font-weight:850;margin:8px 0}.mini-list{margin:14px 0 0;padding:0;list-style:none}.mini-list li{padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}.mini-list small{color:var(--muted)}.form-note{font-size:12px;color:var(--muted);margin-top:8px}.delete-btn{background:#fff0f0;color:#a33;border:1px solid #f0c8c8;padding:7px 10px;border-radius:9px;font-size:12px}.mini-list li{align-items:flex-start;min-width:0}.mini-list li>div:first-child{min-width:0;overflow-wrap:anywhere}.mini-list .item-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.item-actions button,.item-actions a{white-space:nowrap}.access-gate{max-width:620px;margin:0 auto 28px}.access-gate .access-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow)}.access-gate h2{margin:0 0 8px;font-size:25px}.access-gate p{color:var(--muted);line-height:1.55}.access-form{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:16px}.access-form input{min-width:0;width:100%}.access-form button{background:var(--accent);color:#fff}.access-note{font-size:12px;color:var(--muted);margin-top:10px}.access-status{margin-top:10px;font-size:13px}.private-locked{display:none!important}main.locked>:not(#accessGate){display:none!important}@media(max-width:600px){.access-form{grid-template-columns:1fr}.access-form button{width:100%}}</style></head>
 <body>
 <header class="hero"><div class="wrap"><nav class="topnav"><a href="communaute.html">💬 Communauté</a><a href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag">🎁 Noël & Anniversaire 2026</span><h1>La liste d’Ethan</h1><p>Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button></div></div></header>
-<main class="wrap"><section class="toolbar"><input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats"><div class="stat"><b id="countAll">0</b><span>cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span>disponibles</span></div><div class="stat"><b id="countReserved">0</b><span>réservés au total</span></div></section><section class="grid" id="grid"></section><section class="fundraisers-main">
+<main class="wrap locked" id="mainContent"><section id="accessGate" class="access-gate"><div class="access-card"><h2>🔐 Liste privée</h2><p>Cette liste est réservée aux personnes autorisées par Ethan. Entre ton code d’invitation pour afficher les cadeaux.</p><form id="listAccessForm" class="access-form"><input id="listAccessCode" type="password" inputmode="text" autocomplete="off" maxlength="64" placeholder="Code d’invitation *" required><button type="submit">Accéder à la liste</button></form><div id="accessStatus" class="access-status" aria-live="polite"></div><div class="access-note">Le contenu des cadeaux n’est chargé qu’après vérification du code.</div></div></section><section class="toolbar"><input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats"><div class="stat"><b id="countAll">0</b><span>cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span>disponibles</span></div><div class="stat"><b id="countReserved">0</b><span>réservés au total</span></div></section><section class="grid" id="grid"></section><section class="fundraisers-main">
 <div class="panel">
   <h2>🎯 Cagnottes</h2
   <p>Les cagnottes proposées restent en attente jusqu’à validation par Ethan.</p>
@@ -103,22 +103,10 @@
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
 const SUPABASE_READY=!SUPABASE_URL.includes("YOUR_")&&!SUPABASE_ANON_KEY.includes("YOUR_");
-const gifts=[
-{id:"ezio",cat:"Jeux vidéo",title:"Assassin’s Creed: The Ezio Collection",price:"20–25 €",desc:"Collection Switch : Assassin’s Creed II, Brotherhood et Revelations.",buy:"ezio"},
-{id:"mauvais-perdants",cat:"Jeux de société",title:"Monopoly Mauvais Perdants",price:"20–45 €",desc:"Une version décalée du Monopoly où perdre peut devenir avantageux.",buy:"mauvais-perdants"},
-{id:"speed",cat:"Jeux de société",title:"Monopoly Speed",price:"20–44 €",desc:"Une partie beaucoup plus rapide, pensée pour des sessions courtes.",buy:"speed"},
-{id:"turing",cat:"Jeux de société",title:"Monopoly Alan Turing",price:"≈45 €",desc:"Édition thématique autour d’Alan Turing, prix variable selon le vendeur.",buy:"turing"},
-{id:"actu",cat:"Presse",title:"L’Actu",price:"≈9,99 €/mois",desc:"Abonnement presse d’actualité pour adolescents.",buy:"actu"},
-{id:"eco",cat:"Presse",title:"L’ÉCO",price:"à partir de 9,99 €/mois",desc:"Hebdomadaire économique PlayBac Presse pour les 15–20 ans, destiné notamment à la 2nde–Bac+2.",image:"https://www.playbacpresse.fr/uploads/media/subscription_page/f36f704875c966e961402c1f9bf4cd96a71006f2.png",buy:"eco"},
-{id:"docs-actu",cat:"Presse",title:"Les Docs de L’Actu",price:"≈49 €/an",desc:"Magazine thématique de découverte et de culture générale.",buy:"docs-actu"},
-{id:"enfantiages",cat:"IA & numérique",title:"enfantIAges",price:"À voir",desc:"Campagne PlayBac Presse liée au Petit Quotidien : des enfants répondent à des questions habituellement posées à l’IA.",buy:"enfantiages",image:"assets/enfantiages.svg"},
-{id:"ducktoon",cat:"BD",title:"Ducktoon",price:"≈48–72 €/an",desc:"Abonnement BD/webtoon Disney autour de personnages comme Picsou, Mickey et Donald.",buy:"ducktoon"},
-{id:"tryhackme",cat:"Cybersécurité",title:"TryHackMe Premium",price:"100 €/an",desc:"Parcours et labs de cybersécurité pour apprendre la sécurité informatique.",buy:"tryhackme"},
-{id:"white-house",cat:"Construction",title:"Puzzle 3D Maison Blanche",price:"≈7–34 €",desc:"Maquette 3D, avec plusieurs modèles possibles selon le niveau et le fabricant.",buy:"white-house"},
-{id:"flipper",cat:"Cybersécurité",title:"Flipper Zero — kit complet",price:"≈235–280 €",desc:"Outil polyvalent d’apprentissage matériel et de sécurité. Usage uniquement autorisé sur ses propres systèmes."},
-{id:"rpi5",cat:"Informatique",title:"Raspberry Pi 5 — kit complet",price:"≈129–200 €",desc:"Configuration visée : 8 Go, SSD NVMe, alimentation 27 W et refroidissement actif."},
-{id:"arduino",cat:"Électronique",title:"Arduino Starter Kit",price:"≈90–100 €",desc:"Kit de démarrage pour apprendre l’électronique et la programmation embarquée."},
-{id:"hackropole",cat:"Cybersécurité",title:"Hackropole",price:"Gratuit",desc:"Plateforme française d’exercices de cybersécurité et de sensibilisation.",buy:"hackropole"}];
+let gifts=[];
+let authorized=false;
+let accessCode="";
+let accessLabel="";
 
 function aiSearchUrl(g){
   const prompt='Compare cet article sur le Web en France : "'+g.title+'".\n'
@@ -195,28 +183,10 @@ async function runAiSearch(g,card,mode="compare"){
 
 function q(v){return encodeURIComponent(v)}
 function shoppingLinks(g){
-  const query=q(g.title);
-  const official=(label,url)=>({label,url,cls:"official"});
   const compare={label:"Comparer",url:aiSearchUrl(g),cls:"featured-shop"};
-  if(g.buy==="ezio") return [official("Ubisoft", "https://www.ubisoft.com/fr-fr/game/assassins-creed/the-ezio-collection"), compare];
-  if(g.buy==="mauvais-perdants") return [official("Hasbro", "https://instructions.hasbro.com/fr-fr/instruction/monopoly-for-sore-losers-board-game-for-ages-8-and-up"), compare];
-  if(g.buy==="speed") return [official("Hasbro", "https://instructions.hasbro.com/fr-fr/instruction/monopoly-speed-board-game-for-kids-ages-8-and-up"), compare];
-  if(g.buy==="turing") return [official("Winning Moves", "https://www.winningmoves.fr/boutique/"), compare];
-  if(g.buy==="actu") return [official("PlayBac Presse", "https://www.playbacpresse.fr/abonnements-l-actu"), compare];
-  if(g.buy==="eco") return [official("PlayBac Presse", "https://www.playbacpresse.fr/abonnements-l-eco"), compare];
-  if(g.buy==="docs-actu") return [official("PlayBac Presse", "https://www.playbacpresse.fr/magazines-thematiques/l-actu"), compare];
-  if(g.buy==="enfantiages") return [official("PlayBac Presse", "https://www.playbacpresse.fr/enfantiages"), compare];
-  if(g.buy==="ducktoon") return [official("Ducktoon", "https://www.ducktoon.com/collections/nos-offres-abonnements"), compare];
-  if(g.buy==="tryhackme") return [official("TryHackMe", "https://tryhackme.com/pricing"), compare];
-  if(g.buy==="white-house") return [official("Wrebbit3D", "https://wrebbit3dpuzzle.com/products/white-house"), compare];
-  if(g.buy==="flipper") return [official("Flipper", "https://flipper.net/"), compare];
-  if(g.buy==="rpi5") return [official("Raspberry Pi", "https://www.raspberrypi.com/products/"), compare];
-  if(g.buy==="arduino") return [official("Arduino Store", "https://store.arduino.cc/collections/arduino-starter-kit-collection"), compare];
-  if(g.buy==="hackropole") return [official("Hackropole", "https://hackropole.fr/"), compare];
-  return [
-    {label:"Recherche officielle",url:"https://www.google.com/search?q="+query+"+site%3Aofficiel",cls:"official"},
-    compare
-  ];
+  const links=[compare];
+  if(g.official_url)links.unshift({label:g.official_label||"Site officiel",url:g.official_url,cls:"official"});
+  return links;
 }
 function productImageUrl(g){
   if(g.image)return g.image;
@@ -229,54 +199,115 @@ function imageSearchUrl(g){
 }
 
 let reservations={};let loadSeq=0;
+const mainContent=document.getElementById("mainContent"),accessGate=document.getElementById("accessGate"),accessForm=document.getElementById("listAccessForm"),accessInput=document.getElementById("listAccessCode"),accessStatus=document.getElementById("accessStatus");
 const grid=document.getElementById("grid"),search=document.getElementById("search"),category=document.getElementById("category"),toast=document.getElementById("toast");
-[...new Set(gifts.map(g=>g.cat))].sort().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;category.appendChild(o)});
+function privateRpc(name,body){return fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)})}
 function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
 function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+async function loadGiftCatalog(){
+  if(!authorized)return false;
+  const r=await privateRpc("get_private_gifts",{p_code:accessCode});
+  const rows=await r.json().catch(()=>[]);
+  if(!r.ok||!Array.isArray(rows)||!rows.length){
+    console.error("private gifts",r.status,rows);
+    if(r.status===401||r.status===403){lockSite("Code invalide ou accès révoqué.");return false}
+    showToast("La liste des cadeaux n’est pas disponible pour le moment.");
+    return false;
+  }
+  gifts=rows.map(x=>({id:x.id,cat:x.cat,title:x.title,price:x.price,desc:x.description,image:x.image||null,official_label:x.official_label||"",official_url:x.official_url||""}));
+  category.innerHTML='<option value="all">Toutes les catégories</option>';
+  [...new Set(gifts.map(g=>g.cat))].sort().forEach(catName=>{const o=document.createElement("option");o.value=catName;o.textContent=catName;category.appendChild(o)});
+  render();
+  return true;
+}
 async function loadReservations(){
  const seq=++loadSeq;
- if(!SUPABASE_READY){reservations={};render();showToast("Supabase n’est pas encore configuré.");return}
- const r=await fetch(SUPABASE_URL+"/rest/v1/reservations?select=gift_id,name",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
- if(!r.ok){const detail=await r.text();console.error("Supabase GET",r.status,detail);showToast("Supabase : erreur "+r.status);return}
- const rows=await r.json();
+ if(!authorized||!accessCode)return;
+ const r=await privateRpc("get_private_reservations",{p_code:accessCode});
+ const rows=await r.json().catch(()=>[]);
+ if(!r.ok){console.error("Supabase reservations",r.status,rows);return}
  if(seq!==loadSeq)return;
- const nextReservations=Object.fromEntries(rows.map(x=>[x.gift_id,x.name]));
+ const nextReservations=Object.fromEntries((Array.isArray(rows)?rows:[]).map(x=>[x.gift_id,x.name]));
  const changed=JSON.stringify(nextReservations)!==JSON.stringify(reservations);
  reservations=nextReservations;
  if(changed)render();
 }
 async function unreserveGift(id,currentName){
- if(!SUPABASE_READY){showToast("Configure Supabase avant de déréserver.");return}
+ if(!authorized||!accessCode){showToast("Accès requis.");return}
  const name=prompt("Pour déréserver, indique le prénom utilisé lors de la réservation :")?.trim();
  if(!name)return;
  if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
  if(!confirm("Déréserver ce cadeau ?"))return;
- const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/cancel_reservation",{
-   method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
-   body:JSON.stringify({p_gift_id:id,p_name:name})
- });
- if(!r.ok){const detail=await r.text();console.error("Supabase RPC DELETE",r.status,detail);showToast("Déréservation impossible ("+r.status+").");return}
+ const r=await privateRpc("cancel_private_reservation",{p_code:accessCode,p_gift_id:id,p_name:name});
  const result=await r.json().catch(()=>false);
+ if(!r.ok){console.error("Supabase RPC DELETE",r.status,result);showToast("Déréservation impossible.");return}
  if(result!==true){showToast("Le prénom ne correspond pas à la réservation.");return}
  delete reservations[id];
  loadSeq++;
  render();
  showToast("Cadeau déréservé.");
- setTimeout(loadReservations,1200);
+ setTimeout(loadReservations,500);
 }
 async function reserveGift(id){
- if(!SUPABASE_READY){showToast("Configure Supabase avant de réserver.");return}
+ if(!authorized||!accessCode){showToast("Accès requis.");return}
  const name=prompt("Prénom de la personne qui réserve ce cadeau :")?.trim();if(!name)return;
- const r=await fetch(SUPABASE_URL+"/rest/v1/reservations",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({gift_id:id,name})});
- if(r.status===409){showToast("Ce cadeau vient d’être réservé.");}
- else if(!r.ok){const detail=await r.text();console.error("Supabase INSERT",r.status,detail);showToast("Supabase : erreur "+r.status);return}
- else showToast("Réservation enregistrée pour tout le monde.");
+ const r=await privateRpc("reserve_private_gift",{p_code:accessCode,p_gift_id:id,p_name:name});
+ const result=await r.json().catch(()=>null);
+ if(r.status===409){showToast("Ce cadeau vient d’être réservé.");return}
+ if(!r.ok){console.error("Supabase INSERT",r.status,result);showToast("Réservation impossible.");return}
+ showToast("Réservation enregistrée pour tout le monde.");
  await loadReservations();
 }
 
 
 
+async function unlockSite(code){
+  code=String(code||"").trim();
+  if(!code){accessStatus.textContent="Entre ton code d’invitation.";return false}
+  accessStatus.textContent="Vérification du code…";
+  const r=await privateRpc("authorize_list_access",{p_code:code});
+  const data=await r.json().catch(()=>null);
+  if(!r.ok||!data||data.authorized!==true){
+    accessStatus.textContent="❌ Code invalide ou accès non autorisé.";
+    sessionStorage.removeItem("birthday_list_access");
+    return false;
+  }
+  accessCode=code;
+  accessLabel=data.label||"";
+  const loaded=await loadGiftCatalog();
+  if(!loaded)return false;
+  authorized=true;
+  sessionStorage.setItem("birthday_list_access",accessCode);
+  if(history.replaceState)history.replaceState(null,"",location.pathname+location.hash);
+  accessStatus.textContent=accessLabel?"✅ Accès autorisé pour "+accessLabel+".":"✅ Accès autorisé.";
+  accessGate.classList.add("private-locked");
+  mainContent.classList.remove("locked");
+  await Promise.all([loadReservations(),loadFundraisers(),loadSuggestions(),loadContributions(),loadIdeas(),loadMessages()]);
+  startPrivateRefresh();
+  return true;
+}
+function lockSite(message){
+  authorized=false;
+  accessCode="";
+  accessLabel="";
+  gifts=[];
+  reservations={};
+  sessionStorage.removeItem("birthday_list_access");
+  mainContent.classList.add("locked");
+  accessGate.classList.remove("private-locked");
+  accessStatus.textContent=message||"Entre ton code d’invitation.";
+  grid.innerHTML="";
+  category.innerHTML='<option value="all">Toutes les catégories</option>';
+}
+let privateRefreshStarted=false;
+function startPrivateRefresh(){
+  if(privateRefreshStarted)return;
+  privateRefreshStarted=true;
+  setInterval(()=>{if(authorized){loadReservations();loadFundraisers();loadSuggestions();loadIdeas();loadMessages()}},5000);
+}
+
 async function loadFundraisers(){
+  if(!authorized)return;
   const [fr,cr]=await Promise.all([
     fetch(SUPABASE_URL+"/rest/v1/fundraisers?select=id,title,description,goal_amount,status&status=eq.approved&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}}),
     fetch(SUPABASE_URL+"/rest/v1/contributions?select=fundraiser_id,amount",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}})
@@ -336,6 +367,7 @@ async function deleteContribution(id,currentName){
   showToast("Donation retirée.");loadContributions();
 }
 async function loadIdeas(){
+  if(!authorized)return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/ideas?select=id,name,idea,created_at&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
   if(!r.ok)return;
   const rows=await r.json(),list=document.getElementById("ideasList");list.innerHTML="";
@@ -398,6 +430,7 @@ async function submitMessage(e){
 async function loadMessages(){ return; }
 async function deleteMessage(){ return; }
 async function loadSuggestions(){
+  if(!authorized)return;
   const r=await fetch(SUPABASE_URL+"/rest/v1/gift_suggestions?select=id,name,gift_name,link,message,created_at&status=eq.approved&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
   if(!r.ok)return;
   const rows=await r.json();
@@ -423,6 +456,7 @@ async function submitSuggestion(e){
   document.getElementById("suggestForm").reset();showToast("Suggestion envoyée.");loadSuggestions();
 }
 async function loadContributions(){
+  if(!authorized)return;
   const selected=document.getElementById("fundraiserSelect")?.value||"";
   const filter=selected?"&fundraiser_id=eq."+encodeURIComponent(selected):"";
   const r=await fetch(SUPABASE_URL+"/rest/v1/contributions?select=id,name,amount,message,created_at,fundraiser_id&order=created_at.desc"+filter,{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
@@ -459,10 +493,21 @@ function render(){
 <div class="top"><div class="cat">${g.cat}</div><div class="title">${g.title}</div><div class="desc">${g.desc}</div><div class="shop-title">🛒 Recherche intelligente</div><button class="compare-search compare-offers" type="button">🔎 Comparer les prix et vérifier les sites disponibles</button><button class="ai-search ai-web-search" type="button">🤖 Chercher sur le Web avec l’IA</button><div class="ai-note">Les résultats s’affichent directement ici : offres, disponibilité, sources et images.</div><div class="ai-results"></div><div class="shop-links">${shops.map(s=>'<a class="'+(s.cls||"")+'" href="'+s.url+'" target="_blank" rel="noopener noreferrer">'+s.label+'</a>').join("")}</div><div class="offer-note">Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.</div></div><div class="bottom"><div class="price">${g.price} <small>prix indicatif</small></div><div class="row"><button class="reserve ${who?"done":""}" ${who?"disabled":""}>${who?"✓ Réservé":"Réserver"}</button><button class="link copy-gift">Copier</button></div>${who?`<div class="reserved">Réservé par : ${escapeHtml(who)}</div><button class="link unreserve" style="width:100%;margin-top:8px">Déréserver</button>`:""}</div>`;card.querySelector(".compare-offers").addEventListener("click",()=>runAiSearch(g,card,"compare"));card.querySelector(".ai-web-search").addEventListener("click",()=>runAiSearch(g,card,"search"));if(aiCache.has(g.id))restoreAiResult(g,card);card.querySelector(".image-search").addEventListener("click",()=>{window.open(imageSearchUrl(g),"_blank","noopener");});card.querySelector(".reserve").addEventListener("click",()=>reserveGift(g.id));card.querySelector(".copy-gift").addEventListener("click",()=>{navigator.clipboard?.writeText(location.href+"#"+g.id);showToast("Lien copié.")});if(who){card.querySelector(".unreserve").addEventListener("click",()=>unreserveGift(g.id,who))}grid.appendChild(card)});
  document.getElementById("countAll").textContent=gifts.length;document.getElementById("countReserved").textContent=Object.keys(reservations).length;document.getElementById("countAvailable").textContent=gifts.length-Object.keys(reservations).length;
 }
-search.addEventListener("input",render);category.addEventListener("change",render);
-document.getElementById("shareBtn").addEventListener("click",async()=>{const data={title:"Liste d’Ethan — Noël & Anniversaire 2026",url:location.href};if(navigator.share){try{await navigator.share(data)}catch{}}else{await navigator.clipboard?.writeText(location.href);showToast("Lien de la liste copié.")}});
-document.getElementById("resetBtn").addEventListener("click",async()=>{showToast("Actualisation…");await loadReservations();showToast("Liste actualisée.");});
-render();loadReservations();loadFundraisers();loadSuggestions();loadContributions();loadIdeas();loadMessages();document.getElementById("fundraiserForm").addEventListener("submit",submitFundraiser);document.getElementById("fundraiserSelect").addEventListener("change",loadContributions);document.getElementById("suggestForm").addEventListener("submit",submitSuggestion);document.getElementById("contribForm").addEventListener("submit",submitContribution);document.getElementById("ideaForm").addEventListener("submit",submitIdea);document.getElementById("messageForm").addEventListener("submit",submitMessage);document.getElementById("profileForm").addEventListener("submit",submitProfile);setInterval(()=>{loadReservations();loadFundraisers();loadSuggestions();loadIdeas();loadMessages()},5000);
+search.addEventListener("input",()=>{if(authorized)render()});
+category.addEventListener("change",()=>{if(authorized)render()});
+document.getElementById("shareBtn").addEventListener("click",async()=>{const data={title:"Liste d’Ethan — Noël & Anniversaire 2026",url:location.href};if(navigator.share){try{await navigator.share(data)}catch{}}else{await navigator.clipboard?.writeText(location.href);showToast("Lien copié.")}});
+document.getElementById("resetBtn").addEventListener("click",async()=>{if(!authorized){showToast("Entre d’abord ton code d’invitation.");return}showToast("Actualisation…");await loadGiftCatalog();await loadReservations();showToast("Liste actualisée.")});
+accessForm.addEventListener("submit",async e=>{e.preventDefault();await unlockSite(accessInput.value);});
+document.getElementById("fundraiserForm").addEventListener("submit",submitFundraiser);
+document.getElementById("fundraiserSelect").addEventListener("change",loadContributions);
+document.getElementById("suggestForm").addEventListener("submit",submitSuggestion);
+document.getElementById("contribForm").addEventListener("submit",submitContribution);
+document.getElementById("ideaForm").addEventListener("submit",submitIdea);
+document.getElementById("messageForm").addEventListener("submit",submitMessage);
+document.getElementById("profileForm").addEventListener("submit",submitProfile);
+const urlCode=new URLSearchParams(location.search).get("code");
+const savedCode=sessionStorage.getItem("birthday_list_access");
+if(urlCode){accessInput.value=urlCode;unlockSite(urlCode)}else if(savedCode){unlockSite(savedCode)}else{lockSite("Entre ton code d’invitation pour continuer.")}
 async function logSiteVisit(page){try{await fetch(SUPABASE_URL+"/rest/v1/rpc/log_site_visit",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_page:page})})}catch{}}
 logSiteVisit("Liste principale");
 </script></body></html>
