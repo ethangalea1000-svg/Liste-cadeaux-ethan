@@ -1135,36 +1135,34 @@ set search_path = ''
 as $audit$
 declare
   row_data jsonb;
+  old_data jsonb;
   actor text;
   entity_key text;
   detail text;
   action_name text;
+  old_status text;
+  new_status text;
 begin
   row_data := case when TG_OP = 'DELETE' then to_jsonb(OLD) else to_jsonb(NEW) end;
+  old_data := case when TG_OP = 'INSERT' then '{}'::jsonb else to_jsonb(OLD) end;
 
   actor := coalesce(
     nullif(trim(row_data->>'name'), ''),
-    case when TG_TABLE_NAME = 'reservations' then 'Visiteur' else 'Visiteur' end
+    'Visiteur'
   );
 
   entity_key := coalesce(row_data->>'id', row_data->>'gift_id');
 
+  old_status := coalesce(old_data->>'status', '');
+  new_status := coalesce(row_data->>'status', '');
+
   if TG_OP = 'UPDATE'
-     and TG_TABLE_NAME = 'gift_suggestions'
-     and coalesce(OLD.status,'') <> coalesce(NEW.status,'')
+     and TG_TABLE_NAME in ('gift_suggestions','fundraisers')
+     and old_status <> new_status
   then
     action_name := case
-      when NEW.status = 'approved' then 'validée'
-      when NEW.status = 'rejected' then 'refusée'
-      else 'modifiée'
-    end;
-  elsif TG_OP = 'UPDATE'
-     and TG_TABLE_NAME = 'fundraisers'
-     and coalesce(OLD.status,'') <> coalesce(NEW.status,'')
-  then
-    action_name := case
-      when NEW.status = 'approved' then 'validée'
-      when NEW.status = 'rejected' then 'refusée'
+      when new_status = 'approved' then 'validée'
+      when new_status = 'rejected' then 'refusée'
       else 'modifiée'
     end;
   else
@@ -1180,7 +1178,9 @@ begin
     nullif(trim(row_data->>'gift_name'), ''),
     nullif(trim(row_data->>'title'), ''),
     nullif(trim(row_data->>'gift_id'), ''),
-    case when TG_TABLE_NAME = 'community_reactions' then 'Réaction ' || coalesce(row_data->>'emoji','') end,
+    case when TG_TABLE_NAME = 'community_reactions'
+      then 'Réaction ' || coalesce(row_data->>'emoji','')
+    end,
     TG_TABLE_NAME
   );
 
