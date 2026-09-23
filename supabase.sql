@@ -1554,7 +1554,7 @@ returns table (
   id text,sort_order integer,cat text,title text,price text,description text,image text,
   official_label text,official_url text,target_amount numeric,allow_contributions boolean,
   allow_reservation boolean,funding_note text,contributed_amount numeric,remaining_amount numeric,
-  contribution_count bigint,participant_count bigint,reserved_by text
+  contribution_count bigint,participant_count bigint,my_contribution_count bigint,my_contributed_amount numeric,reserved_by text
 )
 language plpgsql security definer set search_path=public
 as $$
@@ -1567,6 +1567,8 @@ begin
     greatest(g.target_amount-coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0),0)::numeric,
     (select count(*) from public.gift_contributions c where c.gift_id=g.id),
     (select count(distinct lower(trim(c.name))) from public.gift_contributions c where c.gift_id=g.id),
+    (select count(*) from public.gift_contributions c where c.gift_id=g.id and lower(trim(c.name)) = lower(trim((select lac.label from public.list_access_codes lac where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1)))),
+    (select coalesce(sum(c.amount),0)::numeric from public.gift_contributions c where c.gift_id=g.id and lower(trim(c.name)) = lower(trim((select lac.label from public.list_access_codes lac where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1)))),
     (select r.name from public.reservations r where r.gift_id=g.id limit 1)
   from public.gift_catalog g
   where coalesce(g.archived,false) = false
