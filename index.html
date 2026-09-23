@@ -58,14 +58,23 @@
 </section>
 <section class="forms">
 <div class="panel">
-<h2>💡 Boîte à idées</h2>
-<p>Une idée pour améliorer le site ? Elle sera visible avec ton prénom.</p>
-<form id="ideaForm" class="form-grid">
-<input id="ideaName" maxlength="50" required placeholder="Ton prénom *">
-<textarea id="ideaText" maxlength="500" required placeholder="Ton idée *"></textarea>
-<div class="form-actions"><button class="send" type="submit">Envoyer mon idée</button></div>
+<h2>👤 Me présenter</h2>
+<p>Tu viens sur le site ? Tu peux créer une petite fiche pour qu’Ethan sache plus facilement qui tu es.</p>
+<form id="profileForm" class="form-grid">
+<input id="profileName" maxlength="50" required placeholder="Ton prénom *">
+<select id="profileRelation" required>
+<option value="">Qui es-tu pour Ethan ? *</option>
+<option>Ami(e)</option>
+<option>Famille</option>
+<option>Camarade de classe</option>
+<option>Connaissance</option>
+<option>Autre</option>
+</select>
+<input id="profileAvatar" maxlength="4" placeholder="Ton emoji (optionnel) — ex. 🎮">
+<textarea id="profileBio" maxlength="250" placeholder="Un petit mot pour te présenter (optionnel)"></textarea>
+<div class="form-actions"><button class="send" type="submit">Enregistrer mon profil</button></div>
+<div class="form-note">Ces informations servent uniquement à identifier plus facilement les personnes qui utilisent le site.</div>
 </form>
-<ul class="mini-list" id="ideasList"></ul>
 </div>
 <div class="panel">
 <h2>💬 Boîte à messages pour Ethan</h2>
@@ -76,6 +85,18 @@
 <div class="form-actions"><button class="send" type="submit">Envoyer le message</button></div>
 <p class="form-note">Le message est conservé dans Supabase et n'est pas affiché publiquement.</p>
 </form>
+</div>
+</section>
+<section class="forms">
+<div class="panel">
+<h2>💡 Boîte à idées</h2>
+<p>Une idée pour améliorer le site ? Elle sera visible avec ton prénom.</p>
+<form id="ideaForm" class="form-grid">
+<input id="ideaName" maxlength="50" required placeholder="Ton prénom *">
+<textarea id="ideaText" maxlength="500" required placeholder="Ton idée *"></textarea>
+<div class="form-actions"><button class="send" type="submit">Envoyer mon idée</button></div>
+</form>
+<ul class="mini-list" id="ideasList"></ul>
 </div>
 </section><div class="foot"><strong>Réservations partagées :</strong> les réservations sont enregistrées en ligne. Tous les visiteurs voient les mêmes réservations.</div><div style="margin-top:10px"><a href="confidentialite.html">🔒 Confidentialité & données personnelles</a></div></div></main><div class="toast" id="toast"></div>
 <script>
@@ -334,6 +355,24 @@ async function deleteIdea(id,name){
   if(!r.ok){console.error("delete idea",r.status,await r.text());showToast("Impossible de supprimer l’idée.");return}
   showToast("Idée supprimée.");loadIdeas();
 }
+async function submitProfile(e){
+  e.preventDefault();
+  const body={
+    p_name:document.getElementById("profileName").value.trim(),
+    p_relation:document.getElementById("profileRelation").value,
+    p_avatar:document.getElementById("profileAvatar").value.trim(),
+    p_bio:document.getElementById("profileBio").value.trim()
+  };
+  if(!body.p_name||!body.p_relation)return;
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/upsert_guest_profile",{
+    method:"POST",cache:"no-store",
+    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  });
+  if(!r.ok){console.error("Supabase profile",r.status,await r.text());showToast("Impossible d’enregistrer le profil ("+r.status+").");return}
+  document.getElementById("profileForm").reset();
+  showToast("Profil enregistré.");
+}
 async function submitMessage(e){
   e.preventDefault();
   const body={
@@ -423,7 +462,7 @@ function render(){
 search.addEventListener("input",render);category.addEventListener("change",render);
 document.getElementById("shareBtn").addEventListener("click",async()=>{const data={title:"Liste d’Ethan — Noël & Anniversaire 2026",url:location.href};if(navigator.share){try{await navigator.share(data)}catch{}}else{await navigator.clipboard?.writeText(location.href);showToast("Lien de la liste copié.")}});
 document.getElementById("resetBtn").addEventListener("click",async()=>{showToast("Actualisation…");await loadReservations();showToast("Liste actualisée.");});
-render();loadReservations();loadFundraisers();loadSuggestions();loadContributions();loadIdeas();loadMessages();document.getElementById("fundraiserForm").addEventListener("submit",submitFundraiser);document.getElementById("fundraiserSelect").addEventListener("change",loadContributions);document.getElementById("suggestForm").addEventListener("submit",submitSuggestion);document.getElementById("contribForm").addEventListener("submit",submitContribution);document.getElementById("ideaForm").addEventListener("submit",submitIdea);document.getElementById("messageForm").addEventListener("submit",submitMessage);setInterval(()=>{loadReservations();loadFundraisers();loadSuggestions();loadIdeas();loadMessages()},5000);
+render();loadReservations();loadFundraisers();loadSuggestions();loadContributions();loadIdeas();loadMessages();document.getElementById("fundraiserForm").addEventListener("submit",submitFundraiser);document.getElementById("fundraiserSelect").addEventListener("change",loadContributions);document.getElementById("suggestForm").addEventListener("submit",submitSuggestion);document.getElementById("contribForm").addEventListener("submit",submitContribution);document.getElementById("ideaForm").addEventListener("submit",submitIdea);document.getElementById("messageForm").addEventListener("submit",submitMessage);document.getElementById("profileForm").addEventListener("submit",submitProfile);setInterval(()=>{loadReservations();loadFundraisers();loadSuggestions();loadIdeas();loadMessages()},5000);
 async function logSiteVisit(page){try{await fetch(SUPABASE_URL+"/rest/v1/rpc/log_site_visit",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_page:page})})}catch{}}
 logSiteVisit("Liste principale");
 </script></body></html>
