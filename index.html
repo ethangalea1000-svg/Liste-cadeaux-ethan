@@ -220,7 +220,7 @@ async function loadGiftCatalog(){
     showToast("La liste des cadeaux n’est pas disponible pour le moment.");
     return false;
   }
-  gifts=rows.map(x=>({id:x.id,cat:x.cat,title:x.title,price:x.price,desc:x.description,image:x.image||null,official_label:x.official_label||"",official_url:x.official_url||"",targetAmount:Number(x.target_amount||0),allowContributions:x.allow_contributions!==false,allowReservation:x.allow_reservation!==false,fundingNote:x.funding_note||"",contributedAmount:Number(x.contributed_amount||0),remainingAmount:Number(x.remaining_amount||0),contributionCount:Number(x.contribution_count||0),reservedBy:x.reserved_by||""}));
+  gifts=rows.map(x=>({id:x.id,cat:x.cat,title:x.title,price:x.price,desc:x.description,image:x.image||null,official_label:x.official_label||"",official_url:x.official_url||"",targetAmount:Number(x.target_amount||0),allowContributions:x.allow_contributions!==false,allowReservation:x.allow_reservation!==false,fundingNote:x.funding_note||"",contributedAmount:Number(x.contributed_amount||0),remainingAmount:Number(x.remaining_amount||0),contributionCount:Number(x.contribution_count||0),participantCount:Number(x.participant_count||0),reservedBy:x.reserved_by||""}));
   category.innerHTML='<option value="all">Toutes les catégories</option>';
   [...new Set(gifts.map(g=>g.cat))].sort().forEach(catName=>{const o=document.createElement("option");o.value=catName;o.textContent=catName;category.appendChild(o)});
   render();
@@ -489,6 +489,20 @@ async function submitContribution(e){
   if(!r.ok){console.error("Supabase contribution",r.status,await r.text());showToast("Impossible d’enregistrer la participation.");return}
   document.getElementById("contribForm").reset();showToast("Participation enregistrée.");loadContributions();
 }
+async function removeMyGiftContributions(g){
+ if(!authorized||!accessCode){showToast("Accès requis.");return}
+ if(!g.allowContributions){showToast("Les participations ne sont pas activées.");return}
+ if(!g.contributedAmount||g.contributedAmount<=0){showToast("Aucune participation enregistrée.");return}
+ if(!confirm("Retirer toutes tes participations à ce cadeau ?"))return;
+ const r=await privateRpc("delete_private_gift_contribution",{p_code:accessCode,p_gift_id:g.id});
+ const data=await r.json().catch(()=>null);
+ if(!r.ok){console.error("gift contribution delete",r.status,data);showToast(data?.message||"Impossible de retirer les participations.");return}
+ if(Number(data||0)<=0){showToast("Aucune de tes participations n’a été trouvée.");return}
+ showToast("Tes participations ont été retirées.");
+ await loadGiftCatalog();
+ await loadReservations();
+}
+
 async function contributeToGift(g){
  if(!authorized||!accessCode){showToast("Accès requis.");return}
  if(!g.allowContributions){showToast("Les participations ne sont pas activées pour ce cadeau.");return}
@@ -518,13 +532,13 @@ function render(){
    const shops=shoppingLinks(g);const imageUrl=productImageUrl(g);
    const target=Number(g.targetAmount||0),funded=Number(g.contributedAmount||0),remaining=Math.max(Number(g.remainingAmount||0),0);
    const pct=target>0?Math.min(100,funded/target*100):0;
-   const fundingHtml=target>0?'<div class="gift-funding"><div><strong>💶 Financement</strong> · '+funded.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € / '+target.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</div><div class="funding-bar"><span style="width:'+pct+'%"></span></div><div class="funding-meta"><span>'+ (remaining>0?remaining.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € restant(s)': 'Objectif atteint') +'</span><span>'+Number(g.contributionCount||0)+' participation(s)</span></div>'+(g.fundingNote?'<div class="form-note">'+escapeHtml(g.fundingNote)+'</div>':"")+(g.allowContributions&&remaining>0&&!who?'<button class="gift-contribute" type="button">💶 Participer à ce cadeau</button>':"")+'</div>':'';
+   const fundingHtml=target>0?'<div class="gift-funding"><div><strong>💶 Financement</strong> · '+funded.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € / '+target.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</div><div class="funding-bar"><span style="width:'+pct+'%"></span></div><div class="funding-meta"><span>'+ (remaining>0?remaining.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € restant(s)': 'Objectif atteint') +'</span><span>'+Number(g.contributionCount||0)+' participation(s)</span></div>'+(g.fundingNote?'<div class="form-note">'+escapeHtml(g.fundingNote)+'</div>':"")+(g.allowContributions&&remaining>0&&!who?'<button class="gift-contribute" type="button">💶 Participer à ce cadeau</button>':"")+(g.allowContributions&&funded>0&&!who?'<button class="gift-remove-contrib" type="button">↩️ Retirer mes participations</button>':"")+'</div>':'';
    const reserveHtml=who?'<div class="reserved">Réservé par : '+escapeHtml(who)+'</div><button class="link unreserve" style="width:100%;margin-top:8px">Déréserver</button>':(g.allowReservation&&funded<=0?'<button class="reserve">Réserver</button>':"");
    card.innerHTML=`
 <div class="image-wrap"><img class="product-image" src="${imageUrl}" alt="Image de ${escapeHtml(g.title)} — ${escapeHtml(g.desc)}" loading="lazy" onerror="this.style.display='none'"><div class="image-label">Image auto · nom + légende</div></div><button class="ai-search image-search" type="button">🖼️ Chercher les images liées</button>
 <div class="top"><div class="cat">${escapeHtml(g.cat)}</div><div class="title">${escapeHtml(g.title)}</div><div class="desc">${escapeHtml(g.desc)}</div><div class="shop-title">🛒 Recherche intelligente</div><button class="compare-search compare-offers" type="button">🔎 Comparer les prix et vérifier les sites disponibles</button><button class="ai-search ai-web-search" type="button">🤖 Chercher sur le Web avec l’IA</button><div class="ai-note">Les résultats s’affichent directement ici : offres, disponibilité, sources et images.</div><div class="ai-results"></div><div class="shop-links">${shops.map(s=>'<a class="'+(s.cls||"")+'" href="'+s.url+'" target="_blank" rel="noopener noreferrer">'+s.label+'</a>').join("")}</div><div class="offer-note">Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.</div>${fundingHtml}</div>
 <div class="bottom"><div class="price">${escapeHtml(g.price)} <small>prix indicatif</small></div><div class="row">${reserveHtml}<button class="link copy-gift">Copier</button></div></div>`;
-   const contribBtn=card.querySelector(".gift-contribute");if(contribBtn)contribBtn.addEventListener("click",()=>contributeToGift(g));
+   const contribBtn=card.querySelector(".gift-contribute");if(contribBtn)contribBtn.addEventListener("click",()=>contributeToGift(g));const removeContribBtn=card.querySelector(".gift-remove-contrib");if(removeContribBtn)removeContribBtn.addEventListener("click",()=>removeMyGiftContributions(g));
    card.querySelector(".compare-offers").addEventListener("click",()=>runAiSearch(g,card,"compare"));
    card.querySelector(".ai-web-search").addEventListener("click",()=>runAiSearch(g,card,"search"));
    if(aiCache.has(g.id))restoreAiResult(g,card);
