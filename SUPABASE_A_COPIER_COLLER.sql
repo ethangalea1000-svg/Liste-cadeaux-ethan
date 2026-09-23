@@ -1554,7 +1554,7 @@ returns table (
   id text,sort_order integer,cat text,title text,price text,description text,image text,
   official_label text,official_url text,target_amount numeric,allow_contributions boolean,
   allow_reservation boolean,funding_note text,contributed_amount numeric,remaining_amount numeric,
-  contribution_count bigint,reserved_by text
+  contribution_count bigint,participant_count bigint,reserved_by text
 )
 language plpgsql security definer set search_path=public
 as $$
@@ -1566,6 +1566,7 @@ begin
     coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0)::numeric,
     greatest(g.target_amount-coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0),0)::numeric,
     (select count(*) from public.gift_contributions c where c.gift_id=g.id),
+    (select count(distinct lower(trim(c.name))) from public.gift_contributions c where c.gift_id=g.id),
     (select r.name from public.reservations r where r.gift_id=g.id limit 1)
   from public.gift_catalog g
   where coalesce(g.archived,false) = false
@@ -1604,12 +1605,14 @@ begin
 end;
 $$;
 
+drop function if exists public.admin_list_gift_catalog();
+
 create or replace function public.admin_list_gift_catalog()
 returns table (
   id text,sort_order integer,cat text,title text,price text,description text,image text,
   official_label text,official_url text,target_amount numeric,allow_contributions boolean,
   allow_reservation boolean,funding_note text,contributed_amount numeric,remaining_amount numeric,
-  contribution_count bigint,reserved_by text
+  contribution_count bigint,participant_count bigint,reserved_by text
 )
 language plpgsql security definer set search_path=public
 as $$
@@ -1621,6 +1624,7 @@ begin
     coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0)::numeric,
     greatest(g.target_amount-coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0),0)::numeric,
     (select count(*) from public.gift_contributions c where c.gift_id=g.id),
+    (select count(distinct lower(trim(c.name))) from public.gift_contributions c where c.gift_id=g.id),
     (select r.name from public.reservations r where r.gift_id=g.id limit 1)
   from public.gift_catalog g order by g.sort_order,g.id;
 end;
@@ -1670,6 +1674,42 @@ end;
 $$;
 
 grant execute on function public.admin_delete_gift(text) to anon;
+
+create or replace function public.delete_private_gift_contribution(
+  p_code text,
+  p_gift_id text
+)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $privategiftdelete$
+declare
+  v_name text;
+  v_deleted integer;
+begin
+  select label
+  into v_name
+  from public.list_access_codes
+  where active = true
+    and code = trim(coalesce(p_code, ''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.'
+      using errcode = '42501';
+  end if;
+
+  delete from public.gift_contributions
+  where gift_id = p_gift_id
+    and lower(trim(name)) = lower(trim(v_name));
+
+  get diagnostics v_deleted = row_count;
+  return v_deleted;
+end;
+$privategiftdelete$;
+
+grant execute on function public.delete_private_gift_contribution(text,text) to anon;
 
 create or replace function public.admin_list_gift_contributions()
 returns table(id bigint,gift_id text,gift_title text,name text,amount numeric,message text,created_at timestamptz)
