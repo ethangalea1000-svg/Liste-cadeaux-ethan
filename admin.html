@@ -224,7 +224,7 @@ async function deleteGiftContributionAdmin(id){
 }
 async function loadAccessCodes(){
  try{
-  const rows=await rpc("admin_list_access_codes",{});
+  const rows=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
   $("countAccess").textContent=rows.filter(x=>x.active).length;
   $("accessList").innerHTML=rows.length?rows.map(x=>{
     const url=location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(x.code);
