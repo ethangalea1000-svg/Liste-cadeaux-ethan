@@ -1714,6 +1714,50 @@ end;
 $$;
 
 grant execute on function public.admin_list_access_codes() to anon;
+  
+create or replace function public.admin_list_access_codes_for_code(p_code text)
+returns table(
+  id bigint,
+  label text,
+  code text,
+  active boolean,
+  is_admin boolean,
+  created_at timestamptz,
+  last_used_at timestamptz
+)
+language plpgsql
+security definer
+set search_path = public
+as $accesslist$
+begin
+  if not exists (
+    select 1
+    from public.list_access_codes
+    where active = true
+      and is_admin = true
+      and code = trim(coalesce(p_code, ''))
+  ) then
+    raise exception 'Accès administrateur refusé.'
+      using errcode = '42501';
+  end if;
+
+  return query
+  select
+    id,
+    label,
+    code,
+    active,
+    is_admin,
+    created_at,
+    last_used_at
+  from public.list_access_codes
+  order by created_at desc;
+end;
+$accesslist$;
+
+grant execute on function public.admin_list_access_codes_for_code(text) to anon;
+
+
 
 create or replace function public.admin_create_access_code(p_label text,p_code text)
 returns bigint language plpgsql security definer set search_path=public
