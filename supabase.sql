@@ -199,6 +199,30 @@ $$;
 grant execute on function public.delete_message(bigint,text) to anon;
 
 
+create or replace function public.assert_admin_header()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $admincheck$
+declare
+  v_headers jsonb;
+  v_code text;
+begin
+  v_headers := coalesce(nullif(current_setting('request.headers', true), ''), '{}')::jsonb;
+  v_code := trim(coalesce(v_headers ->> 'x-admin-code', ''));
+
+  if not exists (
+    select 1 from public.list_access_codes
+    where active = true and is_admin = true and code = v_code
+  ) then
+    raise exception 'Accès administrateur refusé.' using errcode = '42501';
+  end if;
+end;
+$admincheck$;
+
+revoke execute on function public.assert_admin_header() from anon, authenticated;
+
 create or replace function public.admin_list_pending_suggestions()
 returns setof public.gift_suggestions
 language plpgsql
@@ -206,6 +230,7 @@ security definer
 set search_path = public
 as $$
 begin
+  perform public.assert_admin_header();
 
   return query
   select *
@@ -227,6 +252,7 @@ security definer
 set search_path = public
 as $$
 begin
+  perform public.assert_admin_header();
 
   if p_status not in ('approved','rejected') then
     raise exception 'invalid status';
@@ -443,6 +469,204 @@ on function public.toggle_reaction(bigint, text, text)
 to anon;
 
   
+-- ============================================================
+-- COMMUNAUTÉ PRIVÉE : code d'accès + identité automatique
+-- ============================================================
+
+revoke select, insert, update, delete on table public.community_posts from anon, authenticated;
+revoke select, insert, update, delete on table public.community_reactions from anon, authenticated;
+revoke execute on function public.toggle_reaction(bigint,text,text) from anon, authenticated;
+revoke execute on function public.delete_community_post(bigint,text) from anon, authenticated;
+
+create or replace function public.get_private_community(p_code text)
+returns table (
+  id bigint, name text, message text, link text, attachments jsonb, created_at timestamptz,
+  heart bigint, thumbs bigint, laugh bigint, party bigint, wow bigint
+)
+language plpgsql
+security definer
+set search_path = public
+as $privatecommunity$
+begin
+  if not exists (
+    select 1 from public.list_access_codes
+    where active = true and code = trim(coalesce(p_code, ''))
+  ) then
+    raise exception 'Accès refusé.' using errcode = '42501';
+  end if;
+
+  return query
+  select
+    p.id, p.name, p.message, p.link, p.attachments, p.created_at,
+    count(r.id) filter (where r.emoji = '❤️')::bigint,
+    count(r.id) filter (where r.emoji = '👍')::bigint,
+    count(r.id) filter (where r.emoji = '😂')::bigint,
+    count(r.id) filter (where r.emoji = '🎉')::bigint,
+    count(r.id) filter (where r.emoji = '😮')::bigint
+  from public.community_posts p
+  left join public.community_reactions r on r.post_id = p.id
+  group by p.id
+  order by p.created_at desc
+  limit 50;
+end;
+$privatecommunity$;
+
+grant execute on function public.get_private_community(text) to anon;
+
+
+create or replace function public.create_private_community_post(
+  p_code text, p_message text, p_link text default null, p_attachments jsonb default '[]'::jsonb
+)
+returns bigint
+language plpgsql
+security definer
+set search_path = public
+as $privatepost$
+declare
+  v_name text;
+  v_id bigint;
+begin
+  select label into v_name
+  from public.list_access_codes
+  where active = true and code = trim(coalesce(p_code, ''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode = '42501';
+  end if;
+
+  if char_length(trim(coalesce(p_message, ''))) < 1
+     or char_length(trim(p_message)) > 500 then
+    raise exception 'Message invalide.';
+  end if;
+
+  if p_link is not null and char_length(trim(p_link)) > 500 then
+    raise exception 'Lien invalide.';
+  end if;
+
+  p_attachments := coalesce(p_attachments, '[]'::jsonb);
+  if jsonb_typeof(p_attachments) <> 'array' or jsonb_array_length(p_attachments) > 5 then
+    raise exception 'Pièces jointes invalides.';
+  end if;
+
+  insert into public.community_posts(name, message, link, attachments)
+  values (
+    trim(v_name), trim(p_message), nullif(trim(coalesce(p_link, '')), ''), p_attachments
+  )
+  returning id into v_id;
+
+  return v_id;
+end;
+$privatepost$;
+
+grant execute on function public.create_private_community_post(text,text,text,jsonb) to anon;
+
+
+create or replace function public.toggle_private_community_reaction(
+  p_code text, p_post_id bigint, p_emoji text
+)
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $privatereaction$
+declare
+  v_name text;
+  reaction_id bigint;
+begin
+  select label into v_name
+  from public.list_access_codes
+  where active = true and code = trim(coalesce(p_code, ''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode = '42501';
+  end if;
+
+  if p_emoji not in ('❤️','👍','😂','🎉','😮') then
+    raise exception 'Réaction invalide.';
+  end if;
+
+  delete from public.community_reactions
+  where post_id = p_post_id
+    and emoji = p_emoji
+    and lower(trim(name)) = lower(trim(v_name))
+  returning id into reaction_id;
+
+  if reaction_id is not null then
+    return 'removed';
+  end if;
+
+  if not exists (select 1 from public.community_posts where id = p_post_id) then
+    raise exception 'Message introuvable.';
+  end if;
+
+  insert into public.community_reactions(post_id, emoji, name)
+  values (p_post_id, p_emoji, trim(v_name));
+
+  return 'added';
+end;
+$privatereaction$;
+
+grant execute on function public.toggle_private_community_reaction(text,bigint,text) to anon;
+
+
+create or replace function public.delete_private_community_post(
+  p_code text, p_id bigint
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, storage
+as $privatedelete$
+declare
+  v_name text;
+  files jsonb;
+  file_item jsonb;
+  file_path text;
+begin
+  select label into v_name
+  from public.list_access_codes
+  where active = true and code = trim(coalesce(p_code, ''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode = '42501';
+  end if;
+
+  select attachments into files
+  from public.community_posts
+  where id = p_id and lower(trim(name)) = lower(trim(v_name));
+
+  if files is null then return false; end if;
+
+  for file_item in select value from jsonb_array_elements(coalesce(files, '[]'::jsonb))
+  loop
+    file_path := regexp_replace(
+      file_item->>'url',
+      '^.*/storage/v1/object/public/community-files/', ''
+    );
+
+    if file_path is not null and file_path <> '' then
+      delete from storage.objects
+      where bucket_id = 'community-files' and name = file_path;
+    end if;
+  end loop;
+
+  delete from public.community_posts
+  where id = p_id and lower(trim(name)) = lower(trim(v_name));
+
+  return found;
+end;
+$privatedelete$;
+
+grant execute on function public.delete_private_community_post(text,bigint) to anon;
+
+
+-- ============================================================
+-- FIN COMMUNAUTÉ PRIVÉE
+-- ============================================================
+
 -- =====================================================
 -- STOCKAGE PUBLIC : GIFS, IMAGES, DOCUMENTS, VIDEOS...
 -- =====================================================
@@ -491,6 +715,16 @@ to anon
 with check (
   bucket_id = 'community-files'
   and name like 'community/%'
+  and exists (
+    select 1 from public.list_access_codes
+    where active = true
+      and code = trim(
+        coalesce(
+          (coalesce(nullif(current_setting('request.headers', true), ''), '{}')::jsonb)->>'x-access-code',
+          ''
+        )
+      )
+  )
 );
 
 
@@ -571,6 +805,7 @@ security definer
 set search_path = public
 as $fundall$
 begin
+  perform public.assert_admin_header();
   return query
   select * from public.fundraisers
   order by created_at desc;
@@ -586,6 +821,7 @@ security definer
 set search_path = public
 as $fundadmin$
 begin
+  perform public.assert_admin_header();
 
   return query
   select *
@@ -607,6 +843,7 @@ security definer
 set search_path = public
 as $fundstatus$
 begin
+  perform public.assert_admin_header();
 
   if p_status not in ('approved','rejected') then
     raise exception 'invalid status';
@@ -634,6 +871,7 @@ security definer
 set search_path = public
 as $adminmsg$
 begin
+  perform public.assert_admin_header();
 
   return query
   select *
@@ -652,6 +890,7 @@ security definer
 set search_path = public
 as $adminidea$
 begin
+  perform public.assert_admin_header();
 
   return query
   select *
@@ -678,6 +917,7 @@ security definer
 set search_path = public
 as $admincontrib$
 begin
+  perform public.assert_admin_header();
 
   return query
   select
@@ -704,6 +944,7 @@ security definer
 set search_path = public
 as $admincommunity$
 begin
+  perform public.assert_admin_header();
 
   return query
   select *
@@ -724,6 +965,7 @@ security definer
 set search_path = public
 as $adminmsgdel$
 begin
+  perform public.assert_admin_header();
 
   delete from public.messages where id = p_id;
   return found;
@@ -742,6 +984,7 @@ security definer
 set search_path = public
 as $adminideadel$
 begin
+  perform public.assert_admin_header();
 
   delete from public.ideas where id = p_id;
   return found;
@@ -760,6 +1003,7 @@ security definer
 set search_path = public
 as $admincontribdel$
 begin
+  perform public.assert_admin_header();
 
   delete from public.contributions where id = p_id;
   return found;
@@ -782,6 +1026,7 @@ declare
   file_item jsonb;
   file_path text;
 begin
+  perform public.assert_admin_header();
 
   select attachments
   into files
@@ -824,6 +1069,7 @@ grant execute on function public.admin_delete_community_post(bigint) to anon;
 create or replace function public.admin_delete_suggestion(p_id bigint)
 returns boolean language plpgsql security definer set search_path=public as $admsuggdel$
 begin
+  perform public.assert_admin_header();
   delete from public.gift_suggestions where id=p_id;
   return found;
 end;
@@ -833,6 +1079,7 @@ grant execute on function public.admin_delete_suggestion(bigint) to anon;
 create or replace function public.admin_delete_fundraiser(p_id bigint)
 returns boolean language plpgsql security definer set search_path=public as $admfunddel$
 begin
+  perform public.assert_admin_header();
   delete from public.fundraisers where id=p_id;
   return found;
 end;
@@ -843,6 +1090,7 @@ create or replace function public.admin_create_announcement(p_message text,p_lin
 returns bigint language plpgsql security definer set search_path=public as $admannounce$
 declare new_id bigint;
 begin
+  perform public.assert_admin_header();
   if char_length(trim(coalesce(p_message,''))) < 1 or char_length(trim(p_message)) > 500 then
     raise exception 'invalid announcement';
   end if;
@@ -1020,6 +1268,7 @@ security definer
 set search_path = ''
 as $list$
 begin
+  perform public.assert_admin_header();
   return query
   select *
   from public.audit_logs
@@ -1044,10 +1293,13 @@ returns table (
   fundraisers bigint,
   reactions bigint
 )
-language sql
+language plpgsql
 security definer
 set search_path = ''
 as $daily$
+begin
+  perform public.assert_admin_header();
+  return query
   with days as (
     select generate_series(current_date - 6, current_date, interval '1 day')::date as day
   )
@@ -1067,8 +1319,9 @@ as $daily$
   left join public.audit_logs a
     on a.created_at::date = d.day
   group by d.day
-  order by d.day;
-$daily$;
+  order by d.day;;
+end;
+$daily$;;
 
 grant execute on function public.admin_activity_daily() to anon;
 
@@ -1085,10 +1338,13 @@ returns table (
   fundraisers bigint,
   reactions bigint
 )
-language sql
+language plpgsql
 security definer
 set search_path = ''
 as $summary$
+begin
+  perform public.assert_admin_header();
+  return query
   select
     count(*) as total,
     count(*) filter (where entity_type = 'Visite') as visits,
@@ -1100,8 +1356,9 @@ as $summary$
     count(*) filter (where entity_type = 'Communauté') as community,
     count(*) filter (where entity_type = 'Cagnotte') as fundraisers,
     count(*) filter (where entity_type = 'Réaction') as reactions
-  from public.audit_logs;
-$summary$;
+  from public.audit_logs;;
+end;
+$summary$;;
 
 grant execute on function public.admin_activity_summary() to anon;
 
@@ -1192,6 +1449,7 @@ security definer
 set search_path = public
 as $people$
 begin
+  perform public.assert_admin_header();
   return query
   select
     p.id,
@@ -1353,16 +1611,20 @@ returns table (
   allow_reservation boolean,funding_note text,contributed_amount numeric,remaining_amount numeric,
   contribution_count bigint,reserved_by text
 )
-language sql security definer set search_path=public
+language plpgsql security definer set search_path=public
 as $$
+begin
+  perform public.assert_admin_header();
+  return query
   select g.id,g.sort_order,g.cat,g.title,g.price,g.description,g.image,g.official_label,g.official_url,
     g.target_amount,g.allow_contributions,g.allow_reservation,g.funding_note,
     coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0)::numeric,
     greatest(g.target_amount-coalesce((select sum(c.amount) from public.gift_contributions c where c.gift_id=g.id),0),0)::numeric,
     (select count(*) from public.gift_contributions c where c.gift_id=g.id),
     (select r.name from public.reservations r where r.gift_id=g.id limit 1)
-  from public.gift_catalog g order by g.sort_order,g.id;
-$$;
+  from public.gift_catalog g order by g.sort_order,g.id;;
+end;
+$$;;
 
 grant execute on function public.admin_list_gift_catalog() to anon;
 
@@ -1374,6 +1636,7 @@ create or replace function public.admin_save_gift(
 returns text language plpgsql security definer set search_path=public
 as $$
 begin
+  perform public.assert_admin_header();
   if char_length(trim(coalesce(p_id,'')))<1 or char_length(trim(p_id))>80 then raise exception 'Identifiant invalide.'; end if;
   if char_length(trim(coalesce(p_title,'')))<1 or char_length(trim(p_title))>160 then raise exception 'Nom du cadeau invalide.'; end if;
   if p_target_amount is null or p_target_amount<0 then raise exception 'Objectif invalide.'; end if;
@@ -1397,6 +1660,7 @@ returns boolean language plpgsql security definer set search_path=public
 as $$
 declare n integer;
 begin
+  perform public.assert_admin_header();
   delete from public.gift_contributions where gift_id=p_id;
   delete from public.reservations where gift_id=p_id;
   delete from public.gift_catalog where id=p_id;
@@ -1409,12 +1673,16 @@ grant execute on function public.admin_delete_gift(text) to anon;
 
 create or replace function public.admin_list_gift_contributions()
 returns table(id bigint,gift_id text,gift_title text,name text,amount numeric,message text,created_at timestamptz)
-language sql security definer set search_path=public
+language plpgsql security definer set search_path=public
 as $$
+begin
+  perform public.assert_admin_header();
+  return query
   select c.id,c.gift_id,g.title,c.name,c.amount,c.message,c.created_at
   from public.gift_contributions c left join public.gift_catalog g on g.id=c.gift_id
-  order by c.created_at desc;
-$$;
+  order by c.created_at desc;;
+end;
+$$;;
 
 grant execute on function public.admin_list_gift_contributions() to anon;
 
@@ -1423,6 +1691,7 @@ returns boolean language plpgsql security definer set search_path=public
 as $$
 declare n integer;
 begin
+  perform public.assert_admin_header();
   delete from public.gift_contributions where id=p_id;
   get diagnostics n=row_count;
   return n>0;
@@ -1435,10 +1704,14 @@ drop function if exists public.admin_list_access_codes();
 
 create or replace function public.admin_list_access_codes()
 returns table(id bigint,label text,code text,active boolean,is_admin boolean,created_at timestamptz,last_used_at timestamptz)
-language sql security definer set search_path=public
+language plpgsql security definer set search_path=public
 as $$
-  select id,label,code,active,is_admin,created_at,last_used_at from public.list_access_codes order by created_at desc;
-$$;
+begin
+  perform public.assert_admin_header();
+  return query
+  select id,label,code,active,is_admin,created_at,last_used_at from public.list_access_codes order by created_at desc;;
+end;
+$$;;
 
 grant execute on function public.admin_list_access_codes() to anon;
 
@@ -1447,6 +1720,7 @@ returns bigint language plpgsql security definer set search_path=public
 as $$
 declare v_id bigint;
 begin
+  perform public.assert_admin_header();
   if char_length(trim(coalesce(p_label,'')))<1 or char_length(trim(p_label))>80 then raise exception 'Nom invalide.'; end if;
   if char_length(trim(coalesce(p_code,'')))<8 or char_length(trim(p_code))>64 then raise exception 'Code trop court ou trop long.'; end if;
   insert into public.list_access_codes(label,code,active) values(trim(p_label),trim(p_code),true) returning id into v_id;
@@ -1463,6 +1737,7 @@ security definer
 set search_path=public
 as $$
 begin
+  perform public.assert_admin_header();
   update public.list_access_codes
   set is_admin=coalesce(p_is_admin,false)
   where id=p_id;
@@ -1475,7 +1750,8 @@ grant execute on function public.admin_set_access_code_admin(bigint,boolean) to 
 create or replace function public.admin_set_access_code_status(p_id bigint,p_active boolean)
 returns boolean language plpgsql security definer set search_path=public
 as $$
-begin update public.list_access_codes set active=coalesce(p_active,false) where id=p_id; return found; end;
+begin
+  perform public.assert_admin_header(); update public.list_access_codes set active=coalesce(p_active,false) where id=p_id; return found; end;
 $$;
 
 grant execute on function public.admin_set_access_code_status(bigint,boolean) to anon;
@@ -1483,7 +1759,8 @@ grant execute on function public.admin_set_access_code_status(bigint,boolean) to
 create or replace function public.admin_delete_access_code(p_id bigint)
 returns boolean language plpgsql security definer set search_path=public
 as $$
-begin delete from public.list_access_codes where id=p_id; return found; end;
+begin
+  perform public.assert_admin_header(); delete from public.list_access_codes where id=p_id; return found; end;
 $$;
 
 grant execute on function public.admin_delete_access_code(bigint) to anon;
