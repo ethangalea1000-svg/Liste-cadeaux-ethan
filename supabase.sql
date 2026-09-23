@@ -1413,7 +1413,7 @@ security definer
 set search_path = public
 as $$
 declare
-  v_deleted boolean;
+  v_deleted integer;
 begin
   if not exists (
     select 1
@@ -1428,8 +1428,8 @@ begin
   where gift_id = p_gift_id
     and lower(trim(name)) = lower(trim(coalesce(p_name, '')));
 
-  get diagnostics v_deleted = row_count > 0;
-  return coalesce(v_deleted, false);
+  get diagnostics v_deleted = row_count;
+  return coalesce(v_deleted, 0) > 0;
 end;
 $$;
 
