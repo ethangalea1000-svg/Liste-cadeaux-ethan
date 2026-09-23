@@ -1365,75 +1365,45 @@ $$;
 grant execute on function public.get_private_reservations(text) to anon;
 
 create or replace function public.reserve_private_gift(
-  p_code text,
-  p_gift_id text,
-  p_name text
+  p_code text,p_gift_id text,p_name text default null
 )
 returns boolean
 language plpgsql
 security definer
-set search_path = public
+set search_path=public
 as $$
+declare v_name text;
 begin
-  if not exists (
-    select 1
-    from public.list_access_codes
-    where active = true
-      and code = trim(coalesce(p_code, ''))
-  ) then
-    raise exception 'Accès refusé.' using errcode = '42501';
-  end if;
-
-  if not exists (
-    select 1 from public.gift_catalog where id = p_gift_id
-  ) then
-    raise exception 'Cadeau introuvable.';
-  end if;
-
-  insert into public.reservations(gift_id, name)
-  values (
-    p_gift_id,
-    trim(coalesce(p_name, ''))
-  );
-
+  select label into v_name
+  from public.list_access_codes
+  where active=true and code=trim(coalesce(p_code,''))
+  limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  if not exists(select 1 from public.gift_catalog where id=p_gift_id) then raise exception 'Cadeau introuvable.'; end if;
+  insert into public.reservations(gift_id,name) values(p_gift_id,v_name);
   return true;
 end;
 $$;
 
-grant execute on function public.reserve_private_gift(text,text,text) to anon;
-
 create or replace function public.cancel_private_reservation(
-  p_code text,
-  p_gift_id text,
-  p_name text
+  p_code text,p_gift_id text,p_name text default null
 )
 returns boolean
 language plpgsql
 security definer
-set search_path = public
+set search_path=public
 as $$
-declare
-  v_deleted integer;
+declare v_name text;v_deleted integer;
 begin
-  if not exists (
-    select 1
-    from public.list_access_codes
-    where active = true
-      and code = trim(coalesce(p_code, ''))
-  ) then
-    raise exception 'Accès refusé.' using errcode = '42501';
-  end if;
-
+  select label into v_name from public.list_access_codes
+  where active=true and code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
   delete from public.reservations
-  where gift_id = p_gift_id
-    and lower(trim(name)) = lower(trim(coalesce(p_name, '')));
-
-  get diagnostics v_deleted = row_count;
-  return coalesce(v_deleted, 0) > 0;
+  where gift_id=p_gift_id and lower(trim(name))=lower(trim(v_name));
+  get diagnostics v_deleted=row_count;
+  return coalesce(v_deleted,0)>0;
 end;
 $$;
-
-grant execute on function public.cancel_private_reservation(text,text,text) to anon;
 
 -- Les anciennes fonctions/règles publiques ne sont plus utilisées par le site.
 revoke execute on function public.cancel_reservation(text,text) from anon, authenticated;
@@ -1523,17 +1493,18 @@ create or replace function public.add_private_gift_contribution(
   p_code text,p_gift_id text,p_name text,p_amount numeric,p_message text default null
 )
 returns bigint
-language plpgsql security definer set search_path=public
+language plpgsql
+security definer
+set search_path=public
 as $$
-declare v_target numeric;v_current numeric;v_remaining numeric;v_allow boolean;v_id bigint;
+declare v_target numeric;v_current numeric;v_remaining numeric;v_allow boolean;v_id bigint;v_name text;
 begin
-  if not exists(select 1 from public.list_access_codes where active=true and code=trim(coalesce(p_code,''))) then
-    raise exception 'Accès refusé.' using errcode='42501';
-  end if;
+  select label into v_name from public.list_access_codes
+  where active=true and code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
   select target_amount,allow_contributions into v_target,v_allow from public.gift_catalog where id=p_gift_id for update;
   if v_target is null then raise exception 'Cadeau introuvable.'; end if;
   if not v_allow then raise exception 'Les participations ne sont pas activées pour ce cadeau.'; end if;
-  if trim(coalesce(p_name,''))='' then raise exception 'Prénom obligatoire.'; end if;
   if p_amount is null or p_amount<=0 or p_amount>50000 then raise exception 'Montant invalide.'; end if;
   if exists(select 1 from public.reservations where gift_id=p_gift_id) then raise exception 'Ce cadeau est déjà réservé en totalité.'; end if;
   select coalesce(sum(amount),0) into v_current from public.gift_contributions where gift_id=p_gift_id;
@@ -1541,13 +1512,11 @@ begin
   if v_remaining<=0 then raise exception 'Ce cadeau est déjà entièrement financé.'; end if;
   if p_amount>v_remaining then raise exception 'Le maximum est % €.',to_char(v_remaining,'FM999999990.00'); end if;
   insert into public.gift_contributions(gift_id,name,amount,message)
-  values(p_gift_id,trim(p_name),round(p_amount,2),nullif(trim(p_message),''))
+  values(p_gift_id,v_name,round(p_amount,2),nullif(trim(p_message),''))
   returning id into v_id;
   return v_id;
 end;
 $$;
-
-grant execute on function public.add_private_gift_contribution(text,text,text,numeric,text) to anon;
 
 create or replace function public.admin_list_gift_catalog()
 returns table (
