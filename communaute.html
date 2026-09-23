@@ -12,16 +12,26 @@
 <body>
 <header class="hero"><div class="wrap hero-row"><div><strong>💬 Communauté</strong><div style="margin-top:6px;color:#e8e9f2">Discutez, partagez vos idées et réagissez aux messages.</div></div><a class="back" href="index.html">← Liste</a></div></header>
 <main class="wrap">
+<section id="accessGate" class="panel" style="max-width:620px;margin:24px auto">
+<h2>🔐 Communauté privée</h2>
+<p class="note">Entre ton code d’invitation pour accéder à la discussion. Ton identité est récupérée automatiquement depuis ce code.</p>
+<form id="accessForm" class="form">
+<input id="accessCodeInput" type="password" maxlength="64" autocomplete="off" placeholder="Code d’invitation *" required>
+<button class="send" type="submit">Accéder à la communauté</button>
+</form>
+<div id="accessStatus" class="note" aria-live="polite"></div>
+</section>
+<section id="communityContent" class="hidden">
 <section class="panel">
 <h2>Écrire un message</h2>
+<div class="note">👤 Identité automatique : <strong id="identity"></strong></div>
 <form id="postForm" class="form">
-<input id="name" maxlength="50" required placeholder="Ton prénom *">
 <textarea id="message" maxlength="500" required placeholder="Ton message *"></textarea>
 <input id="link" type="url" maxlength="500" placeholder="Lien (optionnel)">
 <input id="files" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.txt,.csv,.rtf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.7z">
 <div class="note">Images, GIF, vidéos, PDF et documents courants. 6 Mo maximum par fichier. N’envoie pas de document privé ou sensible.</div>
 <button class="send" type="submit">Publier</button>
-<div class="note">Les messages de cette page sont publics. Pour supprimer ton message ou ta réaction, le prénom utilisé doit être vérifié.</div>
+<div class="note">Les messages sont visibles par les personnes autorisées. Ton identité est ajoutée automatiquement à partir de ton code.</div>
 </form>
 </section>
 <section class="panel">
@@ -33,96 +43,193 @@
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
-const postsEl=document.getElementById("posts"),toast=document.getElementById("toast");
-function showToast(m){toast.textContent=m;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2200)}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-async function load(){
- const [pr,rr]=await Promise.all([
-  fetch(SUPABASE_URL+"/rest/v1/community_posts?select=id,name,message,link,attachments,created_at&order=created_at.desc&limit=50",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}}),
-  fetch(SUPABASE_URL+"/rest/v1/community_reactions?select=post_id,emoji,name",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}})
- ]);
- if(!pr.ok){postsEl.innerHTML='<div class="empty">Impossible de charger la discussion.</div>';return}
- const posts=await pr.json(), reactions=rr.ok?await rr.json():[];
- const counts={};
- reactions.forEach(r=>{counts[r.post_id]??={};counts[r.post_id][r.emoji]=(counts[r.post_id][r.emoji]||0)+1});
- postsEl.innerHTML="";
- if(!posts.length){postsEl.innerHTML='<div class="empty">Aucun message pour le moment.</div>';return}
- posts.forEach(p=>{
-  const c=counts[p.id]||{};
-  const box=document.createElement("article");box.className="post";
-  const atts=Array.isArray(p.attachments)?p.attachments:[];
-  const attachmentsHtml=atts.map(a=>a.type&&a.type.startsWith("image/")?
-    '<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer"><img class="attachment-img" src="'+esc(a.url)+'" alt="'+esc(a.name||"image")+'"></a>':
-    '<a class="attachment-link" href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">📎 '+esc(a.name||"Fichier")+'</a>'
-  ).join("");
-  const linkHtml=p.link?'<div class="post-link">🔗 <a href="'+esc(p.link)+'" target="_blank" rel="noopener noreferrer">'+esc(p.link)+'</a></div>':"";
-  box.innerHTML='<div class="meta"><strong>'+esc(p.name)+'</strong> · '+new Date(p.created_at).toLocaleString("fr-FR")+'</div><div class="message">'+esc(p.message)+'</div>'+linkHtml+(attachmentsHtml?'<div class="attachments">'+attachmentsHtml+'</div>':"")+'<div class="reactions">'+["❤️","👍","😂","🎉","😮"].map(e=>'<button class="reaction" data-e="'+e+'">'+e+' '+(c[e]||0)+'</button>').join("")+'</div><div class="post-actions"><button class="danger delete-post">Supprimer ce message</button></div>';
-  box.querySelectorAll(".reaction").forEach(b=>b.onclick=()=>toggleReaction(p.id,b.dataset.e));
-  box.querySelector(".delete-post").onclick=()=>deletePost(p.id,p.name);
-  postsEl.appendChild(box);
- });
+const postsEl=document.getElementById("posts");
+const toast=document.getElementById("toast");
+const accessGate=document.getElementById("accessGate");
+const communityContent=document.getElementById("communityContent");
+const accessStatus=document.getElementById("accessStatus");
+let accessCode="";
+let accessLabel="";
+
+function showToast(m){
+  toast.textContent=m;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),2200);
 }
-async function rpcPost(path,body){
-  const headers={apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Accept":"application/json"};
-  let r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+path,{method:"POST",cache:"no-store",headers,body:JSON.stringify(body)});
-  if(r.status===401){
-    const retryHeaders={...headers,Authorization:"Bearer "+SUPABASE_ANON_KEY};
-    r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+path,{method:"POST",cache:"no-store",headers:retryHeaders,body:JSON.stringify(body)});
+function esc(s){
+  return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+async function rpc(name,body,extraHeaders={}){
+  const headers={apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Accept":"application/json",...extraHeaders};
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{
+    method:"POST",cache:"no-store",headers,body:JSON.stringify(body)
+  });
+  const data=await r.json().catch(()=>null);
+  if(!r.ok){
+    const msg=data?.message||data?.hint||data?.details||data?.error||("HTTP "+r.status);
+    throw new Error(msg);
   }
-  return r;
+  return data;
+}
+async function authorizeCommunity(code){
+  code=String(code||"").trim();
+  if(!code){accessStatus.textContent="Entre ton code.";return false}
+  accessStatus.textContent="Vérification…";
+  try{
+    const data=await rpc("authorize_list_access",{p_code:code});
+    if(!data?.authorized){
+      accessStatus.textContent="❌ Code invalide ou accès non autorisé.";
+      sessionStorage.removeItem("birthday_list_access");
+      return false;
+    }
+    accessCode=code;
+    accessLabel=String(data.label||"").trim();
+    sessionStorage.setItem("birthday_list_access",accessCode);
+    document.getElementById("accessCodeInput").value="";
+    document.getElementById("identity").textContent=accessLabel||"Visiteur autorisé";
+    accessStatus.textContent="✅ Accès autorisé.";
+    accessGate.style.display="none";
+    communityContent.classList.remove("hidden");
+    await load();
+    return true;
+  }catch(e){
+    accessStatus.textContent="❌ Impossible de vérifier le code.";
+    console.error(e);
+    return false;
+  }
+}
+function lockCommunity(msg){
+  accessCode="";
+  accessLabel="";
+  accessGate.style.display="";
+  communityContent.classList.add("hidden");
+  accessStatus.textContent=msg||"Entre ton code d’invitation.";
+}
+async function load(){
+  if(!accessCode)return;
+  try{
+    const posts=await rpc("get_private_community",{p_code:accessCode});
+    postsEl.innerHTML="";
+    if(!Array.isArray(posts)||!posts.length){
+      postsEl.innerHTML='<div class="empty">Aucun message pour le moment.</div>';
+      return;
+    }
+    posts.forEach(p=>{
+      const box=document.createElement("article");
+      box.className="post";
+      const atts=Array.isArray(p.attachments)?p.attachments:[];
+      const attachmentsHtml=atts.map(a=>a.type&&a.type.startsWith("image/")?
+        '<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer"><img class="attachment-img" src="'+esc(a.url)+'" alt="'+esc(a.name||"image")+'"></a>':
+        '<a class="attachment-link" href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">📎 '+esc(a.name||"Fichier")+'</a>'
+      ).join("");
+      const linkHtml=p.link?'<div class="post-link">🔗 <a href="'+esc(p.link)+'" target="_blank" rel="noopener noreferrer">'+esc(p.link)+'</a></div>':"";
+      const count=e=>Number(p[e]||0);
+      box.innerHTML='<div class="meta"><strong>'+esc(p.name)+'</strong> · '+new Date(p.created_at).toLocaleString("fr-FR")+
+        '</div><div class="message">'+esc(p.message)+'</div>'+linkHtml+
+        (attachmentsHtml?'<div class="attachments">'+attachmentsHtml+'</div>':"")+
+        '<div class="reactions">'+
+        '<button class="reaction" data-e="❤️">❤️ '+count("heart")+'</button>'+
+        '<button class="reaction" data-e="👍">👍 '+count("thumbs")+'</button>'+
+        '<button class="reaction" data-e="😂">😂 '+count("laugh")+'</button>'+
+        '<button class="reaction" data-e="🎉">🎉 '+count("party")+'</button>'+
+        '<button class="reaction" data-e="😮">😮 '+count("wow")+'</button>'+
+        '</div><div class="post-actions"><button class="danger delete-post">Supprimer ce message</button></div>';
+      box.querySelectorAll(".reaction").forEach(b=>b.onclick=()=>toggleReaction(p.id,b.dataset.e));
+      box.querySelector(".delete-post").onclick=()=>deletePost(p.id);
+      postsEl.appendChild(box);
+    });
+  }catch(e){
+    console.error(e);
+    showToast("Impossible de charger la discussion.");
+  }
 }
 async function toggleReaction(postId,emoji){
-  const name=prompt("Pour ajouter ou retirer cette réaction, écris ton prénom :")?.trim();
-  if(!name)return;
-  const r=await rpcPost("toggle_reaction",{p_post_id:postId,p_emoji:emoji,p_name:name});
-  if(!r.ok){const detail=await r.text();console.error("reaction",r.status,detail);showToast("Réaction impossible ("+r.status+").");return}
-  const result=await r.json().catch(()=>null);
-  showToast(result==="removed"?"Réaction retirée.":"Réaction ajoutée.");
-  load();
-}
-async function deletePost(postId,currentName){
-  const name=prompt("Pour supprimer ce message et ses fichiers, écris le prénom utilisé lors de sa publication :")?.trim();
-  if(!name)return;
-  if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
-  if(!confirm("Supprimer ce message, ses liens et ses fichiers ?"))return;
-  const r=await rpcPost("delete_community_post",{p_id:postId,p_name:name});
-  if(!r.ok){
-    const detail=await r.text();
-    console.error("delete post",r.status,detail);
-    let msg="Suppression impossible ("+r.status+").";
-    if(detail){try{const j=JSON.parse(detail);if(j.message)msg+=" "+j.message}catch(e){}}
-    showToast(msg.slice(0,180));
-    return;
+  try{
+    const result=await rpc("toggle_private_community_reaction",{
+      p_code:accessCode,p_post_id:postId,p_emoji:emoji
+    });
+    showToast(result==="removed"?"Réaction retirée.":"Réaction ajoutée.");
+    load();
+  }catch(e){
+    console.error(e);
+    showToast("Réaction impossible.");
   }
-  showToast("Message, liens et fichiers supprimés.");
-  load();
 }
-
+async function deletePost(postId){
+  if(!confirm("Supprimer ce message, ses liens et ses fichiers ?"))return;
+  try{
+    const ok=await rpc("delete_private_community_post",{p_code:accessCode,p_id:postId});
+    if(!ok){showToast("Tu ne peux supprimer que tes propres messages.");return}
+    showToast("Message, liens et fichiers supprimés.");
+    load();
+  }catch(e){
+    console.error(e);
+    showToast("Suppression impossible.");
+  }
+}
 document.getElementById("postForm").addEventListener("submit",async e=>{
- e.preventDefault();
- const name=document.getElementById("name").value.trim();
- const message=document.getElementById("message").value.trim();
- const link=document.getElementById("link").value.trim();
- const files=[...document.getElementById("files").files];
- if(!name||!message)return;
- if(files.length>5){showToast("Maximum 5 fichiers par message.");return}
- if(files.some(file=>file.size>6*1024*1024)){showToast("Chaque fichier doit faire au maximum 6 Mo.");return}
- const attachments=[];
- for(const file of files){
-   const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-   const path="community/"+Date.now()+"-"+crypto.randomUUID()+"-"+safe;
-   const up=await fetch(SUPABASE_URL+"/storage/v1/object/community-files/"+encodeURIComponent(path).replace(/%2F/g,"/"),{
-     method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":file.type||"application/octet-stream","x-upsert":"false"},body:file
-   });
-   if(!up.ok){const detail=await up.text();console.error("Storage upload",up.status,detail);showToast("Upload impossible pour "+file.name);return}
-   attachments.push({name:file.name,type:file.type||"application/octet-stream",url:SUPABASE_URL+"/storage/v1/object/public/community-files/"+path});
- }
- const body={name,message,link:link||null,attachments};
- const r=await fetch(SUPABASE_URL+"/rest/v1/community_posts",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
- if(!r.ok){const detail=await r.text();console.error("community post",r.status,detail);showToast("Impossible de publier le message.");return}
- document.getElementById("postForm").reset();showToast("Message publié.");load();
+  e.preventDefault();
+  const message=document.getElementById("message").value.trim();
+  const link=document.getElementById("link").value.trim();
+  const files=[...document.getElementById("files").files];
+  if(!message)return;
+  if(files.length>5){showToast("Maximum 5 fichiers par message.");return}
+  if(files.some(file=>file.size>6*1024*1024)){showToast("Chaque fichier doit faire au maximum 6 Mo.");return}
+  const attachments=[];
+  for(const file of files){
+    const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const path="community/"+Date.now()+"-"+crypto.randomUUID()+"-"+safe;
+    const up=await fetch(
+      SUPABASE_URL+"/storage/v1/object/community-files/"+encodeURIComponent(path).replace(/%2F/g,"/"),
+      {method:"POST",cache:"no-store",headers:{
+        apikey:SUPABASE_ANON_KEY,
+        "x-access-code":accessCode,
+        "Content-Type":file.type||"application/octet-stream",
+        "x-upsert":"false"
+      },body:file}
+    );
+    if(!up.ok){
+      const detail=await up.text();
+      console.error("Storage upload",up.status,detail);
+      showToast("Upload impossible pour "+file.name);
+      return;
+    }
+    attachments.push({
+      name:file.name,
+      type:file.type||"application/octet-stream",
+      url:SUPABASE_URL+"/storage/v1/object/public/community-files/"+path
+    });
+  }
+  try{
+    await rpc("create_private_community_post",{
+      p_code:accessCode,
+      p_message:message,
+      p_link:link||null,
+      p_attachments:attachments
+    });
+    document.getElementById("postForm").reset();
+    showToast("Message publié.");
+    load();
+  }catch(e){
+    console.error(e);
+    showToast("Impossible de publier le message.");
+  }
 });
-load();setInterval(load,5000);
+document.getElementById("accessForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  await authorizeCommunity(document.getElementById("accessCodeInput").value);
+});
+const urlCode=new URLSearchParams(location.search).get("code");
+const savedCode=sessionStorage.getItem("birthday_list_access");
+if(urlCode){
+  document.getElementById("accessCodeInput").value=urlCode;
+  authorizeCommunity(urlCode).then(()=>history.replaceState(null,"",location.pathname));
+}else if(savedCode){
+  authorizeCommunity(savedCode);
+}else{
+  lockCommunity();
+}
+setInterval(()=>{if(accessCode)load()},5000);
 </script>
 <footer style="max-width:1100px;margin:30px auto;padding:0 20px 30px;color:#6b7280;font-size:13px"><a href="index.html">🎁 Liste des cadeaux</a> · <a href="confidentialite.html">🔒 Confidentialité & données personnelles</a></footer>
 </body>
