@@ -1872,6 +1872,7 @@ $$;
 
 grant execute on function public.admin_list_access_codes() to anon;
   
+drop function if exists public.admin_list_access_codes_for_code(text);
 create or replace function public.admin_list_access_codes_for_code(p_code text)
 returns table(
   id bigint,
