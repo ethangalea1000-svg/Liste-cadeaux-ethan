@@ -861,6 +861,58 @@ $fundstatus$;
 grant execute on function public.admin_set_fundraiser_status(bigint, text) to anon;
 
 -- =====================================================
+-- ============================================================
+-- ADMIN : liste consolidée des accès + profils
+-- Utilise des noms de sortie distincts pour éviter toute ambiguïté
+-- avec les colonnes de tables.
+-- ============================================================
+create or replace function public.admin_list_people_access()
+returns table(
+  access_id bigint,
+  person_name text,
+  access_code text,
+  active_access boolean,
+  is_admin_access boolean,
+  access_created_at timestamptz,
+  last_used_at timestamptz,
+  profile_id bigint,
+  relation text,
+  avatar text,
+  bio text,
+  profile_created_at timestamptz,
+  profile_updated_at timestamptz
+)
+language plpgsql
+security definer
+set search_path = public
+as $peopleaccess$
+begin
+  perform public.assert_admin_header();
+
+  return query
+  select
+    lac.id as access_id,
+    lac.label as person_name,
+    lac.code as access_code,
+    lac.active as active_access,
+    lac.is_admin as is_admin_access,
+    lac.created_at as access_created_at,
+    lac.last_used_at,
+    gp.id as profile_id,
+    gp.relation,
+    gp.avatar,
+    gp.bio,
+    gp.created_at as profile_created_at,
+    gp.updated_at as profile_updated_at
+  from public.list_access_codes as lac
+  left join public.guest_profiles as gp
+    on lower(trim(gp.name)) = lower(trim(lac.label))
+  order by lac.created_at desc;
+end;
+$peopleaccess$;
+
+grant execute on function public.admin_list_people_access() to anon;
+
 -- TABLEAU ADMINISTRATEUR : MESSAGES, IDÉES, PARTICIPATIONS, COMMUNAUTÉ
 -- =====================================================
 
