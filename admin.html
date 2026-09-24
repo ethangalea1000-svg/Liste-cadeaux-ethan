@@ -239,6 +239,10 @@ async function deleteGiftContributionAdmin(id){
  if(!confirm("Supprimer cette contribution ?"))return;
  try{await rpc("admin_delete_gift_contribution",{p_id:id});toast("Contribution supprimée.");loadGiftContributionsAdmin();loadGiftAdmin()}catch(e){toast(e.message)}
 }
+function accessUrl(code){
+  return location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(String(code||"").trim());
+}
+
 async function loadAccessCodes(){
  try{
   const rows=await rpc("admin_list_people_access",{});
