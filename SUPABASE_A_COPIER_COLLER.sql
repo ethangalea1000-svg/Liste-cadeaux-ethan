@@ -1864,7 +1864,9 @@ as $$
 begin
   perform public.assert_admin_header();
   return query
-  select id,label,code,active,is_admin,created_at,last_used_at from public.list_access_codes order by created_at desc;
+  select lac.id,lac.label,lac.code,lac.active,lac.is_admin,lac.created_at,lac.last_used_at
+  from public.list_access_codes as lac
+  order by lac.created_at desc;
 end;
 $$;
 
@@ -1898,15 +1900,15 @@ begin
 
   return query
   select
-    id,
-    label,
-    code,
-    active,
-    is_admin,
-    created_at,
-    last_used_at
-  from public.list_access_codes
-  order by created_at desc;
+    lac.id,
+    lac.label,
+    lac.code,
+    lac.active,
+    lac.is_admin,
+    lac.created_at,
+    lac.last_used_at
+  from public.list_access_codes as lac
+  order by lac.created_at desc;
 end;
 $accesslist$;
 
