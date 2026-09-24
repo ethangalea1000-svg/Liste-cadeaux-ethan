@@ -180,20 +180,22 @@ async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_s
 
 async function loadPeople(){
  try{
-  let accesses=[];
-  let profiles=[];
+  let accesses=[],profiles=[];
+  let accessError=null;
+
   try{
     accesses=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
-  }catch(_){
-    accesses=await rpc("admin_list_access_codes",{});
+  }catch(e){
+    accessError=e;
   }
-  accesses=Array.isArray(accesses)?accesses:[];
 
   try{
     profiles=await rpc("admin_list_guest_profiles",{});
   }catch(_){
     profiles=[];
   }
+
+  accesses=Array.isArray(accesses)?accesses:[];
   profiles=Array.isArray(profiles)?profiles:[];
 
   $("countPeople").textContent=accesses.length||profiles.length;
@@ -210,14 +212,10 @@ async function loadPeople(){
       (profile?.bio?'<div class="message">'+esc(profile.bio)+'</div>':"")+
       '<div class="meta" style="margin-top:10px">Accès '+(x.active?"actif":"désactivé")+(x.is_admin?" · administrateur":"")+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div>'+
       '<div class="access-link">'+esc(url)+'</div>'+
-      '<div class="actions">'+
-        '<button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button>'+
-        '<button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button>'+
-      '</div></article>');
+      '<div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button></div></article>');
     byName.delete(name.toLowerCase());
   });
 
-  // Keep old guest profiles visible too, even if their access row no longer exists.
   byName.forEach(p=>{
     cards.push('<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(p.avatar||"👤")+'</div><div><strong>'+esc(p.name)+'</strong><div class="meta" style="margin:3px 0 0">'+esc(p.relation||"Profil")+'</div></div></div>'+
       (p.bio?'<div class="message">'+esc(p.bio)+'</div>':"")+
@@ -225,7 +223,16 @@ async function loadPeople(){
       '<div class="meta" style="margin-top:10px">Profil enregistré le '+date(p.created_at)+'</div></article>');
   });
 
-  $("peopleList").innerHTML=cards.length?cards.join(""):empty("Aucune personne déjà créée. Crée d’abord un accès dans « 🔑 Accès ».");
+  $("peopleList").innerHTML=cards.length?cards.join(""):empty("Aucune personne déjà créée.");
+
+  if(accessError){
+    const msg=String(accessError.message||"");
+    if(/ambiguous/i.test(msg)){
+      $("peopleList").insertAdjacentHTML("afterbegin",'<div class="panel" style="margin-bottom:12px;background:#fff8e6;border-color:#f0d58c"><strong>⚠️ La base Supabase n’est pas encore actualisée.</strong><div class="meta" style="margin-top:6px">Les comptes existants ne peuvent pas être affichés tant que le correctif SQL des fonctions d’accès n’a pas été exécuté.</div></div>');
+    }else{
+      toast(msg||"Impossible de charger les accès.");
+    }
+  }
  }catch(e){
   $("peopleList").innerHTML=empty("Impossible de charger les personnes : "+(e.message||"erreur inconnue"));
   toast(e.message||"Impossible de charger les personnes.");
@@ -275,66 +282,17 @@ async function deleteGiftContributionAdmin(id){
 }
 async function loadAccessCodes(){
  try{
-  let rows=[];
-  try{
-    rows=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
-  }catch(primaryError){
-    // Compatibilité avec une base qui n'a pas encore exécuté le dernier SQL.
-    rows=await rpc("admin_list_access_codes",{});
-  }
-  rows=Array.isArray(rows)?rows:[];
-  $("countAccess").textContent=rows.filter(x=>x.active).length;
-  $("accessList").innerHTML=rows.length?rows.map(x=>{
-    const url=location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(x.code);
+  const rows=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
+  const data=Array.isArray(rows)?rows:[];
+  $("countAccess").textContent=data.filter(x=>x.active).length;
+  $("accessList").innerHTML=data.length?data.map(x=>{
+    const url=accessUrl(x.code);
     return '<article class="item"><div class="meta">'+date(x.created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.label)+'</strong> · <span class="badge">'+(x.active?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(x.label)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.id+','+(!x.active)+')">'+(x.active?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.id+','+(!x.is_admin)+')">'+(x.is_admin?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.id+')">Supprimer</button></div></article>';
-  }).join(""):empty("Aucun code d’accès trouvé. Si tu viens de créer un accès, clique sur « ↻ Actualiser ».");
- }catch(e){toast(e.message)}
-}
-function accessUrl(code){
- return location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(String(code||"").trim());
-}
-async function copyAccessLink(code){
- const url=accessUrl(code);
- try{
-   await navigator.clipboard.writeText(url);
-   toast("Lien d’accès copié.");
+  }).join(""):empty("Aucun accès actif ou créé.");
  }catch(e){
-   window.prompt("Copie ce lien :",url);
- }
-}
-async function shareAccessLink(code,label){
- const url=accessUrl(code);
- const title="Accès à la liste d’Ethan"+(label?" — "+label:"");
- try{
-   if(navigator.share){
-     await navigator.share({title,text:"Voici ton lien privé pour accéder à la liste d’Ethan :",url});
-     toast("Lien partagé.");
-   }else{
-     await navigator.clipboard?.writeText(url);
-     toast("Partage non disponible ici : lien copié.");
-   }
- }catch(e){
-   if(e?.name!=="AbortError"){
-     try{await navigator.clipboard.writeText(url);toast("Lien copié.");}
-     catch(_){window.prompt("Copie ce lien :",url);}
-   }
- }
-}
-async function shareCurrentList(){
- const url=location.href.replace(/admin\.html(?:\?.*)?$/,"index.html");
- try{
-   if(navigator.share){
-     await navigator.share({title:"La liste d’Ethan — Noël & Anniversaire 2026",text:"Voici la liste d’Ethan :",url});
-     toast("Liste partagée.");
-   }else{
-     await navigator.clipboard?.writeText(url);
-     toast("Lien de la liste copié.");
-   }
- }catch(e){
-   if(e?.name!=="AbortError"){
-     try{await navigator.clipboard.writeText(url);toast("Lien de la liste copié.");}
-     catch(_){window.prompt("Copie ce lien :",url);}
-   }
+  const msg=e?.message||"Erreur inconnue.";
+  $("accessList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ Base Supabase à actualiser</strong><div class="message">Le site est bien mis à jour, mais la fonction SQL des accès utilisée par cette page est encore l’ancienne. Exécute <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase SQL Editor, puis recharge la page.</div><div class="meta" style="margin-top:8px">'+esc(msg)+'</div></div>';
+  toast("Base Supabase à actualiser.");
  }
 }
 async function createAccess(e){
