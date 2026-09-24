@@ -180,59 +180,21 @@ async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_s
 
 async function loadPeople(){
  try{
-  let accesses=[],profiles=[];
-  let accessError=null;
-
-  try{
-    accesses=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
-  }catch(e){
-    accessError=e;
-  }
-
-  try{
-    profiles=await rpc("admin_list_guest_profiles",{});
-  }catch(_){
-    profiles=[];
-  }
-
-  accesses=Array.isArray(accesses)?accesses:[];
-  profiles=Array.isArray(profiles)?profiles:[];
-
-  $("countPeople").textContent=accesses.length||profiles.length;
-
-  const byName=new Map();
-  profiles.forEach(p=>byName.set(String(p.name||"").trim().toLowerCase(),p));
-
-  const cards=[];
-  accesses.forEach(x=>{
-    const name=String(x.label||"").trim();
-    const profile=byName.get(name.toLowerCase());
+  const rows=await rpc("admin_list_people_v2",{});
+  const data=Array.isArray(rows)?rows:[];
+  $("countPeople").textContent=data.length;
+  $("peopleList").innerHTML=data.length?data.map(x=>{
+    const hasProfile=!!x.profile_id;
+    const name=x.label||x.profile_name||"Sans nom";
     const url=accessUrl(x.code);
-    cards.push('<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(profile?.avatar||"👤")+'</div><div><strong>'+esc(name||"Sans nom")+'</strong><div class="meta" style="margin:3px 0 0">'+(profile?esc(profile.relation||"Profil enregistré"):"Accès créé — profil non complété")+'</div></div></div>'+
-      (profile?.bio?'<div class="message">'+esc(profile.bio)+'</div>':"")+
-      '<div class="meta" style="margin-top:10px">Accès '+(x.active?"actif":"désactivé")+(x.is_admin?" · administrateur":"")+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div>'+
+    return '<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(x.avatar||"👤")+'</div><div><strong>'+esc(name)+'</strong><div class="meta" style="margin:3px 0 0">'+(hasProfile?esc(x.relation||"Profil enregistré"):"Accès créé — profil non complété")+'</div></div></div>'+
+      (x.bio?'<div class="message">'+esc(x.bio)+'</div>':"")+
+      '<div class="actions"><span class="badge">'+(x.access_active?"✅ Accès actif":"⛔ Accès désactivé")+'</span>'+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+
+      '<span class="badge">💬 '+Number(x.messages_count||0)+'</span><span class="badge">💡 '+Number(x.ideas_count||0)+'</span><span class="badge">🎁 '+Number(x.suggestions_count||0)+'</span><span class="badge">💶 '+Number(x.contributions_count||0)+'</span><span class="badge">💬 '+Number(x.community_count||0)+'</span></div>'+
+      '<div class="meta" style="margin-top:10px">Créé le '+date(x.access_created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div>'+
       '<div class="access-link">'+esc(url)+'</div>'+
-      '<div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button></div></article>');
-    byName.delete(name.toLowerCase());
-  });
-
-  byName.forEach(p=>{
-    cards.push('<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(p.avatar||"👤")+'</div><div><strong>'+esc(p.name)+'</strong><div class="meta" style="margin:3px 0 0">'+esc(p.relation||"Profil")+'</div></div></div>'+
-      (p.bio?'<div class="message">'+esc(p.bio)+'</div>':"")+
-      '<div class="actions"><span class="badge">💬 '+Number(p.messages_count||0)+' message(s)</span><span class="badge">💡 '+Number(p.ideas_count||0)+' idée(s)</span><span class="badge">🎁 '+Number(p.suggestions_count||0)+' suggestion(s)</span><span class="badge">💶 '+Number(p.contributions_count||0)+' participation(s)</span><span class="badge">💬 '+Number(p.community_count||0)+' publication(s)</span></div>'+
-      '<div class="meta" style="margin-top:10px">Profil enregistré le '+date(p.created_at)+'</div></article>');
-  });
-
-  $("peopleList").innerHTML=cards.length?cards.join(""):empty("Aucune personne déjà créée.");
-
-  if(accessError){
-    const msg=String(accessError.message||"");
-    if(/ambiguous/i.test(msg)){
-      $("peopleList").insertAdjacentHTML("afterbegin",'<div class="panel" style="margin-bottom:12px;background:#fff8e6;border-color:#f0d58c"><strong>⚠️ La base Supabase n’est pas encore actualisée.</strong><div class="meta" style="margin-top:6px">Les comptes existants ne peuvent pas être affichés tant que le correctif SQL des fonctions d’accès n’a pas été exécuté.</div></div>');
-    }else{
-      toast(msg||"Impossible de charger les accès.");
-    }
-  }
+      '<div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button></div></article>';
+  }).join(""):empty("Aucune personne / aucun accès créé.");
  }catch(e){
   $("peopleList").innerHTML=empty("Impossible de charger les personnes : "+(e.message||"erreur inconnue"));
   toast(e.message||"Impossible de charger les personnes.");
@@ -282,18 +244,14 @@ async function deleteGiftContributionAdmin(id){
 }
 async function loadAccessCodes(){
  try{
-  const rows=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
+  const rows=await rpc("admin_list_access_codes_v2",{});
   const data=Array.isArray(rows)?rows:[];
-  $("countAccess").textContent=data.filter(x=>x.active).length;
+  $("countAccess").textContent=data.filter(x=>x.access_active).length;
   $("accessList").innerHTML=data.length?data.map(x=>{
     const url=accessUrl(x.code);
-    return '<article class="item"><div class="meta">'+date(x.created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.label)+'</strong> · <span class="badge">'+(x.active?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(x.label)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.id+','+(!x.active)+')">'+(x.active?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.id+','+(!x.is_admin)+')">'+(x.is_admin?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.id+')">Supprimer</button></div></article>';
-  }).join(""):empty("Aucun accès actif ou créé.");
- }catch(e){
-  const msg=e?.message||"Erreur inconnue.";
-  $("accessList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ Base Supabase à actualiser</strong><div class="message">Le site est bien mis à jour, mais la fonction SQL des accès utilisée par cette page est encore l’ancienne. Exécute <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase SQL Editor, puis recharge la page.</div><div class="meta" style="margin-top:8px">'+esc(msg)+'</div></div>';
-  toast("Base Supabase à actualiser.");
- }
+    return '<article class="item"><div class="meta">'+date(x.access_created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.label)+'</strong> · <span class="badge">'+(x.access_active?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(x.label)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.access_active)+')">'+(x.access_active?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin)+')">'+(x.is_admin?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div></article>';
+  }).join(""):empty("Aucun accès créé.");
+ }catch(e){$("accessList").innerHTML=empty("Impossible de charger les accès : "+(e.message||"erreur inconnue"));toast(e.message||"Impossible de charger les accès.")}
 }
 async function createAccess(e){
  e.preventDefault();
