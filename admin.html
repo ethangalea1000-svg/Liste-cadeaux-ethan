@@ -109,6 +109,7 @@
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
+let adminCode="";
 
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
@@ -141,7 +142,11 @@ async function authorizeAdmin(code){
     $("dashboard").classList.remove("hidden");
     refreshAll();
     return true;
-  }catch(e){$("adminStatus").textContent="❌ Impossible de vérifier le code.";return false}
+  }catch(e){
+    console.error("authorizeAdmin",e);
+    $("adminStatus").textContent="❌ Impossible de vérifier le code : "+(e?.message||"erreur inconnue")+".";
+    return false;
+  }
 }
 function adminLogout(){sessionStorage.removeItem("birthday_admin_access");adminCode="";$("dashboard").classList.add("hidden");$("adminGate").classList.remove("hidden");$("adminCodeInput").value="";$("adminStatus").textContent="Session fermée."}
 
