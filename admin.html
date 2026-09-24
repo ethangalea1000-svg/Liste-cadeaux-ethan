@@ -152,7 +152,7 @@ function adminLogout(){sessionStorage.removeItem("birthday_admin_access");adminC
 
 async function runDiagnostic(){
  showDiagnostic();
- const tests=["admin_list_pending_suggestions","admin_list_pending_fundraisers","admin_list_messages","admin_list_ideas","admin_list_contributions","admin_list_community_posts","admin_list_activity","admin_activity_daily","admin_activity_summary"];
+ const tests=["admin_list_people_access","admin_list_pending_suggestions","admin_list_pending_fundraisers","admin_list_messages","admin_list_ideas","admin_list_contributions","admin_list_community_posts","admin_list_activity","admin_activity_daily","admin_activity_summary"];
  $("diagnosticStatus").textContent="Test en cours…"; $("diagnosticList").innerHTML="";
  const results=[];
  for(const fn of tests){
@@ -180,24 +180,21 @@ async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_s
 
 async function loadPeople(){
  try{
-  const rows=await rpc("admin_list_people_v2",{});
+  const rows=await rpc("admin_list_people_access",{});
   const data=Array.isArray(rows)?rows:[];
   $("countPeople").textContent=data.length;
+
   $("peopleList").innerHTML=data.length?data.map(x=>{
-    const hasProfile=!!x.profile_id;
-    const name=x.label||x.profile_name||"Sans nom";
-    const url=accessUrl(x.code);
-    return '<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(x.avatar||"👤")+'</div><div><strong>'+esc(name)+'</strong><div class="meta" style="margin:3px 0 0">'+(hasProfile?esc(x.relation||"Profil enregistré"):"Accès créé — profil non complété")+'</div></div></div>'+
+    const url=accessUrl(x.access_code);
+    return '<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(x.avatar||"👤")+'</div><div><strong>'+esc(x.person_name||"Sans nom")+'</strong><div class="meta" style="margin:3px 0 0">'+(x.relation?esc(x.relation):"Accès créé — profil non complété")+'</div></div></div>'+
       (x.bio?'<div class="message">'+esc(x.bio)+'</div>':"")+
-      '<div class="actions"><span class="badge">'+(x.access_active?"✅ Accès actif":"⛔ Accès désactivé")+'</span>'+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+
-      '<span class="badge">💬 '+Number(x.messages_count||0)+'</span><span class="badge">💡 '+Number(x.ideas_count||0)+'</span><span class="badge">🎁 '+Number(x.suggestions_count||0)+'</span><span class="badge">💶 '+Number(x.contributions_count||0)+'</span><span class="badge">💬 '+Number(x.community_count||0)+'</span></div>'+
-      '<div class="meta" style="margin-top:10px">Créé le '+date(x.access_created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div>'+
+      '<div class="meta" style="margin-top:10px">Accès '+(x.active_access?"actif":"désactivé")+(x.is_admin_access?" · administrateur":"")+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div>'+
       '<div class="access-link">'+esc(url)+'</div>'+
-      '<div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button></div></article>';
-  }).join(""):empty("Aucune personne / aucun accès créé.");
+      '<div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button></div></article>';
+  }).join(""):empty("Aucune personne déjà créée.");
  }catch(e){
-  $("peopleList").innerHTML=empty("Impossible de charger les personnes : "+(e.message||"erreur inconnue"));
-  toast(e.message||"Impossible de charger les personnes.");
+  $("peopleList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ SQL des accès à actualiser</strong><div class="message">Exécute la dernière version de <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase, puis recharge cette page.</div><div class="meta" style="margin-top:8px">'+esc(e?.message||"Erreur inconnue")+'</div></div>';
+  toast(e?.message||"Impossible de charger les personnes.");
  }
 }
 let adminGifts=[];
@@ -244,14 +241,17 @@ async function deleteGiftContributionAdmin(id){
 }
 async function loadAccessCodes(){
  try{
-  const rows=await rpc("admin_list_access_codes_v2",{});
+  const rows=await rpc("admin_list_people_access",{});
   const data=Array.isArray(rows)?rows:[];
-  $("countAccess").textContent=data.filter(x=>x.access_active).length;
+  $("countAccess").textContent=data.filter(x=>x.active_access).length;
   $("accessList").innerHTML=data.length?data.map(x=>{
-    const url=accessUrl(x.code);
-    return '<article class="item"><div class="meta">'+date(x.access_created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.label)+'</strong> · <span class="badge">'+(x.access_active?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(x.label)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.access_active)+')">'+(x.access_active?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin)+')">'+(x.is_admin?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div></article>';
+    const url=accessUrl(x.access_code);
+    return '<article class="item"><div class="meta">'+date(x.access_created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.person_name)+'</strong> · <span class="badge">'+(x.active_access?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin_access?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.active_access)+')">'+(x.active_access?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin_access)+')">'+(x.is_admin_access?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div></article>';
   }).join(""):empty("Aucun accès créé.");
- }catch(e){$("accessList").innerHTML=empty("Impossible de charger les accès : "+(e.message||"erreur inconnue"));toast(e.message||"Impossible de charger les accès.")}
+ }catch(e){
+  $("accessList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ SQL des accès à actualiser</strong><div class="message">Exécute la dernière version de <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase, puis recharge cette page.</div><div class="meta" style="margin-top:8px">'+esc(e?.message||"Erreur inconnue")+'</div></div>';
+  toast(e?.message||"Impossible de charger les accès.");
+ }
 }
 async function createAccess(e){
  e.preventDefault();
