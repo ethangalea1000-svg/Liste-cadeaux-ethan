@@ -73,7 +73,7 @@
     <div id="giftAdminList" class="list"></div>
   </section>
   <section id="access" class="section">
-    <div class="section-head"><div><h2>🔑 Accès à la liste</h2><div class="meta">Crée, active, désactive ou supprime les codes qui permettent de voir les cadeaux.</div></div><button class="btn" onclick="loadAccessCodes()">↻ Actualiser</button></div>
+    <div class="section-head"><div><h2>🔑 Accès à la liste</h2><div class="meta">Tous les accès déjà créés apparaissent ici. Tu peux copier ou partager directement chaque lien privé.</div></div><div class="actions"><button class="btn" onclick="shareCurrentList()">🔗 Partager ma liste</button><button class="btn" onclick="loadAccessCodes()">↻ Actualiser</button></div></div>
     <div class="panel" style="margin-bottom:14px">
       <form id="accessForm" class="editor-grid">
         <input id="accessLabel" required maxlength="80" placeholder="Pour qui ? ex. Léa">
@@ -224,13 +224,67 @@ async function deleteGiftContributionAdmin(id){
 }
 async function loadAccessCodes(){
  try{
-  const rows=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
+  let rows=[];
+  try{
+    rows=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
+  }catch(primaryError){
+    // Compatibilité avec une base qui n'a pas encore exécuté le dernier SQL.
+    rows=await rpc("admin_list_access_codes",{});
+  }
+  rows=Array.isArray(rows)?rows:[];
   $("countAccess").textContent=rows.filter(x=>x.active).length;
   $("accessList").innerHTML=rows.length?rows.map(x=>{
     const url=location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(x.code);
-    return '<article class="item"><div class="meta">'+date(x.created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.label)+'</strong> · <span class="badge">'+(x.active?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">Copier le lien</button><button class="btn" onclick="toggleAccess('+x.id+','+(!x.active)+')">'+(x.active?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.id+','+(!x.is_admin)+')">'+(x.is_admin?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.id+')">Supprimer</button></div></article>';
-  }).join(""):empty("Aucun code d’accès.");
+    return '<article class="item"><div class="meta">'+date(x.created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.label)+'</strong> · <span class="badge">'+(x.active?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(x.label)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.id+','+(!x.active)+')">'+(x.active?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.id+','+(!x.is_admin)+')">'+(x.is_admin?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.id+')">Supprimer</button></div></article>';
+  }).join(""):empty("Aucun code d’accès trouvé. Si tu viens de créer un accès, clique sur « ↻ Actualiser ».");
  }catch(e){toast(e.message)}
+}
+function accessUrl(code){
+ return location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(String(code||"").trim());
+}
+async function copyAccessLink(code){
+ const url=accessUrl(code);
+ try{
+   await navigator.clipboard.writeText(url);
+   toast("Lien d’accès copié.");
+ }catch(e){
+   window.prompt("Copie ce lien :",url);
+ }
+}
+async function shareAccessLink(code,label){
+ const url=accessUrl(code);
+ const title="Accès à la liste d’Ethan"+(label?" — "+label:"");
+ try{
+   if(navigator.share){
+     await navigator.share({title,text:"Voici ton lien privé pour accéder à la liste d’Ethan :",url});
+     toast("Lien partagé.");
+   }else{
+     await navigator.clipboard?.writeText(url);
+     toast("Partage non disponible ici : lien copié.");
+   }
+ }catch(e){
+   if(e?.name!=="AbortError"){
+     try{await navigator.clipboard.writeText(url);toast("Lien copié.");}
+     catch(_){window.prompt("Copie ce lien :",url);}
+   }
+ }
+}
+async function shareCurrentList(){
+ const url=location.href.replace(/admin\.html(?:\?.*)?$/,"index.html");
+ try{
+   if(navigator.share){
+     await navigator.share({title:"La liste d’Ethan — Noël & Anniversaire 2026",text:"Voici la liste d’Ethan :",url});
+     toast("Liste partagée.");
+   }else{
+     await navigator.clipboard?.writeText(url);
+     toast("Lien de la liste copié.");
+   }
+ }catch(e){
+   if(e?.name!=="AbortError"){
+     try{await navigator.clipboard.writeText(url);toast("Lien de la liste copié.");}
+     catch(_){window.prompt("Copie ce lien :",url);}
+   }
+ }
 }
 async function createAccess(e){
  e.preventDefault();
