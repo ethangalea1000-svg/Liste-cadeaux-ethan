@@ -49,7 +49,7 @@
   </nav>
 
   <section id="pending" class="section active"><div class="section-head"><h2>Suggestions à valider</h2><button class="btn" onclick="refreshAll()">↻ Actualiser</button></div><div id="suggestions" class="list"></div></section>
-  <section id="people" class="section"><div class="section-head"><div><h2>👥 Personnes</h2><div class="meta">Profils enregistrés et résumé de leurs activités sur le site.</div></div><button class="btn" onclick="loadPeople()">↻ Actualiser</button></div><div id="peopleList" class="list"></div></section>
+  <section id="people" class="section"><div class="section-head"><div><h2>👥 Personnes</h2><div class="meta">Toutes les personnes ayant déjà un accès créé apparaissent ici, même sans profil complété.</div></div><button class="btn" onclick="loadPeople()">↻ Actualiser</button></div><div id="peopleList" class="list"></div></section>
   <section id="gifts" class="section">
     <div class="section-head"><div><h2>🎁 Gestion des cadeaux</h2><div class="meta">Modifier les cadeaux, leur objectif, les contributions autorisées et les réservations.</div></div><button class="btn" onclick="loadGiftAdmin()">↻ Actualiser</button></div>
     <div class="panel" style="margin-bottom:14px">
@@ -175,10 +175,56 @@ async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_s
 
 async function loadPeople(){
  try{
-  const rows=await rpc("admin_list_guest_profiles",{});
-  $("countPeople").textContent=rows.length;
-  $("peopleList").innerHTML=rows.length?rows.map(x=>'<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(x.avatar||"👤")+'</div><div><strong>'+esc(x.name)+'</strong><div class="meta" style="margin:3px 0 0">'+esc(x.relation)+'</div></div></div>'+(x.bio?'<div class="message">'+esc(x.bio)+'</div>':"")+'<div class="actions"><span class="badge">💬 '+Number(x.messages_count||0)+' message(s)</span><span class="badge">💡 '+Number(x.ideas_count||0)+' idée(s)</span><span class="badge">🎁 '+Number(x.suggestions_count||0)+' suggestion(s)</span><span class="badge">💶 '+Number(x.contributions_count||0)+' participation(s)</span><span class="badge">💬 '+Number(x.community_count||0)+' publication(s)</span></div><div class="meta" style="margin-top:10px">Profil mis à jour le '+date(x.updated_at)+'</div></article>').join(""):empty("Aucun profil enregistré pour le moment.");
- }catch(e){toast(e.message)}
+  let accesses=[];
+  let profiles=[];
+  try{
+    accesses=await rpc("admin_list_access_codes_for_code",{p_code:adminCode});
+  }catch(_){
+    accesses=await rpc("admin_list_access_codes",{});
+  }
+  accesses=Array.isArray(accesses)?accesses:[];
+
+  try{
+    profiles=await rpc("admin_list_guest_profiles",{});
+  }catch(_){
+    profiles=[];
+  }
+  profiles=Array.isArray(profiles)?profiles:[];
+
+  $("countPeople").textContent=accesses.length||profiles.length;
+
+  const byName=new Map();
+  profiles.forEach(p=>byName.set(String(p.name||"").trim().toLowerCase(),p));
+
+  const cards=[];
+  accesses.forEach(x=>{
+    const name=String(x.label||"").trim();
+    const profile=byName.get(name.toLowerCase());
+    const url=accessUrl(x.code);
+    cards.push('<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(profile?.avatar||"👤")+'</div><div><strong>'+esc(name||"Sans nom")+'</strong><div class="meta" style="margin:3px 0 0">'+(profile?esc(profile.relation||"Profil enregistré"):"Accès créé — profil non complété")+'</div></div></div>'+
+      (profile?.bio?'<div class="message">'+esc(profile.bio)+'</div>':"")+
+      '<div class="meta" style="margin-top:10px">Accès '+(x.active?"actif":"désactivé")+(x.is_admin?" · administrateur":"")+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div>'+
+      '<div class="access-link">'+esc(url)+'</div>'+
+      '<div class="actions">'+
+        '<button class="btn" data-access-code="'+esc(x.code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button>'+
+        '<button class="btn primary" data-access-code="'+esc(x.code)+'" data-access-label="'+esc(name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button>'+
+      '</div></article>');
+    byName.delete(name.toLowerCase());
+  });
+
+  // Keep old guest profiles visible too, even if their access row no longer exists.
+  byName.forEach(p=>{
+    cards.push('<article class="item"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:30px">'+esc(p.avatar||"👤")+'</div><div><strong>'+esc(p.name)+'</strong><div class="meta" style="margin:3px 0 0">'+esc(p.relation||"Profil")+'</div></div></div>'+
+      (p.bio?'<div class="message">'+esc(p.bio)+'</div>':"")+
+      '<div class="actions"><span class="badge">💬 '+Number(p.messages_count||0)+' message(s)</span><span class="badge">💡 '+Number(p.ideas_count||0)+' idée(s)</span><span class="badge">🎁 '+Number(p.suggestions_count||0)+' suggestion(s)</span><span class="badge">💶 '+Number(p.contributions_count||0)+' participation(s)</span><span class="badge">💬 '+Number(p.community_count||0)+' publication(s)</span></div>'+
+      '<div class="meta" style="margin-top:10px">Profil enregistré le '+date(p.created_at)+'</div></article>');
+  });
+
+  $("peopleList").innerHTML=cards.length?cards.join(""):empty("Aucune personne déjà créée. Crée d’abord un accès dans « 🔑 Accès ».");
+ }catch(e){
+  $("peopleList").innerHTML=empty("Impossible de charger les personnes : "+(e.message||"erreur inconnue"));
+  toast(e.message||"Impossible de charger les personnes.");
+ }
 }
 let adminGifts=[];
 async function loadGiftAdmin(){
