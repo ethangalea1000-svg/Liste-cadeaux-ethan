@@ -66,8 +66,14 @@
 }
 </style></head>
 <body>
-<header class="hero"><div class="wrap"><nav class="topnav"><a href="communaute.html">💬 Communauté</a><a href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag">🎁 Noël & Anniversaire 2026</span><h1>La liste d’Ethan</h1><p>Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button id="installAppBtn" class="primary" hidden>📲 Installer l’application</button><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button></div></div></header>
-<main class="wrap locked" id="mainContent"><section id="accessGate" class="access-gate"><div class="access-card"><h2>🔐 Liste privée</h2><p>Cette liste est réservée aux personnes autorisées par Ethan. Entre ton code d’invitation pour afficher les cadeaux.</p><form id="listAccessForm" class="access-form"><input id="listAccessCode" type="password" inputmode="text" autocomplete="off" maxlength="64" placeholder="Code d’invitation *" required><button type="submit">Accéder à la liste</button></form><div id="accessStatus" class="access-status" aria-live="polite"></div><div class="access-note">Le contenu des cadeaux n’est chargé qu’après vérification du code.</div></div></section><section class="toolbar"><input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats"><div class="stat"><b id="countAll">0</b><span>cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span>disponibles</span></div><div class="stat"><b id="countReserved">0</b><span>réservés au total</span></div></section><section class="grid" id="grid"></section><section class="fundraisers-main">
+<header class="hero"><div class="wrap"><nav class="topnav"><a href="communaute.html">💬 Communauté</a><a href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag">🎁 Noël & Anniversaire 2026</span><h1>La liste d’Ethan</h1><p>Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button id="installAppBtn" class="primary">📲 Installer l’application</button><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button></div></div></header>
+<main class="wrap locked" id="mainContent"><section id="accessGate" class="access-gate"><div class="access-card"><h2>🔐 Liste privée</h2><p>Cette liste est réservée aux personnes autorisées par Ethan. Entre ton code d’invitation pour afficher les cadeaux.</p><form id="listAccessForm" class="access-form"><input id="listAccessCode" type="password" inputmode="text" autocomplete="off" maxlength="64" placeholder="Code d’invitation *" required><button type="submit">Accéder à la liste</button></form><div id="accessStatus" class="access-status" aria-live="polite"></div><div class="access-note">Le contenu des cadeaux n’est chargé qu’après vérification du code.</div></div></section>
+<section id="pwaInstallHelp" class="foot" style="margin-top:0;margin-bottom:22px">
+  <strong>📲 Installer la liste comme une application</strong>
+  <p style="margin:8px 0">Cette option ne nécessite pas le mode développeur ni l’installation d’une extension.</p>
+  <div id="pwaInstallStatus" style="font-size:12px;color:#6b7280">Clique sur « Installer l’application ». Si ton navigateur ne propose pas l’installation automatiquement, utilise le menu du navigateur puis l’option « Installer la page en tant qu’application ».</div>
+</section>
+<section class="toolbar"><input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats"><div class="stat"><b id="countAll">0</b><span>cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span>disponibles</span></div><div class="stat"><b id="countReserved">0</b><span>réservés au total</span></div></section><section class="grid" id="grid"></section><section class="fundraisers-main">
 <div class="panel">
   <h2>🎯 Cagnottes</h2
   <p>Les cagnottes proposées restent en attente jusqu’à validation par Ethan.</p>
@@ -664,12 +670,15 @@ window.addEventListener("beforeinstallprompt",e=>{
 });
 installBtn?.addEventListener("click",async()=>{
   if(!deferredInstallPrompt){
-    showToast("Ouvre le menu du navigateur puis choisis « Installer la page en tant qu’application ».");
+    const status=document.getElementById("pwaInstallStatus");
+    if(status)status.textContent="➡️ Ouvre le menu de ton navigateur et choisis « Installer la page en tant qu’application » ou « Installer l’application ». Aucun mode développeur n’est nécessaire.";
+    showToast("Utilise le menu du navigateur pour installer l’application.");
     return;
   }
   deferredInstallPrompt.prompt();
   await deferredInstallPrompt.userChoice.catch(()=>null);
   deferredInstallPrompt=null;
+  installBtn.textContent="✅ Application installée / proposée";
   installBtn.hidden=true;
 });
 window.addEventListener("appinstalled",()=>{
