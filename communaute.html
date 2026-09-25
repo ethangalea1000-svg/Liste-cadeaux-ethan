@@ -7,6 +7,33 @@
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#6b7280;--line:#e6e8ef;--accent:#5b5ce2;--shadow:0 10px 30px rgba(20,25,50,.08)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}a{color:inherit}.hero{padding:28px 20px;background:linear-gradient(135deg,#17192a,#393b73);color:#fff}.wrap{max-width:900px;margin:auto}.hero-row{display:flex;justify-content:space-between;gap:15px;align-items:center}.back{background:#ffffff1f;padding:9px 12px;border-radius:10px;text-decoration:none;font-weight:700}.panel{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.form{display:grid;gap:10px}.form input,.form textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit}.form textarea{min-height:90px;resize:vertical}.send{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 15px;font-weight:700;cursor:pointer}.note{font-size:12px;color:var(--muted)}.posts{display:grid;gap:12px;margin-top:18px}.post{border:1px solid var(--line);border-radius:14px;padding:15px}.meta{font-size:12px;color:var(--muted);margin-bottom:6px}.message{white-space:pre-wrap;line-height:1.5}.reactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.reaction{border:1px solid var(--line);background:#f8f8fb;border-radius:999px;padding:7px 10px;cursor:pointer}.attachments{display:grid;gap:8px;margin-top:12px}.attachment-img{max-width:100%;max-height:360px;border-radius:12px;border:1px solid var(--line)}.attachment-link{display:inline-block;padding:9px 11px;background:#f4f4f8;border-radius:10px;text-decoration:none}.post-link{margin-top:10px}.danger{border:1px solid #f0c8c8;background:#fff0f0;color:#a33;border-radius:10px;padding:7px 10px;cursor:pointer;font-weight:700}.post-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.empty{text-align:center;color:var(--muted);padding:20px}.toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 14px;border-radius:12px;opacity:0;transition:.2s}.toast.show{opacity:1}.hidden{display:none!important}
+@media(max-width:700px){
+  .hero{padding:18px 10px}
+  .wrap{max-width:none}
+  .hero-row{flex-direction:column;align-items:stretch;gap:10px}
+  .hero-row>div{min-width:0}
+  .back{display:block;text-align:center;padding:10px}
+  main.wrap{padding:0 10px 30px}
+  .panel{margin-top:12px;padding:14px;border-radius:14px}
+  .panel h2{font-size:20px}
+  .form{gap:8px}
+  .form input,.form textarea{font-size:16px;padding:11px}
+  .form input[type="file"]{font-size:13px;padding:9px;max-width:100%;overflow:hidden}
+  .send{width:100%;padding:12px}
+  .post{padding:12px}
+  .reactions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .reaction{width:100%;padding:8px 5px;font-size:13px;min-width:0}
+  .post-actions{display:grid;grid-template-columns:1fr;gap:7px}
+  .post-actions button{width:100%}
+  .attachment-img{max-height:260px;width:100%;object-fit:contain;background:#fafafa}
+  .attachment-link{width:100%;overflow-wrap:anywhere}
+  .post-link{overflow-wrap:anywhere}
+  .meta{overflow-wrap:anywhere}
+}
+@media(max-width:380px){
+  .reactions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
 </style>
 </head>
 <body>
@@ -232,5 +259,6 @@ if(urlCode){
 setInterval(()=>{if(accessCode)load()},5000);
 </script>
 <footer style="max-width:1100px;margin:30px auto;padding:0 20px 30px;color:#6b7280;font-size:13px"><a href="index.html">🎁 Liste des cadeaux</a> · <a href="confidentialite.html">🔒 Confidentialité & données personnelles</a></footer>
+<div style="text-align:center;color:#8a90a3;font-size:10px;padding:8px">Interface mobile • 2026.09.25</div>
 </body>
 </html>
