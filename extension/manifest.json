@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Mes données — Liste d’Ethan",
-  "version": "1.1.0",
-  "description": "Exporte localement l’activité de la liste d’Ethan et, si activé, quelques informations techniques non sensibles. Aucun mot de passe ni code d’accès.",
+  "version": "1.2.0",
+  "description": "Enregistre et, avec consentement, transmet à Supabase la télémétrie de la liste d’Ethan. Aucun mot de passe ni code d’accès.",
   "permissions": ["storage"],
   "background": {
     "service_worker": "background.js"
