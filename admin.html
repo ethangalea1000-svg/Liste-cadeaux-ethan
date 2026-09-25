@@ -9,7 +9,7 @@
 .hero{background:linear-gradient(135deg,#15182a,#4c4a9e);color:#fff;padding:24px 0}.hero-row{display:flex;align-items:center;justify-content:space-between;gap:15px}.hero h1{margin:4px 0 0;font-size:25px}.back{color:#fff;text-decoration:none;background:#ffffff20;padding:9px 12px;border-radius:10px;font-weight:800}
 .admin-gate{max-width:520px;margin:45px auto}.admin-gate .panel{padding:24px}.admin-status{margin-top:10px;font-size:13px}.admin-user{font-size:13px;color:var(--muted);margin-top:6px}.admin-signout{margin-left:auto}.access-admin-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#fff1d7;color:#8a5800;font-size:11px;font-weight:900}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;font:inherit}.btn{border:0;border-radius:11px;padding:10px 14px;font-weight:800;cursor:pointer}.primary{background:var(--accent);color:#fff}.danger{background:var(--dangerbg);color:var(--danger)}.success{background:var(--okbg);color:var(--ok)}
 .hidden{display:none}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.stat b{font-size:24px;display:block}.stat span{color:var(--muted);font-size:12px}
-.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:5px;margin-bottom:15px}.tab{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-weight:800;cursor:pointer;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0 10px;margin-bottom:15px;position:sticky;top:0;z-index:15;background:var(--bg);scrollbar-width:thin}.tab{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-weight:800;cursor:pointer;white-space:nowrap}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .section{display:none}.section.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.section-head h2{margin:0}.list{display:grid;gap:12px}.item{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.meta{font-size:12px;color:var(--muted);margin-bottom:7px}.message{white-space:pre-wrap;line-height:1.5;margin-top:8px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--bluebg);font-size:11px;font-weight:800}.empty{padding:28px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:15px}.activity-grid{display:grid;grid-template-columns:1.55fr .9fr;gap:14px}.chart-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.chart-card h3{margin:0 0 14px}.chart{width:100%;height:260px}.chart svg{width:100%;height:100%;overflow:visible}.axis{fill:var(--muted);font-size:11px}.chart-line{fill:none;stroke:#5b8cff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-area{fill:rgba(91,140,255,.12)}.activity-list{display:grid;gap:9px;max-height:520px;overflow:auto}.activity-row{display:grid;grid-template-columns:115px 1fr auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#f8f9fc}.activity-row small{color:var(--muted)}.activity-pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#3845a3;font-size:11px;font-weight:800}.mini-bars{display:grid;gap:10px}.bar-row{display:grid;grid-template-columns:105px 1fr 35px;gap:8px;align-items:center;font-size:12px}.bar-track{height:8px;background:#e8ebf2;border-radius:99px;overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,#4f46e5,#22a6c7);border-radius:99px}.editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.editor-grid .full{grid-column:1/-1}.check-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.check-row label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}.gift-admin-card{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.gift-admin-card .titleline{font-size:18px;font-weight:850}.gift-admin-card .sub{font-size:12px;color:var(--muted);margin-top:3px}.progress-mini{height:8px;background:#e8ebf2;border-radius:99px;overflow:hidden;margin:8px 0}.progress-mini span{display:block;height:100%;background:var(--accent)}.access-link{font-size:12px;word-break:break-all;background:#f8f9fc;border:1px solid var(--line);padding:8px;border-radius:9px}.editor-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:700px){
   .wrap{padding-left:10px;padding-right:10px}
@@ -44,7 +44,7 @@
   .empty{padding:20px 12px}
 }
 .toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 15px;border-radius:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:20}
-.birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}}
+.birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px;resize:vertical}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}.admin-editor-note{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:12px;color:var(--muted)}.quick-preview{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,#fff,#f8f9ff)}.site-color{height:46px;padding:4px}.hydra-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hydra-editor-grid .full{grid-column:1/-1}.hydra-editor-grid textarea{min-height:95px;resize:vertical}.hydra-editor-grid .scenario{min-height:230px}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}.hydra-editor-grid{grid-template-columns:1fr}.hydra-editor-grid .full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -75,7 +75,7 @@
   <nav class="tabs">
     <button class="tab active" data-tab="pending">À valider</button>
     <button class="tab" data-tab="messages">Messages</button>
-    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="birthday">🎂 Anniversaire</button><button class="tab" data-tab="extension">📡 Extension</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
+    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="site">⚙️ Site</button><button class="tab" data-tab="birthday">🎂 Anniversaire</button><button class="tab" data-tab="extension">📡 Extension</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
     <button class="tab" data-tab="ideas">Idées</button>
     <button class="tab" data-tab="contributions">Participations</button>
     <button class="tab" data-tab="community">Communauté</button>
@@ -118,7 +118,56 @@
     <div id="accessStats" class="stats" style="margin-bottom:14px"></div>
     <div id="accessDuplicates" class="list" style="margin-bottom:14px"></div><div id="accessList" class="list"></div>
   </section>
-  <section id="birthday" class="section">
+  <section id="site" class="section">
+  <div class="section-head">
+    <div><h2>⚙️ Éditeur global du site</h2><div class="meta">Modifie les textes principaux, l’apparence, les boutons, l’accès privé et l’annonce globale sans toucher au code.</div></div>
+    <div class="actions"><button class="btn" onclick="window.open('index.html','_blank','noopener')">↗ Ouvrir le site</button><button class="btn" onclick="loadSiteAdmin()">↻ Actualiser</button></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:14px">
+    <div class="section-head"><div><h3 style="margin:0">Identité & interface</h3><div class="meta">Les modifications sont enregistrées dans Supabase et appliquées au site public.</div></div><button class="btn primary" onclick="saveSiteQuick()">💾 Enregistrer</button></div>
+    <div class="editor-grid">
+      <input id="siteTag" maxlength="120" placeholder="Tag / étiquette du site">
+      <input id="siteTitle" maxlength="120" placeholder="Titre principal">
+      <textarea id="siteDescription" class="full" maxlength="500" placeholder="Description principale"></textarea>
+      <input id="siteShareLabel" maxlength="60" placeholder="Bouton Partager">
+      <input id="siteRefreshLabel" maxlength="60" placeholder="Bouton Actualiser">
+      <input id="siteAccessTitle" maxlength="120" placeholder="Titre de la porte d’accès">
+      <input id="siteAccessButton" maxlength="60" placeholder="Bouton d’accès">
+      <textarea id="siteAccessText" class="full" maxlength="500" placeholder="Texte de la porte d’accès"></textarea>
+      <input id="siteAccessNote" class="full" maxlength="300" placeholder="Note sous le formulaire d’accès">
+      <input id="siteSearchPlaceholder" maxlength="100" placeholder="Placeholder de recherche">
+      <input id="siteCategoryAll" maxlength="100" placeholder="Libellé de toutes les catégories">
+      <input id="siteStatAll" maxlength="60" placeholder="Libellé nombre de cadeaux">
+      <input id="siteStatAvailable" maxlength="60" placeholder="Libellé disponibles">
+      <input id="siteStatReserved" maxlength="60" placeholder="Libellé réservés">
+      <input id="siteAccent" class="site-color" type="color" title="Couleur principale">
+      <input id="siteBackground" class="site-color" type="color" title="Arrière-plan">
+      <input id="siteCard" class="site-color" type="color" title="Couleur des cartes">
+      <input id="siteText" class="site-color" type="color" title="Couleur du texte">
+      <input id="siteRadius" maxlength="20" placeholder="Rayon des cartes, ex. 18px">
+    </div>
+  </div>
+
+  <div class="panel" style="margin-bottom:14px">
+    <div class="section-head"><div><h3 style="margin:0">📢 Annonce globale intégrée</h3><div class="meta">Une annonce permanente peut être affichée après l’autorisation d’accès.</div></div></div>
+    <div class="editor-grid">
+      <div class="check-row full"><label><input id="siteAnnouncementEnabled" type="checkbox"> Afficher l’annonce</label></div>
+      <input id="siteAnnouncementTitle" maxlength="120" placeholder="Titre de l’annonce">
+      <input id="siteAnnouncementLink" maxlength="500" placeholder="Lien facultatif (https://…)">
+      <textarea id="siteAnnouncementMessage" class="full" maxlength="700" placeholder="Message de l’annonce"></textarea>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="section-head"><div><h3 style="margin:0">🧩 Mode avancé — toute la configuration</h3><div class="meta">Ici tu peux modifier directement l’objet JSON complet du site.</div></div><button class="btn" onclick="saveSiteJson()">💾 Enregistrer le JSON</button></div>
+    <textarea id="siteConfigEditor" class="code-editor" spellcheck="false" placeholder="Configuration JSON du site…"></textarea>
+    <div class="admin-editor-note" style="margin-top:8px">Le mode avancé permet notamment d’ajouter d’autres clés de configuration sans modifier le code de la page.</div>
+    <button class="btn" style="margin-top:8px" onclick="loadSiteAdmin()">↻ Recharger la configuration</button>
+  </div>
+</section>
+
+<section id="birthday" class="section">
     <div class="section-head">
       <div><h2>🎂 Centre anniversaire</h2><div class="meta">Contrôle du compte à rebours, du mode anniversaire, du programme caché et des modules de la fête.</div></div>
       <button class="btn" onclick="loadBirthdayAdmin()">↻ Actualiser</button>
@@ -553,7 +602,7 @@ function renderActivityBars(s){
 }
 async function refreshAll(){
   const currentTab=sessionStorage.getItem("birthday_admin_tab")||"pending";
-  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadGiftContributionsAdmin(),loadExtensionTelemetry(),loadBirthdayAdmin()]);
+  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadGiftContributionsAdmin(),loadExtensionTelemetry(),loadBirthdayAdmin(),loadSiteAdmin()]);
   activateTab(currentTab,false);
 }
 
