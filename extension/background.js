@@ -1,5 +1,5 @@
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
-const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_nQsF4";
+const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
 const SITE_ORIGIN="https://ethangalea1000-svg.github.io";
 
 async function sendTelemetry(event){
