@@ -1,15 +1,77 @@
 const status=document.getElementById("status");
+
+async function getState(){
+  return chrome.storage.local.get({
+    events:[],
+    detailedCollection:false,
+    cookieChoice:null
+  });
+}
+
+function formatDate(value){
+  if(!value)return "—";
+  try{return new Date(value).toLocaleString("fr-FR");}catch{return "—"}
+}
+
+async function refresh(){
+  const data=await getState();
+  const events=Array.isArray(data.events)?data.events:[];
+  document.getElementById("eventCount").textContent=events.length;
+  document.getElementById("pageCount").textContent=new Set(events.map(e=>e.page).filter(Boolean)).size;
+  document.getElementById("lastActivity").textContent=formatDate(events.at(-1)?.time);
+  document.getElementById("detailStatus").textContent=data.detailedCollection?"activée":"désactivée";
+  const toggle=document.getElementById("toggleDetails");
+  toggle.textContent=data.detailedCollection?"Désactiver la collecte détaillée":"Activer la collecte détaillée";
+  document.getElementById("cookieCard").style.display=data.cookieChoice?"none":"block";
+}
+
+document.getElementById("cookieAccept").addEventListener("click",async()=>{
+  await chrome.storage.local.set({cookieChoice:"accepted"});
+  status.textContent="Préférence enregistrée. Aucun cookie réel n’a été activé.";
+  refresh();
+});
+
+document.getElementById("cookieReject").addEventListener("click",async()=>{
+  await chrome.storage.local.set({cookieChoice:"rejected"});
+  status.textContent="Préférence enregistrée. Aucun cookie réel n’est utilisé.";
+  refresh();
+});
+
+document.getElementById("toggleDetails").addEventListener("click",async()=>{
+  const data=await getState();
+  await chrome.storage.local.set({detailedCollection:!data.detailedCollection});
+  status.textContent=!data.detailedCollection
+    ?"Collecte détaillée activée."
+    :"Collecte détaillée désactivée.";
+  refresh();
+});
+
 document.getElementById("export").addEventListener("click",async()=>{
-  const data=await chrome.storage.local.get({events:[]});
-  const blob=new Blob([JSON.stringify(data.events||[],null,2)],{type:"application/json"});
+  const data=await getState();
+  const blob=new Blob([JSON.stringify({
+    exportedAt:new Date().toISOString(),
+    detailedCollection:!!data.detailedCollection,
+    cookieChoice:data.cookieChoice,
+    events:Array.isArray(data.events)?data.events:[]
+  },null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
   a.href=url;
   a.download="mes-donnees-liste-ethan.json";
   a.click();
-  URL.revokeObjectURL(url);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
   status.textContent="Export créé.";
 });
+
 document.getElementById("takeout").addEventListener("click",()=>{
   chrome.tabs.create({url:"https://takeout.google.com/"});
 });
+
+document.getElementById("clear").addEventListener("click",async()=>{
+  if(!confirm("Supprimer toutes les données enregistrées par l’extension sur cet appareil ?"))return;
+  await chrome.storage.local.clear();
+  status.textContent="Données locales supprimées.";
+  refresh();
+});
+
+refresh();
