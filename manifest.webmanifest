@@ -1,0 +1,19 @@
+{
+  "name":"La liste d’Ethan",
+  "short_name":"Liste d’Ethan",
+  "description":"Liste privée de cadeaux d’Ethan.",
+  "lang":"fr-FR",
+  "start_url":"/Liste-cadeaux-ethan/index.html",
+  "scope":"/Liste-cadeaux-ethan/",
+  "display":"standalone",
+  "background_color":"#f6f7fb",
+  "theme_color":"#393b73",
+  "icons":[
+    {
+      "src":"/Liste-cadeaux-ethan/assets/pwa-icon.svg",
+      "sizes":"any",
+      "type":"image/svg+xml",
+      "purpose":"any maskable"
+    }
+  ]
+}
