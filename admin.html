@@ -44,6 +44,7 @@
   .empty{padding:20px 12px}
 }
 .toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 15px;border-radius:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:20}
+.birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -74,7 +75,7 @@
   <nav class="tabs">
     <button class="tab active" data-tab="pending">À valider</button>
     <button class="tab" data-tab="messages">Messages</button>
-    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="extension">📡 Extension</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
+    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="birthday">🎂 Anniversaire</button><button class="tab" data-tab="extension">📡 Extension</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
     <button class="tab" data-tab="ideas">Idées</button>
     <button class="tab" data-tab="contributions">Participations</button>
     <button class="tab" data-tab="community">Communauté</button>
@@ -116,6 +117,41 @@
     </div>
     <div id="accessStats" class="stats" style="margin-bottom:14px"></div>
     <div id="accessDuplicates" class="list" style="margin-bottom:14px"></div><div id="accessList" class="list"></div>
+  </section>
+  <section id="birthday" class="section">
+    <div class="section-head">
+      <div><h2>🎂 Centre anniversaire</h2><div class="meta">Contrôle du compte à rebours, du mode anniversaire, du programme caché et des modules de la fête.</div></div>
+      <button class="btn" onclick="loadBirthdayAdmin()">↻ Actualiser</button>
+    </div>
+
+    <div class="panel" style="margin-bottom:14px">
+      <h3 style="margin-top:0">⚙️ Contrôles rapides</h3>
+      <div class="birthday-grid">
+        <div><label class="meta">Date du compte à rebours</label><input id="birthdayCountdownAt" type="datetime-local"></div>
+        <div class="check-row" style="align-items:flex-start;padding-top:20px">
+          <label><input id="birthdayModeEnabled" type="checkbox"> Activer le mode anniversaire</label>
+          <label><input id="birthdayScheduleVisible" type="checkbox"> Publier le programme</label>
+        </div>
+        <div class="full actions">
+          <button class="btn primary" onclick="saveBirthdayQuick()">💾 Enregistrer</button>
+          <button class="btn success" onclick="deployBirthdaySchedule(true)">🚀 Publier le programme maintenant</button>
+          <button class="btn" onclick="deployBirthdaySchedule(false)">🙈 Masquer le programme</button>
+        </div>
+      </div>
+      <div class="meta">Le programme (fonction 3) reste caché tant que « Publier le programme » n’est pas activé.</div>
+    </div>
+
+    <div class="panel" style="margin-bottom:14px">
+      <div class="section-head"><div><h3 style="margin:0">🧩 Configuration des modules</h3><div class="meta">Tu peux modifier le contenu des fonctions 4, 5, 6, 7, 13, 14 et 15 en une seule fois.</div></div><button class="btn" onclick="saveBirthdayJson()">💾 Enregistrer la configuration</button></div>
+      <textarea id="birthdayConfigEditor" class="code-editor" spellcheck="false" placeholder='Configuration JSON…'></textarea>
+      <div class="meta" style="margin-top:8px">Conseil : utilise le bouton « Charger la configuration » avant de modifier.</div>
+      <button class="btn" onclick="loadBirthdayAdmin()">↻ Charger la configuration</button>
+    </div>
+
+    <div class="panel">
+      <div class="section-head"><div><h3 style="margin:0">🕵️ Murder Party spéciale — Hydra</h3><div class="meta">Dossier spécial réservé à l’administration. Les rôles et fragments ci-dessous reprennent ton document de préparation.</div></div></div>
+      <div id="hydraPlayers" class="list"></div>
+    </div>
   </section>
   <section id="extension" class="section">
     <div class="section-head">
@@ -382,6 +418,67 @@ async function loadExtensionTelemetry(){
     toast(e?.message||"Impossible de charger la télémétrie.");
   }
 }
+async function getBirthdayConfig(){
+  const data=await rpc("get_birthday_config",{});
+  return data&&typeof data==="object"?data:{};
+}
+function birthdayIsoToLocal(v){
+  if(!v)return "";
+  const d=new Date(v); if(Number.isNaN(d.getTime()))return "";
+  const pad=n=>String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes());
+}
+async function loadBirthdayAdmin(){
+  try{
+    const cfg=await getBirthdayConfig();
+    $("birthdayCountdownAt").value=birthdayIsoToLocal(cfg.countdown_at);
+    $("birthdayModeEnabled").checked=cfg.birthday_mode===true;
+    $("birthdayScheduleVisible").checked=cfg.schedule_visible===true;
+    $("birthdayConfigEditor").value=JSON.stringify(cfg,null,2);
+    const players=cfg.murder_party?.players||[];
+    $("hydraPlayers").innerHTML=players.length?players.map((p,i)=>'<article class="item hydra-player"><div><strong>'+esc(p.name||"")+'</strong> · <span class="badge">'+esc(p.role||"")+'</span><div class="sub">'+esc(p.function||"")+'</div><div class="sub" style="margin-top:7px"><strong>Document :</strong> '+esc(p.special||"")+'</div><div class="sub" style="margin-top:4px"><strong>Fragment :</strong> '+esc(p.fragment||"")+'</div></div><button class="btn" onclick="copyHydra('+i+')">📋 Copier</button></article>').join(""):empty("Aucun dossier Hydra.");
+  }catch(e){toast(e.message)}
+}
+async function saveBirthdayQuick(){
+  try{
+    const cfg=await getBirthdayConfig();
+    cfg.countdown_at=$("birthdayCountdownAt").value?new Date($("birthdayCountdownAt").value).toISOString():cfg.countdown_at||null;
+    cfg.birthday_mode=$("birthdayModeEnabled").checked;
+    cfg.schedule_visible=$("birthdayScheduleVisible").checked;
+    await rpc("admin_save_birthday_config",{p_settings:cfg});
+    $("birthdayConfigEditor").value=JSON.stringify(cfg,null,2);
+    toast("Configuration anniversaire enregistrée.");
+  }catch(e){toast(e.message)}
+}
+async function deployBirthdaySchedule(visible){
+  try{
+    const cfg=await getBirthdayConfig();
+    cfg.schedule_visible=!!visible;
+    $("birthdayScheduleVisible").checked=!!visible;
+    await rpc("admin_save_birthday_config",{p_settings:cfg});
+    $("birthdayConfigEditor").value=JSON.stringify(cfg,null,2);
+    toast(visible?"Programme publié.":"Programme masqué.");
+  }catch(e){toast(e.message)}
+}
+async function saveBirthdayJson(){
+  try{
+    const cfg=JSON.parse($("birthdayConfigEditor").value);
+    await rpc("admin_save_birthday_config",{p_settings:cfg});
+    $("birthdayCountdownAt").value=birthdayIsoToLocal(cfg.countdown_at);
+    $("birthdayModeEnabled").checked=cfg.birthday_mode===true;
+    $("birthdayScheduleVisible").checked=cfg.schedule_visible===true;
+    toast("Configuration complète enregistrée.");
+  }catch(e){toast("JSON invalide ou impossible à enregistrer : "+e.message)}
+}
+async function copyHydra(index){
+  try{
+    const cfg=await getBirthdayConfig(); const p=cfg.murder_party?.players?.[index];
+    if(!p)return;
+    const text=[\"DOSSIER HYDRA\",\"Nom : \"+p.name,\"Rôle : \"+p.role,\"Fonction : \"+p.function,\"Document spécial : \"+p.special,\"Fragment IA : \"+p.fragment].join("\n");
+    await navigator.clipboard?.writeText(text);
+    toast("Dossier de "+p.name+" copié.");
+  }catch(e){toast(e.message)}
+}
 async function loadMessages(){
  try{
   const rows=await rpc("admin_list_messages",{});
@@ -455,7 +552,7 @@ function renderActivityBars(s){
 }
 async function refreshAll(){
   const currentTab=sessionStorage.getItem("birthday_admin_tab")||"pending";
-  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadGiftContributionsAdmin(),loadExtensionTelemetry()]);
+  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadGiftContributionsAdmin(),loadExtensionTelemetry(),loadBirthdayAdmin()]);
   activateTab(currentTab,false);
 }
 
