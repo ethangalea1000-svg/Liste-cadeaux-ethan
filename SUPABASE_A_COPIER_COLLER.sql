@@ -2839,4 +2839,531 @@ grant execute on function public.admin_list_birthday_interactions() to anon;
 
 -- IMPORTANT : ce bloc doit être exécuté dans l’éditeur SQL Supabase pour créer/mettre à jour les fonctions du Centre anniversaire.
 -- Le fichier GitHub seul ne modifie pas le schéma Supabase.
+
+-- ============================================================
+-- ÉDITEUR GLOBAL DU SITE
+-- ============================================================
+
+create table if not exists public.site_settings (
+  id bigint primary key default 1 check (id=1),
+  settings jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.site_settings enable row level security;
+revoke all on public.site_settings from anon, authenticated;
+
+insert into public.site_settings(id, settings)
+values (
+  1,
+  jsonb_build_object(
+    'branding', jsonb_build_object(
+      'tag','🎁 Noël & Anniversaire 2026',
+      'title','La liste d’Ethan',
+      'description','Une liste privée pour les cadeaux, les participations et les animations de l’anniversaire.'
+    ),
+    'hero', jsonb_build_object(
+      'share_label','Partager la liste',
+      'refresh_label','Actualiser'
+    ),
+    'access', jsonb_build_object(
+      'title','🔐 Liste privée',
+      'text','Cette liste est réservée aux personnes autorisées par Ethan. Entre ton code d’invitation pour afficher les cadeaux.',
+      'note','Le contenu des cadeaux n’est chargé qu’après vérification du code.',
+      'button_label','Accéder à la liste'
+    ),
+    'search', jsonb_build_object(
+      'placeholder','Rechercher un cadeau…',
+      'all_categories','Toutes les catégories'
+    ),
+    'stats', jsonb_build_object(
+      'all','cadeaux',
+      'available','disponibles',
+      'reserved','réservés au total'
+    ),
+    'theme', jsonb_build_object(
+      'accent','#5856d6',
+      'background','#f4f6fb',
+      'card','#ffffff',
+      'text','#161a2b',
+      'radius','18px'
+    ),
+    'announcement', jsonb_build_object(
+      'enabled',false,
+      'title','Annonce',
+      'message','',
+      'link',''
+    )
+  )
+)
+on conflict(id) do nothing;
+
+update public.site_settings
+set settings = jsonb_build_object(
+  'branding', coalesce(settings->'branding','{}'::jsonb),
+  'hero', coalesce(settings->'hero','{}'::jsonb),
+  'access', coalesce(settings->'access','{}'::jsonb),
+  'search', coalesce(settings->'search','{}'::jsonb),
+  'stats', coalesce(settings->'stats','{}'::jsonb),
+  'theme', coalesce(settings->'theme','{}'::jsonb),
+  'announcement', coalesce(settings->'announcement','{}'::jsonb)
+) || settings,
+    updated_at = now()
+where id=1;
+
+drop function if exists public.get_public_site_settings();
+create or replace function public.get_public_site_settings()
+returns jsonb
+language sql
+security definer
+set search_path=public
+as $publicsitesettings$
+  select coalesce(settings,'{}'::jsonb)
+  from public.site_settings
+  where id=1;
+$publicsitesettings$;
+
+grant execute on function public.get_public_site_settings() to anon;
+
+drop function if exists public.get_site_settings();
+create or replace function public.get_site_settings()
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $adminsitesettings$
+begin
+  perform public.assert_admin_header();
+  return (
+    select coalesce(settings,'{}'::jsonb)
+    from public.site_settings
+    where id=1
+  );
+end;
+$adminsitesettings$;
+
+grant execute on function public.get_site_settings() to anon;
+
+drop function if exists public.admin_save_site_settings(jsonb);
+create or replace function public.admin_save_site_settings(p_settings jsonb)
+returns boolean
+language plpgsql
+security definer
+set search_path=public
+as $adminsavesitesettings$
+begin
+  perform public.assert_admin_header();
+  if p_settings is null or jsonb_typeof(p_settings) <> 'object' then
+    raise exception 'Configuration du site invalide.';
+  end if;
+  update public.site_settings
+  set settings=p_settings, updated_at=now()
+  where id=1;
+  return found;
+end;
+$adminsavesitesettings$;
+
+grant execute on function public.admin_save_site_settings(jsonb) to anon;
+
+-- ============================================================
+-- DOSSIERS HYDRA : enrichissement + import des scénarios
+-- ============================================================
+
+drop function if exists public.admin_import_hydra_defaults();
+create or replace function public.admin_import_hydra_defaults()
+returns boolean
+language plpgsql
+security definer
+set search_path=public
+as $hydraimport$
+declare
+  v_settings jsonb;
+  v_players jsonb;
+  v_defaults jsonb := $json$
+[
+  {
+    "name":"Ethan",
+    "description":"Tu supervises l’organisation et les déplacements des joueurs. Tu es le chef de l’enquête.",
+    "knowledge":"Hydra est une structure numérique secrète. Un corps a été retrouvé sur l’île flottante. L’IA Hydra a crypté l’enregistrement du meurtre en 12 fragments.",
+    "objective":"Organiser l’enquête, distribuer les documents, identifier le coupable.",
+    "special_text":"Ordre du Chef Hydra — « Distribuer les fragments IA. Ne rien dire sur leur origine. Chef. »",
+    "rule":"Tu coordonnes les transmissions et conserves les informations sensibles.",
+    "fictional_hook":"Le Chef Hydra, cerveau de l’enquête, semble tout contrôler mais connaît des éléments que personne d’autre ne possède."
+  },
+  {
+    "name":"Serge",
+    "description":"Tu es souvent à l’infirmerie et tu as vu des choses étranges. Tu es persuadé qu’Hydra t’a rendu malade.",
+    "knowledge":"Tu as été examiné récemment. Les bijoux de la victime faisaient « bip bip » près de toi.",
+    "objective":"Comprendre ce qui t’arrive et ce que tu as vu à l’infirmerie.",
+    "special_text":"Dossier Médical Hydra — « Traces Alpha : faibles mais présentes. Symptômes compatibles avec une exposition récente. »",
+    "rule":"",
+    "fictional_hook":"Le Patient Hydra semble vulnérable, mais ses observations médicales pourraient être essentielles."
+  },
+  {
+    "name":"Silvie",
+    "description":"Tu protèges un livre très ancien contenant un secret d’État. Tu ne lis pas bien mais tu vois tout.",
+    "knowledge":"Une page du livre a disparu. Tu sais qui a touché le livre, qui a volé la page et qui a caché les bijoux dedans.",
+    "objective":"Retrouver la page manquante.",
+    "special_text":"Extrait du Livre Ancien — « Le sang des deux lignées n’est qu’un seul fleuve. La page manquante révèle l’héritier véritable. »",
+    "rule":"",
+    "fictional_hook":"La Protectrice du Livre Ancien garde un secret qui pourrait réécrire toute l’histoire familiale."
+  },
+  {
+    "name":"Fabrice",
+    "description":"Tu analyses les fichiers, les métadonnées et les archives Hydra.",
+    "knowledge":"Certains fichiers semblent altérés. L’IA a effacé des données.",
+    "objective":"Comprendre les anomalies dans les données.",
+    "special_text":"Dossier OSINT — « Altération détectée. Source : Hydra-Core. Horodatage incohérent. »",
+    "rule":"",
+    "fictional_hook":"L’Archiviste Numérique ne fait confiance ni aux images ni aux horodatages : les fichiers eux-mêmes mentent."
+  },
+  {
+    "name":"Jean-Louis Pineau",
+    "description":"Tu conduis l’île flottante. Tu sais qui est monté, descendu ou s’est caché dans les zones interdites.",
+    "knowledge":"Une déviation imprévue a eu lieu.",
+    "objective":"Comprendre les mouvements suspects de l’île.",
+    "special_text":"Journal de Navigation — « 21h52 : déviation non programmée. Trajectoire modifiée sans autorisation. »",
+    "rule":"",
+    "fictional_hook":"Le Pilote de l’Île Flottante connaît les trajets que personne n’était censé emprunter."
+  },
+  {
+    "name":"Jean-Louis Meal",
+    "description":"Tu es un agent infiltré. Tu as deux identités. Tu mens. Tu caches quelque chose.",
+    "knowledge":"Tu as reçu un ordre secret : surveiller un joueur.",
+    "objective":"Remplir ta mission sans te faire repérer.",
+    "special_text":"Ordre Secret Hydra — « Surveiller le sujet Y. Risque Omega élevé. Ne pas révéler la mission. »",
+    "rule":"",
+    "fictional_hook":"L’Espion Hydra joue un double jeu et doit protéger sa couverture jusqu’au bout."
+  },
+  {
+    "name":"Cécile",
+    "description":"Tu observes les comportements et les déplacements. Tu as des yeux partout.",
+    "knowledge":"Tu as vu une silhouette étrange.",
+    "objective":"Identifier les comportements suspects.",
+    "special_text":"Rapport d’Observation — « 22h14 : silhouette identique à la victime observée. Déplacement non expliqué. »",
+    "rule":"",
+    "fictional_hook":"La Sentinelle Hydra remarque ce que les autres ne voient pas, et une silhouette continue de la hanter."
+  },
+  {
+    "name":"Annie",
+    "description":"Tu connais l’histoire des familles liées à Hydra.",
+    "knowledge":"Un ancien conflit familial existe. Les deux familles ennemies sont en réalité la même.",
+    "objective":"Comprendre le lien entre les familles et Hydra.",
+    "special_text":"Mémoire Familiale — « En 1824, la lignée fut divisée pour protéger un secret d’État. Ce secret n’a jamais été révélé. »",
+    "rule":"",
+    "fictional_hook":"La Matriarche détient la mémoire familiale que personne ne veut voir révélée."
+  },
+  {
+    "name":"Max",
+    "description":"Tu analyses les métadonnées et les fichiers.",
+    "knowledge":"Un message crypté a été trouvé.",
+    "objective":"Décrypter les informations.",
+    "special_text":"Message Crypté — « Coordonnées : 47.3 / 12.9. Zone interdite. Décryptage nécessaire. »",
+    "rule":"",
+    "fictional_hook":"L’Agent OSINT sait que la vérité se cache souvent dans les détails techniques."
+  },
+  {
+    "name":"Yoan",
+    "description":"Tu as saboté quelque chose sans savoir que ça tuerait la victime.",
+    "knowledge":"Un passage technique est endommagé.",
+    "objective":"Comprendre ton rôle dans les sabotages.",
+    "special_text":"Schéma de Sabotage — « Sabotage mineur effectué. Impact imprévu sur la zone technique. »",
+    "rule":"",
+    "fictional_hook":"Le Saboteur Repenti a déclenché une chaîne d’événements qu’il ne maîtrise plus."
+  },
+  {
+    "name":"Marie-Françoise",
+    "description":"Tu surveilles les bijoux Hydra équipés de traceurs et micro-caméras.",
+    "knowledge":"Un bijou a disparu.",
+    "objective":"Retrouver le bijou manquant.",
+    "special_text":"Inventaire des Bijoux Hydra — Bijou 3 : « Signal détecté près de Serge. Objet manquant. »",
+    "rule":"",
+    "fictional_hook":"La Gardienne des Bijoux sait que l’un des objets traceurs a quitté sa trajectoire."
+  },
+  {
+    "name":"Claudie",
+    "description":"Tu observes les comportements et les réactions. Tu as accès aux dossiers mentaux Hydra.",
+    "knowledge":"Un joueur semble instable.",
+    "objective":"Comprendre les comportements altérés.",
+    "special_text":"Profil Mental Hydra — « Sujet X : comportement altéré après exposition Omega. Instabilité observée. »",
+    "rule":"",
+    "fictional_hook":"La Psychologue Hydra cherche à distinguer le mensonge, la peur et les effets d’une exposition mystérieuse."
+  },
+  {
+    "name":"Andrea",
+    "description":"Tu interprètes les réactions du chien Milo.",
+    "knowledge":"Milo a réagi dans une zone précise.",
+    "objective":"Suivre Milo et comprendre ses réactions.",
+    "special_text":"Rapport Milo — « Zone 3 : réaction forte du chien. Traces Omega détectées. »",
+    "rule":"",
+    "fictional_hook":"La Protectrice des Animaux est la seule à pouvoir interpréter correctement les réactions de Milo."
+  },
+  {
+    "name":"Mario",
+    "description":"Tu accompagnes Milo et récupères les indices qu’il trouve.",
+    "knowledge":"Milo a trouvé un objet.",
+    "objective":"Suivre Milo et rapporter les indices.",
+    "special_text":"Note de Terrain — « 20h31 : Milo a trouvé un bijou Hydra. Objet récupéré. »",
+    "rule":"",
+    "fictional_hook":"Le Gardien de Milo suit chaque piste laissée par le chien détecteur."
+  },
+  {
+    "name":"Tony",
+    "description":"Tu repères les symboles et les QR codes. Tu es super motivé !",
+    "knowledge":"Un symbole Hydra est apparu.",
+    "objective":"Identifier les logos Hydra.",
+    "special_text":"Symbole Hydra — Mot-clé : « Omega ». « Ce symbole apparaît sur les objets liés au poison. »",
+    "rule":"",
+    "fictional_hook":"Le Mini-Analyste OSINT possède un œil d’aigle pour les détails visuels et les codes cachés."
+  },
+  {
+    "name":"Lino",
+    "description":"Tu protèges un objet important.",
+    "knowledge":"L’objet doit rester en sécurité.",
+    "objective":"Ne jamais perdre l’objet.",
+    "special_text":"Objet Sacré Hydra — « Ne le laisse jamais tomber. Cet objet doit rester en sécurité. »",
+    "rule":"Cet objet doit rester sur toi et rester intact.",
+    "fictional_hook":"Le Gardien des Objets protège une relique dont personne ne doit prendre possession."
+  },
+  {
+    "name":"Emy",
+    "description":"Tu aides Ethan dans l’organisation. Tu distribues les fiches.",
+    "knowledge":"Tu dois distribuer certains documents.",
+    "objective":"Suivre les instructions du Chef.",
+    "special_text":"Ordre du Chef Hydra — « Distribuer les fragments IA. Ne rien dire sur leur origine. Chef. »",
+    "rule":"Tu dois dire « Chef ! » à la fin de chaque phrase pendant toute la journée. C’est ton code secret.",
+    "fictional_hook":"La Secrétaire du Chef est la relais indispensable entre Ethan et les autres joueurs."
+  },
+  {
+    "name":"Milo",
+    "description":"Tu renifles les objets et les zones.",
+    "knowledge":"Tu réagis à certains endroits.",
+    "objective":"Trouver des indices.",
+    "special_text":"Carte des Zones Reniflées — Zone 1 : neutre. Zone 2 : traces Alpha. Zone 3 : traces Omega.",
+    "rule":"Tu peux signaler une zone ou un objet lorsque tu détectes une piste.",
+    "fictional_hook":"Le Chien Détecteur Hydra mène l’enquête grâce à son flair et à ses réactions."
+  }
+]$json$;
+
+  perform public.assert_admin_header();
+
+  select settings
+  into v_settings
+  from public.birthday_config
+  where id=1
+  for update;
+
+  v_players := (
+    select coalesce(jsonb_agg(
+      case
+        when d is null then p
+        else
+          p ||
+          case when coalesce(p->>'description','') = '' then jsonb_build_object('description',d->>'description') else '{}'::jsonb end ||
+          case when coalesce(p->>'knowledge','') = '' then jsonb_build_object('knowledge',d->>'knowledge') else '{}'::jsonb end ||
+          case when coalesce(p->>'objective','') = '' then jsonb_build_object('objective',d->>'objective') else '{}'::jsonb end ||
+          case when coalesce(p->>'special_text','') = '' then jsonb_build_object('special_text',d->>'special_text') else '{}'::jsonb end ||
+          case when coalesce(p->>'rule','') = '' then jsonb_build_object('rule',d->>'rule') else '{}'::jsonb end ||
+          case when coalesce(p->>'fictional_hook','') = '' then jsonb_build_object('fictional_hook',d->>'fictional_hook') else '{}'::jsonb end ||
+          case when coalesce(p->>'scenario','') = '' then jsonb_build_object(
+            'scenario',
+            concat(
+              'DOSSIER HYDRA', E'\n\n',
+              'Nom : ', coalesce(p->>'name',''), E'\n',
+              'Rôle : ', coalesce(p->>'role',''), E'\n',
+              'Fonction : ', coalesce(p->>'function',''), E'\n',
+              'Description : ', coalesce(p->>'description',d->>'description',''), E'\n',
+              'Ce que tu sais au début : ', coalesce(p->>'knowledge',d->>'knowledge',''), E'\n',
+              'Ton objectif : ', coalesce(p->>'objective',d->>'objective',''), E'\n',
+              'Document spécial : ', coalesce(p->>'special_text',d->>'special_text',p->>'special',''), E'\n',
+              case when coalesce(p->>'rule',d->>'rule','') <> '' then 'Règle spéciale : '||coalesce(p->>'rule',d->>'rule','')||E'\n' else '' end,
+              'Fragment IA : ', coalesce(p->>'fragment',''), E'\n',
+              'Accroche : ', coalesce(p->>'fictional_hook',d->>'fictional_hook','')
+            )
+          ) else '{}'::jsonb end
+      end
+    ) filter (where true),'[]'::jsonb)
+    from jsonb_array_elements(coalesce(v_settings->'murder_party'->'players','[]'::jsonb)) p
+    left join lateral (
+      select value as d
+      from jsonb_array_elements(v_defaults) x(value)
+      where x.value->>'name' = p->>'name'
+      limit 1
+    ) s on true
+    cross join lateral (select s.d as d) q
+  );
+
+  v_settings := jsonb_set(v_settings,'{murder_party,players}',v_players,true);
+
+  update public.birthday_config
+  set settings=v_settings, updated_at=now()
+  where id=1;
+
+  return true;
+end;
+$hydraimport$;
+
+grant execute on function public.admin_import_hydra_defaults() to anon;
+
+drop function if exists public.get_my_hydra_dossier(text);
+create or replace function public.get_my_hydra_dossier(p_code text)
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $hydrapublic$
+declare
+  v_name text;
+  v_players jsonb;
+  v_player jsonb;
+begin
+  select label
+  into v_name
+  from public.list_access_codes
+  where active=true and code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  select settings->'murder_party'->'players'
+  into v_players
+  from public.birthday_config
+  where id=1;
+
+  select value
+  into v_player
+  from jsonb_array_elements(coalesce(v_players,'[]'::jsonb))
+  where lower(trim(value->>'name')) = lower(trim(v_name))
+  limit 1;
+
+  return coalesce(v_player,'{}'::jsonb);
+end;
+$hydrapublic$;
+
+grant execute on function public.get_my_hydra_dossier(text) to anon;
+
+-- ============================================================
+-- PARTICIPATIONS : RÉDUCTION PARTIELLE PAR LE PROPRIÉTAIRE
+-- ============================================================
+
+drop function if exists public.reduce_private_gift_contribution(text,bigint,numeric);
+create or replace function public.reduce_private_gift_contribution(
+  p_code text,
+  p_contribution_id bigint,
+  p_reduce_amount numeric
+)
+returns numeric
+language plpgsql
+security definer
+set search_path=public
+as $reducegift$
+declare
+  v_name text;
+  v_current numeric;
+  v_left numeric;
+begin
+  select label into v_name
+  from public.list_access_codes
+  where active=true and code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  if p_reduce_amount is null or p_reduce_amount <= 0 then
+    raise exception 'Le montant à retirer doit être supérieur à 0 €.';
+  end if;
+
+  select amount into v_current
+  from public.gift_contributions
+  where id=p_contribution_id
+    and lower(trim(name))=lower(trim(v_name))
+  for update;
+
+  if v_current is null then
+    raise exception 'Participation introuvable.';
+  end if;
+
+  if p_reduce_amount > v_current then
+    raise exception 'Le montant à retirer est supérieur à cette participation.';
+  end if;
+
+  if p_reduce_amount = v_current then
+    delete from public.gift_contributions where id=p_contribution_id;
+    return 0;
+  end if;
+
+  v_left := v_current - p_reduce_amount;
+  update public.gift_contributions
+  set amount = round(v_left,2)
+  where id=p_contribution_id;
+
+  return round(v_left,2);
+end;
+$reducegift$;
+
+grant execute on function public.reduce_private_gift_contribution(text,bigint,numeric) to anon;
+
+drop function if exists public.reduce_private_contribution(text,bigint,numeric);
+create or replace function public.reduce_private_contribution(
+  p_code text,
+  p_contribution_id bigint,
+  p_reduce_amount numeric
+)
+returns numeric
+language plpgsql
+security definer
+set search_path=public
+as $reducecontrib$
+declare
+  v_name text;
+  v_current numeric;
+  v_left numeric;
+begin
+  select label into v_name
+  from public.list_access_codes
+  where active=true and code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  if p_reduce_amount is null or p_reduce_amount <= 0 then
+    raise exception 'Le montant à retirer doit être supérieur à 0 €.';
+  end if;
+
+  select amount into v_current
+  from public.contributions
+  where id=p_contribution_id
+    and lower(trim(name))=lower(trim(v_name))
+  for update;
+
+  if v_current is null then
+    raise exception 'Participation introuvable.';
+  end if;
+
+  if p_reduce_amount > v_current then
+    raise exception 'Le montant à retirer est supérieur à cette participation.';
+  end if;
+
+  if p_reduce_amount = v_current then
+    delete from public.contributions where id=p_contribution_id;
+    return 0;
+  end if;
+
+  v_left := v_current - p_reduce_amount;
+  update public.contributions
+  set amount = round(v_left,2)
+  where id=p_contribution_id;
+
+  return round(v_left,2);
+end;
+$reducecontrib$;
+
+grant execute on function public.reduce_private_contribution(text,bigint,numeric) to anon;
+
 notify pgrst,'reload schema';
