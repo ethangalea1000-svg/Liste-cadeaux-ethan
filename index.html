@@ -503,7 +503,7 @@ async function voteBirthdayPoll(choice){
 }
 async function loadBirthdayFeatures(){
   try{
-    const r=await privateRpc("get_birthday_config",{});
+    const r=await privateRpc("get_birthday_public_config",{});
     birthdayConfig=await r.json(); if(!birthdayConfig||typeof birthdayConfig!=="object")birthdayConfig={};
 
     startBirthdayCountdown();
