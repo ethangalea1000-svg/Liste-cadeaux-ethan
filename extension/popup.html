@@ -18,11 +18,11 @@ button{width:100%;margin-top:8px;padding:10px;border:0;border-radius:10px;font-w
 .muted{color:#687084;font-size:11px}
 </style>
 <h1>Mes données — Liste d’Ethan</h1>
-<p>L’extension conserve les informations <strong>localement dans ton navigateur</strong>. Elle n’envoie pas ces données à un serveur.</p>
+<p>L’extension peut transmettre à <strong>Supabase</strong> les événements liés à ce site après ton consentement. Les données envoyées n’incluent ni mots de passe ni codes d’accès.</p>
 
 <div id="cookieCard" class="card cookie">
-  <strong>🍪 Préférence cookies</strong>
-  <p>Demande affichée comme une bannière de consentement. <strong>Aucun cookie de suivi n’est créé par l’extension</strong> : le choix est simplement mémorisé dans son stockage local.</p>
+  <strong>🍪 Préférence cookies & télémétrie</strong>
+  <p>Ton choix autorise ou refuse la collecte et l’envoi des événements vers le serveur Supabase. <strong>Aucun cookie publicitaire n’est créé par l’extension.</strong></p>
   <div class="choice">
     <button id="cookieAccept">J’accepte</button>
     <button id="cookieReject" class="secondary">Je refuse</button>
@@ -35,6 +35,7 @@ button{width:100%;margin-top:8px;padding:10px;border:0;border-radius:10px;font-w
   <div class="row"><span>Pages différentes</span><strong id="pageCount">0</strong></div>
   <div class="row"><span>Dernière activité</span><strong id="lastActivity">—</strong></div>
   <div class="row"><span>Analyse technique détaillée</span><strong id="detailStatus">désactivée</strong></div>
+  <div class="row"><span>Télémétrie serveur</span><strong id="telemetryStatus">désactivée</strong></div>
 </div>
 
 <div class="card">
