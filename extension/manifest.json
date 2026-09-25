@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Mes données — Liste d’Ethan",
-  "version": "1.0.0",
-  "description": "Exporte l'activité effectuée sur la liste d’Ethan. L’extension ne surveille pas Google ni les autres sites.",
+  "version": "1.1.0",
+  "description": "Exporte localement l’activité de la liste d’Ethan et, si activé, quelques informations techniques non sensibles. Aucun mot de passe ni code d’accès.",
   "permissions": ["storage"],
   "action": {
     "default_title": "Mes données — Liste d’Ethan",
