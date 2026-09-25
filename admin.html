@@ -74,7 +74,7 @@
   <nav class="tabs">
     <button class="tab active" data-tab="pending">À valider</button>
     <button class="tab" data-tab="messages">Messages</button>
-    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
+    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="extension">📡 Extension</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
     <button class="tab" data-tab="ideas">Idées</button>
     <button class="tab" data-tab="contributions">Participations</button>
     <button class="tab" data-tab="community">Communauté</button>
@@ -116,6 +116,18 @@
     </div>
     <div id="accessStats" class="stats" style="margin-bottom:14px"></div>
     <div id="accessDuplicates" class="list" style="margin-bottom:14px"></div><div id="accessList" class="list"></div>
+  </section>
+  <section id="extension" class="section">
+    <div class="section-head">
+      <div><h2>📡 Télémétrie de l’extension</h2><div class="meta">Événements remontés par l’extension après consentement explicite.</div></div>
+      <button class="btn" onclick="loadExtensionTelemetry()">↻ Actualiser</button>
+    </div>
+    <div id="extensionStats" class="stats" style="margin-bottom:14px"></div>
+    <div class="panel" style="margin-bottom:14px;background:#eef2ff;border-color:#d9defe">
+      <strong>ℹ️ Ce qui est suivi</strong>
+      <div class="meta" style="margin-top:5px">Pages du site, clics, événements techniques et informations techniques limitées. Les mots de passe, codes d’accès et contenus de formulaires ne sont pas envoyés par cette extension.</div>
+    </div>
+    <div id="extensionTelemetryList" class="list"></div>
   </section>
   <section id="gift-contributions" class="section">
     <div class="section-head"><div><h2>💶 Participations aux cadeaux</h2><div class="meta">Chaque ligne = une participation. Le bouton « Supprimer » permet de l’enlever.</div></div><button class="btn" onclick="loadGiftContributionsAdmin()">↻ Actualiser</button></div>
@@ -337,6 +349,39 @@ async function copyAccessLink(code){
  await navigator.clipboard?.writeText(url);toast("Lien d’accès copié.");
 }
 
+async function loadExtensionTelemetry(){
+  try{
+    const [stats,rows]=await Promise.all([
+      rpc("admin_extension_telemetry_stats",{}),
+      rpc("admin_list_extension_events",{p_limit:250})
+    ]);
+    const s=(Array.isArray(stats)?stats[0]:stats)||{};
+    $("extensionStats").innerHTML=[
+      '<div class="stat"><b>'+Number(s.total_events||0)+'</b><span>événements</span></div>',
+      '<div class="stat"><b>'+Number(s.installations||0)+'</b><span>installations</span></div>',
+      '<div class="stat"><b>'+Number(s.sessions||0)+'</b><span>sessions</span></div>',
+      '<div class="stat"><b>'+Number(s.active_installations_24h||0)+'</b><span>installations actives 24 h</span></div>',
+      '<div class="stat"><b>'+Number(s.events_24h||0)+'</b><span>événements 24 h</span></div>',
+      '<div class="stat"><b>'+Number(s.page_views_24h||0)+'</b><span>pages vues 24 h</span></div>'
+    ].join("");
+
+    const data=Array.isArray(rows)?rows:[];
+    $("extensionTelemetryList").innerHTML=data.length
+      ?data.map(x=>{
+          const meta=x.metadata&&typeof x.metadata==="object"?JSON.stringify(x.metadata):String(x.metadata||"");
+          return '<article class="item">'
+            +'<div class="meta">'+date(x.created_at)+' · installation <code>'+esc(String(x.installation_id).slice(0,12))+'…</code> · session <code>'+esc(String(x.session_id).slice(0,12))+'…</code></div>'
+            +'<div><strong>'+esc(x.event_type||"")+'</strong> <span class="badge">'+esc(x.page_path||"")+'</span></div>'
+            +(x.event_label?'<div class="message">'+esc(x.event_label)+'</div>':"")
+            +(meta&&meta!=="{}"?'<div class="access-link" style="margin-top:8px">'+esc(meta)+'</div>':"")
+            +'</article>';
+        }).join("")
+      :empty("Aucun événement de l’extension pour le moment.");
+  }catch(e){
+    $("extensionTelemetryList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ Télémétrie indisponible</strong><div class="meta" style="margin-top:7px">'+esc(e?.message||"Erreur inconnue")+'</div><div class="meta" style="margin-top:7px">Exécute d’abord la dernière version de SUPABASE_A_COPIER_COLLER.sql dans Supabase.</div></div>';
+    toast(e?.message||"Impossible de charger la télémétrie.");
+  }
+}
 async function loadMessages(){
  try{
   const rows=await rpc("admin_list_messages",{});
@@ -410,7 +455,7 @@ function renderActivityBars(s){
 }
 async function refreshAll(){
   const currentTab=sessionStorage.getItem("birthday_admin_tab")||"pending";
-  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadGiftContributionsAdmin()]);
+  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadGiftContributionsAdmin(),loadExtensionTelemetry()]);
   activateTab(currentTab,false);
 }
 
