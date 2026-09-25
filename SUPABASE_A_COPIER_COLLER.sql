@@ -3134,6 +3134,7 @@ declare
   }
 ]$json$;
 
+begin
   perform public.assert_admin_header();
 
   select settings
