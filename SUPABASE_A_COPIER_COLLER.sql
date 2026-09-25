@@ -3227,6 +3227,14 @@ begin
     raise exception 'Accès refusé.' using errcode='42501';
   end if;
 
+  if not coalesce((
+    select (settings->'murder_party'->>'enabled')::boolean
+    from public.birthday_config
+    where id=1
+  ), false) then
+    return '{}'::jsonb;
+  end if;
+
   select settings->'murder_party'->'players'
   into v_players
   from public.birthday_config
