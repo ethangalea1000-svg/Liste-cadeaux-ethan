@@ -2668,6 +2668,8 @@ create table if not exists public.birthday_interactions (
 alter table public.birthday_interactions enable row level security;
 revoke all on public.birthday_interactions from anon, authenticated;
 
+drop function if exists public.get_birthday_config();
+
 create or replace function public.get_birthday_config()
 returns jsonb
 language plpgsql
@@ -2828,4 +2830,7 @@ $adminbirthdayinteractions$;
 
 grant execute on function public.admin_list_birthday_interactions() to anon;
 
+
+-- IMPORTANT : ce bloc doit être exécuté dans l’éditeur SQL Supabase pour créer/mettre à jour les fonctions du Centre anniversaire.
+-- Le fichier GitHub seul ne modifie pas le schéma Supabase.
 notify pgrst,'reload schema';
