@@ -3156,15 +3156,15 @@ declare
   v_players := (
     select coalesce(jsonb_agg(
       case
-        when d is null then p
+        when s.d is null then p
         else
           p ||
-          case when coalesce(p->>'description','') = '' then jsonb_build_object('description',d->>'description') else '{}'::jsonb end ||
-          case when coalesce(p->>'knowledge','') = '' then jsonb_build_object('knowledge',d->>'knowledge') else '{}'::jsonb end ||
-          case when coalesce(p->>'objective','') = '' then jsonb_build_object('objective',d->>'objective') else '{}'::jsonb end ||
-          case when coalesce(p->>'special_text','') = '' then jsonb_build_object('special_text',d->>'special_text') else '{}'::jsonb end ||
-          case when coalesce(p->>'rule','') = '' then jsonb_build_object('rule',d->>'rule') else '{}'::jsonb end ||
-          case when coalesce(p->>'fictional_hook','') = '' then jsonb_build_object('fictional_hook',d->>'fictional_hook') else '{}'::jsonb end ||
+          case when coalesce(p->>'description','') = '' then jsonb_build_object('description',s.d->>'description') else '{}'::jsonb end ||
+          case when coalesce(p->>'knowledge','') = '' then jsonb_build_object('knowledge',s.d->>'knowledge') else '{}'::jsonb end ||
+          case when coalesce(p->>'objective','') = '' then jsonb_build_object('objective',s.d->>'objective') else '{}'::jsonb end ||
+          case when coalesce(p->>'special_text','') = '' then jsonb_build_object('special_text',s.d->>'special_text') else '{}'::jsonb end ||
+          case when coalesce(p->>'rule','') = '' then jsonb_build_object('rule',s.d->>'rule') else '{}'::jsonb end ||
+          case when coalesce(p->>'fictional_hook','') = '' then jsonb_build_object('fictional_hook',s.d->>'fictional_hook') else '{}'::jsonb end ||
           case when coalesce(p->>'scenario','') = '' then jsonb_build_object(
             'scenario',
             concat(
@@ -3172,13 +3172,13 @@ declare
               'Nom : ', coalesce(p->>'name',''), E'\n',
               'Rôle : ', coalesce(p->>'role',''), E'\n',
               'Fonction : ', coalesce(p->>'function',''), E'\n',
-              'Description : ', coalesce(p->>'description',d->>'description',''), E'\n',
-              'Ce que tu sais au début : ', coalesce(p->>'knowledge',d->>'knowledge',''), E'\n',
-              'Ton objectif : ', coalesce(p->>'objective',d->>'objective',''), E'\n',
-              'Document spécial : ', coalesce(p->>'special_text',d->>'special_text',p->>'special',''), E'\n',
-              case when coalesce(p->>'rule',d->>'rule','') <> '' then 'Règle spéciale : '||coalesce(p->>'rule',d->>'rule','')||E'\n' else '' end,
+              'Description : ', coalesce(p->>'description',s.d->>'description',''), E'\n',
+              'Ce que tu sais au début : ', coalesce(p->>'knowledge',s.d->>'knowledge',''), E'\n',
+              'Ton objectif : ', coalesce(p->>'objective',s.d->>'objective',''), E'\n',
+              'Document spécial : ', coalesce(p->>'special_text',s.d->>'special_text',p->>'special',''), E'\n',
+              case when coalesce(p->>'rule',s.d->>'rule','') <> '' then 'Règle spéciale : '||coalesce(p->>'rule',s.d->>'rule','')||E'\n' else '' end,
               'Fragment IA : ', coalesce(p->>'fragment',''), E'\n',
-              'Accroche : ', coalesce(p->>'fictional_hook',d->>'fictional_hook','')
+              'Accroche : ', coalesce(p->>'fictional_hook',s.d->>'fictional_hook','')
             )
           ) else '{}'::jsonb end
       end
