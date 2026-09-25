@@ -274,7 +274,7 @@ async function deleteGiftContributionAdmin(id){
  try{await rpc("admin_delete_gift_contribution",{p_id:id});toast("Contribution supprimée.");loadGiftContributionsAdmin();loadGiftAdmin()}catch(e){toast(e.message)}
 }
 function accessUrl(code){
-  return location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(String(code||"").trim());
+  return location.origin+location.pathname.replace("admin.html","index.html")+"#code="+encodeURIComponent(String(code||"").trim());
 }
 window.accessUrl=accessUrl;
 window.AccessUrl=accessUrl;
@@ -333,7 +333,7 @@ async function deleteAccess(id){
  try{await rpc("admin_delete_access_code",{p_id:id});toast("Accès supprimé.");loadAccessCodes()}catch(e){toast(e.message)}
 }
 async function copyAccessLink(code){
- const url=location.origin+location.pathname.replace("admin.html","index.html")+"?code="+encodeURIComponent(code);
+ const url=location.origin+location.pathname.replace("admin.html","index.html")+"#code="+encodeURIComponent(code);
  await navigator.clipboard?.writeText(url);toast("Lien d’accès copié.");
 }
 
