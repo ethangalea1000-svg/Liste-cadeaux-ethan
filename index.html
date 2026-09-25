@@ -439,8 +439,7 @@ function lockSite(message){
   category.innerHTML='<option value="all">Toutes les catégories</option>';
 }
 async function birthdayRpc(type,payload){
-  const name=currentVisitorName()||"Visiteur autorisé";
-  const r=await privateRpc("submit_birthday_interaction",{p_type:type,p_name:name,p_payload:payload});
+  const r=await privateRpc("submit_birthday_interaction",{p_code:accessCode,p_type:type,p_payload:payload});
   const data=await r.json().catch(()=>null);
   if(!r.ok)throw new Error(data?.message||"Action impossible.");
   return data;
@@ -472,7 +471,7 @@ function startBirthdayCountdown(){
 }
 async function loadBirthdayWall(){
   try{
-    const rows=await (await privateRpc("get_birthday_interactions",{p_type:"wall_message"})).json();
+    const rows=await (await privateRpc("get_birthday_interactions",{p_code:accessCode,p_type:"wall_message"})).json();
     const data=Array.isArray(rows)?rows:[];
     const list=document.getElementById("birthdayWallList");
     if(list)list.innerHTML=data.length?data.map(x=>'<div class="birthday-item"><strong>'+esc(x.visitor_name||"Visiteur")+'</strong><span class="form-note">'+esc(x.payload?.message||"")+'</span></div>').join(""):'<div class="form-note">Aucun message pour le moment.</div>';
@@ -480,7 +479,7 @@ async function loadBirthdayWall(){
 }
 async function loadBirthdayGallery(){
   try{
-    const rows=await (await privateRpc("get_birthday_interactions",{p_type:"gallery_submission"})).json();
+    const rows=await (await privateRpc("get_birthday_interactions",{p_code:accessCode,p_type:"gallery_submission"})).json();
     const data=Array.isArray(rows)?rows:[];
     const list=document.getElementById("birthdayGalleryList");
     if(list)list.innerHTML=data.length?data.map(x=>{
@@ -494,7 +493,7 @@ async function loadBirthdayPoll(){
   document.getElementById("birthdayPollTitle").textContent=poll.title||"Vote en direct";
   const opts=Array.isArray(poll.options)?poll.options:[];
   let votes=[];
-  try{votes=await (await privateRpc("get_birthday_interactions",{p_type:"poll_vote"})).json();}catch{}
+  try{votes=await (await privateRpc("get_birthday_interactions",{p_code:accessCode,p_type:"poll_vote"})).json();}catch{}
   const counts={}; (Array.isArray(votes)?votes:[]).forEach(v=>{const k=v.payload?.choice;counts[k]=(counts[k]||0)+1});
   document.getElementById("birthdayPollBody").innerHTML=opts.map(o=>'<div class="birthday-item"><strong>'+esc(o)+'</strong><div class="birthday-actions"><button class="btn" onclick="voteBirthdayPoll('+JSON.stringify(String(o))+')">Voter</button><span class="badge">'+Number(counts[o]||0)+' vote(s)</span></div></div>').join("");
 }
