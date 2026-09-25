@@ -2732,8 +2732,8 @@ $adminbirthday$;
 grant execute on function public.admin_save_birthday_config(jsonb) to anon;
 
 create or replace function public.submit_birthday_interaction(
+  p_code text,
   p_type text,
-  p_name text,
   p_payload jsonb
 )
 returns bigint
@@ -2743,43 +2743,66 @@ set search_path=public
 as $birthdayinteraction$
 declare
   v_id bigint;
+  v_name text;
 begin
+  select label into v_name
+  from public.list_access_codes
+  where active=true and code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
   if p_type not in ('quiz_result','poll_vote','challenge_done','wall_message','gallery_submission') then
     raise exception 'Type d’interaction invalide.';
   end if;
-  if char_length(trim(coalesce(p_name,''))) < 1 or char_length(trim(p_name)) > 80 then
-    raise exception 'Nom invalide.';
-  end if;
+
   if p_payload is null or jsonb_typeof(p_payload) <> 'object' then
     raise exception 'Données invalides.';
   end if;
+
   insert into public.birthday_interactions(interaction_type,visitor_name,payload)
-  values(p_type,trim(p_name),p_payload)
+  values(p_type,trim(v_name),p_payload)
   returning id into v_id;
+
   return v_id;
 end;
 $birthdayinteraction$;
 
 grant execute on function public.submit_birthday_interaction(text,text,jsonb) to anon;
 
-create or replace function public.get_birthday_interactions(p_type text)
+create or replace function public.get_birthday_interactions(
+  p_code text,
+  p_type text
+)
 returns table(
   visitor_name text,
   payload jsonb,
   created_at timestamptz
 )
-language sql
+language plpgsql
 security definer
 set search_path=public
 as $birthdaypublic$
+begin
+  if not exists(
+    select 1 from public.list_access_codes
+    where active=true and code=trim(coalesce(p_code,''))
+  ) then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  return query
   select visitor_name,payload,created_at
   from public.birthday_interactions
   where interaction_type=trim(p_type)
   order by created_at desc
   limit 500;
+end;
 $birthdaypublic$;
 
-grant execute on function public.get_birthday_interactions(text) to anon;
+grant execute on function public.get_birthday_interactions(text,text) to anon;
 
 create or replace function public.admin_list_birthday_interactions()
 returns table(
