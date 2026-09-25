@@ -450,6 +450,9 @@ function birthdaySet(id,show){
 function startBirthdayCountdown(){
   if(birthdayCountdownTimer)clearInterval(birthdayCountdownTimer);
   const target=new Date(birthdayConfig.countdown_at||"2026-12-23T00:00:00+01:00");
+   if(typeof birthdayConfig.birth_time==="string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(birthdayConfig.birth_time)){
+     target.setHours(Number(birthdayConfig.birth_time.slice(0,2)),Number(birthdayConfig.birth_time.slice(3,5)),0,0);
+   }
   const title=document.getElementById("birthdayCountdownTitle");
   const tick=()=>{
     const diff=Math.max(0,target.getTime()-Date.now());
@@ -465,7 +468,11 @@ function startBirthdayCountdown(){
     document.getElementById("birthdayCountdown").innerHTML=[
       [d,"jours"],[h,"heures"],[m,"minutes"],[s,"secondes"]
     ].map(x=>'<div class="countdown-box"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join("");
-    if(title)title.textContent="Rendez-vous le "+target.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+    if(title){
+       const dateLabel=target.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+       const timeLabel=(typeof birthdayConfig.birth_time==="string" && birthdayConfig.birth_time)? " à "+birthdayConfig.birth_time : "";
+       title.textContent="Rendez-vous le "+dateLabel+timeLabel;
+     }
   };
   tick(); birthdayCountdownTimer=setInterval(tick,1000);
 }
