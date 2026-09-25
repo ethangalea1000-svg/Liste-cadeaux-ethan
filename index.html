@@ -654,33 +654,6 @@ function render(){
 
 search.addEventListener("input",()=>{if(authorized)render()});
 category.addEventListener("change",()=>{if(authorized)render()});
-const installBtn=document.getElementById("installAppBtn");
-let deferredInstallPrompt=null;
-window.addEventListener("beforeinstallprompt",e=>{
-  e.preventDefault();
-  deferredInstallPrompt=e;
-  if(installBtn)installBtn.hidden=false;
-});
-installBtn?.addEventListener("click",async()=>{
-  if(!deferredInstallPrompt){
-    const status=document.getElementById("pwaInstallStatus");
-    if(status)status.textContent="➡️ Ouvre le menu de ton navigateur et choisis « Installer la page en tant qu’application » ou « Installer l’application ». Aucun mode développeur n’est nécessaire.";
-    showToast("Utilise le menu du navigateur pour installer l’application.");
-    return;
-  }
-  deferredInstallPrompt.prompt();
-  await deferredInstallPrompt.userChoice.catch(()=>null);
-  deferredInstallPrompt=null;
-  installBtn.textContent="✅ Application installée / proposée";
-  installBtn.hidden=true;
-});
-window.addEventListener("appinstalled",()=>{
-  if(installBtn)installBtn.hidden=true;
-});
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js").catch(()=>{});
-}
-
 document.getElementById("shareBtn").addEventListener("click",async()=>{const data={title:"Liste d’Ethan — Noël & Anniversaire 2026",url:location.href};if(navigator.share){try{await navigator.share(data)}catch{}}else{await navigator.clipboard?.writeText(location.href);showToast("Lien copié.")}});
 document.getElementById("resetBtn").addEventListener("click",async()=>{if(!authorized){showToast("Entre d’abord ton code d’invitation.");return}showToast("Actualisation…");await loadGiftCatalog();await loadReservations();showToast("Liste actualisée.")});
 accessForm.addEventListener("submit",async e=>{e.preventDefault();await unlockSite(accessInput.value);});
