@@ -17,7 +17,7 @@
 <p id="browserHint">Détection de ton navigateur…</p>
 <div class="install-grid">
   <div class="install-card"><strong>1. Télécharger</strong><p>Le dépôt complet contient directement le dossier de l’extension.</p><a class="btn" href="https://github.com/ethangalea1000-svg/Liste-cadeaux-ethan/archive/refs/heads/main.zip" target="_blank" rel="noopener">Télécharger le ZIP</a></div>
-  <div class="install-card"><strong>2. Ouvrir les extensions</strong><p id="extensionUrlText">Ouvre la page officielle de gestion des extensions.</p><button class="btn" id="openExtensions">Ouvrir</button></div>
+  <div class="install-card"><strong>2. Ouvrir les extensions</strong><p id="extensionUrlText">Le navigateur bloque l’ouverture automatique de cette page interne depuis un site web.</p><button class="btn" id="openExtensions">📋 Copier l’adresse</button><div id="copyStatus" class="step" style="display:none;margin-top:8px"></div></div>
 </div>
 <div class="note" style="margin-top:12px"><strong>Après extraction :</strong> active <strong>Mode développeur</strong> → <strong>Charger l’extension non empaquetée</strong> → choisis le dossier <code>extension</code>.</div>
 </section>
@@ -62,8 +62,17 @@ const isEdge=/Edg\//.test(ua);
 const isChrome=/Chrome\//.test(ua)&&!isEdge;
 const url=isEdge?"edge://extensions/":"chrome://extensions/";
 document.getElementById("browserHint").textContent=isEdge?"Navigateur détecté : Microsoft Edge. Le bouton ci-dessous ouvre sa page d’extensions.":isChrome?"Navigateur détecté : Google Chrome. Le bouton ci-dessous ouvre sa page d’extensions.":"Navigateur Chromium détecté ou navigateur non identifié. Utilise Chrome/Edge pour l’installation la plus simple.";
-document.getElementById("extensionUrlText").textContent=url;
-document.getElementById("openExtensions").addEventListener("click",()=>{location.href=url});
+document.getElementById("extensionUrlText").textContent="Adresse à ouvrir : "+url;
+document.getElementById("openExtensions").addEventListener("click",async()=>{
+  const status=document.getElementById("copyStatus");
+  try{
+    await navigator.clipboard.writeText(url);
+    status.textContent="✅ Adresse copiée. Colle-la dans la barre d’adresse du navigateur puis appuie sur Entrée.";
+  }catch{
+    status.textContent="➡️ Copie manuelle : "+url;
+  }
+  status.style.display="block";
+});
 </script>
 </body>
 </html>
