@@ -42,7 +42,7 @@ document.getElementById("cookieAccept").addEventListener("click",async()=>{
       type:"consent_granted",
       page:"/extension-popup",
       label:null,
-      metadata:{extensionVersion:"1.1.0",source:"popup"}
+      metadata:{extensionVersion:"1.2.0",source:"popup"}
     }
   }).catch(()=>{});
   status.textContent="Préférence enregistrée. Aucun cookie réel n’a été activé.";
