@@ -1,0 +1,17 @@
+{
+  "name":"liste-cadeaux-ethan-native",
+  "private":true,
+  "version":"1.0.0",
+  "description":"Applications natives Windows, Android et iPhone pour la liste d'Ethan.",
+  "scripts":{
+    "native:prepare":"node scripts/prepare-native.mjs",
+    "app:dev":"npm run native:prepare && tauri dev",
+    "app:build":"npm run native:prepare && tauri build",
+    "app:windows":"npm run native:prepare && tauri build --bundles nsis,msi",
+    "app:android":"npm run native:prepare && tauri android init && tauri android build",
+    "app:ios":"npm run native:prepare && tauri ios init && tauri ios build"
+  },
+  "devDependencies":{
+    "@tauri-apps/cli":"2.11.4"
+  }
+}
