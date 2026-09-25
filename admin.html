@@ -284,7 +284,7 @@ function adminLogout(){sessionStorage.removeItem("birthday_admin_access");adminC
 
 async function runDiagnostic(){
  showDiagnostic();
- const tests=["admin_list_people_access","admin_list_access_usage","admin_list_access_stats","admin_list_access_duplicates","admin_list_pending_suggestions","admin_list_pending_fundraisers","admin_list_messages","admin_list_ideas","admin_list_contributions","admin_list_community_posts","admin_list_activity","admin_activity_daily","admin_activity_summary"];
+ const tests=["admin_list_people_access","admin_list_access_usage","admin_list_access_stats","admin_list_access_duplicates","admin_list_pending_suggestions","admin_list_pending_fundraisers","admin_list_messages","admin_list_ideas","admin_list_contributions","admin_list_community_posts","admin_list_activity","admin_activity_daily","admin_activity_summary","get_birthday_config","get_site_settings","admin_list_birthday_interactions"];
  $("diagnosticStatus").textContent="Test en cours…"; $("diagnosticList").innerHTML="";
  const results=[];
  for(const fn of tests){
