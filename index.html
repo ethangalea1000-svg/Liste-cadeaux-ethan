@@ -3,6 +3,47 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+  (function(){
+    const key = "__scroll_position__:" + location.pathname + location.search;
+    try{ history.scrollRestoration = "manual"; }catch(_){}
+    let saveFrame = 0;
+    function saveScroll(){
+      if(saveFrame) return;
+      saveFrame = requestAnimationFrame(()=>{
+        saveFrame = 0;
+        try{
+          sessionStorage.setItem(key, JSON.stringify({
+            x: window.scrollX,
+            y: window.scrollY
+          }));
+        }catch(_){}
+      });
+    }
+    function restoreScroll(){
+      try{
+        const raw = sessionStorage.getItem(key);
+        if(!raw) return;
+        const pos = JSON.parse(raw);
+        const restore = () => window.scrollTo({
+          left: Number(pos.x)||0,
+          top: Number(pos.y)||0,
+          behavior: "auto"
+        });
+        restore();
+        requestAnimationFrame(restore);
+        setTimeout(restore, 150);
+        setTimeout(restore, 500);
+      }catch(_){}
+    }
+    window.addEventListener("scroll", saveScroll, {passive:true});
+    window.addEventListener("beforeunload", saveScroll);
+    window.addEventListener("pagehide", saveScroll);
+    window.addEventListener("pageshow", restoreScroll);
+    document.addEventListener("DOMContentLoaded", restoreScroll);
+    window.addEventListener("load", restoreScroll);
+  })();
+</script>
 <title>La liste d’Ethan — Noël & Anniversaire 2026</title>
 <meta name="description" content="Liste de cadeaux d’Ethan pour Noël et son anniversaire 2026.">
 
