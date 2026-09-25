@@ -2911,6 +2911,42 @@ set settings = jsonb_build_object(
     updated_at = now()
 where id=1;
 
+update public.site_settings
+set settings = settings || jsonb_build_object(
+  'ui',
+  coalesce(settings->'ui','{}'::jsonb) || jsonb_build_object(
+    'nav_community','💬 Communauté',
+    'nav_privacy','🔒 Confidentialité',
+    'birthday_countdown_title','🎂 Compte à rebours',
+    'birthday_countdown_before','Avant l’anniversaire d’Ethan',
+    'birthday_mode_title','🎉 Mode anniversaire',
+    'birthday_schedule_title','🗓️ Programme de la journée',
+    'birthday_quiz_title','🧠 Qui connaît Ethan ?',
+    'birthday_poll_title','🗳️ Vote en direct',
+    'birthday_challenges_title','🎯 Défis secrets',
+    'birthday_wall_title','💬 Mur des messages',
+    'birthday_gallery_title','📸 Galerie de la fête',
+    'birthday_memories_title','📖 Souvenirs',
+    'birthday_hydra_title','🕵️ Mon dossier Hydra',
+    'fundraisers_title','🎯 Cagnottes',
+    'fundraisers_intro','Les cagnottes proposées restent en attente jusqu’à validation par Ethan.',
+    'gift_funding_label','💶 Financement',
+    'gift_participate_label','💶 Participer à ce cadeau',
+    'gift_manage_label','💶 Mes participations',
+    'gift_reserve_label','Réserver',
+    'gift_unreserve_label','Déréserver',
+    'gift_copy_label','Copier',
+    'gift_compare_label','🔎 Comparer les prix et vérifier les sites disponibles',
+    'gift_ai_label','🤖 Chercher sur le Web avec l’IA',
+    'gift_image_label','🖼️ Chercher les images liées',
+    'gift_offer_note','Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.',
+    'contribution_reduce_label','Réduire',
+    'contribution_remove_all_label','Retirer tout'
+  )
+),
+    updated_at = now()
+where id=1;
+
 drop function if exists public.get_public_site_settings();
 create or replace function public.get_public_site_settings()
 returns jsonb
@@ -3244,6 +3280,8 @@ begin
   into v_player
   from jsonb_array_elements(coalesce(v_players,'[]'::jsonb))
   where lower(trim(value->>'name')) = lower(trim(v_name))
+     or lower(trim(v_name)) like lower(trim(value->>'name')) || '%'
+  order by case when lower(trim(value->>'name')) = lower(trim(v_name)) then 0 else 1 end
   limit 1;
 
   return coalesce(v_player,'{}'::jsonb);
