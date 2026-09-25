@@ -25,8 +25,8 @@ jobs:
         with:
           name: liste-ethan-windows
           path: |
-            app/src-tauri/target/release/bundle/nsis/*.exe
-            app/src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
 
   android:
     runs-on: ubuntu-latest
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: liste-ethan-android
-          path: app/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+          path: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
 
   ios:
     runs-on: macos-latest
@@ -70,8 +70,10 @@ jobs:
         run: |
           npm run native:prepare
           npx tauri ios init
+      - name: Build unsigned iOS archive
+        run: npx tauri ios build --no-sign --archive-only
       - name: Upload iOS project
         uses: actions/upload-artifact@v4
         with:
           name: liste-ethan-ios-project
-          path: app/src-tauri/gen/apple
+          path: src-tauri/gen/apple
