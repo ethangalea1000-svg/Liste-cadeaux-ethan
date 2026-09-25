@@ -514,6 +514,107 @@ async function loadExtensionTelemetry(){
     toast(e?.message||"Impossible de charger la télémétrie.");
   }
 }
+async function loadSiteAdmin(){
+  try{
+    const cfg=await rpc("get_site_settings",{});
+    const s=cfg&&typeof cfg==="object"?cfg:{};
+    const b=s.branding||{},h=s.hero||{},a=s.access||{},q=s.search||{},st=s.stats||{},th=s.theme||{},an=s.announcement||{},ui=s.ui||{};
+    $("siteTag").value=b.tag||"";
+    $("siteTitle").value=b.title||"";
+    $("siteDescription").value=b.description||"";
+    $("siteShareLabel").value=h.share_label||"";
+    $("siteRefreshLabel").value=h.refresh_label||"";
+    $("siteAccessTitle").value=a.title||"";
+    $("siteAccessButton").value=a.button_label||"";
+    $("siteAccessText").value=a.text||"";
+    $("siteAccessNote").value=a.note||"";
+    $("siteSearchPlaceholder").value=q.placeholder||"";
+    $("siteCategoryAll").value=q.all_categories||"";
+    $("siteStatAll").value=st.all||"";
+    $("siteStatAvailable").value=st.available||"";
+    $("siteStatReserved").value=st.reserved||"";
+    $("siteAccent").value=/^#[0-9a-fA-F]{6}$/.test(th.accent||"")?th.accent:"#5856d6";
+    $("siteBackground").value=/^#[0-9a-fA-F]{6}$/.test(th.background||"")?th.background:"#f4f6fb";
+    $("siteCard").value=/^#[0-9a-fA-F]{6}$/.test(th.card||"")?th.card:"#ffffff";
+    $("siteText").value=/^#[0-9a-fA-F]{6}$/.test(th.text||"")?th.text:"#161a2b";
+    $("siteRadius").value=th.radius||"18px";
+    $("siteAnnouncementEnabled").checked=an.enabled===true;
+    $("siteAnnouncementTitle").value=an.title||"";
+    $("siteAnnouncementMessage").value=an.message||"";
+    $("siteAnnouncementLink").value=an.link||"";
+    $("siteUiEditor").value=JSON.stringify(ui,null,2);
+    $("siteConfigEditor").value=JSON.stringify(s,null,2);
+  }catch(e){toast(e.message)}
+}
+async function saveSiteQuick(){
+  try{
+    const cfg=await rpc("get_site_settings",{});
+    const s=cfg&&typeof cfg==="object"?cfg:{};
+    s.branding=Object.assign({},s.branding,{
+      tag:$("siteTag").value.trim(),
+      title:$("siteTitle").value.trim(),
+      description:$("siteDescription").value.trim()
+    });
+    s.hero=Object.assign({},s.hero,{
+      share_label:$("siteShareLabel").value.trim(),
+      refresh_label:$("siteRefreshLabel").value.trim()
+    });
+    s.access=Object.assign({},s.access,{
+      title:$("siteAccessTitle").value.trim(),
+      button_label:$("siteAccessButton").value.trim(),
+      text:$("siteAccessText").value.trim(),
+      note:$("siteAccessNote").value.trim()
+    });
+    s.search=Object.assign({},s.search,{
+      placeholder:$("siteSearchPlaceholder").value.trim(),
+      all_categories:$("siteCategoryAll").value.trim()
+    });
+    s.stats=Object.assign({},s.stats,{
+      all:$("siteStatAll").value.trim(),
+      available:$("siteStatAvailable").value.trim(),
+      reserved:$("siteStatReserved").value.trim()
+    });
+    s.theme=Object.assign({},s.theme,{
+      accent:$("siteAccent").value,
+      background:$("siteBackground").value,
+      card:$("siteCard").value,
+      text:$("siteText").value,
+      radius:$("siteRadius").value.trim()||"18px"
+    });
+    s.announcement=Object.assign({},s.announcement,{
+      enabled:$("siteAnnouncementEnabled").checked,
+      title:$("siteAnnouncementTitle").value.trim(),
+      message:$("siteAnnouncementMessage").value.trim(),
+      link:$("siteAnnouncementLink").value.trim()
+    });
+    await rpc("admin_save_site_settings",{p_settings:s});
+    $("siteConfigEditor").value=JSON.stringify(s,null,2);
+    $("siteUiEditor").value=JSON.stringify(s.ui||{},null,2);
+    toast("Configuration du site enregistrée.");
+  }catch(e){toast("Impossible d’enregistrer : "+e.message)}
+}
+async function saveSiteUi(){
+  try{
+    const ui=JSON.parse($("siteUiEditor").value||"{}");
+    if(!ui||Array.isArray(ui)||typeof ui!=="object")throw new Error("Le JSON des libellés doit être un objet.");
+    const cfg=await rpc("get_site_settings",{});
+    const s=cfg&&typeof cfg==="object"?cfg:{};
+    s.ui=Object.assign({},s.ui||{},ui);
+    await rpc("admin_save_site_settings",{p_settings:s});
+    $("siteUiEditor").value=JSON.stringify(s.ui,null,2);
+    $("siteConfigEditor").value=JSON.stringify(s,null,2);
+    toast("Libellés enregistrés.");
+  }catch(e){toast("JSON des libellés invalide : "+e.message)}
+}
+async function saveSiteJson(){
+  try{
+    const s=JSON.parse($("siteConfigEditor").value||"{}");
+    if(!s||Array.isArray(s)||typeof s!=="object")throw new Error("La configuration doit être un objet JSON.");
+    await rpc("admin_save_site_settings",{p_settings:s});
+    $("siteUiEditor").value=JSON.stringify(s.ui||{},null,2);
+    toast("Configuration complète du site enregistrée.");
+  }catch(e){toast("JSON invalide ou impossible à enregistrer : "+e.message)}
+}
 async function getBirthdayConfig(){
   const data=await rpc("get_birthday_config",{});
   return data&&typeof data==="object"?data:{};
