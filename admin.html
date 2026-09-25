@@ -114,7 +114,8 @@
         <div class="editor-actions full"><button class="btn primary" type="submit">➕ Créer l’accès</button><button class="btn" type="button" onclick="generateAccessCode()">🎲 Générer</button></div>
       </form>
     </div>
-    <div id="accessList" class="list"></div>
+    <div id="accessStats" class="stats" style="margin-bottom:14px"></div>
+    <div id="accessDuplicates" class="list" style="margin-bottom:14px"></div><div id="accessList" class="list"></div>
   </section>
   <section id="gift-contributions" class="section">
     <div class="section-head"><div><h2>💶 Participations aux cadeaux</h2><div class="meta">Chaque ligne = une participation. Le bouton « Supprimer » permet de l’enlever.</div></div><button class="btn" onclick="loadGiftContributionsAdmin()">↻ Actualiser</button></div>
@@ -185,7 +186,7 @@ function adminLogout(){sessionStorage.removeItem("birthday_admin_access");adminC
 
 async function runDiagnostic(){
  showDiagnostic();
- const tests=["admin_list_people_access","admin_list_pending_suggestions","admin_list_pending_fundraisers","admin_list_messages","admin_list_ideas","admin_list_contributions","admin_list_community_posts","admin_list_activity","admin_activity_daily","admin_activity_summary"];
+ const tests=["admin_list_people_access","admin_list_access_usage","admin_list_access_stats","admin_list_access_duplicates","admin_list_pending_suggestions","admin_list_pending_fundraisers","admin_list_messages","admin_list_ideas","admin_list_contributions","admin_list_community_posts","admin_list_activity","admin_activity_daily","admin_activity_summary"];
  $("diagnosticStatus").textContent="Test en cours…"; $("diagnosticList").innerHTML="";
  const results=[];
  for(const fn of tests){
@@ -280,12 +281,27 @@ window.AccessUrl=accessUrl;
 
 async function loadAccessCodes(){
  try{
-  const rows=await rpc("admin_list_people_access",{});
+  const [rows,stats,dups]=await Promise.all([
+    rpc("admin_list_access_usage",{}),
+    rpc("admin_list_access_stats",{}),
+    rpc("admin_list_access_duplicates",{})
+  ]);
   const data=Array.isArray(rows)?rows:[];
-  $("countAccess").textContent=data.filter(x=>x.active_access).length;
+  const s=(Array.isArray(stats)?stats[0]:stats)||{};
+  const duplicates=Array.isArray(dups)?dups:[];
+  $("countAccess").textContent=Number(s.active_accesses||0);
+  $("accessStats").innerHTML=[
+    '<div class="stat"><b>'+Number(s.active_accesses||0)+'</b><span>accès actifs</span></div>',
+    '<div class="stat"><b>'+Number(s.total_authorizations||0)+'</b><span>accès autorisés</span></div>',
+    '<div class="stat"><b>'+Number(s.used_accesses||0)+'</b><span>accès utilisés</span></div>',
+    '<div class="stat"><b>'+Number(s.duplicate_people||0)+'</b><span>doublons</span></div>'
+  ].join("");
+  $("accessDuplicates").innerHTML=duplicates.length?
+    '<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ Doublons détectés</strong><div class="meta" style="margin:6px 0 10px">Plusieurs codes d’accès portent le même nom.</div>'+duplicates.map(x=>'<div class="item" style="margin-top:8px;padding:10px"><strong>'+esc(x.person_name)+'</strong> · '+Number(x.access_count)+' accès<div class="access-link" style="margin-top:7px">'+esc(x.access_codes)+'</div></div>').join("")+'</div>'
+    :'<div class="panel" style="background:#eaf8f0;border-color:#c8e8d2"><strong>✅ Aucun doublon détecté.</strong><div class="meta">Chaque nom correspond actuellement à un seul accès.</div></div>';
   $("accessList").innerHTML=data.length?data.map(x=>{
     const url=accessUrl(x.access_code);
-    return '<article class="item"><div class="meta">'+date(x.access_created_at)+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div><div><strong>'+esc(x.person_name)+'</strong> · <span class="badge">'+(x.active_access?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin_access?'<span class="access-admin-badge">ADMIN</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.active_access)+')">'+(x.active_access?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin_access)+')">'+(x.is_admin_access?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div></article>';
+    return '<article class="item"><div class="meta">'+date(x.last_authorized_at||x.created_at)+(x.authorization_count?' · '+Number(x.authorization_count)+' accès autorisé(s)': ' · jamais utilisé')+'</div><div><strong>'+esc(x.person_name)+'</strong> · <span class="badge">'+(x.active_access?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin_access?'<span class="access-admin-badge">ADMIN</span>':"")+(Number(x.duplicate_count_for_name)>1?'<span class="access-admin-badge" style="background:#fff0d8;color:#9a5b00">DOUBLON</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.active_access)+')">'+(x.active_access?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin_access)+')">'+(x.is_admin_access?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div></article>';
   }).join(""):empty("Aucun accès créé.");
  }catch(e){
   $("accessList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ SQL des accès à actualiser</strong><div class="message">Exécute la dernière version de <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase, puis recharge cette page.</div><div class="meta" style="margin-top:8px">'+esc(e?.message||"Erreur inconnue")+'</div></div>';
