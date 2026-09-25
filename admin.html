@@ -474,7 +474,7 @@ async function copyHydra(index){
   try{
     const cfg=await getBirthdayConfig(); const p=cfg.murder_party?.players?.[index];
     if(!p)return;
-    const text=[\"DOSSIER HYDRA\",\"Nom : \"+p.name,\"Rôle : \"+p.role,\"Fonction : \"+p.function,\"Document spécial : \"+p.special,\"Fragment IA : \"+p.fragment].join("\n");
+    const text=["DOSSIER HYDRA","Nom : "+p.name,"Rôle : "+p.role,"Fonction : "+p.function,"Document spécial : "+p.special,"Fragment IA : "+p.fragment].join("\n");
     await navigator.clipboard?.writeText(text);
     toast("Dossier de "+p.name+" copié.");
   }catch(e){toast(e.message)}
