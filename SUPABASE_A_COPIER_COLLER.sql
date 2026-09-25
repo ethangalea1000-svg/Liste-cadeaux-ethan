@@ -1783,9 +1783,7 @@ begin
     'is_admin', v_is_admin
   );
 end;
-$;
-
-grant execute on function public.authorize_list_access(text) to anon;
+$;grant execute on function public.authorize_list_access(text) to anon;
 
 drop function if exists public.get_private_gifts(text);
 
