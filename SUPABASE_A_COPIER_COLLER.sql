@@ -2732,6 +2732,25 @@ $birthdayinteraction$;
 
 grant execute on function public.submit_birthday_interaction(text,text,jsonb) to anon;
 
+create or replace function public.get_birthday_interactions(p_type text)
+returns table(
+  visitor_name text,
+  payload jsonb,
+  created_at timestamptz
+)
+language sql
+security definer
+set search_path=public
+as $birthdaypublic$
+  select visitor_name,payload,created_at
+  from public.birthday_interactions
+  where interaction_type=trim(p_type)
+  order by created_at desc
+  limit 500;
+$birthdaypublic$;
+
+grant execute on function public.get_birthday_interactions(text) to anon;
+
 create or replace function public.admin_list_birthday_interactions()
 returns table(
   id bigint,
