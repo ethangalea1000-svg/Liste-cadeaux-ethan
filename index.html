@@ -563,6 +563,7 @@ async function unlockSite(code){
   code=String(code||"").trim();
   if(!code){accessStatus.textContent="Entre ton code d’invitation.";return false}
   accessStatus.textContent="Vérification du code…";
+  let stage="autorisation";
   try{
     const r=await privateRpc("authorize_list_access",{p_code:code});
     const data=await r.json().catch(()=>null);
@@ -588,6 +589,7 @@ async function unlockSite(code){
     accessCode=code;
     accessLabel=data.label||"";
     authorized=true;
+    stage="chargement de la liste";
     const loaded=await loadGiftCatalog();
     if(!loaded){lockSite("La liste est momentanément indisponible.");return false;}
     sessionStorage.setItem("birthday_list_access",accessCode);
@@ -602,9 +604,13 @@ async function unlockSite(code){
     startPrivateRefresh();
     return true;
   }catch(err){
-    console.error("unlockSite",err);
+    console.error("unlockSite",stage,err);
     sessionStorage.removeItem("birthday_list_access");
-    accessStatus.textContent="❌ Impossible de joindre le serveur Supabase. Vérifie ta connexion puis réessaie.";
+    const detail=err&&err.name==="TypeError"&&String(err.message||"").toLowerCase().includes("fetch")
+      ? "Erreur réseau lors de "+stage+"."
+      : "Erreur pendant "+stage+".";
+    accessStatus.textContent="❌ "+detail+" Ouvre la console du navigateur si le problème persiste.";
+
     const change=document.getElementById("changeCodeBtn");
     if(change)change.hidden=false;
     return false;
