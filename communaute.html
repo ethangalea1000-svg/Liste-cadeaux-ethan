@@ -3,6 +3,47 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+  (function(){
+    const key = "__scroll_position__:" + location.pathname + location.search;
+    try{ history.scrollRestoration = "manual"; }catch(_){}
+    let saveFrame = 0;
+    function saveScroll(){
+      if(saveFrame) return;
+      saveFrame = requestAnimationFrame(()=>{
+        saveFrame = 0;
+        try{
+          sessionStorage.setItem(key, JSON.stringify({
+            x: window.scrollX,
+            y: window.scrollY
+          }));
+        }catch(_){}
+      });
+    }
+    function restoreScroll(){
+      try{
+        const raw = sessionStorage.getItem(key);
+        if(!raw) return;
+        const pos = JSON.parse(raw);
+        const restore = () => window.scrollTo({
+          left: Number(pos.x)||0,
+          top: Number(pos.y)||0,
+          behavior: "auto"
+        });
+        restore();
+        requestAnimationFrame(restore);
+        setTimeout(restore, 150);
+        setTimeout(restore, 500);
+      }catch(_){}
+    }
+    window.addEventListener("scroll", saveScroll, {passive:true});
+    window.addEventListener("beforeunload", saveScroll);
+    window.addEventListener("pagehide", saveScroll);
+    window.addEventListener("pageshow", restoreScroll);
+    document.addEventListener("DOMContentLoaded", restoreScroll);
+    window.addEventListener("load", restoreScroll);
+  })();
+</script>
 <title>Communauté — La liste d’Ethan</title>
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#6b7280;--line:#e6e8ef;--accent:#5b5ce2;--shadow:0 10px 30px rgba(20,25,50,.08)}
