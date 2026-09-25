@@ -313,7 +313,13 @@ async function createAccess(e){
  try{await rpc("admin_create_access_code",{p_label:$("accessLabel").value.trim(),p_code:$("accessCode").value.trim()});$("accessForm").reset();toast("Accès créé.");loadAccessCodes()}catch(e){toast(e.message)}
 }
 function generateAccessCode(){
- const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let code="ETHAN-";for(let i=0;i<8;i++)code+=chars[Math.floor(Math.random()*chars.length)];$("accessCode").value=code;
+ const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+ const length=20;
+ const random=new Uint32Array(length);
+ crypto.getRandomValues(random);
+ let code="ETHAN-";
+ for(let i=0;i<length;i++) code+=chars[random[i]%chars.length];
+ $("accessCode").value=code;
 }
 async function toggleAccess(id,active){
  try{await rpc("admin_set_access_code_status",{p_id:id,p_active:active});toast(active?"Accès activé.":"Accès désactivé.");loadAccessCodes()}catch(e){toast(e.message)}
