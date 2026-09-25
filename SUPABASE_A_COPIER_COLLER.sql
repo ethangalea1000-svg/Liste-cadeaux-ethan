@@ -2670,16 +2670,46 @@ revoke all on public.birthday_interactions from anon, authenticated;
 
 create or replace function public.get_birthday_config()
 returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $adminbirthdayconfig$
+begin
+  perform public.assert_admin_header();
+  return (
+    select coalesce(settings,'{}'::jsonb)
+    from public.birthday_config
+    where id=1
+  );
+end;
+$adminbirthdayconfig$;
+
+grant execute on function public.get_birthday_config() to anon;
+
+create or replace function public.get_birthday_public_config()
+returns jsonb
 language sql
 security definer
 set search_path=public
-as $$
-  select coalesce(settings,'{}'::jsonb)
+as $birthdaypublicconfig$
+  select jsonb_strip_nulls(
+    coalesce(settings,'{}'::jsonb)
+    - 'murder_party'
+    - 'schedule'
+  ) ||
+  jsonb_build_object(
+    'schedule',
+      case
+        when coalesce((settings->>'schedule_visible')::boolean,false)
+        then coalesce(settings->'schedule','[]'::jsonb)
+        else '[]'::jsonb
+      end
+  )
   from public.birthday_config
   where id=1;
-$$;
+$birthdaypublicconfig$;
 
-grant execute on function public.get_birthday_config() to anon;
+grant execute on function public.get_birthday_public_config() to anon;
 
 create or replace function public.admin_save_birthday_config(p_settings jsonb)
 returns boolean
