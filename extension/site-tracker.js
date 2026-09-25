@@ -1,6 +1,6 @@
 (() => {
   const key="events";
-  const extensionVersion="1.1.0";
+  const extensionVersion="1.2.0";
 
   async function ids(){
     const local=await chrome.storage.local.get({installationId:null});
