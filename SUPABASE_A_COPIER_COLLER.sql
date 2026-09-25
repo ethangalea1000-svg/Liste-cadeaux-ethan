@@ -1696,7 +1696,7 @@ returns jsonb
 language plpgsql
 security definer
 set search_path = public
-as $
+as $auth$
 declare
   v_id bigint;
   v_label text;
