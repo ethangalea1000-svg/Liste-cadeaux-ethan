@@ -2914,7 +2914,7 @@ where id=1;
 update public.site_settings
 set settings = settings || jsonb_build_object(
   'ui',
-  coalesce(settings->'ui','{}'::jsonb) || jsonb_build_object(
+  jsonb_build_object(
     'nav_community','💬 Communauté',
     'nav_privacy','🔒 Confidentialité',
     'birthday_countdown_title','🎂 Compte à rebours',
@@ -2939,67 +2939,20 @@ set settings = settings || jsonb_build_object(
     'gift_compare_label','🔎 Comparer les prix et vérifier les sites disponibles',
     'gift_ai_label','🤖 Chercher sur le Web avec l’IA',
     'gift_image_label','🖼️ Chercher les images liées',
+    'gift_search_title','🛒 Recherche intelligente',
+    'gift_image_auto_label','Image auto · nom + légende',
     'gift_offer_note','Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.',
     'contribution_reduce_label','Réduire',
-    'contribution_remove_all_label','Retirer tout'
-  )
+    'contribution_remove_all_label','Retirer tout',
+    'birthday_wall_placeholder','Écris un message…',
+    'birthday_wall_submit','Publier',
+    'birthday_gallery_url_placeholder','URL de ta photo',
+    'birthday_gallery_caption_placeholder','Légende (optionnel)',
+    'birthday_gallery_submit','Ajouter ma photo'
+  ) || coalesce(settings->'ui','{}'::jsonb)
 ),
     updated_at = now()
 where id=1;
-
-drop function if exists public.get_public_site_settings();
-create or replace function public.get_public_site_settings()
-returns jsonb
-language sql
-security definer
-set search_path=public
-as $publicsitesettings$
-  select coalesce(settings,'{}'::jsonb)
-  from public.site_settings
-  where id=1;
-$publicsitesettings$;
-
-grant execute on function public.get_public_site_settings() to anon;
-
-drop function if exists public.get_site_settings();
-create or replace function public.get_site_settings()
-returns jsonb
-language plpgsql
-security definer
-set search_path=public
-as $adminsitesettings$
-begin
-  perform public.assert_admin_header();
-  return (
-    select coalesce(settings,'{}'::jsonb)
-    from public.site_settings
-    where id=1
-  );
-end;
-$adminsitesettings$;
-
-grant execute on function public.get_site_settings() to anon;
-
-drop function if exists public.admin_save_site_settings(jsonb);
-create or replace function public.admin_save_site_settings(p_settings jsonb)
-returns boolean
-language plpgsql
-security definer
-set search_path=public
-as $adminsavesitesettings$
-begin
-  perform public.assert_admin_header();
-  if p_settings is null or jsonb_typeof(p_settings) <> 'object' then
-    raise exception 'Configuration du site invalide.';
-  end if;
-  update public.site_settings
-  set settings=p_settings, updated_at=now()
-  where id=1;
-  return found;
-end;
-$adminsavesitesettings$;
-
-grant execute on function public.admin_save_site_settings(jsonb) to anon;
 
 -- ============================================================
 -- DOSSIERS HYDRA : enrichissement + import des scénarios
