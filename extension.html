@@ -6,27 +6,49 @@
 <title>🧩 Extension — Liste d’Ethan</title>
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#151827;--muted:#687084;--line:#e3e7ef;--accent:#5856d6;--shadow:0 10px 30px rgba(20,25,50,.08)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.5}.wrap{max-width:800px;margin:auto;padding:20px}.hero{background:linear-gradient(135deg,#17192a,#393b73);color:#fff;padding:30px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}h1{margin:8px 0}.btn{display:inline-block;padding:11px 14px;border-radius:11px;background:var(--accent);color:#fff;text-decoration:none;font-weight:800;margin:5px 5px 0 0}.note{background:#eef0ff;border:1px solid #dfe1ff;border-radius:12px;padding:12px}.step{padding:10px 0;border-top:1px solid var(--line)}code{background:#f1f2f6;padding:2px 5px;border-radius:6px}small{color:var(--muted)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.5}.wrap{max-width:850px;margin:auto;padding:20px}.hero{background:linear-gradient(135deg,#17192a,#393b73);color:#fff;padding:30px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}h1{margin:8px 0}.btn{display:inline-block;padding:11px 14px;border-radius:11px;background:var(--accent);color:#fff;text-decoration:none;font-weight:800;margin:5px 5px 0 0;border:0;cursor:pointer}.secondary{background:#eef0ff;color:#30338a}.note{background:#eef0ff;border:1px solid #dfe1ff;border-radius:12px;padding:12px}.cookie{background:#fff8e6;border:1px solid #f0d58c}.step{padding:10px 0;border-top:1px solid var(--line)}code{background:#f1f2f6;padding:2px 5px;border-radius:6px}small{color:var(--muted)}.install-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.install-card{border:1px solid var(--line);border-radius:14px;padding:14px}.hidden{display:none}
 </style>
 </head>
 <body>
-<header class="hero"><div class="wrap"><a href="index.html" style="color:#fff">← Retour à la liste</a><h1>🧩 Extension Chrome</h1><div>« Mes données — Liste d’Ethan »</div></div></header>
+<header class="hero"><div class="wrap"><a href="index.html" style="color:#fff">← Retour à la liste</a><h1>🧩 Extension Chrome / Edge</h1><div>« Mes données — Liste d’Ethan » · version 1.1.0</div></div></header>
 <main class="wrap">
 <section class="card">
-<h2>À quoi sert-elle ?</h2>
-<p>Cette extension enregistre localement les actions effectuées sur le site de la liste d’Ethan : visites de pages et clics sur les boutons/liens. Elle permet ensuite d’exporter ces événements en JSON.</p>
-<div class="note"><strong>Confidentialité :</strong> elle ne surveille pas Google, les autres sites, les mots de passe, les messages privés ou toute l’activité générale d’une personne.</div>
+<h2>⚡ Installation simplifiée</h2>
+<p id="browserHint">Détection de ton navigateur…</p>
+<div class="install-grid">
+  <div class="install-card"><strong>1. Télécharger</strong><p>Le dépôt complet contient directement le dossier de l’extension.</p><a class="btn" href="https://github.com/ethangalea1000-svg/Liste-cadeaux-ethan/archive/refs/heads/main.zip" target="_blank" rel="noopener">Télécharger le ZIP</a></div>
+  <div class="install-card"><strong>2. Ouvrir les extensions</strong><p id="extensionUrlText">Ouvre la page officielle de gestion des extensions.</p><button class="btn" id="openExtensions">Ouvrir</button></div>
+</div>
+<div class="note" style="margin-top:12px"><strong>Après extraction :</strong> active <strong>Mode développeur</strong> → <strong>Charger l’extension non empaquetée</strong> → choisis le dossier <code>extension</code>.</div>
 </section>
+
 <section class="card">
-<h2>Installer dans Chrome / Edge</h2>
-<div class="step"><strong>1.</strong> Télécharge ou clone le dépôt GitHub de la liste.</div>
-<div class="step"><strong>2.</strong> Ouvre <code>chrome://extensions</code>.</div>
+<h2>À quoi sert-elle ?</h2>
+<p>Elle enregistre localement les pages et clics liés au site de la liste d’Ethan. Tu peux activer une collecte détaillée de quelques informations techniques non sensibles depuis le popup.</p>
+<div class="note"><strong>Elle ne collecte pas :</strong> mots de passe, codes d’accès, contenu des champs de formulaire, messages privés ou activité sur Google et les autres sites.</div>
+</section>
+
+<section class="card cookie">
+<h2>🍪 Demande de cookies</h2>
+<p>L’extension affiche une demande de préférence dans son popup. <strong>Cette demande ne crée aucun cookie réel et n’active aucun suivi publicitaire :</strong> le choix est uniquement conservé dans <code>chrome.storage.local</code>.</p>
+</section>
+
+<section class="card">
+<h2>📊 Données disponibles</h2>
+<p>Par défaut : date/heure, page visitée sur le site et type d’action. Avec la collecte détaillée : titre de page, langue, fuseau horaire, taille d’écran et de fenêtre, thème clair/sombre, statut en ligne et quelques informations de connexion disponibles par le navigateur.</p>
+<p><strong>Tout reste sur l’appareil.</strong> Le bouton « Exporter mes données » permet de vérifier exactement ce que l’extension a enregistré.</p>
+</section>
+
+<section class="card">
+<h2>🛠️ Étapes manuelles</h2>
+<div class="step"><strong>1.</strong> Télécharge le ZIP ci-dessus et extrais-le.</div>
+<div class="step"><strong>2.</strong> Ouvre la page des extensions.</div>
 <div class="step"><strong>3.</strong> Active <strong>Mode développeur</strong>.</div>
 <div class="step"><strong>4.</strong> Clique sur <strong>Charger l’extension non empaquetée</strong>.</div>
-<div class="step"><strong>5.</strong> Sélectionne le dossier <code>extension</code> du dépôt.</div>
-<div class="step"><strong>6.</strong> Épingle l’extension avec l’icône puzzle.</div>
-<a class="btn" href="https://github.com/ethangalea1000-svg/Liste-cadeaux-ethan/tree/main/extension" target="_blank" rel="noopener">Ouvrir le dossier GitHub</a>
+<div class="step"><strong>5.</strong> Sélectionne le dossier <code>extension</code>.</div>
+<div class="step"><strong>6.</strong> Épingle « Mes données — Liste d’Ethan » avec l’icône puzzle.</div>
 </section>
+
 <section class="card">
 <h2>Mes données Google</h2>
 <p>Pour récupérer les données de ton propre compte Google, utilise Google Takeout.</p>
@@ -34,5 +56,14 @@
 </section>
 </main>
 <footer class="wrap"><small>Interface extension • 2026.09.25</small></footer>
+<script>
+const ua=navigator.userAgent;
+const isEdge=/Edg\//.test(ua);
+const isChrome=/Chrome\//.test(ua)&&!isEdge;
+const url=isEdge?"edge://extensions/":"chrome://extensions/";
+document.getElementById("browserHint").textContent=isEdge?"Navigateur détecté : Microsoft Edge. Le bouton ci-dessous ouvre sa page d’extensions.":isChrome?"Navigateur détecté : Google Chrome. Le bouton ci-dessous ouvre sa page d’extensions.":"Navigateur Chromium détecté ou navigateur non identifié. Utilise Chrome/Edge pour l’installation la plus simple.";
+document.getElementById("extensionUrlText").textContent=url;
+document.getElementById("openExtensions").addEventListener("click",()=>{location.href=url});
+</script>
 </body>
 </html>
