@@ -3,6 +3,47 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+  (function(){
+    const key = "__scroll_position__:" + location.pathname + location.search;
+    try{ history.scrollRestoration = "manual"; }catch(_){}
+    let saveFrame = 0;
+    function saveScroll(){
+      if(saveFrame) return;
+      saveFrame = requestAnimationFrame(()=>{
+        saveFrame = 0;
+        try{
+          sessionStorage.setItem(key, JSON.stringify({
+            x: window.scrollX,
+            y: window.scrollY
+          }));
+        }catch(_){}
+      });
+    }
+    function restoreScroll(){
+      try{
+        const raw = sessionStorage.getItem(key);
+        if(!raw) return;
+        const pos = JSON.parse(raw);
+        const restore = () => window.scrollTo({
+          left: Number(pos.x)||0,
+          top: Number(pos.y)||0,
+          behavior: "auto"
+        });
+        restore();
+        requestAnimationFrame(restore);
+        setTimeout(restore, 150);
+        setTimeout(restore, 500);
+      }catch(_){}
+    }
+    window.addEventListener("scroll", saveScroll, {passive:true});
+    window.addEventListener("beforeunload", saveScroll);
+    window.addEventListener("pagehide", saveScroll);
+    window.addEventListener("pageshow", restoreScroll);
+    document.addEventListener("DOMContentLoaded", restoreScroll);
+    window.addEventListener("load", restoreScroll);
+  })();
+</script>
 <title>Centre de gestion — Liste d’Ethan</title>
 <style>:root{--radius:18px}:root{--bg:#f4f6fb;--card:#fff;--card2:#f8f9fc;--text:#161a2b;--muted:#687084;--line:#e3e7ef;--accent:#5856d6;--ok:#14804a;--okbg:#e8f7ef;--danger:#b33a3a;--dangerbg:#fff0f0;--bluebg:#eef2ff;--shadow:0 10px 35px rgba(25,30,60,.08)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.wrap{max-width:1100px;margin:auto;padding:0 16px}
