@@ -2955,6 +2955,78 @@ set settings = settings || jsonb_build_object(
 where id=1;
 
 -- ============================================================
+-- LECTURE / ÉCRITURE DE LA CONFIGURATION GLOBALE DU SITE
+-- ============================================================
+
+create or replace function public.get_public_site_settings()
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $sitepublic$
+declare
+  v_settings jsonb;
+begin
+  select settings into v_settings
+  from public.site_settings
+  where id=1;
+
+  return coalesce(v_settings,'{}'::jsonb);
+end;
+$sitepublic$;
+
+grant execute on function public.get_public_site_settings() to anon;
+
+
+create or replace function public.get_site_settings()
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $siteadmin$
+declare
+  v_settings jsonb;
+begin
+  perform public.assert_admin_header();
+
+  select settings into v_settings
+  from public.site_settings
+  where id=1
+  for update;
+
+  return coalesce(v_settings,'{}'::jsonb);
+end;
+$siteadmin$;
+
+grant execute on function public.get_site_settings() to anon;
+
+
+create or replace function public.admin_save_site_settings(p_settings jsonb)
+returns boolean
+language plpgsql
+security definer
+set search_path=public
+as $sitesave$
+begin
+  perform public.assert_admin_header();
+
+  if p_settings is null or jsonb_typeof(p_settings) <> 'object' then
+    raise exception 'Configuration du site invalide.';
+  end if;
+
+  insert into public.site_settings(id,settings,updated_at)
+  values(1,p_settings,now())
+  on conflict(id) do update
+    set settings=excluded.settings,
+        updated_at=now();
+
+  return true;
+end;
+$sitesave$;
+
+grant execute on function public.admin_save_site_settings(jsonb) to anon;
+
+-- ============================================================
 -- DOSSIERS HYDRA : enrichissement + import des scénarios
 -- ============================================================
 
