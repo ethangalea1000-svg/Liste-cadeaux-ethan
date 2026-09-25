@@ -103,12 +103,78 @@
   .shop-links{grid-template-columns:1fr}
   .ai-images{grid-template-columns:1fr}
 }
+
+/* ===== Nouvelle interface application ===== */
+.private-ui{display:none}
+main.unlocked .private-ui{display:flex}
+.app-tabs{position:sticky;top:0;z-index:30;max-width:1100px;margin:0 auto 14px;padding:8px;border:1px solid var(--line);background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:0 10px 30px rgba(20,25,50,.08);gap:8px}
+.app-tab{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 14px;background:transparent;color:var(--text);border:1px solid transparent;border-radius:13px;text-align:left}
+.app-tab:hover{background:#f3f4fb}
+.app-tab.is-active{background:var(--accent);color:#fff;box-shadow:0 8px 20px rgba(91,92,226,.22)}
+.app-tab-icon{font-size:19px;line-height:1}
+.app-tab b,.app-tab small{display:block}
+.app-tab b{font-size:13px}
+.app-tab small{font-size:11px;opacity:.72;margin-top:2px}
+.app-tab.is-active small{opacity:.86}
+.view-helper{max-width:1100px;margin:0 auto 14px;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px;border-radius:14px;background:#fff;border:1px solid var(--line);box-shadow:0 6px 18px rgba(20,25,50,.05)}
+.view-helper strong{display:block;font-size:15px}
+.view-helper span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.view-top{background:#f0f1f6;color:#303345;padding:8px 11px;border-radius:10px}
+[data-app-view].app-view-hidden{display:none!important}
+main.unlocked .app-tabs + .view-helper{display:flex}
+main.unlocked .app-tabs{margin-top:0}
+.hero{position:relative}
+.hero .wrap{position:relative}
+.hero{padding-bottom:30px}
+.hero .actions{margin-top:18px}
+.hero .actions:after{content:"";flex:1;min-width:120px}
+main.unlocked{padding-top:18px}
+main.unlocked>.foot{margin-top:24px}
+#accessGate{margin-bottom:18px}
+#grid{scroll-margin-top:100px}
+.birthday-section,.fundraisers-main,.forms{scroll-margin-top:100px}
+@media(max-width:780px){
+  .app-tabs{position:sticky;top:8px;border-radius:15px;gap:5px;padding:6px}
+  .app-tab{padding:10px 7px;gap:0;justify-content:center}
+  .app-tab-icon{font-size:18px}
+  .app-tab b{font-size:11px}
+  .app-tab small{display:none}
+  .view-helper{padding:11px 12px}
+  .view-helper span{max-width:260px}
+}
+@media(max-width:480px){
+  main.unlocked{padding-top:10px}
+  .app-tabs{overflow:auto;justify-content:stretch}
+  .app-tab{min-width:82px}
+  .view-top{display:none}
+}
 </style></head>
 <body>
 <header class="hero"><div class="wrap"><nav class="topnav"><a id="navCommunity" href="communaute.html">💬 Communauté</a><a id="navPrivacy" href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag" id="siteTag">🎁 Noël & Anniversaire 2026</span><h1 id="siteHeroTitle">La liste d’Ethan</h1><p id="siteHeroDescription">Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button></div></div></header>
 <main class="wrap locked" id="mainContent"><section id="accessGate" class="access-gate"><div class="access-card"><h2 id="accessTitle">🔐 Liste privée</h2><p id="accessText">Cette liste est réservée aux personnes autorisées par Ethan. Entre ton code d’invitation pour afficher les cadeaux.</p><form id="listAccessForm" class="access-form"><input id="listAccessCode" type="password" inputmode="text" autocomplete="off" maxlength="64" placeholder="Code d’invitation *" required><button id="accessButton" type="submit">Accéder à la liste</button></form><div id="accessStatus" class="access-status" aria-live="polite"></div><div id="accessNote" class="access-note">Le contenu des cadeaux n’est chargé qu’après vérification du code.</div></div></section>
-<section class="toolbar"><input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats"><div class="stat"><b id="countAll">0</b><span id="countAllLabel">cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span id="countAvailableLabel">disponibles</span></div><div class="stat"><b id="countReserved">0</b><span id="countReservedLabel">réservés au total</span></div></section><section class="grid" id="grid"></section>
-<section class="birthday-section" id="birthdayCountdownSection">
+<nav class="app-tabs private-ui" id="appTabs" aria-label="Navigation principale">
+  <button class="app-tab is-active" type="button" data-view-target="liste">
+    <span class="app-tab-icon">🎁</span><span><b>Liste</b><small>Cadeaux</small></span>
+  </button>
+  <button class="app-tab" type="button" data-view-target="anniversaire">
+    <span class="app-tab-icon">🎂</span><span><b>Anniversaire</b><small>Jeu & fête</small></span>
+  </button>
+  <button class="app-tab" type="button" data-view-target="participer">
+    <span class="app-tab-icon">💶</span><span><b>Participer</b><small>Cagnottes</small></span>
+  </button>
+  <button class="app-tab" type="button" data-view-target="communaute">
+    <span class="app-tab-icon">💬</span><span><b>Communauté</b><small>Messages & idées</small></span>
+  </button>
+</nav>
+<div class="view-helper private-ui" id="viewHelper">
+  <div>
+    <strong id="viewHelperTitle">Ta liste de cadeaux</strong>
+    <span id="viewHelperText">Recherche un cadeau, filtre par catégorie et réserve ce qui te plaît.</span>
+  </div>
+  <button type="button" class="view-top" id="viewTopBtn">↑ Haut</button>
+</div>
+<section class="toolbar"<input id="search" type="search" placeholder="Rechercher un cadeau…"><select id="category"><option value="all">Toutes les catégories</option></select></section><section class="stats" data-app-view="liste"><div class="stat"><b id="countAll">0</b><span id="countAllLabel">cadeaux</span></div><div class="stat"><b id="countAvailable">0</b><span id="countAvailableLabel">disponibles</span></div><div class="stat"><b id="countReserved">0</b><span id="countReservedLabel">réservés au total</span></div></section><section class="grid" id="grid" data-app-view="liste"></section>
+<section class="birthday-section" id="birthdayCountdownSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayCountdownSectionTitle">🎂 Compte à rebours</h2>
     <div id="birthdayCountdownTitle" class="form-note">Avant l’anniversaire d’Ethan</div>
@@ -116,42 +182,42 @@
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayModeSection">
+<section class="birthday-section birthday-hidden" id="birthdayModeSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayModeSectionTitle">🎉 Mode anniversaire</h2>
     <div id="birthdayModeContent"></div>
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayScheduleSection">
+<section class="birthday-section birthday-hidden" id="birthdayScheduleSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayScheduleSectionTitle">🗓️ Programme de la journée</h2>
     <div id="birthdayScheduleList" class="birthday-list"></div>
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayQuizSection">
+<section class="birthday-section birthday-hidden" id="birthdayQuizSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayQuizTitle">🧠 Qui connaît Ethan ?</h2>
     <div id="birthdayQuizBody"></div>
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayPollSection">
+<section class="birthday-section birthday-hidden" id="birthdayPollSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayPollTitle">🗳️ Vote en direct</h2>
     <div id="birthdayPollBody"></div>
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayChallengesSection">
+<section class="birthday-section birthday-hidden" id="birthdayChallengesSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayChallengesSectionTitle">🎯 Défis secrets</h2>
     <div id="birthdayChallengesList" class="birthday-list"></div>
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayWallSection">
+<section class="birthday-section birthday-hidden" id="birthdayWallSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayWallTitle">💬 Mur des messages</h2>
     <form id="birthdayWallForm" class="form-grid">
@@ -162,7 +228,7 @@
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayGallerySection">
+<section class="birthday-section birthday-hidden" id="birthdayGallerySection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayGallerySectionTitle">📸 Galerie de la fête</h2>
     <div id="birthdayGalleryList" class="birthday-gallery"></div>
@@ -175,20 +241,20 @@
   </div>
 </section>
 
-<section class="birthday-section birthday-hidden" id="birthdayMemoriesSection">
+<section class="birthday-section birthday-hidden" id="birthdayMemoriesSection" data-app-view="anniversaire">
   <div class="birthday-card">
     <h2 id="birthdayMemoriesTitle">📖 Souvenirs</h2>
     <p id="birthdayMemoriesIntro" class="form-note"></p>
     <div id="birthdayMemoryStats" class="memory-stats"></div>
   </div>
 </section>
- <section class="birthday-section birthday-hidden" id="birthdayHydraSection">
+ <section class="birthday-section birthday-hidden" id="birthdayHydraSection" data-app-view="anniversaire">
    <div class="birthday-card">
      <h2 id="birthdayHydraSectionTitle">🕵️ Mon dossier Hydra</h2>
      <div id="birthdayHydraMeta" class="form-note"></div>
      <div id="birthdayHydraBody" class="birthday-list"></div>
    </div>
- </section><section class="fundraisers-main">
+ </section><section class="fundraisers-main" data-app-view="participer">
 <div class="panel">
   <h2>🎯 Cagnottes</h2
   <p id="fundraisersIntro">Les cagnottes proposées restent en attente jusqu’à validation par Ethan.</p>
@@ -202,7 +268,7 @@
   </form>
 </div>
 </section>
-<section class="forms">
+<section class="forms" data-app-view="participer">
 
 <div class="panel">
   <h2>💡 Proposer un cadeau</h2>
@@ -233,7 +299,7 @@
   <ul class="mini-list" id="contribList"></ul>
 </div>
 </section>
-<section class="forms">
+<section class="forms" data-app-view="communaute">
 <div class="panel">
 <h2>👤 Me présenter</h2>
 <p>Tu viens sur le site ? Tu peux créer une petite fiche pour qu’Ethan sache plus facilement qui tu es.</p>
@@ -264,9 +330,9 @@
 </form>
 </div>
 </section>
-<section class="forms">
+<section class="forms" data-app-view="communaute">
 <div class="panel">
-<h2>💡 Boîte à idées</h2>
+<h2>💡 Boîte à idées</h2
 <p>Une idée pour améliorer le site ? Elle sera visible avec ton prénom.</p>
 <form id="ideaForm" class="form-grid">
 <div class="identity-badge">👤 Identité automatique : <span id="ideaNameAuto"></span></div>
@@ -383,6 +449,50 @@ function imageSearchUrl(g){
 let reservations={};let loadSeq=0;
 const mainContent=document.getElementById("mainContent"),accessGate=document.getElementById("accessGate"),accessForm=document.getElementById("listAccessForm"),accessInput=document.getElementById("listAccessCode"),accessStatus=document.getElementById("accessStatus");
 const grid=document.getElementById("grid"),search=document.getElementById("search"),category=document.getElementById("category"),toast=document.getElementById("toast");
+
+(function initAppNavigation(){
+  const root=document.getElementById("mainContent");
+  const tabs=[...document.querySelectorAll("[data-view-target]")];
+  const blocks=[...document.querySelectorAll("[data-app-view]")];
+  const helperTitle=document.getElementById("viewHelperTitle");
+  const helperText=document.getElementById("viewHelperText");
+  const topBtn=document.getElementById("viewTopBtn");
+  const info={
+    liste:{title:"Ta liste de cadeaux",text:"Recherche un cadeau, filtre par catégorie et réserve ce qui te plaît."},
+    anniversaire:{title:"Anniversaire d’Ethan",text:"Retrouve le compte à rebours, les jeux, la galerie, les souvenirs et ton dossier Hydra."},
+    participer:{title:"Participer",text:"Gère les cagnottes, tes participations et les propositions de cadeaux."},
+    communaute:{title:"Communauté",text:"Présente-toi, écris à Ethan et partage des idées pour améliorer le site."}
+  };
+  function activate(view,restore=false){
+    blocks.forEach(el=>el.classList.toggle("app-view-hidden",el.dataset.appView!==view));
+    tabs.forEach(tab=>tab.classList.toggle("is-active",tab.dataset.viewTarget===view));
+    const meta=info[view]||info.liste;
+    if(helperTitle) helperTitle.textContent=meta.title;
+    if(helperText) helperText.textContent=meta.text;
+    try{sessionStorage.setItem("__liste_ethan_view",view)}catch(_){ }
+    if(!restore) window.scrollTo({top:0,behavior:"smooth"});
+  }
+  tabs.forEach(tab=>tab.addEventListener("click",()=>activate(tab.dataset.viewTarget)));
+  if(topBtn) topBtn.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+  window.addEventListener("hashchange",()=>{
+    const view=location.hash.replace("#","");
+    if(info[view]) activate(view,true);
+  });
+  window.__activateAppView=activate;
+  document.addEventListener("DOMContentLoaded",()=>{
+    let view=location.hash.replace("#","");
+    if(!info[view]){try{view=sessionStorage.getItem("__liste_ethan_view")||"liste"}catch(_){view="liste"}}
+    activate(info[view]?view:"liste",true);
+  });
+})();
+
+(function appNavUnlockObserver(){
+  const main=document.getElementById("mainContent");
+  if(!main)return;
+  const sync=()=>main.classList.toggle("unlocked",!main.classList.contains("locked"));
+  new MutationObserver(sync).observe(main,{attributes:true,attributeFilter:["class"]});
+  sync();
+})();
 function privateRpc(name,body){return fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)})}
 function currentVisitorName(){return String(accessLabel||"").trim()}
 function updateIdentityLabels(){
