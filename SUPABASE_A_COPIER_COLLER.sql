@@ -2596,4 +2596,164 @@ where id in ('journal-mickey','picsou-mickey-pack');
 notify pgrst,'reload schema';
 
 -- Schéma rechargé après les changements d'accès.
+
+-- ============================================================
+-- CENTRE ANNIVERSAIRE
+-- 1 compte à rebours, 2 mode anniversaire, 3 programme masqué
+-- par défaut, quiz, sondages, défis, mur, galerie, souvenirs.
+-- ============================================================
+
+create table if not exists public.birthday_config (
+  id bigint primary key default 1 check (id=1),
+  settings jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.birthday_config enable row level security;
+revoke all on public.birthday_config from anon, authenticated;
+
+insert into public.birthday_config(id,settings)
+values (
+  1,
+  jsonb_build_object(
+    'countdown_at','2026-12-23T00:00:00+01:00',
+    'birthday_mode',false,
+    'schedule_visible',false,
+    'schedule',jsonb_build_array(),
+    'quiz',jsonb_build_object('enabled',false,'title','Qui connaît Ethan ?','questions',jsonb_build_array()),
+    'poll',jsonb_build_object('enabled',false,'title','Que fait-on maintenant ?','options',jsonb_build_array()),
+    'challenges',jsonb_build_array(),
+    'wall',jsonb_build_object('enabled',false,'title','Mur des messages'),
+    'gallery',jsonb_build_object('enabled',false,'items',jsonb_build_array()),
+    'memories',jsonb_build_object('enabled',false,'title','Souvenirs de l’anniversaire','intro','','stats',jsonb_build_array()),
+    'murder_party',jsonb_build_object(
+      'enabled',false,
+      'title','Dossier Hydra — Murder Party',
+      'date','23 décembre 2026',
+      'players',jsonb_build_array(
+        jsonb_build_object('name','Ethan','role','Chef Hydra','function','Coordinateur central, cerveau de l’enquête.','special','Ordre du Chef Hydra','fragment','Fragment IA 1 : Le protocole Hydra-Core a été déclenché avant l’incident.'),
+        jsonb_build_object('name','Serge','role','Patient Hydra','function','Patient chronique, témoin clé.','special','Dossier Médical Hydra','fragment','Fragment IA 2 : Traces Alpha détectées sur un sujet vivant.'),
+        jsonb_build_object('name','Silvie','role','Protectrice du Livre Ancien','function','Gardienne du secret, mémoire du livre.','special','Extrait du Livre Ancien','fragment','Fragment IA 3 : La page manquante contient l’identité réelle de la victime.'),
+        jsonb_build_object('name','Fabrice','role','Archiviste Numérique Hydra','function','Gestion des données et archives.','special','Dossier OSINT','fragment','Fragment IA 4 : Altération du fichier vidéo. Horodatage incohérent.'),
+        jsonb_build_object('name','Jean-Louis Pineau','role','Pilote de l’Île Flottante','function','Navigation et contrôle des déplacements.','special','Journal de Navigation','fragment','Fragment IA 5 : Déviation de trajectoire enregistrée à 21h52.'),
+        jsonb_build_object('name','Jean-Louis Meal','role','Espion Hydra','function','Infiltration, surveillance.','special','Ordre Secret Hydra','fragment','Fragment IA 6 : Un individu a été observé deux fois au même endroit.'),
+        jsonb_build_object('name','Cécile','role','Sentinelle Hydra','function','Observation, surveillance.','special','Rapport d’Observation','fragment','Fragment IA 7 : Silhouette identique détectée à 22h14.'),
+        jsonb_build_object('name','Annie','role','Matriarche Hydra','function','Mémoire familiale depuis 40 ans.','special','Mémoire Familiale','fragment','Fragment IA 8 : Les deux lignées ne forment qu’une seule famille.'),
+        jsonb_build_object('name','Max','role','Agent OSINT','function','Analyse numérique, métadonnées.','special','Message Crypté','fragment','Fragment IA 9 : Il n’est pas celui que vous croyez.'),
+        jsonb_build_object('name','Yoan','role','Saboteur Repenti','function','Manipulation technique.','special','Schéma de Sabotage','fragment','Fragment IA 10 : Sabotage mineur enregistré. Impact imprévu.'),
+        jsonb_build_object('name','Marie-Françoise','role','Gardienne des Bijoux Hydra','function','Gestion des bijoux traceurs.','special','Inventaire des Bijoux Hydra','fragment','Fragment IA 11 : Bijou 3 : signal détecté près d’un sujet instable.'),
+        jsonb_build_object('name','Claudie','role','Psychologue Hydra','function','Profilage mental, analyse comportementale.','special','Profil Mental Hydra','fragment','Fragment IA 12 : Comportement altéré après exposition Omega.'),
+        jsonb_build_object('name','Andrea','role','Protectrice des Animaux Hydra','function','Gestion et interprétation de Milo.','special','Rapport Milo','fragment','Fragment IA 13 : Zone 3 : traces Omega détectées par unité biologique.'),
+        jsonb_build_object('name','Mario','role','Gardien de Milo','function','Suivi du chien détecteur.','special','Note de Terrain','fragment','Fragment IA 14 : Objet Hydra trouvé à 20h31.'),
+        jsonb_build_object('name','Tony','role','Mini-Analyste OSINT','function','Analyse visuelle, QR codes, symboles.','special','Symbole Hydra','fragment','Fragment IA 15 : Symbole Hydra associé au protocole Omega.'),
+        jsonb_build_object('name','Lino','role','Gardien des Objets Hydra','function','Protection des reliques.','special','Objet Sacré Hydra','fragment','Fragment IA 16 : L’objet sacré est lié à l’identité de la victime.'),
+        jsonb_build_object('name','Emy','role','Secrétaire du Chef Hydra','function','Assistance opérationnelle.','special','Ordre du Chef Hydra','fragment','Fragment IA 17 : Fragment IA distribué par ordre du Chef.'),
+        jsonb_build_object('name','Milo','role','Chien Détecteur Hydra','function','Détection biologique des poisons.','special','Carte des Zones Reniflées','fragment','Fragment IA 18 : Zone 2 : traces Alpha détectées.')
+      )
+    )
+  )
+)
+on conflict(id) do nothing;
+
+create table if not exists public.birthday_interactions (
+  id bigint generated by default as identity primary key,
+  interaction_type text not null check (
+    interaction_type in ('quiz_result','poll_vote','challenge_done','wall_message','gallery_submission')
+  ),
+  visitor_name text,
+  payload jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+alter table public.birthday_interactions enable row level security;
+revoke all on public.birthday_interactions from anon, authenticated;
+
+create or replace function public.get_birthday_config()
+returns jsonb
+language sql
+security definer
+set search_path=public
+as $$
+  select coalesce(settings,'{}'::jsonb)
+  from public.birthday_config
+  where id=1;
+$$;
+
+grant execute on function public.get_birthday_config() to anon;
+
+create or replace function public.admin_save_birthday_config(p_settings jsonb)
+returns boolean
+language plpgsql
+security definer
+set search_path=public
+as $adminbirthday$
+begin
+  perform public.assert_admin_header();
+  if p_settings is null or jsonb_typeof(p_settings) <> 'object' then
+    raise exception 'Configuration anniversaire invalide.';
+  end if;
+  update public.birthday_config
+  set settings=p_settings, updated_at=now()
+  where id=1;
+  return found;
+end;
+$adminbirthday$;
+
+grant execute on function public.admin_save_birthday_config(jsonb) to anon;
+
+create or replace function public.submit_birthday_interaction(
+  p_type text,
+  p_name text,
+  p_payload jsonb
+)
+returns bigint
+language plpgsql
+security definer
+set search_path=public
+as $birthdayinteraction$
+declare
+  v_id bigint;
+begin
+  if p_type not in ('quiz_result','poll_vote','challenge_done','wall_message','gallery_submission') then
+    raise exception 'Type d’interaction invalide.';
+  end if;
+  if char_length(trim(coalesce(p_name,''))) < 1 or char_length(trim(p_name)) > 80 then
+    raise exception 'Nom invalide.';
+  end if;
+  if p_payload is null or jsonb_typeof(p_payload) <> 'object' then
+    raise exception 'Données invalides.';
+  end if;
+  insert into public.birthday_interactions(interaction_type,visitor_name,payload)
+  values(p_type,trim(p_name),p_payload)
+  returning id into v_id;
+  return v_id;
+end;
+$birthdayinteraction$;
+
+grant execute on function public.submit_birthday_interaction(text,text,jsonb) to anon;
+
+create or replace function public.admin_list_birthday_interactions()
+returns table(
+  id bigint,
+  interaction_type text,
+  visitor_name text,
+  payload jsonb,
+  created_at timestamptz
+)
+language plpgsql
+security definer
+set search_path=public
+as $adminbirthdayinteractions$
+begin
+  perform public.assert_admin_header();
+  return query
+  select i.id,i.interaction_type,i.visitor_name,i.payload,i.created_at
+  from public.birthday_interactions i
+  order by i.created_at desc
+  limit 500;
+end;
+$adminbirthdayinteractions$;
+
+grant execute on function public.admin_list_birthday_interactions() to anon;
+
 notify pgrst,'reload schema';
