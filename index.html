@@ -662,7 +662,17 @@ document.getElementById("contribForm").addEventListener("submit",submitContribut
 document.getElementById("ideaForm").addEventListener("submit",submitIdea);
 document.getElementById("messageForm").addEventListener("submit",submitMessage);
 document.getElementById("profileForm").addEventListener("submit",submitProfile);
-const urlCode=new URLSearchParams(location.search).get("code");
+const params=new URLSearchParams(location.search);
+const legacyUrlCode=params.get("code");
+const fragment=new URLSearchParams((location.hash||"").replace(/^#/,""));
+const fragmentCode=fragment.get("code");
+const urlCode=fragmentCode||legacyUrlCode;
+if(urlCode&&history.replaceState){
+  const cleanUrl=new URL(location.href);
+  cleanUrl.searchParams.delete("code");
+  cleanUrl.hash="";
+  history.replaceState(null,"",cleanUrl.pathname+cleanUrl.search+cleanUrl.hash);
+}
 const savedCode=sessionStorage.getItem("birthday_list_access");
 if(urlCode){accessInput.value=urlCode;unlockSite(urlCode)}else if(savedCode){unlockSite(savedCode)}else{lockSite("Entre ton code d’invitation pour continuer.")}
 async function logSiteVisit(page){try{await fetch(SUPABASE_URL+"/rest/v1/rpc/log_site_visit",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_page:page})})}catch{}}
