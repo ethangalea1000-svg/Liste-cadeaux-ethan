@@ -1678,26 +1678,96 @@ alter table public.list_access_codes enable row level security;
 revoke all on table public.list_access_codes from anon, authenticated;
 alter table public.list_access_codes add column if not exists is_admin boolean not null default false;
 
+-- Protection anti-brute-force de l'authentification des codes d'accès.
+-- Le compteur est basé sur l'IP vue par la passerelle Supabase et se réinitialise
+-- après une authentification réussie. Aucun code d'accès n'est stocké dans cette table.
+create table if not exists public.list_access_rate_limits (
+  client_ip text primary key,
+  failed_attempts integer not null default 0,
+  last_failed_at timestamptz,
+  blocked_until timestamptz
+);
+
+alter table public.list_access_rate_limits enable row level security;
+revoke all on table public.list_access_rate_limits from anon, authenticated;
+
 create or replace function public.authorize_list_access(p_code text)
 returns jsonb
 language plpgsql
 security definer
 set search_path = public
-as $$
+as $
 declare
   v_id bigint;
   v_label text;
+  v_is_admin boolean;
+  v_ip text;
+  v_attempts integer := 0;
+  v_blocked_until timestamptz;
+  v_retry integer := 0;
 begin
-  select lac.id, lac.label
-    into v_id, v_label
+  -- Supabase expose l'IP cliente via les en-têtes de requête.
+  v_ip := left(coalesce(
+    current_setting('request.headers', true)::json->>'cf-connecting-ip',
+    split_part(current_setting('request.headers', true)::json->>'x-forwarded-for', ',', 1),
+    current_setting('request.headers', true)::json->>'x-real-ip',
+    'unknown'
+  ), 120);
+  v_ip := nullif(trim(v_ip), '');
+  if v_ip is null then v_ip := 'unknown'; end if;
+
+  select failed_attempts, blocked_until
+    into v_attempts, v_blocked_until
+  from public.list_access_rate_limits
+  where client_ip = v_ip;
+
+  if v_blocked_until is not null and v_blocked_until > now() then
+    v_retry := greatest(1, ceil(extract(epoch from (v_blocked_until-now())))::integer);
+    return jsonb_build_object(
+      'authorized', false,
+      'rate_limited', true,
+      'retry_after_seconds', v_retry
+    );
+  end if;
+
+  select lac.id, lac.label, lac.is_admin
+    into v_id, v_label, v_is_admin
   from public.list_access_codes as lac
   where lac.active = true
     and lac.code = trim(coalesce(p_code, ''))
   limit 1;
 
   if v_id is null then
-    return jsonb_build_object('authorized', false);
+    v_attempts := coalesce(v_attempts,0) + 1;
+    v_retry := case
+      when v_attempts >= 20 then 300
+      when v_attempts >= 12 then 60
+      when v_attempts >= 8 then 15
+      when v_attempts >= 5 then 5
+      else 0
+    end;
+
+    insert into public.list_access_rate_limits(client_ip,failed_attempts,last_failed_at,blocked_until)
+    values(
+      v_ip,
+      v_attempts,
+      now(),
+      case when v_retry > 0 then now() + make_interval(secs => v_retry) else null end
+    )
+    on conflict (client_ip) do update
+      set failed_attempts=excluded.failed_attempts,
+          last_failed_at=excluded.last_failed_at,
+          blocked_until=excluded.blocked_until;
+
+    return jsonb_build_object(
+      'authorized', false,
+      'rate_limited', v_retry > 0,
+      'retry_after_seconds', v_retry
+    );
   end if;
+
+  -- Une authentification correcte remet le compteur à zéro.
+  delete from public.list_access_rate_limits where client_ip = v_ip;
 
   update public.list_access_codes as lac
   set last_used_at = now()
@@ -1710,13 +1780,10 @@ begin
     'authorized', true,
     'access_id', v_id,
     'label', v_label,
-    'is_admin', exists(
-      select 1 from public.list_access_codes as admin_lac
-      where admin_lac.id=v_id and admin_lac.is_admin=true
-    )
+    'is_admin', v_is_admin
   );
 end;
-$$;
+$;
 
 grant execute on function public.authorize_list_access(text) to anon;
 
