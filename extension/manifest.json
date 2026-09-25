@@ -4,6 +4,12 @@
   "version": "1.1.0",
   "description": "Exporte localement l’activité de la liste d’Ethan et, si activé, quelques informations techniques non sensibles. Aucun mot de passe ni code d’accès.",
   "permissions": ["storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://ckasbsnzxgwfwfnctioe.supabase.co/*"
+  ],
   "action": {
     "default_title": "Mes données — Liste d’Ethan",
     "default_popup": "popup.html"
