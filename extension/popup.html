@@ -4,17 +4,49 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mes données</title>
 <style>
-body{font-family:system-ui;margin:0;padding:16px;width:300px;background:#f6f7fb;color:#151827}
-h1{font-size:18px;margin:0 0 8px}
+body{font-family:system-ui;margin:0;padding:16px;width:330px;background:#f6f7fb;color:#151827}
+h1{font-size:18px;margin:0 0 8px}h2{font-size:14px;margin:16px 0 7px}
 p{font-size:12px;color:#687084;line-height:1.45}
+.card{background:#fff;border:1px solid #e3e7ef;border-radius:13px;padding:12px;margin-top:10px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:5px 0;border-bottom:1px solid #eef0f4}.row:last-child{border-bottom:0}
 button{width:100%;margin-top:8px;padding:10px;border:0;border-radius:10px;font-weight:700;cursor:pointer;background:#5856d6;color:white}
 .secondary{background:#eef0ff;color:#30338a}
-#status{margin-top:10px;font-size:12px}
+.danger{background:#fff0f0;color:#9f3030}
+.cookie{background:#fff8e6;border:1px solid #f0d58c}
+.cookie button{margin-top:6px}.cookie .choice{display:grid;grid-template-columns:1fr 1fr;gap:6px}.cookie .choice button{margin:0}
+#status{margin-top:10px;font-size:12px;min-height:17px}
+.muted{color:#687084;font-size:11px}
 </style>
-<h1>Mes données</h1>
-<p>Cette extension permet d'exporter uniquement l'activité enregistrée sur la liste d’Ethan.</p>
+<h1>Mes données — Liste d’Ethan</h1>
+<p>L’extension conserve les informations <strong>localement dans ton navigateur</strong>. Elle n’envoie pas ces données à un serveur.</p>
+
+<div id="cookieCard" class="card cookie">
+  <strong>🍪 Préférence cookies</strong>
+  <p>Demande affichée comme une bannière de consentement. <strong>Aucun cookie de suivi n’est créé par l’extension</strong> : le choix est simplement mémorisé dans son stockage local.</p>
+  <div class="choice">
+    <button id="cookieAccept">J’accepte</button>
+    <button id="cookieReject" class="secondary">Je refuse</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>📊 Informations enregistrées</h2>
+  <div class="row"><span>Événements locaux</span><strong id="eventCount">0</strong></div>
+  <div class="row"><span>Pages différentes</span><strong id="pageCount">0</strong></div>
+  <div class="row"><span>Dernière activité</span><strong id="lastActivity">—</strong></div>
+  <div class="row"><span>Analyse technique détaillée</span><strong id="detailStatus">désactivée</strong></div>
+</div>
+
+<div class="card">
+  <h2>🔎 Collecte détaillée</h2>
+  <p>Si tu l’actives, l’extension peut enregistrer des informations techniques non sensibles : taille d’écran, taille de fenêtre, langue, fuseau horaire, thème clair/sombre, statut en ligne et titre de page. Aucun champ de formulaire, mot de passe, code d’accès ou texte saisi n’est enregistré.</p>
+  <button id="toggleDetails">Activer la collecte détaillée</button>
+</div>
+
 <button id="export">Exporter mes données</button>
 <button id="takeout" class="secondary">Ouvrir Google Takeout</button>
-<div id="status"></div>
+<button id="clear" class="danger">Supprimer les données locales</button>
+<div id="status" aria-live="polite"></div>
+<div class="muted">Version extension 1.1.0</div>
 <script src="popup.js"></script>
 </html>
