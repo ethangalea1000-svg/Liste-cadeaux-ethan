@@ -2731,6 +2731,43 @@ $$;
 
 grant execute on function public.admin_create_access_code(text,text) to anon;
 
+-- Regénérer le code d'un accès existant sans supprimer l'accès ni ses dossiers Hydra
+drop function if exists public.admin_regenerate_access_code(bigint);
+create or replace function public.admin_regenerate_access_code(p_id bigint)
+returns text
+language plpgsql
+security definer
+set search_path=public
+as $regen_access$
+declare
+  v_code text;
+begin
+  perform public.assert_admin_header();
+
+  if not exists (
+    select 1 from public.list_access_codes
+    where id=p_id
+  ) then
+    raise exception 'Accès introuvable.';
+  end if;
+
+  loop
+    v_code := 'ETHAN-' || upper(substr(md5(random()::text || clock_timestamp()::text || p_id::text),1,12));
+    exit when not exists (
+      select 1 from public.list_access_codes where code=v_code
+    );
+  end loop;
+
+  update public.list_access_codes
+  set code=v_code
+  where id=p_id;
+
+  return v_code;
+end;
+$regen_access$;
+
+grant execute on function public.admin_regenerate_access_code(bigint) to anon;
+
 create or replace function public.admin_set_access_code_admin(p_id bigint,p_is_admin boolean)
 returns boolean
 language plpgsql
