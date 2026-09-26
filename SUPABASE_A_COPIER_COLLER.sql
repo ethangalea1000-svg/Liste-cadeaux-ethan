@@ -1728,6 +1728,23 @@ create index if not exists hydra_access_assignments_access_idx
 alter table public.hydra_access_assignments enable row level security;
 revoke all on table public.hydra_access_assignments from anon, authenticated;
 
+-- Migration des anciennes attributions uniques vers le système de jetons privés.
+insert into public.hydra_access_assignments(access_id,hydra_player_name,private_token,active)
+select
+  lac.id,
+  trim(lac.hydra_player_name),
+  'HYDRA-' || upper(substr(md5(lac.code || trim(lac.hydra_player_name) || random()::text || clock_timestamp()::text),1,24)),
+  lac.active
+from public.list_access_codes lac
+where coalesce(trim(lac.hydra_player_name),'') <> ''
+  and not exists(
+    select 1
+    from public.hydra_access_assignments haa
+    where haa.access_id=lac.id
+      and lower(trim(haa.hydra_player_name))=lower(trim(lac.hydra_player_name))
+  )
+on conflict (access_id,hydra_player_name) do nothing;
+
 
 
 
@@ -2843,6 +2860,7 @@ as $
 declare
   v_code_exists boolean;
   v_name text;
+  v_private_token text;
 begin
   perform public.assert_admin_header();
 
@@ -2894,10 +2912,11 @@ begin
         and lower(trim(hydra_player_name))=lower(v_name)
     ) then
       loop
+        v_private_token := 'HYDRA-' || upper(substr(md5(random()::text || clock_timestamp()::text || p_access_id::text || v_name),1,24));
         v_code_exists := exists(
           select 1
           from public.hydra_access_assignments
-          where private_token='HYDRA-' || upper(substr(md5(random()::text || clock_timestamp()::text || p_access_id::text || v_name),1,24))
+          where private_token=v_private_token
         );
         exit when not v_code_exists;
       end loop;
@@ -2908,7 +2927,7 @@ begin
       values(
         p_access_id,
         v_name,
-        'HYDRA-' || upper(substr(md5(random()::text || clock_timestamp()::text || p_access_id::text || v_name),1,24)),
+        v_private_token,
         true
       );
     else
