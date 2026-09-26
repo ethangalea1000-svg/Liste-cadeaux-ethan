@@ -189,7 +189,7 @@
         <div><h3 style="margin:0">📚 Dossier complet de la Murder Party</h3><div class="meta">Le document maître complet est stocké dans la configuration Hydra et disponible ici pour le MJ.</div></div>
         <button class="btn" type="button" onclick="loadBirthdayAdmin()">↻ Recharger</button>
       </div>
-      <div id="hydraMasterDossier"></div>
+      <div id="hydraMasterDossier"><div class="admin-editor-note" style="margin-bottom:12px"><strong>HYDRA 2.0 —</strong> scénario canonique, chronologie, relations, 55 énigmes et plan de décoration sont centralisés dans le même dossier.</div></div>
     </div>
   </section>
   <section id="site" class="section">
@@ -859,39 +859,28 @@ function birthdayIsoToLocal(v){
   return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes());
 }
 function renderHydraMasterDossier(cfg){
-  const box=$("hydraMasterDossier");
-  const mp=cfg?.murder_party;
-  if(!box)return;
-  if(!mp){box.innerHTML=empty("Aucun dossier Hydra complet.");return;}
-  const players=Array.isArray(mp.players)?mp.players:[];
-  const zones=Array.isArray(mp.zones)?mp.zones:[];
-  const objects=Array.isArray(mp.objects)?mp.objects:[];
-  const enigmas=Array.isArray(mp.enigmas)?mp.enigmas:[];
-  const npcs=Array.isArray(mp.npcs)?mp.npcs:[];
-  const finals=Array.isArray(mp.end_documents)?mp.end_documents:[];
-  const guide=Array.isArray(mp.gm_guide)?mp.gm_guide:[];
-  const checklist=Array.isArray(mp.print_checklist)?mp.print_checklist:[];
-  const inv=mp.invitation||{};
-  const details=(title,body,open=false)=>'<details style="margin-top:10px"'+(open?" open":"")+'><summary style="cursor:pointer;font-weight:800;padding:8px 0">'+title+'</summary><div style="padding-top:8px">'+body+'</div></details>';
-  const playerHtml=players.map(p=>'<article class="item" style="margin-top:8px"><div><strong>'+esc(p.name||"")+'</strong> · <span class="badge">'+esc(p.role||"")+'</span></div><div class="meta">'+esc(p.function||"")+'</div><div class="message"><strong>Description :</strong> '+esc(p.description||"")+'\n<strong>Ce que tu sais :</strong> '+esc(p.knowledge||"")+'\n<strong>Objectif :</strong> '+esc(p.objective||"")+'\n<strong>Document spécial :</strong> '+esc(p.special_text||p.special||"")+'\n<strong>Fragment IA :</strong> '+esc(p.fragment||"")+(p.rule?"\n<strong>Règle spéciale :</strong> "+esc(p.rule):"")+(p.companion?"\n<strong>Compagnon :</strong> "+esc(p.companion):"")+'\n<strong>👕 Tenue parfaite :</strong> '+esc(p.tenue_parfaite||"À définir")+'</div></article>').join("");
-  const zoneHtml=zones.map(z=>'<article class="item" style="margin-top:8px"><strong>'+esc(z.name||"")+'</strong><div class="message"><strong>Description :</strong> '+esc(z.description||"")+'\n<strong>Ce que les joueurs savent :</strong> '+esc(z.knowledge||"")+'\n<strong>Milo :</strong> '+esc(z.milo_detected||"")+'\n<strong>À trouver :</strong> '+esc(z.finds||"")+'</div></article>').join("");
-  const objectHtml=objects.map(o=>'<article class="item" style="margin-top:8px"><strong>'+esc(o.name||"")+'</strong><div class="message">'+esc(o.description||"")+'</div></article>').join("");
-  const enigmaHtml=enigmas.map(e=>'<article class="item" style="margin-top:8px"><strong>Énigme '+Number(e.id||0)+'</strong><div class="message">'+esc(e.question||"")+'\n<strong>Réponse / PNJ :</strong> '+esc(e.answer||e.npc||"")+'</div></article>').join("");
-  const npcHtml=npcs.map(n=>'<div class="birthday-item"><strong>'+Number(n.id||0)+'. '+esc(n.name||"")+'</strong><div class="form-note">'+esc(n.category||"")+'</div></div>').join("");
-  const finalHtml=finals.map(d=>'<article class="item" style="margin-top:8px"><strong>Document '+Number(d.id||0)+' — '+esc(d.title||"")+'</strong><div class="message">'+esc(d.text||"")+'</div></article>').join("");
-  const guideHtml=guide.map(g=>'<article class="item" style="margin-top:8px"><strong>Phase '+Number(g.phase||0)+' — '+esc(g.title||"")+'</strong><div class="meta">'+esc(g.duration||"")+'</div><div class="message">'+esc(g.text||"")+'</div></article>').join("");
-  const checklistHtml=checklist.map(x=>'<div class="birthday-item">☐ '+esc(x)+'</div>').join("");
-  const invitationHtml='<article class="item"><strong>'+esc(inv.title||mp.title||"PROTOCOLE HYDRA")+'</strong><div class="message"><strong>Introduction :</strong> '+esc(inv.intro||"")+'\n'+esc(inv.body||"")+'\n<strong>Lieu :</strong> '+esc(inv.mission_location||mp.location||"")+'\n<strong>Date :</strong> '+esc(inv.date||mp.date||"")+'\n<strong>Moment clé :</strong> '+esc(inv.key_moment||mp.key_moment||"")+'\n<strong>Tenue :</strong> '+esc(inv.outfit||"")+'\n<strong>Préparation :</strong> '+esc(inv.preparation||"")+'\n<strong>Note :</strong> '+esc(inv.note||"")+'</div>'+(Array.isArray(inv.phases)?'<div class="birthday-list">'+inv.phases.map(x=>'<div class="birthday-item">• '+esc(x)+'</div>').join("")+'</div>':"")+'</article>';
-  box.innerHTML='<div class="stats" style="margin-top:8px"><div class="stat"><b>'+players.length+'</b><span>joueurs</span></div><div class="stat"><b>'+zones.length+'</b><span>zones</span></div><div class="stat"><b>'+objects.length+'</b><span>objets</span></div><div class="stat"><b>'+enigmas.length+'</b><span>énigmes</span></div><div class="stat"><b>'+npcs.length+'</b><span>PNJ</span></div><div class="stat"><b>'+finals.length+'</b><span>documents de fin</span></div></div>'
-    +details("📜 Invitation",invitationHtml,true)
-    +details("👥 Fiches des 19 personnages",playerHtml)
-    +details("🗺️ 8 zones",zoneHtml)
-    +details("🧳 18 objets",objectHtml)
-    +details("🧩 55 énigmes — réponses/PNJ",enigmaHtml)
-    +details("🎭 55 PNJ",npcHtml)
-    +details("🏁 8 documents de fin",finalHtml)
-    +details("🎬 Guide du MJ",guideHtml)
-    +details("🖨️ Checklist d'impression",checklistHtml);
+ const box=$("hydraMasterDossier"),mp=cfg?.murder_party;
+ if(!box)return;
+ if(!mp){box.innerHTML=empty("Aucun dossier Hydra complet.");return;}
+ const players=Array.isArray(mp.players)?mp.players:[],zones=Array.isArray(mp.zones)?mp.zones:[],objects=Array.isArray(mp.objects)?mp.objects:[],enigmas=Array.isArray(mp.enigmas)?mp.enigmas:[],npcs=Array.isArray(mp.npcs)?mp.npcs:[],finals=Array.isArray(mp.end_documents)?mp.end_documents:[],guide=Array.isArray(mp.gm_guide)?mp.gm_guide:[],checklist=Array.isArray(mp.print_checklist)?mp.print_checklist:[],timeline=Array.isArray(mp.timeline)?mp.timeline:[],events=Array.isArray(mp.scene_events)?mp.scene_events:[],decorations=Array.isArray(mp.decorations)?mp.decorations:[],inv=mp.invitation||{},truth=mp.story_truth||{},story=mp.story_public||{},victory=Array.isArray(mp.victory_conditions)?mp.victory_conditions:[];
+ const details=(title,body,open=false)=>'<details style="margin-top:10px"'+(open?" open":"")+'><summary style="cursor:pointer;font-weight:800;padding:8px 0">'+title+'</summary><div style="padding-top:8px">'+body+'</div></details>';
+ const playerHtml=players.map(p=>'<article class="item" style="margin-top:8px"><div><strong>'+esc(p.name||"")+'</strong> · <span class="badge">'+esc(p.role||"")+'</span></div><div class="meta">'+esc(p.function||"")+'</div><div class="message"><strong>Description :</strong> '+esc(p.description||"")+"\n<strong>Ce que tu sais :</strong> "+esc(p.knowledge||"")+"\n<strong>Objectif :</strong> "+esc(p.objective||"")+"\n<strong>Secret :</strong> "+esc(p.secret||"")+"\n<strong>À découvrir :</strong> "+esc(p.discover||"")+"\n<strong>Document spécial :</strong> "+esc(p.special_text||p.special||"")+"\n<strong>Fragment IA :</strong> "+esc(p.fragment||"")+(p.rule?"\n<strong>Règle spéciale :</strong> "+esc(p.rule):"")+(p.companion?"\n<strong>Compagnon :</strong> "+esc(p.companion):"")+"\n<strong>👕 Tenue parfaite :</strong> "+esc(p.tenue_parfaite||"À définir")+'</div>'+(Array.isArray(p.relations)?'<div class="admin-editor-note"><strong>🔗 Relations</strong><ul style="margin-bottom:0">'+p.relations.map(q=>'<li><strong>'+esc(q.with||"")+'</strong> · '+esc(q.type||"")+' — '+esc(q.what||"")+'</li>').join("")+'</ul></div>':"")+(Array.isArray(p.revelations)?'<div class="admin-editor-note" style="margin-top:8px"><strong>🎭 Révélations</strong><ol style="margin-bottom:0">'+p.revelations.map(q=>'<li>'+esc(q)+'</li>').join("")+'</ol></div>':"")+'</article>').join("");
+ const zoneHtml=zones.map(z=>'<article class="item" style="margin-top:8px"><strong>'+esc(z.name||"")+'</strong><div class="message"><strong>Description :</strong> '+esc(z.description||"")+"\n<strong>Ce que les joueurs savent :</strong> "+esc(z.knowledge||"")+"\n<strong>Milo :</strong> "+esc(z.milo_detected||"")+"\n<strong>À trouver :</strong> "+esc(z.finds||"")+'</div></article>').join("");
+ const objectHtml=objects.map(o=>'<article class="item" style="margin-top:8px"><strong>'+esc(o.name||"")+'</strong><div class="message">'+esc(o.description||"")+'</div></article>').join("");
+ const enigmaHtml=enigmas.map(e=>'<article class="item" style="margin-top:8px"><strong>Énigme '+Number(e.id||0)+' · '+esc(e.phase||"")+' · '+esc(e.difficulty||"")+'</strong><div class="message">'+esc(e.question||"")+"\n<strong>Réponse :</strong> "+esc(e.answer||e.npc||"")+"\n<strong>Utilité :</strong> "+esc(e.purpose||"")+"\n<strong>Indice :</strong> "+esc(e.hint||"")+'</div></article>').join("");
+ const npcHtml=npcs.map(n=>'<div class="birthday-item"><strong>'+Number(n.id||0)+'. '+esc(n.name||"")+'</strong><div class="form-note">'+esc(n.category||"")+'</div>'+(n.briefing?'<div class="form-note">'+esc(n.briefing)+'</div>':"")+'</div>').join("");
+ const finalHtml=finals.map(d=>'<article class="item" style="margin-top:8px"><strong>Document '+Number(d.id||0)+' — '+esc(d.title||"")+'</strong><div class="message">'+esc(d.text||"")+'</div></article>').join("");
+ const guideHtml=guide.map(g=>'<article class="item" style="margin-top:8px"><strong>Phase '+Number(g.phase||0)+' — '+esc(g.title||"")+'</strong><div class="meta">'+esc(g.duration||"")+'</div><div class="message">'+esc(g.text||"")+'</div></article>').join("");
+ const checklistHtml=checklist.map(x=>'<div class="birthday-item">☐ '+esc(x)+'</div>').join("");
+ const timelineHtml=timeline.map(t=>'<article class="item" style="margin-top:8px"><strong>'+esc(t.time||"")+' — '+esc(t.title||"")+'</strong><div class="message">'+esc(t.description||"")+'</div></article>').join("");
+ const eventHtml=events.map(e=>'<article class="item" style="margin-top:8px"><strong>'+esc(e.trigger||"")+' — '+esc(e.title||"")+'</strong><div class="message"><strong>Action :</strong> '+esc(e.action||"")+"\n<strong>Effet :</strong> "+esc(e.effect||"")+'</div></article>').join("");
+ const decorationHtml=decorations.map(d=>'<article class="item" style="margin-top:8px"><strong>'+esc(d.name||"")+'</strong><div class="meta">📍 '+esc(d.zone||"")+' · '+esc(d.priority||"")+'</div><div class="message"><strong>Matériel :</strong> '+esc((d.materials||[]).join(", "))+"\n<strong>Montage :</strong> "+esc(d.setup||"")+"\n<strong>Fonction :</strong> "+esc(d.purpose||"")+'</div></article>').join("");
+ const truthHtml='<article class="item"><div class="message"><strong>Résumé :</strong> '+esc(truth.public_summary||"")+"\n<strong>Architecte :</strong> "+esc(truth.primary_responsible||"")+"\n<strong>Agent d’exécution :</strong> "+esc(truth.operational_agent||"")+"\n<strong>Facilitateur involontaire :</strong> "+esc(truth.unwitting_facilitator||"")+"\n<strong>Victime :</strong> "+esc(truth.victim_identity||"")+"\n<strong>Conclusion :</strong> "+esc(truth.final_conclusion||"")+'</div><ol>'+((truth.truth_steps||[]).map(x=>'<li>'+esc(x)+'</li>').join(""))+'</ol></article>';
+ const victoryHtml=victory.map(x=>'<div class="birthday-item">✓ '+esc(x)+'</div>').join("");
+ const storyHtml='<article class="item"><strong>'+esc(story.title||"Histoire")+'</strong><div class="message">'+esc(story.text||"")+'</div></article>';
+ const invitationHtml='<article class="item"><strong>'+esc(inv.title||mp.title||"PROTOCOLE HYDRA")+'</strong><div class="message"><strong>Introduction :</strong> '+esc(inv.intro||"")+"\n"+esc(inv.body||"")+"\n<strong>Lieu :</strong> "+esc(inv.mission_location||mp.location||"")+"\n<strong>Date :</strong> "+esc(inv.date||mp.date||"")+"\n<strong>Moment clé :</strong> "+esc(inv.key_moment||mp.key_moment||"")+"\n<strong>Tenue :</strong> "+esc(inv.outfit||"")+"\n<strong>Préparation :</strong> "+esc(inv.preparation||"")+'</div>'+(Array.isArray(inv.phases)?'<div class="birthday-list">'+inv.phases.map(x=>'<div class="birthday-item">• '+esc(x)+'</div>').join("")+'</div>':"")+'</article>';
+ box.innerHTML='<div class="stats" style="margin-top:8px"><div class="stat"><b>'+players.length+'</b><span>joueurs</span></div><div class="stat"><b>'+zones.length+'</b><span>zones</span></div><div class="stat"><b>'+objects.length+'</b><span>objets</span></div><div class="stat"><b>'+enigmas.length+'</b><span>énigmes</span></div><div class="stat"><b>'+decorations.length+'</b><span>décors</span></div><div class="stat"><b>'+finals.length+'</b><span>documents de fin</span></div></div>'
+ +details("📜 Invitation",invitationHtml,true)+details("🎬 Histoire publique",storyHtml)+details("🔐 Vérité canonique / solution MJ",truthHtml)+details("⏱️ Chronologie Hydra",timelineHtml)+details("🎬 Événements de mise en scène",eventHtml)+details("🏆 Conditions de résolution",victoryHtml)+details("👥 Fiches des 19 personnages",playerHtml)+details("🗺️ 8 zones",zoneHtml)+details("🧳 18 objets",objectHtml)+details("🧩 55 énigmes — réponses/indices",enigmaHtml)+details("🎭 55 PNJ",npcHtml)+details("🎨 Plan de décoration",decorationHtml)+details("🏁 8 documents de fin",finalHtml)+details("🎬 Guide du MJ",guideHtml)+details("🖨️ Checklist d’impression et de préparation",checklistHtml);
 }
 async function loadBirthdayAdmin(){
   try{
