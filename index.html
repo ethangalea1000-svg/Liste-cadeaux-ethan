@@ -214,7 +214,7 @@ body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{backgro
 .hydra-parchment-rule{height:1px;background:linear-gradient(90deg,transparent,#795b2d,transparent);margin:18px auto 25px;max-width:500px}
 .hydra-parchment-recipient{text-align:center;font-size:17px;margin-bottom:22px}
 .hydra-parchment-recipient strong{font-size:22px}
-.hydra-parchment-body{font-size:17px;line-height:1.75;text-align:center;white-space:pre-wrap}
+.hydra-parchment-linked,.hydra-parchment-personal{margin:14px 0;padding:11px 13px;border:1px solid #cdbb8d;background:#fffaf0;border-radius:10px}.hydra-parchment-linked strong,.hydra-parchment-personal strong{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7e6742;margin-bottom:4px}.hydra-parchment-linked span,.hydra-parchment-personal div{font-size:13px;line-height:1.45}..hydra-parchment-body{font-size:17px;line-height:1.75;text-align:center;white-space:pre-wrap}
 .hydra-parchment-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:25px 0}
 .hydra-parchment-fact{padding:13px 15px;border:1px solid rgba(107,75,35,.35);background:rgba(255,248,220,.28);box-shadow:inset 0 0 12px rgba(98,63,21,.06)}
 .hydra-parchment-fact strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#765523;margin-bottom:4px}
@@ -452,6 +452,7 @@ let accessCode="";
 let accessLabel="";
 let hydraToken="";
 let birthdayConfig={};
+let birthdayDossiers=[];
 let birthdayCountdownTimer=null;
 let siteConfig={};
 let siteUi={};
@@ -701,15 +702,27 @@ function showHydraInvitationModal(){
   overlay.className="hydra-invitation-overlay";
   const phases=Array.isArray(inv.phases)?inv.phases:[];
   const recipient=accessLabel||currentVisitorName()||"Agent Hydra";
+  const dossiers=Array.isArray(birthdayDossiers)?birthdayDossiers.filter(Boolean):[];
+  const primary=dossiers[0]||{};
+  const dossierNames=dossiers.map(p=>String(p.name||"").trim()).filter(Boolean);
+  const roleText=String(primary.role||"Agent Hydra").trim();
+  const functionText=String(primary.function||"").trim();
+  const linkedHtml=dossierNames.length
+    ? `<div class="hydra-parchment-linked"><strong>Dossier(s) associé(s)</strong><span>${esc(dossierNames.join(" · "))}</span></div>`
+    : "";
+  const personalizedIntro=functionText
+    ? `${recipient}, cette convocation a été préparée pour ton accès personnel. Tu interviens dans le Protocole Hydra en tant que <strong>${esc(roleText)}</strong>.`
+    : `${recipient}, cette convocation a été préparée spécifiquement pour ton accès personnel au Protocole Hydra.`;
   overlay.innerHTML=`
     <article class="hydra-parchment" role="dialog" aria-modal="true" aria-labelledby="hydraInvitationTitle">
       <div class="hydra-wax-seal">HYDRA</div>
       <div class="hydra-parchment-content">
-        <div class="hydra-parchment-kicker">DOCUMENT CLASSÉ · CONVOCATION OFFICIELLE</div>
+        <div class="hydra-parchment-kicker">DOCUMENT CLASSÉ · CONVOCATION PERSONNELLE</div>
         <h2 id="hydraInvitationTitle" class="hydra-parchment-title">${esc(inv.title||"PROTOCOLE HYDRA")}</h2>
         <div class="hydra-parchment-rule"></div>
-        <div class="hydra-parchment-recipient">Cette convocation est destinée à<br><strong>${esc(recipient)}</strong></div>
+        <div class="hydra-parchment-recipient">${personalizedIntro}</div>
         <div class="hydra-parchment-body">${esc(inv.body||"Vous êtes officiellement convoqué pour participer au Protocole Hydra.")}</div>
+        ${linkedHtml}
         <div class="hydra-parchment-facts">
           <div class="hydra-parchment-fact"><strong>Lieu</strong><span>${esc(inv.mission_location||mp.location||"À découvrir")}</span></div>
           <div class="hydra-parchment-fact"><strong>Date</strong><span>${esc(inv.date||mp.date||"À découvrir")}</span></div>
@@ -717,6 +730,7 @@ function showHydraInvitationModal(){
           <div class="hydra-parchment-fact"><strong>Tenue</strong><span>${esc(inv.outfit||"Libre, sauf indication de ton dossier")}</span></div>
         </div>
         ${inv.preparation?`<div class="hydra-parchment-phases"><strong>⚗️ Avant la mission</strong><div>${esc(inv.preparation)}</div></div>`:""}
+        ${functionText?`<div class="hydra-parchment-personal"><strong>Votre rôle</strong><div>${esc(roleText)}${functionText?" — "+esc(functionText):""}</div></div>`:""}
         ${phases.length?`<div class="hydra-parchment-phases"><strong>Déroulement du protocole</strong><ol>${phases.map(x=>"<li>"+esc(x)+"</li>").join("")}</ol></div>`:""}
         ${inv.note?`<div class="hydra-parchment-note">${esc(inv.note)}</div>`:""}
         <div class="hydra-parchment-signature">« Le protocole commence lorsque vous franchissez cette porte. »<br>— Direction Hydra</div>
@@ -732,7 +746,6 @@ function showHydraInvitationModal(){
   document.getElementById("hydraInvitationEnter")?.addEventListener("click",close);
   overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
 }
-
 async function unlockSite(code,providedHydraToken=""){
   code=String(code||"").trim();
   hydraToken=String(providedHydraToken||hydraToken||"").trim();
@@ -790,6 +803,13 @@ async function unlockSite(code,providedHydraToken=""){
     const change=document.getElementById("changeCodeBtn");
     if(change)change.hidden=true;
     await Promise.all([loadReservations(),loadFundraisers(),loadContributions(),loadIdeas(),loadMessages(),loadBirthdayFeatures()]);
+    // Après connexion, ouvre explicitement l’espace Anniversaire : le compte à rebours
+    // et les modules de fête ne restent plus cachés dans l’onglet Liste.
+    if(typeof window.__activateAppView==="function"){
+      window.__activateAppView("anniversaire",true);
+    }else{
+      document.querySelector('[data-view-target="anniversaire"]')?.click();
+    }
     startPrivateRefresh();
     // L'invitation est le premier écran après une identification réussie.
     showHydraInvitationModal();
@@ -877,7 +897,10 @@ function birthdaySet(id,show){
 }
 function startBirthdayCountdown(){
   if(birthdayCountdownTimer)clearInterval(birthdayCountdownTimer);
-  const target=new Date(birthdayConfig.countdown_at||"2026-12-23T00:00:00+01:00");
+  const section=document.getElementById("birthdayCountdownSection");
+  if(section) section.classList.remove("birthday-hidden");
+  const rawTarget=String(birthdayConfig.countdown_at||"2026-12-23T00:00:00+01:00").trim();
+  const target=new Date(rawTarget);
    const title=document.getElementById("birthdayCountdownTitle");
   const tick=()=>{
     const diff=Math.max(0,target.getTime()-Date.now());
@@ -907,7 +930,7 @@ async function loadHydraDossier(){
  try{
   const r=await privateRpc("get_my_hydra_dossiers",{p_code:accessCode}),data=await r.json().catch(()=>[]);
   if(!r.ok)throw new Error(data?.message||data?.error||"Impossible de charger les dossiers Hydra.");
-  const dossiers=Array.isArray(data)?data:[]; if(!dossiers.length)return;
+  const dossiers=Array.isArray(data)?data:[]; birthdayDossiers=dossiers; if(!dossiers.length)return;
   birthdaySet("birthdayHydraSection",true);
   if(meta)meta.textContent=dossiers.length===1?"1 fiche Hydra est associée à ton accès.":dossiers.length+" fiches Hydra sont associées à ton accès.";
   body.innerHTML=dossiers.map((p,index)=>{
