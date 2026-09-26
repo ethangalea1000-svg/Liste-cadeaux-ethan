@@ -2938,6 +2938,14 @@ where id in ('journal-mickey','picsou-mickey-pack');
 
 notify pgrst,'reload schema';
 
+-- Contrôle final : doit retourner HYDRA_SQL_OK après l'exécution.
+select
+  'HYDRA_SQL_OK' as hydra_sql_status,
+  to_regclass('public.hydra_access_assignments') is not null as hydra_table_exists,
+  to_regprocedure('public.admin_list_hydra_access_assignments()') is not null as hydra_list_rpc_exists,
+  to_regprocedure('public.admin_sync_hydra_access_assignments(bigint,jsonb)') is not null as hydra_sync_rpc_exists,
+  (select count(*) from public.hydra_access_assignments) as assignments_count;
+
 -- Schéma rechargé après les changements d'accès.
 
 -- ============================================================
