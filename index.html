@@ -150,10 +150,24 @@ main.unlocked>.foot{margin-top:24px}
   .app-tab{min-width:82px}
   .view-top{display:none}
 }
-.hydra-fiche-card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#fff,#f8f9ff);box-shadow:0 8px 24px rgba(20,25,50,.07);overflow:hidden}.hydra-fiche-card+.hydra-fiche-card{margin-top:12px}.hydra-fiche-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer;list-style:none}.hydra-fiche-summary::-webkit-details-marker{display:none}.hydra-fiche-summary:hover{background:#f8f9ff}.hydra-fiche-number{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent);margin-bottom:3px}.hydra-fiche-name{display:block;font-size:20px;font-weight:800}.hydra-fiche-chevron{font-size:22px;line-height:1;transition:transform .2s ease}.hydra-fiche-card[open] .hydra-fiche-chevron{transform:rotate(180deg)}.hydra-fiche-content{padding:0 16px 16px;border-top:1px solid var(--line)}.hydra-fiche-row{display:grid;grid-template-columns:170px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}.hydra-fiche-row:last-child{border-bottom:0}.hydra-fiche-row span{line-height:1.5}.hydra-fiche-scenario{white-space:pre-wrap;line-height:1.6;margin-top:14px;padding:14px;border-radius:12px;background:var(--card2,#f7f8fc)}@media(max-width:700px){.hydra-fiche-row{grid-template-columns:1fr;gap:5px}.hydra-fiche-summary{padding:14px}.hydra-fiche-name{font-size:18px}}.hydra-ai-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.hydra-ai-actions .btn{text-decoration:none;background:#f2f4ff;color:#27305f}@media(max-width:700px){.hydra-ai-actions .btn{flex:1}}</style></head>
+.hydra-fiche-card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#fff,#f8f9ff);box-shadow:0 8px 24px rgba(20,25,50,.07);overflow:hidden}.hydra-fiche-card+.hydra-fiche-card{margin-top:12px}.hydra-fiche-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer;list-style:none}.hydra-fiche-summary::-webkit-details-marker{display:none}.hydra-fiche-summary:hover{background:#f8f9ff}.hydra-fiche-number{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent);margin-bottom:3px}.hydra-fiche-name{display:block;font-size:20px;font-weight:800}.hydra-fiche-chevron{font-size:22px;line-height:1;transition:transform .2s ease}.hydra-fiche-card[open] .hydra-fiche-chevron{transform:rotate(180deg)}.hydra-fiche-content{padding:0 16px 16px;border-top:1px solid var(--line)}.hydra-fiche-row{display:grid;grid-template-columns:170px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}.hydra-fiche-row:last-child{border-bottom:0}.hydra-fiche-row span{line-height:1.5}.hydra-fiche-scenario{white-space:pre-wrap;line-height:1.6;margin-top:14px;padding:14px;border-radius:12px;background:var(--card2,#f7f8fc)}@media(max-width:700px){.hydra-fiche-row{grid-template-columns:1fr;gap:5px}.hydra-fiche-summary{padding:14px}.hydra-fiche-name{font-size:18px}}.hydra-ai-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.hydra-ai-actions .btn{text-decoration:none;background:#f2f4ff;color:#27305f}@media(max-width:700px){.hydra-ai-actions .btn{flex:1}}<style>
+@media print{
+  body.hydra-print .hero,
+  body.hydra-print .app-tabs,
+  body.hydra-print .private-ui,
+  body.hydra-print > *:not(main),
+  body.hydra-print main > *:not(#birthdayHydraSection):not(#birthdayHydraWorldSection){display:none !important}
+  body.hydra-print main{display:block !important;max-width:none !important;margin:0 !important;padding:0 !important}
+  body.hydra-print #birthdayHydraSection,
+  body.hydra-print #birthdayHydraWorldSection{display:block !important}
+  body.hydra-print .birthday-card{box-shadow:none !important;border:1px solid #bbb !important;break-inside:avoid}
+  body.hydra-print details{break-inside:avoid}
+  body.hydra-print button{display:none !important}
+}
+</style></style></head>
 <body>
 <header class="hero"><div class="wrap"><nav class="topnav"><a id="navCommunity" href="communaute.html">💬 Communauté</a><a id="navPrivacy" href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag" id="siteTag">🎁 Noël & Anniversaire 2026</span><h1 id="siteHeroTitle">La liste d’Ethan</h1><p id="siteHeroDescription">Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button><button class="secondary" id="redoCodeBtn" type="button">🔄 Refaire le code</button></div></div></header>
-<main class="wrap locked" id="mainContent"><section id="accessGate" class="access-gate"><div class="access-card"><h2 id="accessTitle">🔐 Liste privée</h2><p id="accessText">Cette liste est réservée aux personnes autorisées par Ethan. Entre ton code d’invitation pour afficher les cadeaux.</p><form id="listAccessForm" class="access-form"><input id="listAccessCode" type="password" inputmode="text" autocomplete="off" maxlength="64" placeholder="Code d’invitation *" required><button id="accessButton" type="submit">Accéder à la liste</button></form><div id="accessStatus" class="access-status" aria-live="polite"></div><button type="button" id="changeCodeBtn" class="change-code" hidden>Changer de code</button><div id="accessNote" class="access-note">Le contenu des cadeaux n’est chargé qu’après vérification du code.</div><div class="access-request"><h3>📨 Demander un accès</h3><p>Tu n’as pas encore de code ? Présente-toi ici pour demander la création de ton accès.</p><form id="accessRequestForm" class="form-grid"><input id="accessRequestName" maxlength="50" required placeholder="Ton prénom / nom *"><select id="accessRequestRelation" required><option value="">Qui es-tu pour Ethan ? *</option><option>Ami(e)</option><option>Famille</option><option>Camarade de classe</option><option>Connaissance</option><option>Autre</option></select><input id="accessRequestAvatar" maxlength="4" placeholder="Ton emoji (optionnel) — ex. 🎮"><textarea id="accessRequestBio" maxlength="250" placeholder="Un petit mot pour te présenter (optionnel)"></textarea><div class="form-actions"><button class="send" type="submit">Envoyer ma demande d’accès</button></div><div id="accessRequestStatus" class="access-request-status" aria-live="polite"></div><div class="form-note">Ethan verra ta demande dans le panneau administrateur. Aucun accès n’est créé automatiquement.</div></form></div></div></section>
+<main class="wrap locked" id="mainContent"><section id="accessGate" class="access-gate"><div class="access-card"><h2 id="accessTitle">🔐 Liste privée</h2><p id="accessText">Bienvenue sur la liste d’Ethan. Entre ton code d’invitation pour afficher les cadeaux, participer aux animations et retrouver les informations de la journée. Le plus simple est d’utiliser directement le lien qui t’a été envoyé : il peut ouvrir automatiquement la bonne page.</p><form id="listAccessForm" class="access-form"><input id="listAccessCode" type="password" inputmode="text" autocomplete="off" maxlength="64" placeholder="Code d’invitation *" required><button id="accessButton" type="submit">Accéder à la liste</button></form><div id="accessStatus" class="access-status" aria-live="polite"></div><button type="button" id="changeCodeBtn" class="change-code" hidden>Changer de code</button><div id="accessNote" class="access-note">Le contenu des cadeaux n’est chargé qu’après vérification du code.</div><div class="access-request"><h3>📨 Demander un accès</h3><p>Tu n’as pas encore de code ? Présente-toi ici pour demander la création de ton accès.</p><form id="accessRequestForm" class="form-grid"><input id="accessRequestName" maxlength="50" required placeholder="Ton prénom / nom *"><select id="accessRequestRelation" required><option value="">Qui es-tu pour Ethan ? *</option><option>Ami(e)</option><option>Famille</option><option>Camarade de classe</option><option>Connaissance</option><option>Autre</option></select><input id="accessRequestAvatar" maxlength="4" placeholder="Ton emoji (optionnel) — ex. 🎮"><textarea id="accessRequestBio" maxlength="250" placeholder="Un petit mot pour te présenter (optionnel)"></textarea><div class="form-actions"><button class="send" type="submit">Envoyer ma demande d’accès</button></div><div id="accessRequestStatus" class="access-request-status" aria-live="polite"></div><div class="form-note">Ethan verra ta demande dans le panneau administrateur. Aucun accès n’est créé automatiquement.</div></form></div></div></section>
 <nav class="app-tabs private-ui" id="appTabs" aria-label="Navigation principale">
   <button class="app-tab is-active" type="button" data-view-target="liste">
     <span class="app-tab-icon">🎁</span><span><b>Liste</b><small>Cadeaux</small></span>
@@ -259,8 +273,15 @@ main.unlocked>.foot{margin-top:24px}
  </section>
  <section class="birthday-section birthday-hidden" id="birthdayHydraWorldSection" data-app-view="anniversaire">
    <div class="birthday-card">
-     <h2>📜 PROTOCOLE HYDRA — DOSSIER DE LA JOURNÉE</h2>
-     <div id="birthdayHydraInvitation" class="birthday-item"></div>
+     <div class="birthday-actions" style="justify-content:space-between;align-items:center;gap:10px">
+       <h2 style="margin:0">📜 PROTOCOLE HYDRA — DOSSIER DE LA JOURNÉE</h2>
+       <button class="btn" type="button" onclick="printHydraDossier()">🖨️ Imprimer / enregistrer en PDF</button>
+     </div>
+     <div id="birthdayHydraInvitation" class="birthday-item" style="margin-top:12px"></div>
+     <details style="margin-top:12px" open>
+       <summary style="cursor:pointer;font-weight:800">🕵️ Instructions pour la Murder Party</summary>
+       <div id="birthdayHydraInstructions" class="birthday-item" style="margin-top:10px"></div>
+     </details>
      <details style="margin-top:12px">
        <summary style="cursor:pointer;font-weight:800">🗺️ Les 8 zones</summary>
        <div id="birthdayHydraZones" class="birthday-list"></div>
@@ -269,6 +290,7 @@ main.unlocked>.foot{margin-top:24px}
        <summary style="cursor:pointer;font-weight:800">🧳 Les 18 objets clés</summary>
        <div id="birthdayHydraObjects" class="birthday-list"></div>
      </details>
+     <div class="form-note" style="margin-top:12px">Le bouton d’impression permet aussi de choisir « Enregistrer au format PDF » dans le navigateur. Les réponses d’énigmes et les éléments réservés à l’organisateur restent hors de cette vue.</div>
    </div>
  </section><section class="fundraisers-main" data-app-view="participer">
 <div class="panel">
@@ -847,6 +869,12 @@ async function loadBirthdayPoll(){
 async function voteBirthdayPoll(choice){
   try{await birthdayRpc("poll_vote",{choice});showToast("Vote enregistré.");await loadBirthdayPoll();}catch(e){showToast(e.message)}
 }
+function printHydraDossier(){
+  document.body.classList.add("hydra-print");
+  const cleanup=()=>{document.body.classList.remove("hydra-print");window.removeEventListener("afterprint",cleanup);};
+  window.addEventListener("afterprint",cleanup,{once:true});
+  window.print();
+}
 function renderHydraWorld(){
   const mp=birthdayConfig?.murder_party||{};
   const inv=mp.invitation||{};
@@ -863,6 +891,17 @@ function renderHydraWorld(){
       +(inv.preparation?'<div class="form-note" style="margin-top:8px">'+esc(inv.preparation)+'</div>':"")
       +(phases?'<div style="margin-top:8px"><strong>Déroulement :</strong><ul>'+phases+'</ul></div>':"")
       +(inv.note?'<div class="form-note"><strong>Note :</strong> '+esc(inv.note)+'</div>':"");
+  }
+  const instructions=document.getElementById("birthdayHydraInstructions");
+  if(instructions){
+    const phases=Array.isArray(inv.phases)?inv.phases:[];
+    instructions.innerHTML='<p style="margin-top:0"><strong>Règles essentielles :</strong></p>'
+      +'<ul><li>Reste dans ton personnage et garde les informations de ton dossier confidentielles jusqu’au moment où le jeu permet de les révéler.</li>'
+      +'<li>Observe les lieux, les objets, les indices et les autres joueurs : les informations peuvent se recouper.</li>'
+      +'<li>Tu peux discuter, enquêter et formuler des hypothèses, mais ne prends jamais d’action dangereuse dans la vraie vie.</li>'
+      +'<li>Pour les énigmes, privilégie les indices du dossier et du décor ; les réponses officielles restent réservées à l’organisation.</li></ul>'
+      +(phases.length?'<p><strong>Les 5 phases de la journée :</strong></p><ol>'+phases.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>':"")
+      +'<p class="form-note" style="margin-bottom:0">Ton dossier privé « 🕵️ MON DOSSIER HYDRA » contient ton personnage, tes informations secrètes, ton document spécial et ton fragment IA lorsqu’ils sont attribués à ton accès.</p>';
   }
   const zones=document.getElementById("birthdayHydraZones");
   if(zones)zones.innerHTML=(Array.isArray(mp.zones)?mp.zones:[]).map(z=>'<article class="birthday-item"><strong>'+esc(z.name)+'</strong><div class="form-note">'+esc(z.description||"")+'</div><div style="margin-top:6px"><strong>Ce que les joueurs savent :</strong> '+esc(z.knowledge||"")+'</div><div><strong>Détection de Milo :</strong> '+esc(z.milo_detected||"")+'</div><div><strong>À trouver :</strong> '+esc(z.finds||"")+'</div></article>').join("");
