@@ -582,7 +582,7 @@ async function unlockSite(code,providedHydraToken=""){
     const r=await privateRpc("authorize_list_access",{p_code:code});
     const data=await r.json().catch(()=>null);
     if(!r.ok||!data||data.authorized!==true){
-      sessionStorage.removeItem("birthday_list_access");
+      localStorage.removeItem("birthday_list_access");
       if(data?.rate_limited){
         const wait=Number(data.retry_after_seconds||0);
         accessStatus.textContent=wait>0
@@ -610,7 +610,7 @@ async function unlockSite(code,providedHydraToken=""){
       authorized=false;
       accessCode="";
       accessLabel="";
-      sessionStorage.removeItem("birthday_list_access");
+      localStorage.removeItem("birthday_list_access");
       mainContent.classList.add("locked");
       accessGate.classList.remove("private-locked");
       updateIdentityLabels();
@@ -619,7 +619,7 @@ async function unlockSite(code,providedHydraToken=""){
       if(change)change.hidden=false;
       return false;
     }
-    sessionStorage.setItem("birthday_list_access",accessCode);
+    localStorage.setItem("birthday_list_access",accessCode);
     if(hydraToken)sessionStorage.setItem("birthday_hydra_token",hydraToken);else sessionStorage.removeItem("birthday_hydra_token");
     if(history.replaceState)history.replaceState(null,"",location.pathname+location.hash);
     accessStatus.textContent=accessLabel?"✅ Accès autorisé pour "+accessLabel+".":"✅ Accès autorisé.";
@@ -633,7 +633,7 @@ async function unlockSite(code,providedHydraToken=""){
     return true;
   }catch(err){
     console.error("unlockSite",stage,err);
-    sessionStorage.removeItem("birthday_list_access");
+    localStorage.removeItem("birthday_list_access");
     const detail=err&&err.name==="TypeError"&&String(err.message||"").toLowerCase().includes("fetch")
       ? "Erreur réseau lors de "+stage+"."
       : "Erreur pendant "+stage+".";
@@ -651,7 +651,7 @@ function lockSite(message){
   hydraToken="";
   gifts=[];
   reservations={};
-  sessionStorage.removeItem("birthday_list_access");
+  localStorage.removeItem("birthday_list_access");
   mainContent.classList.add("locked");
   accessGate.classList.remove("private-locked");
   accessStatus.textContent=message||"Entre ton code d’invitation.";
@@ -1225,11 +1225,11 @@ document.getElementById("shareBtn").addEventListener("click",async()=>{const dat
 document.getElementById("resetBtn").addEventListener("click",async()=>{if(!authorized){showToast("Entre d’abord ton code d’invitation.");return}showToast("Actualisation…");await loadGiftCatalog();await loadReservations();showToast("Liste actualisée.")});
 accessForm.addEventListener("submit",async e=>{e.preventDefault();await unlockSite(accessInput.value);});
 document.getElementById("changeCodeBtn")?.addEventListener("click",()=>{
-  sessionStorage.removeItem("birthday_list_access");
+  localStorage.removeItem("birthday_list_access");
   sessionStorage.removeItem("birthday_hydra_token");
   hydraToken="";
   accessInput.value="";
-  accessStatus.textContent="Entre ton nouveau code d’invitation.";
+  lockSite("Entre ton nouveau code d’invitation.");
   document.getElementById("changeCodeBtn").hidden=true;
   accessInput.focus();
 });
@@ -1260,9 +1260,17 @@ if(urlCode&&history.replaceState){
   history.replaceState(null,"",cleanUrl.pathname+cleanUrl.search+cleanUrl.hash);
 }
 const siteSettingsReady=loadSiteSettings();
-const savedCode=sessionStorage.getItem("birthday_list_access");
+const savedCode=localStorage.getItem("birthday_list_access");
 const savedHydraToken=sessionStorage.getItem("birthday_hydra_token")||"";
-if(urlCode){accessInput.value=urlCode;unlockSite(urlCode,urlHydra)}else if(savedCode){unlockSite(savedCode,urlHydra||savedHydraToken)}else{lockSite("Entre ton code d’invitation pour continuer.")}
+if(urlCode){
+  accessInput.value=urlCode;
+  unlockSite(urlCode,urlHydra);
+}else if(savedCode){
+  accessInput.value=savedCode;
+  unlockSite(savedCode,urlHydra||savedHydraToken);
+}else{
+  lockSite("Entre ton code d’invitation pour continuer.");
+}
 async function logSiteVisit(page){try{await fetch(SUPABASE_URL+"/rest/v1/rpc/log_site_visit",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_page:page})})}catch{}}
 logSiteVisit("Liste principale");
 </script><div style="text-align:center;color:#8a90a3;font-size:10px;padding:8px">Interface mobile • 2026.09.25</div>
