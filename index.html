@@ -782,7 +782,7 @@ async function loadHydraDossier(){
         "Tenue de référence : "+String(p.tenue_parfaite||""),
         "Donne une liste très précise de vêtements à porter : pièce exacte, couleur, matière, coupe pratique, chaussures et accessoires. Reste cohérent avec le rôle, la journée d’anniversaire et un costume facilement réalisable."
       ].join("\\n");
-      const aiUrl="https://chatgpt.com/";
+      const aiUrl="https://www.perplexity.ai/";
       const aiActions='<div class="hydra-ai-actions"><a class="btn" href="'+aiUrl+'" target="_blank" rel="noopener noreferrer">🤖 Ouvrir l’IA</a><button type="button" class="btn" onclick="copyHydraAiPrompt('+JSON.stringify(aiPrompt)+')">📋 Copier le prompt</button></div>';
 
       return '<details class="hydra-fiche-card">'
@@ -797,10 +797,30 @@ async function loadHydraDossier(){
     body.innerHTML='<div class="birthday-item"><strong>Erreur Hydra</strong><span class="form-note">'+escAny(e?.message||"Erreur inconnue")+'</span></div>';
   }
 }
-function copyHydraAiPrompt(prompt){
-  navigator.clipboard?.writeText(prompt)
-    .then(()=>showToast("Prompt IA copié."))
-    .catch(()=>showToast("Impossible de copier le prompt IA."));
+async function copyHydraAiPrompt(prompt){
+  const text=String(prompt||"");
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+    }else{
+      const ta=document.createElement("textarea");
+      ta.value=text;
+      ta.setAttribute("readonly","");
+      ta.style.position="fixed";
+      ta.style.opacity="0";
+      ta.style.pointerEvents="none";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok=document.execCommand("copy");
+      ta.remove();
+      if(!ok)throw new Error("copy-failed");
+    }
+    showToast("Prompt Perplexity copié.");
+  }catch(e){
+    console.error("copyHydraAiPrompt",e);
+    showToast("Impossible de copier le prompt. Essaie encore.");
+  }
 }
 
 async function loadBirthdayWall(){
