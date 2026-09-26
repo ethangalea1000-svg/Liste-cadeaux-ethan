@@ -3976,8 +3976,8 @@ begin
           ));
         exit when not exists(
           select 1
-          from public.hydra_access_assignments
-          where private_token=v_private_token
+          from public.hydra_access_assignments haa
+          where haa.private_token=v_private_token
         );
       end loop;
 
