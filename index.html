@@ -165,7 +165,7 @@ main.unlocked>.foot{margin-top:24px}
   body.hydra-print details{break-inside:avoid}
   body.hydra-print button{display:none !important}
 }
-.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.skip-link{position:fixed;left:12px;top:12px;z-index:9999;transform:translateY(-180%);padding:10px 14px;border-radius:10px;background:#fff;color:#17192a;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}.skip-link:focus{transform:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8f92ff;outline-offset:2px}.app-tab{min-height:44px}.view-top{min-height:44px}@media(max-width:700px){.app-tabs{border-radius:14px;gap:5px;padding:5px}.app-tab{padding:10px 8px;gap:6px}.app-tab small{display:none}.app-tab-icon{font-size:18px}.topnav{position:static;margin-bottom:18px;justify-content:flex-start}.access-form button,.actions button,.form-actions button{min-height:44px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}</style></head>
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.hydra-world-section{margin-top:24px}.hydra-world-card{background:linear-gradient(180deg,#17192a 0,#212344 42%,#fff 42%,#fff 100%);color:#fff}.hydra-world-card h2{color:#fff}.hydra-kicker{font-size:11px;letter-spacing:.18em;font-weight:900;opacity:.78}.hydra-world-card .form-note{color:#d7d9e8}.hydra-world-card .birthday-item{background:#fff;color:var(--text);border-color:#dfe2ef}.hydra-decoration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.hydra-decoration-card{background:linear-gradient(180deg,#fff,#f8f9fd);border:1px solid var(--line);border-radius:14px;padding:13px;color:var(--text)}.hydra-decoration-card strong{display:block;font-size:15px}.hydra-decoration-meta{font-size:11px;color:var(--muted);margin-top:4px}.hydra-decoration-card ul{margin:8px 0 0;padding-left:18px}.hydra-safety-note{background:#fff7e8;border:1px solid #edd39b;color:#704b00;border-radius:12px;padding:11px 12px;font-size:12px;line-height:1.45}.hydra-fiche-extra{margin-top:10px;padding:10px 11px;background:#f7f8fd;border:1px solid #e1e4ef;border-radius:11px}.hydra-relations{display:grid;gap:7px;margin-top:8px}.hydra-rel{padding:8px;border-radius:9px;background:#fff;border:1px solid var(--line)}@media(max-width:700px){.hydra-decoration-grid{grid-template-columns:1fr}.hydra-world-card{background:linear-gradient(180deg,#17192a 0,#212344 31%,#fff 31%,#fff 100%)}}.skip-link{position:fixed;left:12px;top:12px;z-index:9999;transform:translateY(-180%);padding:10px 14px;border-radius:10px;background:#fff;color:#17192a;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}.skip-link:focus{transform:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8f92ff;outline-offset:2px}.app-tab{min-height:44px}.view-top{min-height:44px}@media(max-width:700px){.app-tabs{border-radius:14px;gap:5px;padding:5px}.app-tab{padding:10px 8px;gap:6px}.app-tab small{display:none}.app-tab-icon{font-size:18px}.topnav{position:static;margin-bottom:18px;justify-content:flex-start}.access-form button,.actions button,.form-actions button{min-height:44px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}</style></head>
 <body>
 <a class="skip-link" href="#mainContent">Aller directement au contenu</a>
 <header class="hero"><div class="wrap"><nav class="topnav"><a id="navCommunity" href="communaute.html">💬 Communauté</a><a id="navPrivacy" href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag" id="siteTag">🎁 Noël & Anniversaire 2026</span><h1 id="siteHeroTitle">La liste d’Ethan</h1><p id="siteHeroDescription">Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button><button class="secondary" id="redoCodeBtn" type="button">🔄 Refaire le code</button></div></div></header>
@@ -278,26 +278,20 @@ main.unlocked>.foot{margin-top:24px}
      <div id="birthdayHydraBody" class="birthday-list"></div>
    </div>
  </section>
- <section class="birthday-section birthday-hidden" id="birthdayHydraWorldSection" data-app-view="anniversaire">
-   <div class="birthday-card">
+ <section class="birthday-section birthday-hidden hydra-world-section" id="birthdayHydraWorldSection" data-app-view="anniversaire">
+   <div class="birthday-card hydra-world-card">
      <div class="birthday-actions" style="justify-content:space-between;align-items:center;gap:10px">
-       <h2 style="margin:0">📜 PROTOCOLE HYDRA — DOSSIER DE LA JOURNÉE</h2>
+       <div><div class="hydra-kicker">🕵️ DOSSIER CENTRAL</div><h2 style="margin:4px 0 0">📜 PROTOCOLE HYDRA — DOSSIER DE LA JOURNÉE</h2></div>
        <button class="btn" type="button" onclick="printHydraDossier()">🖨️ Imprimer / enregistrer en PDF</button>
      </div>
-     <div id="birthdayHydraInvitation" class="birthday-item" style="margin-top:12px"></div>
-     <details style="margin-top:12px" open>
-       <summary style="cursor:pointer;font-weight:800">🕵️ Instructions pour la Murder Party</summary>
-       <div id="birthdayHydraInstructions" class="birthday-item" style="margin-top:10px"></div>
-     </details>
-     <details style="margin-top:12px">
-       <summary style="cursor:pointer;font-weight:800">🗺️ Les 8 zones</summary>
-       <div id="birthdayHydraZones" class="birthday-list"></div>
-     </details>
-     <details style="margin-top:12px">
-       <summary style="cursor:pointer;font-weight:800">🧳 Les 18 objets clés</summary>
-       <div id="birthdayHydraObjects" class="birthday-list"></div>
-     </details>
-     <div class="form-note" style="margin-top:12px">Le bouton d’impression permet aussi de choisir « Enregistrer au format PDF » dans le navigateur. Les réponses d’énigmes et les éléments réservés à l’organisateur restent hors de cette vue.</div>
+     <div id="birthdayHydraInvitation" class="birthday-item hydra-panel" style="margin-top:12px"></div>
+     <details style="margin-top:12px" open><summary style="cursor:pointer;font-weight:800">🎬 L’histoire officielle — sans spoiler</summary><div id="birthdayHydraStory" class="birthday-item" style="margin-top:10px"></div></details>
+     <details style="margin-top:12px" open><summary style="cursor:pointer;font-weight:800">🕵️ Instructions pour la Murder Party</summary><div id="birthdayHydraInstructions" class="birthday-item" style="margin-top:10px"></div></details>
+     <details style="margin-top:12px" open><summary style="cursor:pointer;font-weight:800">🗺️ Les 8 zones</summary><div id="birthdayHydraZones" class="birthday-list"></div></details>
+     <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:800">🧳 Les 18 objets clés</summary><div id="birthdayHydraObjects" class="birthday-list"></div></details>
+     <details style="margin-top:12px" open><summary style="cursor:pointer;font-weight:800">🎨 Décorations officielles</summary><div id="birthdayHydraDecorations" class="hydra-decoration-grid"></div></details>
+     <div class="hydra-safety-note" style="margin-top:12px">⚠️ Les éléments scientifiques d’Hydra sont uniquement des accessoires de fiction. Utilise du papier, des LED, des flacons vides ou de l’eau comme décor : jamais de vraie substance chimique, de feu ou de matériel dangereux.</div>
+     <div class="form-note" style="margin-top:12px">Le bouton d’impression permet aussi de choisir « Enregistrer au format PDF ». Les réponses officielles des énigmes, la chronologie secrète et le guide MJ restent réservés à l’organisation.</div>
    </div>
  </section><section class="fundraisers-main" data-app-view="participer">
 <div class="panel">
@@ -784,66 +778,23 @@ function startBirthdayCountdown(){
   tick(); birthdayCountdownTimer=setInterval(tick,1000);
 }
 async function loadHydraDossier(){
-  const section=document.getElementById("birthdayHydraSection");
-  const body=document.getElementById("birthdayHydraBody");
-  const meta=document.getElementById("birthdayHydraMeta");
-  if(!section||!body)return;
-
-  birthdaySet("birthdayHydraSection",false);
-  body.innerHTML="";
-
-  try{
-    const r=await privateRpc("get_my_hydra_dossiers",{p_code:accessCode});
-    const data=await r.json().catch(()=>[]);
-    if(!r.ok)throw new Error(data?.message||data?.error||"Impossible de charger les dossiers Hydra.");
-    const dossiers=Array.isArray(data)?data:[];
-    if(!dossiers.length)return;
-
-    birthdaySet("birthdayHydraSection",true);
-    if(meta)meta.textContent=dossiers.length===1
-      ?"1 fiche Hydra est associée à ton accès."
-      :dossiers.length+" fiches Hydra sont associées à ton accès.";
-
-    body.innerHTML=dossiers.map((p,index)=>{
-      const rows=[
-        ["Rôle",p.role],
-        ["Fonction",p.function],
-        ["Description",p.description],
-        ["Ce que tu sais au début",p.knowledge],
-        ["Objectif",p.objective],
-        ["Document spécial",p.special_text||p.special],
-        ["👕 Tenue parfaite",p.tenue_parfaite||p.outfit||p.tenue||"À définir"],
-        ["Règle spéciale",p.rule],
-        ["Accroche",p.fictional_hook],
-        ["Fragment IA",p.fragment]
-      ].filter(x=>String(x[1]??"").trim());
-
-      const content=p.scenario&&String(p.scenario).trim()
-        ? '<div class="hydra-fiche-scenario">'+escAny(p.scenario)+'</div>'
-        : rows.map(x=>'<div class="hydra-fiche-row"><strong>'+escAny(x[0])+'</strong><span>'+escAny(x[1])+'</span></div>').join("");
-
-      const aiPrompt=[
-        "Je prépare une tenue de Murder Party pour un personnage fictif.",
-        "Personnage : "+String(p.name||""),
-        "Rôle : "+String(p.role||""),
-        "Fonction : "+String(p.function||""),
-        "Tenue de référence : "+String(p.tenue_parfaite||""),
-        "Donne une liste très précise de vêtements à porter : pièce exacte, couleur, matière, coupe pratique, chaussures et accessoires. Reste cohérent avec le rôle, la journée d’anniversaire et un costume facilement réalisable."
-      ].join("\\n");
-      const aiUrl=perplexityPromptUrl(aiPrompt);
-      const aiActions='<div class="hydra-ai-actions"><a class="btn" href="'+aiUrl+'" target="_blank" rel="noopener noreferrer">🤖 Ouvrir Perplexity avec le prompt</a></div>';
-
-      return '<details class="hydra-fiche-card">'
-        +'<summary class="hydra-fiche-summary"><div><span class="hydra-fiche-number">FICHE '+(index+1)+'</span><span class="hydra-fiche-name">'+escAny(p.name||("Dossier "+(index+1)))+'</span></div><span class="hydra-fiche-chevron">⌄</span></summary>'
-        +'<div class="hydra-fiche-content">'+content+aiActions+'</div>'
-        +'</details>';
-    }).join("");
-  }catch(e){
-    console.error("loadHydraDossier",e);
-    birthdaySet("birthdayHydraSection",true);
-    if(meta)meta.textContent="❌ Impossible de charger les fiches Hydra.";
-    body.innerHTML='<div class="birthday-item"><strong>Erreur Hydra</strong><span class="form-note">'+escAny(e?.message||"Erreur inconnue")+'</span></div>';
-  }
+ const section=document.getElementById("birthdayHydraSection"),body=document.getElementById("birthdayHydraBody"),meta=document.getElementById("birthdayHydraMeta");
+ if(!section||!body)return; birthdaySet("birthdayHydraSection",false); body.innerHTML="";
+ try{
+  const r=await privateRpc("get_my_hydra_dossiers",{p_code:accessCode}),data=await r.json().catch(()=>[]);
+  if(!r.ok)throw new Error(data?.message||data?.error||"Impossible de charger les dossiers Hydra.");
+  const dossiers=Array.isArray(data)?data:[]; if(!dossiers.length)return;
+  birthdaySet("birthdayHydraSection",true);
+  if(meta)meta.textContent=dossiers.length===1?"1 fiche Hydra est associée à ton accès.":dossiers.length+" fiches Hydra sont associées à ton accès.";
+  body.innerHTML=dossiers.map((p,index)=>{
+   const rows=[["Rôle",p.role],["Fonction",p.function],["Description",p.description],["Ce que tu sais au début",p.knowledge],["Objectif",p.objective],["Secret",p.secret],["Ce que tu dois découvrir",p.discover],["Document spécial",p.special_text||p.special],["👕 Tenue parfaite",p.tenue_parfaite||p.outfit||p.tenue||"À définir"],["Règle spéciale",p.rule],["Accroche",p.fictional_hook],["Fragment IA",p.fragment]].filter(x=>String(x[1]??"").trim());
+   const relations=Array.isArray(p.relations)&&p.relations.length?'<div class="hydra-fiche-extra"><strong>🔗 Relations utiles</strong><div class="hydra-relations">'+p.relations.map(r=>'<div class="hydra-rel"><strong>'+escAny(r.with||"")+'</strong> · '+escAny(r.type||"")+'<div class="form-note">'+escAny(r.what||"")+'</div></div>').join("")+'</div></div>':"";
+   const clues=Array.isArray(p.clue_chain)&&p.clue_chain.length?'<div class="hydra-fiche-extra"><strong>🧩 Chaîne d’indices</strong><ul>'+p.clue_chain.map(c=>'<li>'+escAny(c)+'</li>').join("")+'</ul></div>':"";
+   const reveals=Array.isArray(p.revelations)&&p.revelations.length?'<div class="hydra-fiche-extra"><strong>🎭 Révélations progressives</strong><ol>'+p.revelations.map(c=>'<li>'+escAny(c)+'</li>').join("")+'</ol></div>':"";
+   const aiUrl=perplexityPromptUrl(["Je prépare une tenue de Murder Party pour un personnage fictif.","Personnage : "+String(p.name||""),"Rôle : "+String(p.role||""),"Fonction : "+String(p.function||""),"Tenue de référence : "+String(p.tenue_parfaite||""),"Donne une liste précise de vêtements et accessoires, pratique pour une journée d’anniversaire."].join("\n"));
+   return '<details class="hydra-fiche-card"><summary class="hydra-fiche-summary"><div><span class="hydra-fiche-number">FICHE '+(index+1)+'</span><span class="hydra-fiche-name">'+escAny(p.name||("Dossier "+(index+1)))+'</span></div><span class="hydra-fiche-chevron">⌄</span></summary><div class="hydra-fiche-content">'+rows.map(x=>'<div class="hydra-fiche-row"><strong>'+escAny(x[0])+'</strong><span>'+escAny(x[1])+'</span></div>').join("")+relations+clues+reveals+'<div class="hydra-ai-actions"><a class="btn" href="'+aiUrl+'" target="_blank" rel="noopener noreferrer">🤖 Ouvrir Perplexity avec le prompt</a></div></div></details>';
+  }).join("");
+ }catch(e){console.error("loadHydraDossier",e);birthdaySet("birthdayHydraSection",true);if(meta)meta.textContent="❌ Impossible de charger les fiches Hydra.";body.innerHTML='<div class="birthday-item"><strong>Erreur Hydra</strong><span class="form-note">'+escAny(e?.message||"Erreur inconnue")+'</span></div>';}
 }
 async function loadBirthdayWall(){
   try{
@@ -883,37 +834,16 @@ function printHydraDossier(){
   window.print();
 }
 function renderHydraWorld(){
-  const mp=birthdayConfig?.murder_party||{};
-  const inv=mp.invitation||{};
-  birthdaySet("birthdayHydraWorldSection",!!mp.invitation);
-  const invEl=document.getElementById("birthdayHydraInvitation");
-  if(invEl){
-    const phases=Array.isArray(inv.phases)?inv.phases.map(x=>"<li>"+esc(x)+"</li>").join(""):"";
-    invEl.innerHTML='<strong>'+esc(inv.title||"PROTOCOLE HYDRA")+'</strong>'
-      +'<div class="form-note" style="margin-top:6px">'+esc(inv.body||"")+'</div>'
-      +'<div style="margin-top:8px"><strong>📍 Lieu :</strong> '+esc(inv.mission_location||mp.location||"")+'</div>'
-      +'<div><strong>📅 Date :</strong> '+esc(inv.date||mp.date||"")+'</div>'
-      +'<div><strong>⏰ Moment clé :</strong> '+esc(inv.key_moment||mp.key_moment||"")+'</div>'
-      +'<div><strong>👕 Tenue :</strong> '+esc(inv.outfit||"")+'</div>'
-      +(inv.preparation?'<div class="form-note" style="margin-top:8px">'+esc(inv.preparation)+'</div>':"")
-      +(phases?'<div style="margin-top:8px"><strong>Déroulement :</strong><ul>'+phases+'</ul></div>':"")
-      +(inv.note?'<div class="form-note"><strong>Note :</strong> '+esc(inv.note)+'</div>':"");
-  }
-  const instructions=document.getElementById("birthdayHydraInstructions");
-  if(instructions){
-    const phases=Array.isArray(inv.phases)?inv.phases:[];
-    instructions.innerHTML='<p style="margin-top:0"><strong>Règles essentielles :</strong></p>'
-      +'<ul><li>Reste dans ton personnage et garde les informations de ton dossier confidentielles jusqu’au moment où le jeu permet de les révéler.</li>'
-      +'<li>Observe les lieux, les objets, les indices et les autres joueurs : les informations peuvent se recouper.</li>'
-      +'<li>Tu peux discuter, enquêter et formuler des hypothèses, mais ne prends jamais d’action dangereuse dans la vraie vie.</li>'
-      +'<li>Pour les énigmes, privilégie les indices du dossier et du décor ; les réponses officielles restent réservées à l’organisation.</li></ul>'
-      +(phases.length?'<p><strong>Les 5 phases de la journée :</strong></p><ol>'+phases.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>':"")
-      +'<p class="form-note" style="margin-bottom:0">Ton dossier privé « 🕵️ MON DOSSIER HYDRA » contient ton personnage, tes informations secrètes, ton document spécial et ton fragment IA lorsqu’ils sont attribués à ton accès.</p>';
-  }
-  const zones=document.getElementById("birthdayHydraZones");
-  if(zones)zones.innerHTML=(Array.isArray(mp.zones)?mp.zones:[]).map(z=>'<article class="birthday-item"><strong>'+esc(z.name)+'</strong><div class="form-note">'+esc(z.description||"")+'</div><div style="margin-top:6px"><strong>Ce que les joueurs savent :</strong> '+esc(z.knowledge||"")+'</div><div><strong>Détection de Milo :</strong> '+esc(z.milo_detected||"")+'</div><div><strong>À trouver :</strong> '+esc(z.finds||"")+'</div></article>').join("");
-  const objects=document.getElementById("birthdayHydraObjects");
-  if(objects)objects.innerHTML=(Array.isArray(mp.objects)?mp.objects:[]).map(o=>'<article class="birthday-item"><strong>'+esc(o.name)+'</strong><div class="form-note">'+esc(o.description||"")+'</div></article>').join("");
+ const mp=birthdayConfig?.murder_party||{},inv=mp.invitation||{};
+ birthdaySet("birthdayHydraWorldSection",!!mp.invitation);
+ const invEl=document.getElementById("birthdayHydraInvitation");
+ if(invEl){const phases=Array.isArray(inv.phases)?inv.phases.map(x=>"<li>"+esc(x)+"</li>").join(""):"";invEl.innerHTML='<strong>'+esc(inv.title||"PROTOCOLE HYDRA")+'</strong><div class="form-note" style="margin-top:6px">'+esc(inv.body||"")+'</div><div style="margin-top:8px"><strong>📍 Lieu :</strong> '+esc(inv.mission_location||mp.location||"")+'</div><div><strong>📅 Date :</strong> '+esc(inv.date||mp.date||"")+'</div><div><strong>⏰ Moment clé :</strong> '+esc(inv.key_moment||mp.key_moment||"")+'</div><div><strong>👕 Tenue :</strong> '+esc(inv.outfit||"")+'</div>'+(inv.preparation?'<div class="form-note" style="margin-top:8px">'+esc(inv.preparation)+'</div>':"")+(phases?'<div style="margin-top:8px"><strong>Déroulement :</strong><ul>'+phases+'</ul></div>':"")+(inv.note?'<div class="form-note"><strong>Note :</strong> '+esc(inv.note)+'</div>':"");}
+ const sp=mp.story_public||{},story=document.getElementById("birthdayHydraStory");if(story)story.innerHTML='<strong>'+esc(sp.title||"L’histoire")+'</strong><div class="form-note" style="margin-top:6px">'+esc(sp.text||"")+'</div>';
+ const instructions=document.getElementById("birthdayHydraInstructions");
+ if(instructions){const phases=Array.isArray(inv.phases)?inv.phases:[];instructions.innerHTML='<p style="margin-top:0"><strong>Règles essentielles :</strong></p><ul><li>Reste dans ton personnage et garde les informations privées confidentielles jusqu’au moment de les révéler.</li><li>Observe lieux, objets, indices et autres joueurs : les informations peuvent se recouper.</li><li>Tu peux mentir dans ton rôle, mais aucune action dangereuse n’est permise dans la vraie vie.</li><li>Une seule piste ne suffit pas : recoupe toujours les indices.</li></ul>'+(phases.length?'<p><strong>Les actes :</strong></p><ol>'+phases.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>':"")+'<p class="form-note" style="margin-bottom:0">Ton dossier privé contient ton personnage, ses informations secrètes, son document spécial et son fragment IA.</p>';}
+ const zones=document.getElementById("birthdayHydraZones");if(zones)zones.innerHTML=(Array.isArray(mp.zones)?mp.zones:[]).map(z=>'<article class="birthday-item"><strong>'+esc(z.name)+'</strong><div class="form-note">'+esc(z.description||"")+'</div><div style="margin-top:6px"><strong>Ce que les joueurs savent :</strong> '+esc(z.knowledge||"")+'</div><div><strong>Détection de Milo :</strong> '+esc(z.milo_detected||"")+'</div><div><strong>À trouver :</strong> '+esc(z.finds||"")+'</div></article>').join("");
+ const objects=document.getElementById("birthdayHydraObjects");if(objects)objects.innerHTML=(Array.isArray(mp.objects)?mp.objects:[]).map(o=>'<article class="birthday-item"><strong>'+esc(o.name)+'</strong><div class="form-note">'+esc(o.description||"")+'</div></article>').join("");
+ const decorations=document.getElementById("birthdayHydraDecorations");if(decorations)decorations.innerHTML=(Array.isArray(mp.decorations)?mp.decorations:[]).map(d=>'<article class="hydra-decoration-card"><strong>'+esc(d.name||"")+'</strong><div class="hydra-decoration-meta">📍 '+esc(d.zone||"")+' · '+esc(d.priority||"")+'</div><ul>'+((Array.isArray(d.materials)?d.materials:[]).map(x=>'<li>'+esc(x)+'</li>').join(""))+'</ul><div class="form-note" style="margin-top:7px"><strong>Montage :</strong> '+esc(d.setup||"")+'</div></article>').join("");
 }
 async function loadBirthdayFeatures(){
   try{
