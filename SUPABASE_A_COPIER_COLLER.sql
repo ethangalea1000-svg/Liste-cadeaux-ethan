@@ -3095,21 +3095,34 @@ language sql
 security definer
 set search_path=public
 as $birthdaypublicconfig$
-  select jsonb_strip_nulls(
-    coalesce(settings,'{}'::jsonb)
-    - 'murder_party'
-    - 'schedule'
-  ) ||
-  jsonb_build_object(
-    'schedule',
-      case
-        when coalesce((settings->>'schedule_visible')::boolean,false)
-        then coalesce(settings->'schedule','[]'::jsonb)
-        else '[]'::jsonb
-      end
-  )
-  from public.birthday_config
-  where id=1;
+  select
+    jsonb_strip_nulls(
+      coalesce(bc.settings,'{}'::jsonb)
+      - 'murder_party'
+      - 'schedule'
+    )
+    ||
+    jsonb_build_object(
+      'schedule',
+        case
+          when coalesce((bc.settings->>'schedule_visible')::boolean,false)
+          then coalesce(bc.settings->'schedule','[]'::jsonb)
+          else '[]'::jsonb
+        end,
+      'murder_party',
+        jsonb_build_object(
+          'enabled',coalesce((bc.settings->'murder_party'->>'enabled')::boolean,false),
+          'title',bc.settings->'murder_party'->>'title',
+          'date',bc.settings->'murder_party'->>'date',
+          'location',bc.settings->'murder_party'->>'location',
+          'key_moment',bc.settings->'murder_party'->>'key_moment',
+          'invitation',bc.settings->'murder_party'->'invitation',
+          'zones',coalesce(bc.settings->'murder_party'->'zones','[]'::jsonb),
+          'objects',coalesce(bc.settings->'murder_party'->'objects','[]'::jsonb)
+        )
+    )
+  from public.birthday_config as bc
+  where bc.id=1;
 $birthdaypublicconfig$;
 
 grant execute on function public.get_birthday_public_config() to anon;
@@ -4977,3 +4990,18 @@ select
 
   to_regclass('storage.objects') is not null as storage_objects_exists
 ;
+
+-- ============================================================
+-- DIAGNOSTIC PUBLIC HYDRA (CONTENU SANITISÉ UNIQUEMENT)
+-- Les dossiers personnages, fragments IA, énigmes, réponses,
+-- PNJs et guide MJ ne sont volontairement pas exposés.
+-- ============================================================
+select
+  'HYDRA_PUBLIC_WORLD_OK' as hydra_public_world_status,
+  jsonb_array_length(coalesce(
+    public.get_birthday_public_config()->'murder_party'->'zones','[]'::jsonb
+  )) as public_zones_count,
+  jsonb_array_length(coalesce(
+    public.get_birthday_public_config()->'murder_party'->'objects','[]'::jsonb
+  )) as public_objects_count,
+  (public.get_birthday_public_config()->'murder_party'->'invitation') is not null as public_invitation_present;
