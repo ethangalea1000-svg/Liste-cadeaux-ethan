@@ -589,8 +589,16 @@ async function syncHydraAssignments(accessId){
  try{
   if(!select)throw new Error("Sélecteur Hydra introuvable pour cet accès.");
   if(button){button.disabled=true;button.textContent="⏳ Enregistrement…";}
-  await rpc("admin_sync_hydra_access_assignments",{p_access_id:Number(accessId),p_players:players});
-  toast(players.length?players.length+" dossier(s) Hydra ajouté(s) à cette personne.":"Dossiers Hydra retirés pour cette personne.");
+  const saved=await rpc("admin_sync_hydra_access_assignments",{p_access_id:Number(accessId),p_players:players});
+  const savedRows=Array.isArray(saved)?saved:[];
+  const savedNames=savedRows.map(x=>String(x.hydra_player_name||"").trim()).filter(Boolean);
+  toast(savedNames.length
+    ?"✅ Supabase : "+savedNames.length+" dossier(s) enregistré(s) — "+savedNames.join(", ")
+    :"✅ Supabase : aucun dossier Hydra attribué.");
+  const status=document.getElementById("hydraAssignmentStatus");
+  if(status && !hydraAssignmentsError){
+    status.scrollIntoView({behavior:"smooth",block:"center"});
+  }
   await loadAccessCodes();
  }catch(e){
   console.error("syncHydraAssignments",e);
