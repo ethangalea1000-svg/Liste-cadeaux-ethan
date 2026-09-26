@@ -974,83 +974,124 @@ function startPrivateRefresh(){
 }
 
 async function loadFundraisers(){
-  if(!authorized)return;
-  const [fr,cr]=await Promise.all([
-    fetch(SUPABASE_URL+"/rest/v1/fundraisers?select=id,title,description,goal_amount,status&status=eq.approved&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}}),
-    fetch(SUPABASE_URL+"/rest/v1/contributions?select=fundraiser_id,amount",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}})
-  ]);
-  if(!fr.ok)return;
-  const campaigns=await fr.json(), contributions=cr.ok?await cr.json():[];
-  const totals={};
-  contributions.forEach(x=>{if(x.fundraiser_id)totals[x.fundraiser_id]=(totals[x.fundraiser_id]||0)+Number(x.amount||0)});
-  const list=document.getElementById("fundraisersList"),select=document.getElementById("fundraiserSelect");
-  list.innerHTML="";
-  select.innerHTML="";
-  if(!campaigns.length){
-    list.innerHTML='<div class="empty">Aucune cagnotte validée pour le moment.</div>';
-    select.innerHTML='<option value="">Aucune cagnotte disponible</option>';
-    return;
+  if(!authorized||!accessCode)return;
+  try{
+    const fr=await privateRpc("get_private_fundraisers",{p_code:accessCode});
+    const campaigns=await fr.json().catch(()=>[]);
+    if(!fr.ok)throw new Error("Impossible de charger les cagnottes.");
+    const list=document.getElementById("fundraisersList"),select=document.getElementById("fundraiserSelect");
+    list.innerHTML="";
+    select.innerHTML="";
+    if(!Array.isArray(campaigns)||!campaigns.length){
+      list.innerHTML='<div class="empty">Aucune cagnotte validée pour le moment.</div>';
+      select.innerHTML='<option value="">Aucune cagnotte disponible</option>';
+      return;
+    }
+    const cr=await privateRpc("get_private_contributions",{p_code:accessCode,p_fundraiser_id:null});
+    const contributions=cr.ok?(await cr.json().catch(()=>[])):[];
+
+    const totals={};
+    (Array.isArray(contributions)?contributions:[]).forEach(x=>{
+      if(x.fundraiser_id)totals[x.fundraiser_id]=(totals[x.fundraiser_id]||0)+Number(x.amount||0);
+    });
+
+    campaigns.forEach(x=>{
+      const total=totals[x.id]||0;
+      const goal=Number(x.goal_amount||0);
+      const pct=goal?Math.min(100,total/goal*100):0;
+      const d=document.createElement("div");
+      d.className="fundraiser-card";
+      d.innerHTML='<div class="fundraiser-title">'+escapeHtml(x.title)+'</div>'
+        +(x.description?'<div style="margin-top:5px;color:var(--muted);font-size:13px">'+escapeHtml(x.description)+'</div>':"")
+        +'<div class="progress"><span style="width:'+pct+'%"></span></div>'
+        +'<div class="fundraiser-meta"><span>'+total.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € annoncés</span><span>objectif '+goal.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</span></div>';
+      list.appendChild(d);
+      const o=document.createElement("option");
+      o.value=x.id;o.textContent=x.title;select.appendChild(o);
+    });
+    if(!select.value)select.value=String(campaigns[0].id);
+    await loadContributions();
+  }catch(e){
+    console.error("loadFundraisers",e);
+    showToast("Impossible de charger les cagnottes.");
   }
-  campaigns.forEach(x=>{
-    const total=totals[x.id]||0,goal=Number(x.goal_amount||0),pct=goal?Math.min(100,total/goal*100):0;
-    const d=document.createElement("div");d.className="fundraiser-card";
-    d.innerHTML='<div class="fundraiser-title">'+escapeHtml(x.title)+'</div>'+(x.description?'<div style="margin-top:5px;color:var(--muted);font-size:13px">'+escapeHtml(x.description)+'</div>':"")+'<div class="progress"><span style="width:'+pct+'%"></span></div><div class="fundraiser-meta"><span>'+total.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' € annoncés</span><span>objectif '+goal.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</span></div>';
-    list.appendChild(d);
-    const o=document.createElement("option");o.value=x.id;o.textContent=x.title;select.appendChild(o);
-  });
-  if(!select.value)select.value=String(campaigns[0].id);
-  loadContributions();
 }
 async function submitFundraiser(e){
   e.preventDefault();
-  const body={
-    title:document.getElementById("fundraiserTitle").value.trim(),
-    description:document.getElementById("fundraiserDescription").value.trim()||null,
-    goal_amount:Number(document.getElementById("fundraiserGoal").value),
-    status:"pending"
-  };
-  if(!body.title||!Number.isFinite(body.goal_amount)||body.goal_amount<=0||body.goal_amount>50000)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/fundraisers",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
-  if(!r.ok){console.error("fundraiser",r.status,await r.text());showToast("Impossible de créer la cagnotte.");return}
-  document.getElementById("fundraiserForm").reset();
-  showToast("Cagnotte envoyée pour validation.");
+  if(!authorized||!accessCode){showToast("Accès requis.");return}
+  const title=document.getElementById("fundraiserTitle").value.trim();
+  const description=document.getElementById("fundraiserDescription").value.trim()||null;
+  const goal_amount=Number(document.getElementById("fundraiserGoal").value);
+  if(!title||!Number.isFinite(goal_amount)||goal_amount<=0||goal_amount>50000){showToast("Objectif invalide.");return}
+  try{
+    const r=await privateRpc("submit_private_fundraiser",{p_code:accessCode,p_title:title,p_description:description,p_goal_amount:goal_amount});
+    if(!r.ok)throw new Error("Impossible de créer la cagnotte.");
+    document.getElementById("fundraiserForm").reset();
+    showToast("Cagnotte envoyée pour validation.");
+  }catch(e){console.error("submitFundraiser",e);showToast(e.message||"Impossible de créer la cagnotte.");}
 }
 async function deleteSuggestion(id,currentName){
-  const name=currentVisitorName(); if(!name){showToast("Identité non disponible.");return}
-  if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
+  const name=currentVisitorName();
+  if(!authorized||!accessCode||!name){showToast("Accès requis.");return}
+  if(name.toLowerCase()!==String(currentName||"").toLowerCase()){showToast("Le prénom ne correspond pas.");return}
   if(!confirm("Supprimer cette proposition ?"))return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_gift_suggestion",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
-  if(!r.ok){console.error("delete suggestion",r.status,await r.text());showToast("Impossible de supprimer la proposition.");return}
-  showToast("Idée supprimée.");loadSuggestions();
+  try{
+    const r=await privateRpc("delete_private_gift_suggestion",{p_code:accessCode,p_id:Number(id)});
+    const ok=await r.json().catch(()=>false);
+    if(!r.ok||ok!==true){showToast("Impossible de supprimer la proposition.");return}
+    showToast("Idée supprimée.");await loadSuggestions();
+  }catch(e){console.error("deleteSuggestion",e);showToast("Impossible de supprimer la proposition.");}
 }
 async function deleteContribution(id,currentName){
-  const name=currentVisitorName(); if(!name){showToast("Identité non disponible.");return}
-  if(name.toLowerCase()!==currentName.toLowerCase()){showToast("Le prénom ne correspond pas.");return}
+  const name=currentVisitorName();
+  if(!authorized||!accessCode||!name){showToast("Accès requis.");return}
+  if(name.toLowerCase()!==String(currentName||"").toLowerCase()){showToast("Le prénom ne correspond pas.");return}
   if(!confirm("Retirer cette donation ?"))return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_contribution",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
-  if(!r.ok){console.error("delete contribution",r.status,await r.text());showToast("Impossible de retirer la donation.");return}
-  showToast("Donation retirée.");loadContributions();
+  try{
+    const r=await privateRpc("delete_private_contribution",{p_code:accessCode,p_id:Number(id)});
+    const ok=await r.json().catch(()=>false);
+    if(!r.ok||ok!==true){showToast("Impossible de retirer la donation.");return}
+    showToast("Donation retirée.");await loadContributions();
+  }catch(e){console.error("deleteContribution",e);showToast("Impossible de retirer la donation.");}
 }
 async function loadIdeas(){
-  if(!authorized)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/ideas?select=id,name,idea,created_at&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
-  if(!r.ok)return;
-  const rows=await r.json(),list=document.getElementById("ideasList");list.innerHTML="";
-  rows.slice(0,10).forEach(x=>{const li=document.createElement("li");li.innerHTML="<div><strong>"+escapeHtml(x.name)+"</strong><br><small>"+escapeHtml(x.idea)+"</small></div><div class=\"item-actions\"><button class=\"delete-btn\">Supprimer</button></div>";li.querySelector("button").onclick=()=>deleteIdea(x.id,x.name);list.appendChild(li)});
+  if(!authorized||!accessCode)return;
+  try{
+    const r=await privateRpc("get_private_ideas",{p_code:accessCode});
+    const rows=await r.json().catch(()=>[]);
+    if(!r.ok)throw new Error("Impossible de charger les idées.");
+    const list=document.getElementById("ideasList");list.innerHTML="";
+    (Array.isArray(rows)?rows:[]).slice(0,10).forEach(x=>{
+      const li=document.createElement("li");
+      li.innerHTML="<div><strong>"+escapeHtml(x.name)+"</strong><br><small>"+escapeHtml(x.idea)+"</small></div><div class="item-actions"><button class="delete-btn">Supprimer</button></div>";
+      li.querySelector("button").onclick=()=>deleteIdea(x.id,x.name);
+      list.appendChild(li);
+    });
+  }catch(e){console.error("loadIdeas",e);showToast("Impossible de charger les idées.");}
 }
 async function submitIdea(e){
   e.preventDefault();
-  const body={name:currentVisitorName(),idea:document.getElementById("ideaText").value.trim()};
-  if(!body.name||!body.idea)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/ideas",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
-  if(!r.ok){console.error("idea",r.status,await r.text());showToast("Impossible d’envoyer l’idée.");return}
-  document.getElementById("ideaForm").reset();showToast("Idée envoyée.");loadIdeas();
+  if(!authorized||!accessCode){showToast("Accès requis.");return}
+  const idea=document.getElementById("ideaText").value.trim();
+  if(!idea)return;
+  try{
+    const r=await privateRpc("submit_private_idea",{p_code:accessCode,p_idea:idea});
+    const result=await r.json().catch(()=>null);
+    if(!r.ok)throw new Error(result?.message||"Impossible d’envoyer l’idée.");
+    document.getElementById("ideaForm").reset();showToast("Idée envoyée.");await loadIdeas();
+  }catch(e){console.error("submitIdea",e);showToast(e.message||"Impossible d’envoyer l’idée.");}
 }
 async function deleteIdea(id,name){
+  const current=currentVisitorName();
+  if(!authorized||!accessCode||!current){showToast("Accès requis.");return}
+  if(current.toLowerCase()!==String(name||"").toLowerCase()){showToast("Le prénom ne correspond pas.");return}
   if(!confirm("Supprimer cette idée ?"))return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/delete_idea",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_id:id,p_name:name})});
-  if(!r.ok){console.error("delete idea",r.status,await r.text());showToast("Impossible de supprimer l’idée.");return}
-  showToast("Idée supprimée.");loadIdeas();
+  try{
+    const r=await privateRpc("delete_private_idea",{p_code:accessCode,p_id:Number(id)});
+    const ok=await r.json().catch(()=>false);
+    if(!r.ok||ok!==true){showToast("Impossible de supprimer l’idée.");return}
+    showToast("Idée supprimée.");await loadIdeas();
+  }catch(e){console.error("deleteIdea",e);showToast("Impossible de supprimer l’idée.");}
 }
 async function submitAccessRequest(e){
   e.preventDefault();
@@ -1087,53 +1128,47 @@ async function submitAccessRequest(e){
 }
 async function submitMessage(e){
   e.preventDefault();
-  const body={
-    name:currentVisitorName(),
-    message:document.getElementById("messageText").value.trim()
-  };
-  if(!body.name||!body.message)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/messages",{
-    method:"POST",
-    cache:"no-store",
-    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},
-    body:JSON.stringify(body)
-  });
-  if(!r.ok){
-    const detail=await r.text();
-    console.error("Supabase message",r.status,detail);
-    showToast("Impossible d’envoyer le message ("+r.status+").");
-    return;
-  }
-  document.getElementById("messageForm").reset();
-  showToast("Message envoyé à Ethan.");
+  if(!authorized||!accessCode){showToast("Accès requis.");return}
+  const message=document.getElementById("messageText").value.trim();
+  if(!message)return;
+  try{
+    const r=await privateRpc("submit_private_message",{p_code:accessCode,p_message:message});
+    if(!r.ok)throw new Error("Impossible d’envoyer le message.");
+    document.getElementById("messageForm").reset();
+    showToast("Message envoyé à Ethan.");
+  }catch(e){console.error("submitMessage",e);showToast(e.message||"Impossible d’envoyer le message.");}
 }
 async function loadMessages(){ return; }
 async function deleteMessage(){ return; }
 async function loadSuggestions(){
-  if(!authorized)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/gift_suggestions?select=id,name,gift_name,link,message,created_at&status=eq.approved&order=created_at.desc",{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
-  if(!r.ok)return;
-  const rows=await r.json();
-  const list=document.getElementById("suggestionsList");
-  list.innerHTML="";
-  rows.slice(0,8).forEach(x=>{
-    const li=document.createElement("li");
-    li.innerHTML="<div><strong>"+escapeHtml(x.gift_name)+"</strong><br><small>"+escapeHtml(x.name)+(x.message?" — "+escapeHtml(x.message):"")+"</small></div><div class=\"item-actions\">"+(x.link?'<a href="'+escapeHtml(x.link)+'" target="_blank" rel="noopener noreferrer">Voir</a>':"")+'<button class="delete-btn">Supprimer</button></div>';li.querySelector(".delete-btn").onclick=()=>deleteSuggestion(x.id,x.name);
-    list.appendChild(li);
-  });
+  if(!authorized||!accessCode)return;
+  try{
+    const r=await privateRpc("get_private_gift_suggestions",{p_code:accessCode});
+    const rows=await r.json().catch(()=>[]);
+    if(!r.ok)throw new Error("Impossible de charger les suggestions.");
+    const list=document.getElementById("suggestionsList");list.innerHTML="";
+    (Array.isArray(rows)?rows:[]).slice(0,8).forEach(x=>{
+      const li=document.createElement("li");
+      li.innerHTML="<div><strong>"+escapeHtml(x.gift_name)+"</strong><br><small>"+escapeHtml(x.name)+(x.message?" — "+escapeHtml(x.message):"")+"</small></div><div class="item-actions">"+(x.link?'<a href="'+escapeHtml(x.link)+'" target="_blank" rel="noopener noreferrer">Voir</a>':"")+'<button class="delete-btn">Supprimer</button></div>";
+      li.querySelector(".delete-btn").onclick=()=>deleteSuggestion(x.id,x.name);
+      list.appendChild(li);
+    });
+  }catch(e){console.error("loadSuggestions",e);showToast("Impossible de charger les suggestions.");}
 }
 async function submitSuggestion(e){
   e.preventDefault();
+  if(!authorized||!accessCode){showToast("Accès requis.");return}
   const body={
-    name:currentVisitorName()||null,
     gift_name:document.getElementById("suggestGift").value.trim(),
     link:document.getElementById("suggestLink").value.trim()||null,
     message:document.getElementById("suggestMessage").value.trim()||null
   };
   if(!body.gift_name)return;
-  const r=await fetch(SUPABASE_URL+"/rest/v1/gift_suggestions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
-  if(!r.ok){console.error("Supabase suggestion",r.status,await r.text());showToast("Impossible d’envoyer la suggestion.");return}
-  document.getElementById("suggestForm").reset();showToast("Suggestion envoyée.");loadSuggestions();
+  try{
+    const r=await privateRpc("submit_private_gift_suggestion",{p_code:accessCode,p_gift_name:body.gift_name,p_link:body.link,p_message:body.message});
+    if(!r.ok)throw new Error("Impossible d’envoyer la suggestion.");
+    document.getElementById("suggestForm").reset();showToast("Suggestion envoyée.");await loadSuggestions();
+  }catch(e){console.error("submitSuggestion",e);showToast(e.message||"Impossible d’envoyer la suggestion.");}
 }
 async function reduceContribution(id,currentAmount){
   if(!authorized||!accessCode)return;
@@ -1150,32 +1185,38 @@ async function reduceContribution(id,currentAmount){
 }
 
 async function loadContributions(){
-  if(!authorized)return;
+  if(!authorized||!accessCode)return;
   const selected=document.getElementById("fundraiserSelect")?.value||"";
-  const filter=selected?"&fundraiser_id=eq."+encodeURIComponent(selected):"";
-  const r=await fetch(SUPABASE_URL+"/rest/v1/contributions?select=id,name,amount,message,created_at,fundraiser_id&order=created_at.desc"+filter,{cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,Accept:"application/json"}});
-  if(!r.ok)return;
-  const rows=await r.json();
-  const total=rows.reduce((s,x)=>s+Number(x.amount||0),0);
-  document.getElementById("contribTotal").textContent=total.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2});
-  document.getElementById("contribCount").textContent=rows.length;
-  const list=document.getElementById("contribList");list.innerHTML="";
-  rows.slice(0,8).forEach(x=>{
-    const li=document.createElement("li");
-    li.innerHTML="<div><strong>"+escapeHtml(x.name)+"</strong>"+(x.message?"<br><small>"+escapeHtml(x.message)+"</small>":"")+"</div><div class=\"item-actions\"><strong>"+Number(x.amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €</strong><button class=\"delete-btn\">Retirer</button></div>";li.querySelector(".delete-btn").onclick=()=>deleteContribution(x.id,x.name);
-    list.appendChild(li);
-  });
+  try{
+    const r=await privateRpc("get_private_contributions",{p_code:accessCode,p_fundraiser_id:selected?Number(selected):null});
+    const rows=await r.json().catch(()=>[]);
+    if(!r.ok)throw new Error("Impossible de charger les participations.");
+    const data=Array.isArray(rows)?rows:[];
+    const total=data.reduce((s,x)=>s+Number(x.amount||0),0);
+    document.getElementById("contribTotal").textContent=total.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById("contribCount").textContent=data.length;
+    const list=document.getElementById("contribList");list.innerHTML="";
+    data.slice(0,8).forEach(x=>{
+      const li=document.createElement("li");
+      li.innerHTML="<div><strong>"+escapeHtml(x.name)+"</strong>"+(x.message?"<br><small>"+escapeHtml(x.message)+"</small>":"")+"</div><div class="item-actions"><strong>"+Number(x.amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €</strong><button class="delete-btn">Retirer</button></div>";
+      li.querySelector(".delete-btn").onclick=()=>deleteContribution(x.id,x.name);
+      list.appendChild(li);
+    });
+  }catch(e){console.error("loadContributions",e);showToast("Impossible de charger les participations.");}
 }
 async function submitContribution(e){
   e.preventDefault();
+  if(!authorized||!accessCode){showToast("Accès requis.");return}
   const amount=Number(document.getElementById("contribAmount").value);
   if(!Number.isFinite(amount)||amount<1||amount>5000){showToast("Montant entre 1 € et 5 000 €.");return}
   const fundraiserId=Number(document.getElementById("fundraiserSelect").value);
   if(!Number.isInteger(fundraiserId)){showToast("Choisis une cagnotte.");return}
-  const body={name:currentVisitorName(),amount:amount,message:document.getElementById("contribMessage").value.trim()||null,fundraiser_id:fundraiserId};
-  const r=await fetch(SUPABASE_URL+"/rest/v1/contributions",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(body)});
-  if(!r.ok){console.error("Supabase contribution",r.status,await r.text());showToast("Impossible d’enregistrer la participation.");return}
-  document.getElementById("contribForm").reset();showToast("Participation enregistrée.");loadContributions();
+  const message=document.getElementById("contribMessage").value.trim()||null;
+  try{
+    const r=await privateRpc("submit_private_contribution",{p_code:accessCode,p_amount:amount,p_message:message,p_fundraiser_id:fundraiserId});
+    if(!r.ok)throw new Error("Impossible d’enregistrer la participation.");
+    document.getElementById("contribForm").reset();showToast("Participation enregistrée.");await loadContributions();
+  }catch(e){console.error("submitContribution",e);showToast(e.message||"Impossible d’enregistrer la participation.");}
 }
 async function removeMyGiftContributions(g){
  if(!authorized||!accessCode){showToast("Accès requis.");return}
