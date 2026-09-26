@@ -470,7 +470,16 @@ async function approveAccessRequest(id){
   await loadAccessRequests();
   await loadAccessCodes();
   await loadPeople();
- }catch(e){toast(e.message)}
+ }catch(e){
+  const box=$("accessRequestResult");
+  if(box){
+    box.classList.remove("hidden");
+    box.dataset.link="";
+    box.dataset.code="";
+    box.innerHTML='<strong>❌ Création de l’accès impossible</strong><div class="meta" style="margin-top:6px">'+esc(e?.message||"Erreur inconnue")+'</div>';
+  }
+  toast(e?.message||"Création de l’accès impossible.");
+ }
 }
 async function rejectAccessRequest(id){
  if(!confirm("Refuser cette demande d’accès ?"))return;
