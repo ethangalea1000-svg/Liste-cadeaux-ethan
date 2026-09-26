@@ -4496,3 +4496,17 @@ select
   has_table_privilege('anon','public.reservations','select') as anon_can_select_table,
   has_table_privilege('anon','public.reservations','insert') as anon_can_insert_table,
   has_table_privilege('anon','public.reservations','delete') as anon_can_delete_table;
+
+-- ============================================================
+-- TEXTE D'ACCUEIL — CODE D'ACCÈS
+-- ============================================================
+update public.site_settings
+set settings = jsonb_set(
+  settings,
+  '{access,text}',
+  to_jsonb('Bienvenue sur la liste d’Ethan. Entre ton code d’invitation pour afficher les cadeaux, participer aux animations et retrouver les informations de la journée. Le plus simple est d’utiliser directement le lien qui t’a été envoyé : il peut ouvrir automatiquement la bonne page.'::text),
+  true
+),
+updated_at = now()
+where id=1;
+
