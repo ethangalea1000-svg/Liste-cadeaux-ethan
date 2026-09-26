@@ -61,6 +61,21 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
 @media(max-width:1000px){.advanced-grid.three,.classified-grid,.lab-grid,.progress-grid,.evidence-locker{grid-template-columns:repeat(2,minmax(0,1fr))}.intel-layout,.forensic-layout,.puzzle-layout,.comms-grid,.radio-panel,.terminal,.ai-grid{grid-template-columns:1fr}.surv-grid{grid-template-columns:1fr}}
 @media(max-width:640px){.advanced-grid,.classified-grid,.lab-grid,.progress-grid,.evidence-locker{grid-template-columns:1fr}.incident{grid-template-columns:1fr}.os-command{flex-wrap:wrap}.os-time{text-align:left}}
 
+
+/* === HYDRA WORKSPACE APPS === */
+.office-layout{display:grid;grid-template-columns:220px 1fr;min-height:620px;border:1px solid #2b3d58;border-radius:18px;overflow:hidden;background:#0b111c}
+.office-side{padding:15px;background:#0d1522;border-right:1px solid #23334a}.office-side h3{margin:0 0 12px}.office-menu{display:grid;gap:6px}.office-menu button{border:1px solid transparent;background:transparent;color:#b4c2d7;text-align:left;border-radius:10px;padding:9px;cursor:pointer;font-weight:800}.office-menu button:hover,.office-menu button.active{background:#18263d;border-color:#334a6b;color:#fff}.office-main{min-width:0;padding:15px}
+.word-toolbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px;border:1px solid #263751;border-radius:12px;background:#0d1725;margin-bottom:10px}.word-toolbar button{border:1px solid #344866;background:#111d2e;color:#dbe6f7;border-radius:8px;padding:8px 9px;font-weight:850;cursor:pointer}.word-toolbar select{padding:7px;border-radius:8px;border:1px solid #344866;background:#111d2e;color:#dbe6f7}.word-title{display:flex;gap:8px;margin-bottom:10px}.word-title input{flex:1}.word-page{min-height:500px;padding:34px;background:#f5f7fb;color:#172033;border-radius:12px;box-shadow:0 15px 40px rgba(0,0,0,.2);outline:none;line-height:1.7}.word-page:empty:before{content:"Commence ton document…";color:#8a95a8}.word-status{display:flex;justify-content:space-between;gap:10px;margin-top:9px;color:#8092ab;font-size:10px}
+.sheet-wrap{overflow:auto;border:1px solid #283a57;border-radius:13px}.sheet-grid{border-collapse:collapse;min-width:780px;width:100%;font-size:11px}.sheet-grid th,.sheet-grid td{border:1px solid #253750;padding:0;height:31px}.sheet-grid th{background:#111c2c;color:#9eb2cf;font-weight:900}.sheet-grid th.corner{width:48px}.sheet-grid td input{width:100%;height:30px;padding:6px 7px;border:0;outline:0;background:#0c1522;color:#e6eefb;font:inherit}.sheet-grid td input:focus{background:#14233a;box-shadow:inset 0 0 0 2px #596eff}.sheet-formula{display:flex;gap:8px;margin-bottom:10px}.sheet-formula input{flex:1}.sheet-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.sheet-legend span{padding:4px 7px;border-radius:999px;border:1px solid #304762;background:#101c2d;color:#9db0ca;font-size:9px;font-weight:850}
+.social-layout{display:grid;grid-template-columns:240px 1fr 250px;gap:12px}.social-side,.social-main,.social-right{min-width:0}.social-profile{padding:15px;border:1px solid #2b3d58;border-radius:15px;background:linear-gradient(145deg,#16233a,#0c1420)}.social-avatar{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#5b64ff,#28c7ff);font-size:22px;font-weight:950}.social-name{font-weight:950;margin-top:9px}.social-stat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#26364f;margin-top:13px}.social-stat div{padding:8px;background:#0d1624;text-align:center}.social-stat b{display:block;font-size:13px}.social-stat span{display:block;color:#7f92ad;font-size:9px;margin-top:2px}
+.post-compose{border:1px solid #2c3e5b;border-radius:15px;background:#0d1624;padding:13px}.post-compose textarea{min-height:95px}.social-feed{display:grid;gap:10px;margin-top:10px}.post-card{padding:14px;border:1px solid #2a3c57;border-radius:15px;background:linear-gradient(180deg,#101a2a,#0b121d)}.post-head{display:flex;align-items:center;gap:9px}.post-avatar{width:35px;height:35px;border-radius:10px;background:#1b2a42;border:1px solid #344a68;display:grid;place-items:center;font-weight:900}.post-meta{font-size:9px;color:#788da8}.post-body{margin:11px 0;white-space:pre-wrap;line-height:1.55;color:#dce6f4}.post-actions{display:flex;gap:7px;flex-wrap:wrap}.post-action{border:1px solid #31465f;background:#111c2d;color:#becce0;border-radius:9px;padding:7px 9px;font-size:10px;font-weight:850;cursor:pointer}.post-action.on{background:#2a3f7a;border-color:#6477f2;color:#fff}.post-comments{margin-top:10px;padding-top:10px;border-top:1px solid #223047;display:grid;gap:7px}.comment-line{font-size:10px;color:#b9c7da}.comment-line b{color:#e7eef8}.social-right-card{padding:13px;border:1px solid #2a3c57;border-radius:14px;background:#0d1624;margin-bottom:10px}.online-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#61e0ad;margin-right:5px}.social-trend{padding:7px 0;border-bottom:1px solid #213047;font-size:11px}.social-trend:last-child{border-bottom:0}
+.drive-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.drive-card{padding:14px;border:1px solid #2a3c58;border-radius:14px;background:#0e1725;cursor:pointer}.drive-card:hover{border-color:#5c74a4}.drive-icon{font-size:24px}.drive-name{font-weight:900;margin-top:8px}.drive-meta{font-size:10px;color:#8093ad;margin-top:4px}
+.calendar-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.cal-day,.cal-head{padding:9px;border:1px solid #293c58;border-radius:9px;min-height:58px;background:#0e1725}.cal-head{text-align:center;min-height:auto;padding:7px;color:#8094af;font-size:9px;font-weight:900}.cal-day b{display:block}.cal-day small{display:block;margin-top:5px;color:#7fd7ff;line-height:1.3}.cal-day.active{border-color:#6578ff;background:#18264a}
+.contacts-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:12px}.contact-cards{display:grid;gap:7px}.contact-card{padding:11px;border:1px solid #2b3e59;border-radius:12px;background:#0e1725;cursor:pointer}.contact-card.active{background:#243553;border-color:#6578a8}.contact-card b{display:block}.contact-card span{font-size:9px;color:#8095ae}
+.notes-layout{display:grid;grid-template-columns:220px 1fr;gap:12px}.note-list{display:grid;gap:6px}.note-btn{border:1px solid #2a3d59;background:#0e1726;color:#dbe7f6;border-radius:10px;text-align:left;padding:9px;cursor:pointer}.note-btn.active{background:#243553;border-color:#6177a8}.note-editor textarea{min-height:420px;resize:vertical}
+@media(max-width:1100px){.social-layout{grid-template-columns:1fr 1.6fr}.social-right{grid-column:1/-1}.drive-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.calendar-layout,.contacts-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.office-layout,.notes-layout{grid-template-columns:1fr}.office-side{border-right:0;border-bottom:1px solid #23334a}.drive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.social-layout{grid-template-columns:1fr}.social-right{grid-column:auto}}
+
 </style>
 </head>
 <body>
@@ -131,6 +146,13 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
     <button class="tab" data-tab="news">📰 Hydra News</button>
     <button class="tab" data-tab="progress">📈 Progression</button>
     <button class="tab" data-tab="aicore">🤖 AI Core</button>
+    <button class="tab" data-tab="social">🌐 Réseau</button>
+    <button class="tab" data-tab="word">📄 HYDRA Word</button>
+    <button class="tab" data-tab="sheets">📊 HYDRA Sheets</button>
+    <button class="tab" data-tab="drive">☁️ Drive</button>
+    <button class="tab" data-tab="calendar">📅 Agenda</button>
+    <button class="tab" data-tab="contacts">👥 Contacts</button>
+    <button class="tab" data-tab="notes">🗒️ Notes</button>
   </nav>
 
   <section class="section active" id="overview">
@@ -314,6 +336,67 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
   <section class="section" id="aicore">
     <div class="section-head"><div><h2>🤖 HYDRA-CORE // AI ANALYSIS ENGINE</h2><div class="sub">Moteur d'analyse fictif basé sur des règles scénarisées.</div></div><span class="sim-badge">NO EXTERNAL AI</span></div>
     <div class="ai-grid"><div class="ai-console"><div class="sub">CONSOLE</div><div class="ai-result" id="aiResult">Prêt. Soumets un nom, un indice ou une question narrative.</div><div class="ai-input"><textarea id="aiInput" class="input" placeholder="Ex. Analyse Emilie, relie le virement au Protocole Miroir…"></textarea><button class="btn primary" id="aiRun">Analyser</button></div></div><aside class="card score-card" id="aiScore"></aside></div>
+  </section>
+
+
+  <section class="section" id="social">
+    <div class="section-head"><div><h2>🌐 HYDRA Network</h2><div class="sub">Réseau social interne fictif : publications, réactions, commentaires et tendances.</div></div><span class="sim-badge">SOCIAL SIMULATION</span></div>
+    <div class="social-layout">
+      <aside class="social-side">
+        <div class="social-profile"><div class="social-avatar">E</div><div class="social-name">Ethan · Direction Hydra</div><div class="sub">@ethan_hydra</div><div class="social-stat"><div><b id="socialPostCount">0</b><span>posts</span></div><div><b>21</b><span>agents</span></div><div><b id="socialNotifCount">4</b><span>alertes</span></div></div></div>
+        <div class="social-right-card" style="margin-top:10px"><div class="sub">RACCOURCIS</div><div class="actions" style="margin-top:8px"><button class="btn" data-social-filter="all">Tout</button><button class="btn" data-social-filter="hydra">Hydra</button><button class="btn" data-social-filter="finance">Finance</button></div></div>
+      </aside>
+      <main class="social-main">
+        <div class="post-compose"><textarea id="socialComposer" class="input" placeholder="Publier une note interne…"></textarea><div class="actions" style="margin-top:8px"><button class="btn primary" id="socialPublish">Publier</button><button class="btn" id="socialInject">⚡ Nouveau signal</button></div></div>
+        <div class="social-feed" id="socialFeed"></div>
+      </main>
+      <aside class="social-right">
+        <div class="social-right-card"><div class="sub">AGENTS EN LIGNE</div><div style="margin-top:8px"><span class="online-dot"></span>Emilie</div><div style="margin-top:7px"><span class="online-dot"></span>Fabrice</div><div style="margin-top:7px"><span class="online-dot"></span>Max</div><div style="margin-top:7px"><span class="online-dot"></span>Emy</div></div>
+        <div class="social-right-card"><div class="sub">TENDANCES</div><div class="social-trend">#ProtocoleMiroir</div><div class="social-trend">#2300000EUR</div><div class="social-trend">#Archive</div><div class="social-trend">#Fragment21</div></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="word">
+    <div class="section-head"><div><h2>📄 HYDRA Word</h2><div class="sub">Traitement de texte fictif pour rédiger rapports, ordres et comptes rendus.</div></div><span class="sim-badge">DOCUMENT EDITOR</span></div>
+    <div class="office-layout">
+      <aside class="office-side"><h3>Documents</h3><div class="office-menu" id="wordDocs"></div><button class="btn primary" id="wordNew" style="margin-top:10px;width:100%">＋ Nouveau</button></aside>
+      <div class="office-main">
+        <div class="word-title"><input id="wordDocTitle" class="input" value="Rapport Hydra"><button class="btn" id="wordSave">💾 Sauver</button></div>
+        <div class="word-toolbar"><button data-word-cmd="bold"><b>G</b></button><button data-word-cmd="italic"><i>I</i></button><button data-word-cmd="underline"><u>S</u></button><button data-word-cmd="insertUnorderedList">• Liste</button><button data-word-cmd="justifyLeft">←</button><button data-word-cmd="justifyCenter">↔</button><button data-word-cmd="justifyRight">→</button><select id="wordSize"><option value="3">Normal</option><option value="4">Grand</option><option value="5">Très grand</option></select></div>
+        <div id="wordPage" class="word-page" contenteditable="true">RAPPORT D’ANALYSE HYDRA<br><br>Objet : recoupement du Protocole Miroir.<br><br>Statut : en cours.</div>
+        <div class="word-status"><span id="wordStatus">Document local</span><span id="wordCount">0 mots</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sheets">
+    <div class="section-head"><div><h2>📊 HYDRA Sheets</h2><div class="sub">Tableur fictif avec cellules modifiables, formules simples et statistiques.</div></div><span class="sim-badge">SPREADSHEET SIMULATION</span></div>
+    <div class="card">
+      <div class="sheet-formula"><input id="sheetFormula" class="input" placeholder='Sélectionne une cellule, puis entre =SUM(A1:A3) ou une valeur…'><button class="btn primary" id="sheetApply">Appliquer</button><button class="btn" id="sheetDemo">Charger tableau finance</button></div>
+      <div class="sheet-wrap"><table class="sheet-grid" id="sheetGrid"></table></div>
+      <div class="sheet-legend"><span>Entrée : valeur</span><span>Formule : =SUM(A1:A3)</span><span>Calcul : + - * /</span><span>Local / simulation</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="drive">
+    <div class="section-head"><div><h2>☁️ Hydra Drive</h2><div class="sub">Faux espace documentaire regroupant rapports, preuves et archives.</div></div></div>
+    <div class="drive-grid" id="driveGrid"></div>
+  </section>
+
+  <section class="section" id="calendar">
+    <div class="section-head"><div><h2>📅 Agenda Hydra</h2><div class="sub">Planning opérationnel avec événements visibles selon la phase.</div></div></div>
+    <div class="calendar-layout"><div class="card"><div class="calendar-grid" id="calendarGrid"></div></div><aside class="card" id="calendarDetail"></aside></div>
+  </section>
+
+  <section class="section" id="contacts">
+    <div class="section-head"><div><h2>👥 Contacts Hydra</h2><div class="sub">Annuaire des agents, fonctions et informations de communication.</div></div></div>
+    <div class="contacts-grid"><div class="card"><div class="contact-cards" id="contactCards"></div></div><div class="card" id="contactDetail"></div></div>
+  </section>
+
+  <section class="section" id="notes">
+    <div class="section-head"><div><h2>🗒️ Notes personnelles</h2><div class="sub">Carnet privé du maître du jeu, conservé localement dans le navigateur.</div></div></div>
+    <div class="notes-layout"><div class="card"><div class="note-list" id="noteList"></div><button class="btn primary" id="noteNew" style="width:100%;margin-top:8px">＋ Nouvelle note</button></div><div class="card note-editor"><input id="noteTitle" class="input" placeholder="Titre"><textarea id="noteBody" class="input" placeholder="Écris ici…"></textarea><div class="actions" style="margin-top:9px"><button class="btn primary" id="noteSave">💾 Enregistrer</button><button class="btn danger" id="noteDelete">Supprimer</button></div></div></div>
   </section>
 
 <footer class="foot wrap">HYDRA INTERACTIVE • accès administrateur • les données affichées proviennent de la configuration Hydra actuelle.</footer>
@@ -842,7 +925,45 @@ function runAICore(){
   pushSignal("HYDRA-CORE a analysé une requête.","AI");
 }
 
-function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();renderOsShell();renderIntel();renderClassified();renderSignal();renderForensic();initPuzzle();renderComms();renderRadio();renderMap();renderTrust();renderIncidents();renderLab();renderEvidenceLocker();initTerminal();renderSurveillance();renderNews();renderProgress();renderAICore();initOsShell();initAdvancedUi();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
+
+function socialData(){return hydraStore("hydra_social_posts",[
+  {id:"sp1",author:"Emilie",tag:"finance",time:"21:36",text:"Le mouvement de 2,3 M€ n’est pas isolé. Je cherche le lien avec Miroir.",likes:7,comments:["Max : Recoupe avec l’archive.","Fabrice : J’ai peut-être la pièce."]},
+  {id:"sp2",author:"Fabrice",tag:"hydra",time:"21:15",text:"J’ai verrouillé la copie originale avant toute nouvelle modification.",likes:5,comments:["Emy : Bonne procédure."]},
+  {id:"sp3",author:"Max",tag:"hydra",time:"20:58",text:"Trois connexions ressortent dans les dossiers : Finance, Miroir, Hydra-Core.",likes:11,comments:[]},
+  {id:"sp4",author:"Jean-Louis Pineau",tag:"hydra",time:"20:54",text:"Déviation de navigation à recouper avec le planning.",likes:4,comments:[]}
+])}
+function renderSocial(filter="all"){
+  const posts=socialData().filter(p=>filter==="all"||p.tag===filter);
+  $("socialPostCount").textContent=socialData().length;
+  $("socialFeed").innerHTML=posts.map(p=>'<article class="post-card"><div class="post-head"><div class="post-avatar">'+esc(p.author[0])+'</div><div><b>'+esc(p.author)+'</b><div class="post-meta">@'+esc(p.author.toLowerCase().replaceAll(" ","_"))+' · '+esc(p.time)+'</div></div></div><div class="post-body">'+esc(p.text)+'</div><div class="post-actions"><button class="post-action '+(hydraStore("hydra_social_likes",[]).includes(p.id)?"on":"")+'" data-like="'+p.id+'">♥ '+p.likes+'</button><button class="post-action" data-comment="'+p.id+'">💬 '+p.comments.length+'</button><span class="sim-badge">'+esc(p.tag.toUpperCase())+'</span></div>'+(p.comments.length?'<div class="post-comments">'+p.comments.map(c=>'<div class="comment-line"><b>'+esc(c.split(":")[0])+'</b>:'+esc(c.split(":").slice(1).join(":"))+'</div>').join("")+'</div>':"")+'</article>').join("");
+  document.querySelectorAll("[data-like]").forEach(b=>b.onclick=()=>{const likes=hydraStore("hydra_social_likes",[]);const id=b.dataset.like;const p=socialData().map(x=>x.id===id?{...x,likes:x.likes+(likes.includes(id)?-1:1)}:x);hydraSet("hydra_social_posts",p);hydraSet("hydra_social_likes",likes.includes(id)?likes.filter(x=>x!==id):likes.concat(id));renderSocial(filter)});
+  document.querySelectorAll("[data-comment]").forEach(b=>b.onclick=()=>{const id=b.dataset.comment;const t=prompt("Commentaire simulé :");if(t){const p=socialData().map(x=>x.id===id?{...x,comments:x.comments.concat("Ethan : "+t.slice(0,180))}:x);hydraSet("hydra_social_posts",p);renderSocial(filter)}});
+}
+function initSocial(){if(window.__socialInit)return;window.__socialInit=true;let filter="all";document.querySelectorAll("[data-social-filter]").forEach(b=>b.onclick=()=>{filter=b.dataset.socialFilter;renderSocial(filter)});$("socialPublish").onclick=()=>{const t=$("socialComposer").value.trim();if(!t)return;const p=socialData();p.unshift({id:"sp-"+Date.now(),author:"Ethan",tag:"hydra",time:nowClock().slice(0,5),text:t,likes:0,comments:[]});hydraSet("hydra_social_posts",p);$("socialComposer").value="";renderSocial(filter);pushSignal("Nouvelle publication sur HYDRA Network.","SOCIAL")};$("socialInject").onclick=()=>{const arr=["Signal financier détecté.","Archive critique mise à jour.","Nouvelle connexion dans Intelligence Center.","Un agent demande une vérification."];const p=socialData();p.unshift({id:"sp-"+Date.now(),author:"HYDRA-CORE",tag:"hydra",time:nowClock().slice(0,5),text:arr[Math.floor(Math.random()*arr.length)],likes:1,comments:[]});hydraSet("hydra_social_posts",p);renderSocial(filter)};renderSocial(filter)}
+function wordDocs(){return hydraStore("hydra_word_docs",[
+ {id:"w1",title:"Rapport Hydra",html:"RAPPORT D’ANALYSE HYDRA<br><br>Objet : recoupement du Protocole Miroir.<br><br>Statut : en cours."},
+ {id:"w2",title:"Compte rendu Emilie",html:"MOUVEMENT 2,3 M€<br><br>Référence HYDRA-23MIRROR-021."},
+ {id:"w3",title:"Briefing final",html:"PROTOCOLE MIROIR<br><br>Document de préparation du niveau final."}
+])}
+function renderWordList(){const docs=wordDocs();$("wordDocs").innerHTML=docs.map((d,i)=>'<button class="'+(i===0?"active":"")+'" data-word-doc="'+d.id+'">'+esc(d.title)+'</button>').join("");document.querySelectorAll("[data-word-doc]").forEach(b=>b.onclick=()=>loadWordDoc(b.dataset.wordDoc));}
+function loadWordDoc(id){const d=wordDocs().find(x=>x.id===id)||wordDocs()[0];window.__wordDocId=d.id;$("wordDocTitle").value=d.title;$("wordPage").innerHTML=d.html;updateWordCount();document.querySelectorAll("[data-word-doc]").forEach(b=>b.classList.toggle("active",b.dataset.wordDoc===d.id))}
+function updateWordCount(){const text=$("wordPage").innerText.trim();$("wordCount").textContent=(text?text.split(/\s+/).length:0)+" mots";$("wordStatus").textContent="Autosauvegarde locale · "+nowClock()}
+function initWord(){if(window.__wordInit)return;window.__wordInit=true;window.__wordDocId="w1";renderWordList();loadWordDoc("w1");document.querySelectorAll("[data-word-cmd]").forEach(b=>b.onclick=()=>{document.execCommand(b.dataset.wordCmd,false,null);$("wordPage").focus();updateWordCount()});$("wordSize").onchange=e=>{document.execCommand("fontSize",false,e.target.value);$("wordPage").focus()};$("wordSave").onclick=()=>{const docs=wordDocs().map(d=>d.id===window.__wordDocId?{...d,title:$("wordDocTitle").value.trim()||"Sans titre",html:$("wordPage").innerHTML}:d);hydraSet("hydra_word_docs",docs);renderWordList();loadWordDoc(window.__wordDocId);toast("Document enregistré localement.")};$("wordPage").addEventListener("input",updateWordCount);$("wordNew").onclick=()=>{const docs=wordDocs();const d={id:"w-"+Date.now(),title:"Nouveau document",html:""};docs.push(d);hydraSet("hydra_word_docs",docs);renderWordList();loadWordDoc(d.id);$("wordPage").focus()};}
+function sheetData(){return hydraStore("hydra_sheet_cells",{A1:"Opération",B1:"Montant",C1:"Statut",D1:"Notes",A2:"Miroir Holdings",B2:"2300000",C2:"SUSPECT",D2:"Référence 021",A3:"Hydra-Core",B3:"840000",C3:"OK",D3:"Interne",A4:"Miroir Capital",B4:"4820000",C4:"ENTRÉE",D4:"Crédit",A5:"Fournisseur technique",B5:"1204.32",C5:"OK",D5:"Carte",A7:"TOTAL SORTIES",B7:"=SUM(B2:B3,B5)"})}
+function colName(i){let s="";while(i>=0){s=String.fromCharCode(65+i%26)+s;i=Math.floor(i/26)-1}return s}
+function cellValue(ref,cells,seen=new Set()){if(seen.has(ref))return 0;seen.add(ref);const raw=cells[ref]??"";if(typeof raw!=="string")return raw;if(raw.startsWith("="))return evalSheetFormula(raw.slice(1),cells,seen);const num=Number(raw.replace(",", "."));return raw.trim()!==""&&Number.isFinite(num)?num:raw}
+function evalSheetFormula(expr,cells,seen){const e=expr.trim();const sum=e.match(/^SUM\(([^)]+)\)$/i);if(sum){return sum[1].split(",").reduce((a,part)=>a+sumRange(part.trim(),cells,seen),0)}return e.replace(/[A-Z]+\d+/gi,r=>String(Number(cellValue(r.toUpperCase(),cells,seen))||0)).replace(/[^0-9+\-*/().\s]/g,"")||"0"}
+function sumRange(part,cells,seen){if(part.includes(":")){const [a,b]=part.split(":");const ma=a.match(/^([A-Z]+)(\d+)$/i),mb=b.match(/^([A-Z]+)(\d+)$/i);if(!ma||!mb)return 0;const c1=ma[1].toUpperCase().charCodeAt(0)-65,c2=mb[1].toUpperCase().charCodeAt(0)-65;const r1=+ma[2],r2=+mb[2];let s=0;for(let r=Math.min(r1,r2);r<=Math.max(r1,r2);r++)for(let c=c1;c<=c2;c++)s+=Number(cellValue(colName(c)+r,cells,seen))||0;return s}return Number(cellValue(part.toUpperCase(),cells,seen))||0}
+function renderSheets(){const cells=sheetData(),rows=10,cols=8;let h='<thead><tr><th class="corner"></th>'+Array.from({length:cols},(_,i)=>'<th>'+colName(i)+'</th>').join("")+'</tr></thead><tbody>';for(let r=1;r<=rows;r++){h+='<tr><th>'+r+'</th>';for(let c=0;c<cols;c++){const ref=colName(c)+r;const v=cells[ref]??"";const display=String(v).startsWith("=")?String(cellValue(ref,cells)):v;h+='<td><input data-sheet-cell="'+ref+'" value="'+esc(display)+'"></td>'}h+='</tr>'}h+='</tbody>';$("sheetGrid").innerHTML=h;document.querySelectorAll("[data-sheet-cell]").forEach(i=>i.onchange=()=>{const cells=sheetData();cells[i.dataset.sheetCell]=i.value;hydraSet("hydra_sheet_cells",cells);renderSheets();})}
+function initSheets(){if(window.__sheetInit)return;window.__sheetInit=true;renderSheets();let active="A1";$("sheetFormula").oninput=()=>{};document.querySelectorAll("[data-sheet-cell]").forEach(i=>i.onclick=()=>{active=i.dataset.sheetCell;$("sheetFormula").value=sheetData()[active]??""});$("sheetApply").onclick=()=>{const cells=sheetData();cells[active]=$("sheetFormula").value;hydraSet("hydra_sheet_cells",cells);renderSheets();toast("Cellule "+active+" mise à jour.")};$("sheetDemo").onclick=()=>{hydraSet("hydra_sheet_cells",sheetData());renderSheets();$("sheetFormula").value="=SUM(B2:B5)";active="B7";toast("Tableau finance chargé.")}}
+function renderDrive(){const files=[["📄","Rapport_Miroir.docx","Document · 2,4 Ko"],["📊","Flux_Financiers.xlsx","Tableur · 8,2 Ko"],["🔐","Dossier_Clone.sec","Classifié · TOP SECRET"],["🧩","Fragments_IA.zip","Archive · 5 fragments"],["📡","Hydra_Signal.log","Journal · 21 événements"],["🗺️","Carte_Operationnelle.hmap","Carte · 5 zones"],["📸","Capture_CAM_03.enc","Preuve · 21:32"],["📰","Hydra_News.pdf","Journal interne"]];$("driveGrid").innerHTML=files.map(f=>'<article class="drive-card" data-drive="'+esc(f[1])+'"><div class="drive-icon">'+f[0]+'</div><div class="drive-name">'+esc(f[1])+'</div><div class="drive-meta">'+esc(f[2])+'</div></article>').join("");document.querySelectorAll("[data-drive]").forEach(b=>b.onclick=()=>toast("Ouverture simulée : "+b.dataset.drive))}
+function renderCalendar(){const days=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"],events={"Mer":{"title":"Enquête","text":"Acte II · 15h30"},"Jeu":{"title":"Archive","text":"Recoupement · 21h12"},"Sam":{"title":"Finance","text":"Contrôle · 21h32"},"Dim":{"title":"Final","text":"Accusation · 21h30"}};$("calendarGrid").innerHTML=days.map(d=>'<div class="cal-head">'+d+'</div>').join("")+days.map(d=>'<div class="cal-day '+(events[d]?"active":"")+'"><b>'+d+'</b>'+(events[d]?'<small>'+events[d].title+'<br>'+events[d].text+'</small>':"")+'</div>').join("");$("calendarDetail").innerHTML='<div class="sub">AGENDA</div><h3>Prochaine opération</h3><p class="sub">Recouper la piste financière avec le Protocole Miroir.</p><div class="notice">Les événements sont des éléments de scénario.</div>'}
+function renderContacts(){const people=[["Ethan","Direction Hydra","Administrateur"],["Emilie","Comptabilité","Finance"],["Fabrice","Archives","Numérique"],["Max","OSINT","Analyse"],["Emy","Secrétariat","Coordination"],["Cécile","Sécurité","Protection"],["Hydra-Core","Système","Noyau"]];const active=window.__contactActive||"Ethan";$("contactCards").innerHTML=people.map(p=>'<button class="contact-card '+(p[0]===active?"active":"")+'" data-person="'+p[0]+'"><b>'+esc(p[0])+'</b><span>'+esc(p[1])+' · '+esc(p[2])+'</span></button>').join("");const p=people.find(x=>x[0]===active)||people[0];$("contactDetail").innerHTML='<div class="sub">FICHE CONTACT</div><h2>'+esc(p[0])+'</h2><p><b>Fonction :</b> '+esc(p[1])+'</p><p><b>Spécialité :</b> '+esc(p[2])+'</p><div class="notice">Canal : HYDRA-SECURE · Disponibilité : simulation</div><div class="actions" style="margin-top:10px"><button class="btn" id="contactPing">PING</button><button class="btn primary" id="contactMail">Ouvrir Mail</button></div>';document.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>{window.__contactActive=b.dataset.person;renderContacts()});$("contactPing").onclick=()=>toast("PING envoyé à "+p[0]+" (simulation).");$("contactMail").onclick=()=>hydraGo("mails")}
+function noteData(){return hydraStore("hydra_notes",[{"id":"n1","title":"Idées du MJ","body":"Prévoir un recoupement entre Emilie, Fabrice et Miroir."},{"id":"n2","title":"Déroulé","body":"Acte I → Acte II → Recoupement → Final."}])}
+function renderNotes(id=window.__noteActive||noteData()[0]?.id){const notes=noteData();const d=notes.find(x=>x.id===id)||notes[0];if(!d)return;$("noteList").innerHTML=notes.map(n=>'<button class="note-btn '+(n.id===d.id?"active":"")+'" data-note="'+n.id+'">'+esc(n.title)+'</button>').join("");$("noteTitle").value=d.title;$("noteBody").value=d.body;window.__noteActive=d.id;document.querySelectorAll("[data-note]").forEach(b=>b.onclick=()=>renderNotes(b.dataset.note))}
+function initNotes(){if(window.__notesInit)return;window.__notesInit=true;renderNotes();$("noteSave").onclick=()=>{const notes=noteData().map(n=>n.id===window.__noteActive?{...n,title:$("noteTitle").value.trim()||"Sans titre",body:$("noteBody").value}:n);hydraSet("hydra_notes",notes);renderNotes();toast("Note enregistrée.")};$("noteNew").onclick=()=>{const notes=noteData(),d={id:"n-"+Date.now(),title:"Nouvelle note",body:""};notes.push(d);hydraSet("hydra_notes",notes);renderNotes(d.id);$("noteBody").focus()};$("noteDelete").onclick=()=>{const notes=noteData().filter(n=>n.id!==window.__noteActive);hydraSet("hydra_notes",notes);renderNotes(notes[0]?.id)}}
+
+function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();renderOsShell();renderIntel();renderClassified();renderSignal();renderForensic();initPuzzle();renderComms();renderRadio();renderMap();renderTrust();renderIncidents();renderLab();renderEvidenceLocker();initTerminal();renderSurveillance();renderNews();renderProgress();renderAICore();initOsShell();initAdvancedUi();initSocial();initWord();initSheets();renderDrive();renderCalendar();renderContacts();initNotes();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
 async function saveLive(){
   try{
     const next=JSON.parse(JSON.stringify(cfg));
