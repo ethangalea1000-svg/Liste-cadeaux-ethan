@@ -5018,3 +5018,208 @@ select
     public.get_birthday_public_config()->'murder_party'->'objects','[]'::jsonb
   )) as public_objects_count,
   (public.get_birthday_public_config()->'murder_party'->'invitation') is not null as public_invitation_present;
+
+
+-- ============================================================
+-- HYDRA EXPERIENCE 2.0 — RÔLES + PHASES + MODE LIVE
+-- ============================================================
+
+update public.birthday_config
+set settings =
+  jsonb_set(
+    jsonb_set(
+      coalesce(settings,'{}'::jsonb),
+      '{experience}',
+      coalesce(settings->'experience','{}'::jsonb) || jsonb_build_object(
+        'phase', coalesce(settings->'experience'->>'phase','before'),
+        'phase_started_at', coalesce(settings->'experience'->>'phase_started_at', now()::text),
+        'phase_ends_at', settings->'experience'->'phase_ends_at'
+      ),
+      true
+    ),
+    '{murder_party,live}',
+    coalesce(settings->'murder_party'->'live','{}'::jsonb) || jsonb_build_object(
+      'status_text', coalesce(settings->'murder_party'->'live'->>'status_text','ENQUÊTE ACTIVE'),
+      'active_zone', coalesce(settings->'murder_party'->'live'->>'active_zone',''),
+      'alert', coalesce(settings->'murder_party'->'live'->'alert','{}'::jsonb),
+      'vote', coalesce(settings->'murder_party'->'live'->'vote','{}'::jsonb)
+    ),
+    true
+  ),
+updated_at = now()
+where id=1;
+
+update public.birthday_config
+set settings = jsonb_set(
+  settings,
+  '{murder_party,teaser}',
+  to_jsonb(coalesce(
+    settings->'murder_party'->>'teaser',
+    'Une anomalie a été détectée. Le dossier sera ouvert au moment prévu.'
+  )),
+  true
+)
+where id=1;
+
+drop function if exists public.get_birthday_experience(text);
+
+create or replace function public.get_birthday_experience(p_code text)
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $birthdayexperience$
+declare
+  v_access_id bigint;
+  v_label text;
+  v_is_admin boolean;
+  v_role text;
+  v_phase text;
+  v_settings jsonb;
+  v_mp jsonb;
+  v_result jsonb;
+  v_public_mp jsonb;
+begin
+  select lac.id,lac.label,lac.is_admin
+    into v_access_id,v_label,v_is_admin
+  from public.list_access_codes as lac
+  where lac.active=true
+    and lac.code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_access_id is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  select coalesce(bc.settings,'{}'::jsonb)
+    into v_settings
+  from public.birthday_config as bc
+  where bc.id=1;
+
+  v_phase := coalesce(v_settings->'experience'->>'phase','before');
+  if v_phase not in ('before','live','after') then v_phase := 'before'; end if;
+
+  if coalesce(v_is_admin,false) then
+    v_role := 'gm';
+  elsif exists(
+    select 1 from public.hydra_access_assignments as haa
+    where haa.access_id=v_access_id and haa.active=true
+  ) then
+    v_role := 'player';
+  else
+    v_role := 'guest';
+  end if;
+
+  v_result :=
+    jsonb_strip_nulls(v_settings - 'murder_party' - 'experience' - 'schedule')
+    ||
+    jsonb_build_object(
+      'schedule',
+      case when coalesce((v_settings->>'schedule_visible')::boolean,false)
+        then coalesce(v_settings->'schedule','[]'::jsonb) else '[]'::jsonb end,
+      'experience',jsonb_build_object(
+        'phase',v_phase,
+        'phase_started_at',v_settings->'experience'->>'phase_started_at',
+        'phase_ends_at',v_settings->'experience'->'phase_ends_at',
+        'role',v_role,
+        'access_label',v_label
+      ),
+      'permissions',
+      case v_role
+        when 'guest' then jsonb_build_object(
+          'gifts',true,'fundraisers',true,'community',true,'gallery',true,
+          'hydra',false,'hydra_dossier',false,'hydra_live',false,'hydra_debrief',false,'gm_controls',false
+        )
+        when 'player' then jsonb_build_object(
+          'gifts',v_phase <> 'live','fundraisers',v_phase <> 'live','community',v_phase <> 'live',
+          'gallery',true,'hydra',true,'hydra_dossier',true,
+          'hydra_live',v_phase='live','hydra_debrief',v_phase='after','gm_controls',false
+        )
+        else jsonb_build_object(
+          'gifts',true,'fundraisers',true,'community',true,'gallery',true,
+          'hydra',true,'hydra_dossier',true,'hydra_live',true,'hydra_debrief',true,'gm_controls',true
+        )
+      end
+    );
+
+  if v_role='guest' then return v_result; end if;
+
+  v_mp := coalesce(v_settings->'murder_party','{}'::jsonb);
+
+  if v_role='gm' then
+    return v_result || jsonb_build_object('murder_party',v_mp);
+  end if;
+
+  v_public_mp := jsonb_build_object(
+    'enabled',coalesce((v_mp->>'enabled')::boolean,false),
+    'title',v_mp->>'title','date',v_mp->>'date','location',v_mp->>'location',
+    'key_moment',v_mp->>'key_moment',
+    'invitation',
+      case when v_phase='before' then
+        jsonb_build_object(
+          'title',v_mp->'invitation'->>'title',
+          'intro',v_mp->'invitation'->>'intro',
+          'body',v_mp->'invitation'->>'body',
+          'date',v_mp->'invitation'->>'date',
+          'time',v_mp->'invitation'->>'time',
+          'key_moment',v_mp->'invitation'->>'key_moment',
+          'outfit',v_mp->'invitation'->>'outfit',
+          'teaser',coalesce(v_mp->>'teaser','')
+        )
+      else coalesce(v_mp->'invitation','{}'::jsonb) end
+  );
+
+  if v_phase='before' then
+    v_public_mp := v_public_mp || jsonb_build_object(
+      'teaser',coalesce(v_mp->>'teaser',''),'players',jsonb_build_array()
+    );
+  elsif v_phase='live' then
+    v_public_mp := v_public_mp || jsonb_build_object(
+      'story_public',v_mp->'story_public',
+      'zones',coalesce(v_mp->'zones','[]'::jsonb),
+      'objects',coalesce(v_mp->'objects','[]'::jsonb),
+      'live',coalesce(v_mp->'live','{}'::jsonb)
+    );
+  else
+    v_public_mp := v_public_mp || jsonb_build_object(
+      'story_public',v_mp->'story_public',
+      'zones',coalesce(v_mp->'zones','[]'::jsonb),
+      'objects',coalesce(v_mp->'objects','[]'::jsonb),
+      'story_truth',v_mp->'story_truth',
+      'end_documents',coalesce(v_mp->'end_documents','[]'::jsonb)
+    );
+  end if;
+
+  return v_result || jsonb_build_object('murder_party',v_public_mp);
+end;
+$birthdayexperience$;
+
+revoke execute on function public.get_birthday_experience(text) from public, authenticated;
+grant execute on function public.get_birthday_experience(text) to anon;
+
+create or replace function public.get_birthday_public_config()
+returns jsonb
+language sql
+security definer
+set search_path=public
+as $birthdaypublicconfig_safe$
+  select
+    jsonb_strip_nulls(coalesce(bc.settings,'{}'::jsonb)-'murder_party'-'experience'-'schedule')
+    ||
+    jsonb_build_object(
+      'schedule',
+      case when coalesce((bc.settings->>'schedule_visible')::boolean,false)
+        then coalesce(bc.settings->'schedule','[]'::jsonb) else '[]'::jsonb end
+    )
+  from public.birthday_config as bc
+  where bc.id=1;
+$birthdaypublicconfig_safe$;
+
+revoke execute on function public.get_birthday_public_config() from public, authenticated;
+grant execute on function public.get_birthday_public_config() to anon;
+
+select
+  'HYDRA_EXPERIENCE_OK' as status,
+  (select settings->'experience'->>'phase' from public.birthday_config where id=1) as phase,
+  (select settings->'murder_party'->'live' is not null from public.birthday_config where id=1) as live_state_present,
+  to_regprocedure('public.get_birthday_experience(text)') is not null as experience_rpc_exists;
