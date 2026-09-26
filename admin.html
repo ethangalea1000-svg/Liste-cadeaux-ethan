@@ -85,7 +85,7 @@
   .empty{padding:20px 12px}
 }
 .toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 15px;border-radius:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:20}
-.birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px;resize:vertical}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}.admin-editor-note{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:12px;color:var(--muted)}.quick-preview{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,#fff,#f8f9ff)}.site-color{height:46px;padding:4px}.hydra-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hydra-editor-grid .full{grid-column:1/-1}.hydra-editor-grid textarea{min-height:95px;resize:vertical}.hydra-editor-grid .scenario{min-height:230px}.hydra-access-select{margin-top:10px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#f8f9fc;font:inherit;font-weight:700;width:100%}.hydra-access-label{font-size:12px;color:var(--muted);margin-top:7px}.hydra-access-select{min-height:120px}.hydra-assignment{margin-top:8px;padding:9px;border:1px solid var(--line);border-radius:10px;background:#fbfcff}.hydra-assignment strong{display:block}.hydra-assignment .actions{margin-top:7px}.hydra-assigned-summary{margin-top:9px;padding:10px 12px;border:1px solid #cbdaf7;border-radius:10px;background:#eef4ff;color:#243b64}.hydra-assigned-summary.empty-hydra{background:#f7f8fb;border-color:var(--line);color:var(--muted)}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}.hydra-editor-grid{grid-template-columns:1fr}.hydra-editor-grid .full{grid-column:auto}}
+.birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px;resize:vertical}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}.admin-editor-note{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:12px;color:var(--muted)}.quick-preview{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,#fff,#f8f9ff)}.site-color{height:46px;padding:4px}.hydra-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hydra-editor-grid .full{grid-column:1/-1}.hydra-editor-grid textarea{min-height:95px;resize:vertical}.hydra-editor-grid .scenario{min-height:230px}.hydra-access-select{margin-top:10px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#f8f9fc;font:inherit;font-weight:700;width:100%}.hydra-access-label{font-size:12px;color:var(--muted);margin-top:7px}.hydra-access-select{min-height:120px}.hydra-assignment{margin-top:8px;padding:9px;border:1px solid var(--line);border-radius:10px;background:#fbfcff}.hydra-assignment strong{display:block}.hydra-assignment .actions{margin-top:7px}.hydra-assigned-summary{margin-top:9px;padding:10px 12px;border:1px solid #cbdaf7;border-radius:10px;background:#eef4ff;color:#243b64}.hydra-assigned-summary.empty-hydra{background:#f7f8fb;border-color:var(--line);color:var(--muted)}.hydra-global-grid{display:grid;gap:7px;margin-top:10px}.hydra-global-row{display:grid;grid-template-columns:minmax(90px,1fr) 24px minmax(120px,1fr);align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}.hydra-global-row span:last-child{font-weight:700}@media(max-width:700px){.hydra-global-row{grid-template-columns:1fr}.hydra-global-row span{display:none}}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}.hydra-editor-grid{grid-template-columns:1fr}.hydra-editor-grid .full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -162,6 +162,7 @@
       <div id="accessRequestsList" class="list"></div>
     </div>
     <div id="accessStats" class="stats" style="margin-bottom:14px"></div>
+    <div id="hydraAssignmentStatus" class="panel" style="margin-bottom:14px"></div>
     <div id="accessDuplicates" class="list" style="margin-bottom:14px"></div><div id="accessList" class="list"></div>
   </section>
   <section id="site" class="section">
@@ -486,18 +487,30 @@ async function rejectAccessRequest(id){
 }
 async function loadAccessCodes(){
  try{
-  const [rows,stats,dups,birthdayCfg,hydraAssignments]=await Promise.all([
+  const [rows,stats,dups,birthdayCfg]=await Promise.all([
     rpc("admin_list_access_usage",{}),
     rpc("admin_list_access_stats",{}),
     rpc("admin_list_access_duplicates",{}),
-    getBirthdayConfig().catch(()=>({})),
-    rpc("admin_list_hydra_access_assignments",{}).catch(()=>[])
+    getBirthdayConfig().catch(()=>({}))
   ]);
+  let hydraAssignments=[];
+  let hydraAssignmentsError=null;
+  try{
+    hydraAssignments=await rpc("admin_list_hydra_access_assignments",{});
+    hydraAssignments=Array.isArray(hydraAssignments)?hydraAssignments:[];
+  }catch(e){
+    hydraAssignmentsError=e;
+  }
   const data=Array.isArray(rows)?rows:[];
   const s=(Array.isArray(stats)?stats[0]:stats)||{};
   const duplicates=Array.isArray(dups)?dups:[];
   const assignments=Array.isArray(hydraAssignments)?hydraAssignments:[];
   const hydraPlayers=Array.isArray(birthdayCfg?.murder_party?.players)?birthdayCfg.murder_party.players:[];
+  $("hydraAssignmentStatus").innerHTML=hydraAssignmentsError
+    ? '<strong>⚠️ Attribution Hydra indisponible</strong><div class="meta" style="margin-top:6px">'+esc(hydraAssignmentsError.message||"La fonction SQL Hydra n’est pas disponible.")+'</div><div class="meta" style="margin-top:6px">Exécute la dernière version de <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase, puis recharge l’administration.</div>'
+    : assignments.length
+      ? '<strong>🧩 Attribution des dossiers Hydra</strong><div class="hydra-global-grid">'+assignments.map(a=>'<div class="hydra-global-row"><strong>'+esc(a.person_name||"Personne")+'</strong><span>→</span><span>'+esc(a.hydra_player_name||"Dossier inconnu")+'</span></div>').join("")+'</div>'
+      : '<strong>🧩 Attribution des dossiers Hydra</strong><div class="meta" style="margin-top:6px">Aucun dossier Hydra n’est actuellement enregistré.</div>';
   const byAccess=new Map();
   assignments.forEach(a=>{
     const k=String(a.access_id);
