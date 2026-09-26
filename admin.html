@@ -104,7 +104,7 @@
   </div>
 </section>
 <section id="dashboard" class="hidden">
-  <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" onclick="showAnnouncement()">📢 Faire une annonce</button><button class="btn" onclick="showDiagnostic()">🔧 Tester Supabase</button><button class="btn admin-signout" onclick="adminLogout()">Se déconnecter</button></div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" onclick="showAnnouncement()">📢 Faire une annonce</button><button class="btn" onclick="activateTab('hydra');loadAccessCodes()">🧩 Voir Hydra</button><button class="btn" onclick="showDiagnostic()">🔧 Tester Supabase</button><button class="btn admin-signout" onclick="adminLogout()">Se déconnecter</button></div>
 <div id="announcementBox" class="panel hidden" style="margin-top:12px"><div class="section-head"><h2>📢 Nouvelle annonce</h2><button class="btn" onclick="hideAnnouncement()">Fermer</button></div><div style="display:grid;gap:10px"><input id="announcementMessage" maxlength="500" placeholder="Texte de l’annonce…"><input id="announcementLink" maxlength="500" placeholder="Lien facultatif (https://…)"><div class="actions"><button class="btn primary" onclick="publishAnnouncement()">Publier l’annonce</button></div></div></div><div class="stats">
     <div class="stat"><b id="countSuggestions">0</b><span>À valider</span></div>
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
@@ -116,7 +116,7 @@
   <nav class="tabs">
     <button class="tab active" data-tab="pending">À valider</button>
     <button class="tab" data-tab="messages">Messages</button>
-    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="site">⚙️ Site</button><button class="tab" data-tab="birthday">🎂 Anniversaire</button><button class="tab" data-tab="extension">📡 Extension</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
+    <button class="tab" data-tab="people">👥 Personnes</button><button class="tab" data-tab="gifts">🎁 Cadeaux</button><button class="tab" data-tab="access">🔑 Accès</button><button class="tab" data-tab="hydra">🧩 Hydra</button><button class="tab" data-tab="site">⚙️ Site</button><button class="tab" data-tab="birthday">🎂 Anniversaire</button><button class="tab" data-tab="extension">📡 Extension</button><button class="tab" data-tab="gift-contributions">💶 Participations cadeaux</button>
     <button class="tab" data-tab="ideas">Idées</button>
     <button class="tab" data-tab="contributions">Participations</button>
     <button class="tab" data-tab="community">Communauté</button>
@@ -164,6 +164,22 @@
     <div id="accessStats" class="stats" style="margin-bottom:14px"></div>
     <div id="hydraAssignmentStatus" class="panel" style="margin-bottom:14px"></div>
     <div id="accessDuplicates" class="list" style="margin-bottom:14px"></div><div id="accessList" class="list"></div>
+  </section>
+  <section id="hydra" class="section">
+    <div class="section-head">
+      <div>
+        <h2>🧩 Attribution des dossiers Hydra</h2>
+        <div class="meta">Vue dédiée : chaque ligne indique clairement quelle personne possède quel dossier Hydra.</div>
+      </div>
+      <button class="btn" onclick="loadAccessCodes()">↻ Actualiser</button>
+    </div>
+    <div id="hydraOverview" class="panel" style="margin-bottom:14px">
+      <strong>Chargement des attributions Hydra…</strong>
+    </div>
+    <div class="panel">
+      <strong>Comment modifier une attribution ?</strong>
+      <div class="meta" style="margin-top:6px">Va dans <strong>🔑 Accès</strong>, sélectionne un ou plusieurs dossiers dans la fiche de la personne, puis clique sur <strong>💾 Enregistrer les dossiers</strong>.</div>
+    </div>
   </section>
   <section id="site" class="section">
   <div class="section-head">
@@ -506,11 +522,13 @@ async function loadAccessCodes(){
   const duplicates=Array.isArray(dups)?dups:[];
   const assignments=Array.isArray(hydraAssignments)?hydraAssignments:[];
   const hydraPlayers=Array.isArray(birthdayCfg?.murder_party?.players)?birthdayCfg.murder_party.players:[];
-  $("hydraAssignmentStatus").innerHTML=hydraAssignmentsError
+  const hydraOverviewHtml=hydraAssignmentsError
     ? '<strong>⚠️ Attribution Hydra indisponible</strong><div class="meta" style="margin-top:6px">'+esc(hydraAssignmentsError.message||"La fonction SQL Hydra n’est pas disponible.")+'</div><div class="meta" style="margin-top:6px">Exécute la dernière version de <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase, puis recharge l’administration.</div>'
     : assignments.length
-      ? '<strong>🧩 Attribution des dossiers Hydra</strong><div class="hydra-global-grid">'+assignments.map(a=>'<div class="hydra-global-row"><strong>'+esc(a.person_name||"Personne")+'</strong><span>→</span><span>'+esc(a.hydra_player_name||"Dossier inconnu")+'</span></div>').join("")+'</div>'
-      : '<strong>🧩 Attribution des dossiers Hydra</strong><div class="meta" style="margin-top:6px">Aucun dossier Hydra n’est actuellement enregistré.</div>';
+      ? '<strong>✅ Personnes avec dossier Hydra</strong><div class="hydra-global-grid">'+assignments.map(a=>'<div class="hydra-global-row"><strong>'+esc(a.person_name||"Personne")+'</strong><span>→</span><span>'+esc(a.hydra_player_name||"Dossier inconnu")+'</span></div>').join("")+'</div>'
+      : '<strong>ℹ️ Aucun dossier Hydra attribué</strong><div class="meta" style="margin-top:6px">Aucune attribution n’est actuellement enregistrée dans Supabase.</div>';
+  $("hydraAssignmentStatus").innerHTML=hydraOverviewHtml;
+  $("hydraOverview").innerHTML=hydraOverviewHtml;
   const byAccess=new Map();
   assignments.forEach(a=>{
     const k=String(a.access_id);
