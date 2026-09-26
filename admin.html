@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#15182a">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https://ckasbsnzxgwfwfnctio.supabase.co; media-src 'self' blob: https:; frame-src 'self'">
 <script>
   (function(){
     const key = "__scroll_position__:" + location.pathname + location.search;
@@ -86,12 +89,13 @@
 }
 .toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 15px;border-radius:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:20}
 .birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px;resize:vertical}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}.admin-editor-note{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:12px;color:var(--muted)}.quick-preview{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,#fff,#f8f9ff)}.site-color{height:46px;padding:4px}.hydra-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hydra-editor-grid .full{grid-column:1/-1}.hydra-editor-grid textarea{min-height:95px;resize:vertical}.hydra-editor-grid .scenario{min-height:230px}.hydra-access-select{margin-top:10px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#f8f9fc;font:inherit;font-weight:700;width:100%}.hydra-access-label{font-size:12px;color:var(--muted);margin-top:7px}.hydra-access-select{min-height:120px}.hydra-assignment{margin-top:8px;padding:9px;border:1px solid var(--line);border-radius:10px;background:#fbfcff}.hydra-assignment strong{display:block}.hydra-assignment .actions{margin-top:7px}.hydra-assigned-summary{margin-top:9px;padding:10px 12px;border:1px solid #cbdaf7;border-radius:10px;background:#eef4ff;color:#243b64}.hydra-assigned-summary.empty-hydra{background:#f7f8fb;border-color:var(--line);color:var(--muted)}.hydra-global-grid{display:grid;gap:7px;margin-top:10px}.hydra-global-row{display:grid;grid-template-columns:minmax(90px,1fr) 24px minmax(120px,1fr);align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}.hydra-global-row span:last-child{font-weight:700}@media(max-width:700px){.hydra-global-row{grid-template-columns:1fr}.hydra-global-row span{display:none}}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}.hydra-editor-grid{grid-template-columns:1fr}.hydra-editor-grid .full{grid-column:auto}}
-</style>
+.skip-link{position:fixed;left:12px;top:12px;z-index:9999;transform:translateY(-180%);padding:10px 14px;border-radius:10px;background:#fff;color:#15182a;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}.skip-link:focus{transform:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8f92ff;outline-offset:2px}@media(max-width:700px){.tabs{position:sticky;top:0;overflow-x:auto;-webkit-overflow-scrolling:touch}.btn{min-height:44px}.actions{gap:7px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}</style>
 </head>
 <body>
+<a class="skip-link" href="#adminMain">Aller directement au contenu</a>
 <header class="hero"><div class="wrap hero-row"><div><div style="font-size:12px;opacity:.8">⚙️ CENTRE DE GESTION</div><h1>La liste d’Ethan</h1></div><a class="back" href="index.html">← Retour à la liste</a></div></header>
 
-<main class="wrap">
+<main class="wrap" id="adminMain">
 <section id="adminGate" class="admin-gate">
   <div class="panel">
     <h2 style="margin-top:0">🔐 Accès administration</h2>
@@ -310,7 +314,7 @@
 </main>
 <footer style="max-width:1100px;margin:30px auto;padding:0 20px 30px;color:#6b7280;font-size:13px"><a href="index.html">🎁 Liste des cadeaux</a> · <a href="communaute.html">💬 Communauté</a> · <a href="confidentialite.html">🔒 Confidentialité & données personnelles</a> · <a href="extension.html">🧩 Extension</a></footer>
 <div id="diagnostic" class="panel" style="margin:20px 0;display:none"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><strong>🔧 Diagnostic Supabase</strong><div id="diagnosticStatus" class="meta" style="margin-top:4px">Prêt à tester la connexion.</div></div><button class="btn primary" onclick="runDiagnostic()">Tester la connexion</button></div><div id="diagnosticList" style="margin-top:12px"></div></div>
-<div id="buildVersion" style="text-align:center;color:#8a90a3;font-size:10px;padding:8px">Admin 2026.09.24 • mobile</div><div id="toast" class="toast"></div>
+<div id="buildVersion" style="text-align:center;color:#8a90a3;font-size:10px;padding:8px">Admin 2026.09.24 • mobile</div><div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
