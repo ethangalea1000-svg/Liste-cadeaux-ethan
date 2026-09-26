@@ -843,7 +843,7 @@ async function loadBirthdayAdmin(){
     $("birthdayScheduleVisible").checked=cfg.schedule_visible===true;
     $("birthdayConfigEditor").value=JSON.stringify(cfg,null,2);
     const players=cfg.murder_party?.players||[];
-    $("hydraPlayers").innerHTML=players.length?players.map((p,i)=>'<article class="item hydra-player"><div><strong>'+esc(p.name||"")+'</strong> · <span class="badge">'+esc(p.role||"")+'</span><div class="sub">'+esc(p.function||"")+'</div><div class="sub" style="margin-top:7px"><strong>Document :</strong> '+esc(p.special||"")+'</div><div class="sub" style="margin-top:4px"><strong>Fragment :</strong> '+esc(p.fragment||"")+'</div></div><button class="btn" onclick="copyHydra('+i+')">📋 Copier</button></article>').join(""):empty("Aucun dossier Hydra.");
+    $("hydraPlayers").innerHTML=players.length?players.map((p,i)=>'<article class="item hydra-player"><div><strong>'+esc(p.name||"")+'</strong> · <span class="badge">'+esc(p.role||"")+'</span><div class="sub">'+esc(p.function||"")+'</div><div class="sub" style="margin-top:7px"><strong>👕 Tenue parfaite :</strong> '+esc(p.tenue_parfaite||"Non renseignée")+'</div><div class="sub" style="margin-top:7px"><strong>Document :</strong> '+esc(p.special||"")+'</div><div class="sub" style="margin-top:4px"><strong>Fragment :</strong> '+esc(p.fragment||"")+'</div></div><button class="btn" onclick="copyHydra('+i+')">📋 Copier</button></article>').join(""):empty("Aucun dossier Hydra.");
   }catch(e){toast(e.message)}
 }
 async function saveBirthdayQuick(){
@@ -881,7 +881,7 @@ async function copyHydra(index){
   try{
     const cfg=await getBirthdayConfig(); const p=cfg.murder_party?.players?.[index];
     if(!p)return;
-    const text=["DOSSIER HYDRA","Nom : "+p.name,"Rôle : "+p.role,"Fonction : "+p.function,"Document spécial : "+p.special,"Fragment IA : "+p.fragment].join("\n");
+    const text=["DOSSIER HYDRA","Nom : "+p.name,"Rôle : "+p.role,"Fonction : "+p.function,"Tenue parfaite : "+(p.tenue_parfaite||"Non renseignée"),"Document spécial : "+p.special,"Fragment IA : "+p.fragment].join("\n");
     await navigator.clipboard?.writeText(text);
     toast("Dossier de "+p.name+" copié.");
   }catch(e){toast(e.message)}
