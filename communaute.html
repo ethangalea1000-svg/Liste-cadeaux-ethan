@@ -176,6 +176,39 @@ function lockCommunity(msg){
   communityContent.classList.add("hidden");
   accessStatus.textContent=msg||"Entre ton code d’invitation.";
 }
+async function signCommunityPaths(paths){
+  const unique=[...new Set((Array.isArray(paths)?paths:[]).filter(Boolean))];
+  const out={};
+  if(!unique.length)return out;
+  const r=await fetch(SUPABASE_URL+"/storage/v1/object/sign/community-files",{
+    method:"POST",
+    cache:"no-store",
+    headers:{
+      apikey:SUPABASE_ANON_KEY,
+      "x-access-code":accessCode,
+      "Content-Type":"application/json",
+      Accept:"application/json"
+    },
+    body:JSON.stringify({paths:unique,expiresIn:900})
+  });
+  const data=await r.json().catch(()=>[]);
+  if(!r.ok)throw new Error("Impossible de signer les pièces jointes.");
+  (Array.isArray(data)?data:[]).forEach(item=>{
+    if(item&&item.path&&item.signedURL){
+      try{out[item.path]=new URL(item.signedURL,SUPABASE_URL).href}catch(_){}
+    }
+  });
+  return out;
+}
+function communityAttachmentPath(a){
+  const path=String(a?.path||"").trim();
+  if(path)return path;
+  const raw=String(a?.url||"");
+  const marker="/storage/v1/object/public/community-files/";
+  const i=raw.indexOf(marker);
+  if(i<0)return "";
+  try{return decodeURIComponent(raw.slice(i+marker.length))}catch(_){return raw.slice(i+marker.length)}
+}
 async function load(){
   if(!accessCode)return;
   try{
@@ -185,14 +218,28 @@ async function load(){
       postsEl.innerHTML='<div class="empty">Aucun message pour le moment.</div>';
       return;
     }
+
+    const pathList=[];
+    posts.forEach(p=>{
+      (Array.isArray(p.attachments)?p.attachments:[]).forEach(a=>{
+        const path=communityAttachmentPath(a);
+        if(path)pathList.push(path);
+      });
+    });
+    const signed=await signCommunityPaths(pathList);
+
     posts.forEach(p=>{
       const box=document.createElement("article");
       box.className="post";
       const atts=Array.isArray(p.attachments)?p.attachments:[];
-      const attachmentsHtml=atts.map(a=>a.type&&a.type.startsWith("image/")?
-        '<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer"><img class="attachment-img" src="'+esc(a.url)+'" alt="'+esc(a.name||"image")+'"></a>':
-        '<a class="attachment-link" href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">📎 '+esc(a.name||"Fichier")+'</a>'
-      ).join("");
+      const attachmentsHtml=atts.map(a=>{
+        const path=communityAttachmentPath(a);
+        const url=path?signed[path]:"";
+        if(!url)return '<div class="attachment-link">📎 '+esc(a.name||"Fichier")+' · indisponible</div>';
+        return a.type&&a.type.startsWith("image/")
+          ?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer"><img class="attachment-img" src="'+esc(url)+'" alt="'+esc(a.name||"image")+'"></a>'
+          :'<a class="attachment-link" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">📎 '+esc(a.name||"Fichier")+'</a>';
+      }).join("");
       const linkHtml=p.link?'<div class="post-link">🔗 <a href="'+esc(p.link)+'" target="_blank" rel="noopener noreferrer">'+esc(p.link)+'</a></div>':"";
       const count=e=>Number(p[e]||0);
       box.innerHTML='<div class="meta"><strong>'+esc(p.name)+'</strong> · '+new Date(p.created_at).toLocaleString("fr-FR")+
@@ -270,7 +317,7 @@ document.getElementById("postForm").addEventListener("submit",async e=>{
     attachments.push({
       name:file.name,
       type:file.type||"application/octet-stream",
-      url:SUPABASE_URL+"/storage/v1/object/public/community-files/"+path
+      path:path
     });
   }
   try{
