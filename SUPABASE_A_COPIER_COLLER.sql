@@ -5114,6 +5114,9 @@ begin
     jsonb_strip_nulls(v_settings - 'murder_party' - 'experience' - 'schedule')
     ||
     jsonb_build_object(
+      'countdown_at',v_settings->>'countdown_at',
+      'birthday_mode',coalesce((v_settings->>'birthday_mode')::boolean,false),
+      'schedule_visible',coalesce((v_settings->>'schedule_visible')::boolean,false),
       'schedule',
       case when coalesce((v_settings->>'schedule_visible')::boolean,false)
         then coalesce(v_settings->'schedule','[]'::jsonb) else '[]'::jsonb end,
