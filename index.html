@@ -796,6 +796,7 @@ async function unlockSite(code,providedHydraToken=""){
       mainContent.classList.add("locked");
       accessGate.classList.remove("private-locked");
       updateIdentityLabels();
+      accessGate.classList.remove("auto-login-pending");
       accessStatus.textContent=diagnostic||"❌ La liste est momentanément indisponible.";
       const change=document.getElementById("changeCodeBtn");
       if(change)change.hidden=false;
@@ -804,7 +805,6 @@ async function unlockSite(code,providedHydraToken=""){
     localStorage.setItem("birthday_list_access",accessCode);
     if(hydraToken)sessionStorage.setItem("birthday_hydra_token",hydraToken);else sessionStorage.removeItem("birthday_hydra_token");
     if(history.replaceState){ history.replaceState(null,"",location.pathname); }
-    if(history.replaceState)history.replaceState(null,"",location.pathname+location.hash);
     accessStatus.textContent=accessLabel?"✅ Accès autorisé pour "+accessLabel+".":"✅ Accès autorisé.";
     updateIdentityLabels();
     accessGate.classList.add("private-locked");
