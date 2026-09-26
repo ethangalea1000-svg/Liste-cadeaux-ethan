@@ -789,6 +789,7 @@ async function loadBirthdayFeatures(){
     const r=await privateRpc("get_birthday_public_config",{});
     birthdayConfig=await r.json(); if(!birthdayConfig||typeof birthdayConfig!=="object")birthdayConfig={};
 
+    await loadHydraDossier();
     startBirthdayCountdown();
     birthdaySet("birthdayModeSection",birthdayConfig.birthday_mode===true);
     if(birthdayConfig.birthday_mode===true){
