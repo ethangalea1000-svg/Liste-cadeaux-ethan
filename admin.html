@@ -548,14 +548,20 @@ async function loadAccessCodes(){
  }
 }
 async function syncHydraAssignments(accessId){
+ const select=document.querySelector('.hydra-access-select[data-access-id="'+Number(accessId)+'"]');
+ const players=select?[...select.selectedOptions].map(o=>String(o.value||"").trim()).filter(Boolean):[];
+ const button=select?.parentElement?.querySelector('button.btn.primary');
  try{
-  const select=document.querySelector('.hydra-access-select[data-access-id="'+Number(accessId)+'"]');
-  const players=select?[...select.selectedOptions].map(o=>o.value):[];
+  if(!select)throw new Error("Sélecteur Hydra introuvable pour cet accès.");
+  if(button){button.disabled=true;button.textContent="⏳ Enregistrement…";}
   await rpc("admin_sync_hydra_access_assignments",{p_access_id:Number(accessId),p_players:players});
-  toast(players.length?players.length+" dossier(s) Hydra attribué(s).":"Dossiers Hydra retirés.");
+  toast(players.length?players.length+" dossier(s) Hydra ajouté(s) à cette personne.":"Dossiers Hydra retirés pour cette personne.");
   await loadAccessCodes();
  }catch(e){
-  toast(e?.message||"Impossible d’enregistrer les dossiers Hydra.");
+  console.error("syncHydraAssignments",e);
+  toast("❌ "+(e?.message||"Impossible d’enregistrer les dossiers Hydra."));
+ }finally{
+  if(button){button.disabled=false;button.textContent="💾 Enregistrer les dossiers";}
  }
 }
 function hydraAccessUrl(code,token){
