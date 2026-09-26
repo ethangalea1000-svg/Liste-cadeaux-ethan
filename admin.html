@@ -171,7 +171,7 @@
         <h2>🧩 Attribution des dossiers Hydra</h2>
         <div class="meta">Vue dédiée : chaque ligne indique clairement quelle personne possède quel dossier Hydra.</div>
       </div>
-      <button class="btn" onclick="loadAccessCodes()">↻ Actualiser</button>
+      <div class="actions"><button class="btn" onclick="loadAccessCodes()">↻ Actualiser</button><button class="btn" onclick="testHydraRpc()">🔧 Tester Hydra</button></div>
     </div>
     <div id="hydraOverview" class="panel" style="margin-bottom:14px">
       <strong>Chargement des attributions Hydra…</strong>
@@ -562,7 +562,7 @@ async function loadAccessCodes(){
         +hydraPlayers.map(p=>'<option value="'+esc(p.name||"")+'" '+(selectedNames.has(String(p.name||""))?"selected":"")+'>'+esc(p.name||"")+' — '+esc(p.role||"Joueur Hydra")+'</option>').join("")
         +'</select>'
         +'<div class="meta">Un même code peut avoir plusieurs personnages. Chaque personnage recevra ensuite son propre lien privé.</div>'
-        +'<div class="actions"><button type="button" class="btn primary hydra-save-btn" data-access-id="'+Number(x.access_id)+'">💾 Enregistrer les dossiers</button></div>'
+        +'<div class="actions" style="align-items:center"><button type="button" class="btn primary hydra-save-btn" data-access-id="'+Number(x.access_id)+'">💾 Enregistrer les dossiers</button><span class="hydra-save-status" data-access-id="'+Number(x.access_id)+'" style="font-size:12px;font-weight:700"></span></div>'
         +(currentAssignments.length
           ?'<div class="hydra-access-label">🔗 Liens privés actuellement créés</div>'+currentAssignments.map(a=>'<div class="hydra-assignment"><strong>'+esc(a.hydra_player_name)+'</strong><div class="access-link">'+esc(hydraAccessUrl(x.access_code,a.private_token))+'</div><div class="actions"><button class="btn" data-url="'+esc(hydraAccessUrl(x.access_code,a.private_token))+'" onclick="copyHydraAccessLink(this.dataset.url)">📋 Copier le lien privé</button></div></div>').join("")
           :'<div class="hydra-assignment"><strong>ℹ️ Aucun dossier Hydra attribué à cet accès.</strong><div class="meta">Sélectionne un ou plusieurs personnages ci-dessus.</div></div>')
@@ -603,35 +603,56 @@ document.getElementById("accessList")?.addEventListener("click",async e=>{
   }
 });
 
+async function testHydraRpc(){
+ const box=document.getElementById("hydraOverview");
+ try{
+   if(box)box.innerHTML='<strong>🔎 Test Hydra en cours…</strong>';
+   const r=await rpc("admin_list_hydra_access_assignments",{});
+   const rows=Array.isArray(r)?r:[];
+   if(box)box.innerHTML='<strong>✅ RPC Hydra accessible</strong><div class="meta" style="margin-top:6px">Supabase retourne '+rows.length+' attribution(s).</div>';
+   toast("✅ RPC Hydra fonctionne. "+rows.length+" attribution(s).");
+ }catch(e){
+   console.error("testHydraRpc",e);
+   if(box)box.innerHTML='<strong>❌ RPC Hydra en erreur</strong><div class="meta" style="margin-top:6px">'+esc(e?.message||"Erreur inconnue")+'</div>';
+   toast("❌ "+(e?.message||"RPC Hydra inaccessible"));
+ }
+}
+
 async function syncHydraAssignments(accessId){
  const select=document.querySelector('.hydra-access-select[data-access-id="'+Number(accessId)+'"]');
- const players=select?[...select.selectedOptions].map(o=>String(o.value||"").trim()).filter(Boolean):[];
  const button=document.querySelector('.hydra-save-btn[data-access-id="'+Number(accessId)+'"]');
+ const status=document.querySelector('.hydra-save-status[data-access-id="'+Number(accessId)+'"]');
+ const players=select?[...select.selectedOptions].map(o=>String(o.value||"").trim()).filter(Boolean):[];
+ const setStatus=(text,ok=false)=>{
+   if(status){
+     status.textContent=text;
+     status.style.color=ok?"#087443":"#b42318";
+   }
+ };
  try{
-  if(!select)throw new Error("Sélecteur Hydra introuvable pour cet accès.");
-  if(button && !button.dataset.busy){button.disabled=true;button.textContent="⏳ Enregistrement…";}
-  const saved=await rpc("admin_sync_hydra_access_assignments",{p_access_id:Number(accessId),p_players:players});
-  const savedRows=Array.isArray(saved)?saved:[];
-  const savedNames=savedRows.map(x=>String(x.hydra_player_name||"").trim()).filter(Boolean);
-  const verification=await rpc("admin_list_hydra_access_assignments",{});
-  const verificationRows=(Array.isArray(verification)?verification:[]).filter(x=>Number(x.access_id)===Number(accessId)&&x.active_assignment!==false);
-  const verificationNames=verificationRows.map(x=>String(x.hydra_player_name||"").trim()).filter(Boolean);
-  if(savedNames.join("|")!==verificationNames.join("|")){
-    throw new Error("Supabase n’a pas confirmé l’attribution. Reçu : "+(verificationNames.join(", ")||"aucun dossier")+" ; attendu : "+(savedNames.join(", ")||"aucun dossier"));
-  }
-  toast(savedNames.length
-    ?"✅ Supabase confirmé : "+savedNames.length+" dossier(s) — "+savedNames.join(", ")
-    :"✅ Supabase confirmé : aucun dossier Hydra attribué.");
-  const status=document.getElementById("hydraAssignmentStatus");
-  if(status){
-    status.scrollIntoView({behavior:"smooth",block:"center"});
-  }
-  await loadAccessCodes();
+   if(!select)throw new Error("Sélecteur Hydra introuvable pour cet accès.");
+   setStatus(players.length?"⏳ Envoi : "+players.join(", "):"⏳ Envoi : aucun dossier");
+   if(button){button.disabled=true;button.textContent="⏳ Enregistrement…";}
+   const saved=await rpc("admin_sync_hydra_access_assignments",{p_access_id:Number(accessId),p_players:players});
+   const savedRows=Array.isArray(saved)?saved:[];
+   const savedNames=savedRows.map(x=>String(x.hydra_player_name||"").trim()).filter(Boolean);
+   const verification=await rpc("admin_list_hydra_access_assignments",{});
+   const verificationRows=(Array.isArray(verification)?verification:[]).filter(x=>Number(x.access_id)===Number(accessId)&&x.active_assignment!==false);
+   const verificationNames=verificationRows.map(x=>String(x.hydra_player_name||"").trim()).filter(Boolean);
+   if(savedNames.join("|")!==verificationNames.join("|")){
+     throw new Error("Sauvegarde non confirmée. Envoyé : "+(players.join(", ")||"aucun")+" | Retour : "+(verificationNames.join(", ")||"aucun"));
+   }
+   setStatus(savedNames.length?"✅ Enregistré : "+savedNames.join(", "):"✅ Aucun dossier",true);
+   toast(savedNames.length
+     ?"✅ Supabase confirmé : "+savedNames.length+" dossier(s) — "+savedNames.join(", ")
+     :"✅ Supabase confirmé : aucun dossier Hydra attribué.");
+   await loadAccessCodes();
  }catch(e){
-  console.error("syncHydraAssignments",e);
-  toast("❌ "+(e?.message||"Impossible d’enregistrer les dossiers Hydra."));
+   console.error("syncHydraAssignments",e);
+   setStatus("❌ "+(e?.message||"Erreur Supabase"));
+   toast("❌ "+(e?.message||"Impossible d’enregistrer les dossiers Hydra."));
  }finally{
-  if(button){button.disabled=false;button.textContent="💾 Enregistrer les dossiers";}
+   if(button){button.disabled=false;button.textContent="💾 Enregistrer les dossiers";}
  }
 }
 function hydraAccessUrl(code,token){
