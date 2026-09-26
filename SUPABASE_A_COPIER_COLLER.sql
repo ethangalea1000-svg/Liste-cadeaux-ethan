@@ -4846,3 +4846,74 @@ select
     and to_regprocedure('public.submit_private_idea(text,text)') is not null
     and to_regprocedure('public.submit_private_message(text,text)') is not null
   ) as private_rpc_set_complete;
+
+-- ============================================================
+-- -- AUDIT FINAL GLOBAL DE SÉCURITÉ
+-- À exécuter après tous les blocs précédents dans Supabase.
+-- ============================================================
+
+select
+  'FINAL_SECURITY_AUDIT' as audit_status,
+  (
+    select count(*)=0
+    from (values
+      ('public.reservations'),
+      ('public.gift_suggestions'),
+      ('public.fundraisers'),
+      ('public.contributions'),
+      ('public.ideas'),
+      ('public.messages'),
+      ('public.community_posts'),
+      ('public.community_reactions')
+    ) as t(rel)
+    where has_table_privilege('anon',t.rel,'select')
+       or has_table_privilege('anon',t.rel,'insert')
+       or has_table_privilege('anon',t.rel,'update')
+       or has_table_privilege('anon',t.rel,'delete')
+  ) as anon_has_no_direct_table_write_or_read,
+
+  (
+    select count(*)=8
+    from (values
+      ('public.reservations'),
+      ('public.gift_suggestions'),
+      ('public.fundraisers'),
+      ('public.contributions'),
+      ('public.ideas'),
+      ('public.messages'),
+      ('public.community_posts'),
+      ('public.community_reactions')
+    ) as t(rel)
+    where (
+      select c.relrowsecurity
+      from pg_class c
+      join pg_namespace n on n.oid=c.relnamespace
+      where n.nspname=split_part(t.rel,'.',1)
+        and c.relname=split_part(t.rel,'.',2)
+    )
+  ) as rls_enabled_on_private_tables,
+
+  to_regprocedure('public.get_private_reservations(text)') is not null as reservations_read_rpc,
+  to_regprocedure('public.reserve_private_gift(text,text,text)') is not null as reservations_write_rpc,
+  to_regprocedure('public.cancel_private_reservation(text,text,text)') is not null as reservations_cancel_rpc,
+  to_regprocedure('public.get_private_gift_suggestions(text)') is not null as suggestions_read_rpc,
+  to_regprocedure('public.submit_private_gift_suggestion(text,text,text,text)') is not null as suggestions_write_rpc,
+  to_regprocedure('public.get_private_fundraisers(text)') is not null as fundraisers_read_rpc,
+  to_regprocedure('public.submit_private_fundraiser(text,text,text,numeric)') is not null as fundraisers_write_rpc,
+  to_regprocedure('public.get_private_contributions(text,bigint)') is not null as contributions_read_rpc,
+  to_regprocedure('public.submit_private_contribution(text,numeric,text,bigint)') is not null as contributions_write_rpc,
+  to_regprocedure('public.get_private_ideas(text)') is not null as ideas_read_rpc,
+  to_regprocedure('public.submit_private_idea(text,text)') is not null as ideas_write_rpc,
+  to_regprocedure('public.submit_private_message(text,text)') is not null as message_write_rpc,
+  to_regprocedure('public.get_private_community(text)') is not null as community_read_rpc,
+  to_regprocedure('public.create_private_community_post(text,text,text,jsonb)') is not null as community_write_rpc,
+  to_regprocedure('public.toggle_private_community_reaction(text,bigint,text)') is not null as community_reaction_rpc,
+  to_regprocedure('public.delete_private_community_post(text,bigint)') is not null as community_delete_rpc,
+
+  has_table_privilege('anon','public.list_access_codes','select') as anon_access_codes_select,
+  has_table_privilege('anon','public.list_access_authorizations','select') as anon_authorizations_select,
+  has_table_privilege('anon','public.hydra_access_assignments','select') as anon_hydra_assignments_select,
+  has_table_privilege('anon','public.birthday_config','select') as anon_birthday_config_select,
+  has_table_privilege('anon','public.site_settings','select') as anon_site_settings_select
+;
+
