@@ -4336,3 +4336,163 @@ select
   jsonb_array_length(settings->'murder_party'->'end_documents') as end_documents_count
 from public.birthday_config
 where id=1;
+
+
+-- ============================================================
+-- CORRECTION SÉCURITÉ RÉSERVATIONS PRIVÉES
+-- Le site utilise les RPC privées pour lire/réserver/déréserver.
+-- L'accès direct anon à la table reservations est donc inutile
+-- et supprimé pour éviter le contournement du code d'accès.
+-- ============================================================
+
+drop policy if exists "Public can view reservations" on public.reservations;
+drop policy if exists "Public can create reservations" on public.reservations;
+drop policy if exists "Public can cancel reservations" on public.reservations;
+
+revoke select, insert, update, delete on table public.reservations from anon, authenticated;
+
+drop function if exists public.cancel_reservation(text, text);
+
+create or replace function public.get_private_reservations(p_code text)
+returns table(
+  gift_id text,
+  name text,
+  created_at timestamptz
+)
+language plpgsql
+security definer
+set search_path = public
+as $private_reservations$
+declare
+  v_name text;
+begin
+  select lac.label
+    into v_name
+  from public.list_access_codes as lac
+  where lac.active=true
+    and lac.code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  return query
+  select r.gift_id,r.name,r.created_at
+  from public.reservations as r
+  order by r.created_at desc;
+end;
+$private_reservations$;
+
+grant execute on function public.get_private_reservations(text) to anon;
+
+create or replace function public.reserve_private_gift(
+  p_code text,
+  p_gift_id text,
+  p_name text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $private_reserve$
+declare
+  v_name text;
+  v_allow boolean;
+  v_archived boolean;
+begin
+  select lac.label
+    into v_name
+  from public.list_access_codes as lac
+  where lac.active=true
+    and lac.code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  if lower(trim(coalesce(p_name,''))) <> lower(trim(v_name)) then
+    raise exception 'Identité de réservation invalide.' using errcode='42501';
+  end if;
+
+  select g.allow_reservation,coalesce(g.archived,false)
+    into v_allow,v_archived
+  from public.gift_catalog as g
+  where g.id=p_gift_id
+  limit 1;
+
+  if not found then
+    raise exception 'Cadeau introuvable.';
+  end if;
+
+  if v_archived then
+    raise exception 'Ce cadeau n’est plus disponible.';
+  end if;
+
+  if not coalesce(v_allow,true) then
+    raise exception 'Les réservations sont désactivées pour ce cadeau.';
+  end if;
+
+  begin
+    insert into public.reservations(gift_id,name)
+    values(p_gift_id,trim(v_name));
+  exception
+    when unique_violation then
+      return false;
+  end;
+
+  return true;
+end;
+$private_reserve$;
+
+grant execute on function public.reserve_private_gift(text,text,text) to anon;
+
+create or replace function public.cancel_private_reservation(
+  p_code text,
+  p_gift_id text,
+  p_name text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $private_cancel$
+declare
+  v_name text;
+  deleted boolean;
+begin
+  select lac.label
+    into v_name
+  from public.list_access_codes as lac
+  where lac.active=true
+    and lac.code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_name is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  if lower(trim(coalesce(p_name,''))) <> lower(trim(v_name)) then
+    raise exception 'Identité de réservation invalide.' using errcode='42501';
+  end if;
+
+  delete from public.reservations as r
+  where r.gift_id=p_gift_id
+    and lower(trim(r.name))=lower(trim(v_name))
+  returning true into deleted;
+
+  return coalesce(deleted,false);
+end;
+$private_cancel$;
+
+grant execute on function public.cancel_private_reservation(text,text,text) to anon;
+
+select
+  'RESERVATION_SECURITY_OK' as reservation_security_status,
+  to_regprocedure('public.get_private_reservations(text)') is not null as private_read_rpc_exists,
+  to_regprocedure('public.reserve_private_gift(text,text,text)') is not null as private_reserve_rpc_exists,
+  to_regprocedure('public.cancel_private_reservation(text,text,text)') is not null as private_cancel_rpc_exists,
+  has_table_privilege('anon','public.reservations','select') as anon_can_select_table,
+  has_table_privilege('anon','public.reservations','insert') as anon_can_insert_table,
+  has_table_privilege('anon','public.reservations','delete') as anon_can_delete_table;
