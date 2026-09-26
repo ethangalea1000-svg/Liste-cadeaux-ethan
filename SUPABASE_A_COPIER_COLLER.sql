@@ -5226,6 +5226,165 @@ select
 
 
 -- ============================================================
+
+-- ============================================================
+-- HYDRA ACCESS / COMPANIONS SYNC — 2026-09-27
+-- Les animaux Milo et Snow restent des dossiers/scénario :
+-- aucun compte d'accès humain ne leur est créé.
+-- Mario reçoit son dossier + Milo.
+-- Andréa reçoit son dossier + Snow.
+-- Les kids conserve son accès groupé Emy + Tony + Lino.
+-- ============================================================
+
+-- Dossier compagnon Snow.
+update public.birthday_config b
+set settings=jsonb_set(
+  b.settings,
+  '{murder_party,players}',
+  (b.settings->'murder_party'->'players') || jsonb_build_array(
+    jsonb_build_object(
+      'name','Snow',
+      'role','Chat Détecteur Hydra',
+      'rule','',
+      'secret','Tu es le compagnon animal du scénario : tes réactions peuvent aider à repérer des incohérences.',
+      'special','Consigne compagnon — Snow détecte les menteurs et les traces de poison dans le récit.',
+      'discover','Quelles réactions doivent être reliées aux indices du scénario ?',
+      'fragment','',
+      'function','Détection des incohérences de comportement et des traces suspectes dans le récit.',
+      'companion','',
+      'knowledge','Snow suit Ethan. Il est présenté comme capable de détecter les menteurs et les traces de poison dans le récit.',
+      'objective','Aider Andréa à interpréter les réactions de Snow sans jamais l’exposer à une substance réelle.',
+      'relations',jsonb_build_array(
+        jsonb_build_object('type','guide','what','Elle interprète les réactions de Snow.','with','Andrea'),
+        jsonb_build_object('type','chef','what','Snow accompagne son équipe.','with','Ethan'),
+        jsonb_build_object('type','accompagnement','what','Ils coopèrent pour conserver les indices du scénario.','with','Mario')
+      ),
+      'clue_chain',jsonb_build_array(
+        'Consigne compagnon : Snow détecte les menteurs et les traces de poison dans le récit.',
+        'À découvrir : quelles réactions doivent être reliées aux indices du scénario ?'
+      ),
+      'description','Compagnon animal du scénario, interprété par ses réactions et observations.',
+      'revelations',jsonb_build_array(
+        'Acte II : révéler une partie de l’information.',
+        'Acte III : relier cette information à au moins un autre dossier.',
+        'Final : expliquer ce que cette piste prouve et ce qu’elle ne prouve pas.'
+      ),
+      'special_text','Consigne compagnon — Snow détecte les menteurs et les traces de poison dans le récit.',
+      'fictional_hook','',
+      'tenue_parfaite','Aucune tenue spéciale imposée au véritable animal.'
+    )
+  )
+)
+where b.id=1
+and not exists (
+  select 1 from jsonb_array_elements(b.settings->'murder_party'->'players') p
+  where p->>'name'='Snow'
+);
+
+-- Dossier humain Yannick.
+update public.birthday_config b
+set settings=jsonb_set(
+  b.settings,
+  '{murder_party,players}',
+  (b.settings->'murder_party'->'players') || jsonb_build_array(
+    jsonb_build_object(
+      'name','Yannick',
+      'role','Gardien de la sécurité Hydra',
+      'rule','',
+      'secret','Tu as repéré une anomalie dans le dispositif de sécurité avant l’incident.',
+      'special','Registre de Sécurité Hydra — Une anomalie a été constatée avant l’incident.',
+      'discover','Qui a modifié le dispositif de sécurité ?',
+      'fragment','Fragment IA 20 : Une anomalie de sécurité a été constatée avant l’incident.',
+      'function','Surveillance du dispositif de sécurité et des accès.',
+      'companion','',
+      'knowledge','Tu surveilles les accès et les équipements de sécurité.',
+      'objective','Identifier l’origine de l’anomalie et établir sa chronologie.',
+      'relations',jsonb_build_array(
+        jsonb_build_object('type','surveillance','what','Elle partage les observations de sécurité.','with','Cécile'),
+        jsonb_build_object('type','enquête','what','Les événements numériques peuvent être recoupés.','with','Max'),
+        jsonb_build_object('type','direction','what','Tu lui remontes les anomalies importantes.','with','Ethan')
+      ),
+      'clue_chain',jsonb_build_array(
+        'Indice de départ : une anomalie de sécurité a été constatée avant l’incident.',
+        'À découvrir : qui a modifié le dispositif de sécurité ?'
+      ),
+      'description','Tu surveilles le dispositif de sécurité et les accès de l’île.',
+      'revelations',jsonb_build_array(
+        'Acte II : révéler une partie de l’information.',
+        'Acte III : relier cette information à au moins un autre dossier.',
+        'Final : expliquer ce que cette piste prouve et ce qu’elle ne prouve pas.'
+      ),
+      'special_text','Registre de Sécurité Hydra — Une anomalie a été constatée avant l’incident.',
+      'fictional_hook','',
+      'tenue_parfaite','Tenue sobre de sécurité Hydra, pratique et discrète.'
+    )
+  )
+)
+where b.id=1
+and not exists (
+  select 1 from jsonb_array_elements(b.settings->'murder_party'->'players') p
+  where p->>'name'='Yannick'
+);
+
+-- Primary dossier on each access code.
+update public.list_access_codes
+set hydra_player_name=case id
+  when 2 then 'Ethan'
+  when 3 then 'Ethan'
+  when 6 then 'Cécile'
+  when 7 then 'Yannick'
+  when 8 then 'Max'
+  when 9 then 'Annie'
+  when 10 then 'Claudie'
+  when 11 then 'Jean-Louis Meal'
+  when 12 then 'Serge'
+  when 13 then 'Silvie'
+  when 14 then 'Marie-Françoise'
+  when 15 then 'Jean-Louis Pineau'
+  when 16 then 'Fabrice'
+  when 17 then 'Emy'
+  when 18 then 'Yoan'
+  when 19 then 'Emilie'
+  when 20 then 'Emy'
+  when 21 then 'Andrea'
+  when 22 then 'Mario'
+  when 23 then 'Lino'
+  else hydra_player_name
+end
+where active=true;
+
+-- Exact multi-dossier assignments.
+delete from public.hydra_access_assignments where active=true;
+
+insert into public.hydra_access_assignments(access_id,hydra_player_name,private_token,active)
+values
+  (2,'Ethan','HYDRA-'||upper(substr(md5('2-Ethan-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (3,'Ethan','HYDRA-'||upper(substr(md5('3-Ethan-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (6,'Cécile','HYDRA-'||upper(substr(md5('6-Cécile-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (7,'Yannick','HYDRA-'||upper(substr(md5('7-Yannick-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (8,'Max','HYDRA-'||upper(substr(md5('8-Max-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (9,'Annie','HYDRA-'||upper(substr(md5('9-Annie-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (10,'Claudie','HYDRA-'||upper(substr(md5('10-Claudie-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (11,'Jean-Louis Meal','HYDRA-'||upper(substr(md5('11-Jean-Louis Meal-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (12,'Serge','HYDRA-'||upper(substr(md5('12-Serge-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (13,'Silvie','HYDRA-'||upper(substr(md5('13-Silvie-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (14,'Marie-Françoise','HYDRA-'||upper(substr(md5('14-Marie-Françoise-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (15,'Jean-Louis Pineau','HYDRA-'||upper(substr(md5('15-Jean-Louis Pineau-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (16,'Fabrice','HYDRA-'||upper(substr(md5('16-Fabrice-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (17,'Emy','HYDRA-'||upper(substr(md5('17-Emy-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (17,'Tony','HYDRA-'||upper(substr(md5('17-Tony-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (17,'Lino','HYDRA-'||upper(substr(md5('17-Lino-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (18,'Yoan','HYDRA-'||upper(substr(md5('18-Yoan-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (19,'Emilie','HYDRA-'||upper(substr(md5('19-Emilie-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (20,'Emy','HYDRA-'||upper(substr(md5('20-Emy-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (21,'Andrea','HYDRA-'||upper(substr(md5('21-Andrea-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (21,'Snow','HYDRA-'||upper(substr(md5('21-Snow-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (22,'Mario','HYDRA-'||upper(substr(md5('22-Mario-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (22,'Milo','HYDRA-'||upper(substr(md5('22-Milo-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (23,'Lino','HYDRA-'||upper(substr(md5('23-Lino-'||random()::text||clock_timestamp()::text),1,24)),true)
+on conflict (access_id,hydra_player_name)
+do update set active=excluded.active,private_token=excluded.private_token;
+
 -- FINAL HYDRA EXPERIENCE AUDIT
 -- ============================================================
 
