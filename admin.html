@@ -443,6 +443,16 @@ async function loadAccessRequests(){
   toast(e?.message||"Impossible de charger les demandes.");
  }
 }
+function copyAccessRequestLink(){
+  const value=$("accessRequestResult")?.dataset.link||"";
+  if(!value){toast("Aucun lien disponible.");return}
+  navigator.clipboard?.writeText(value).then(()=>toast("Lien copié."));
+}
+function copyAccessRequestCode(){
+  const value=$("accessRequestResult")?.dataset.code||"";
+  if(!value){toast("Aucun code disponible.");return}
+  navigator.clipboard?.writeText(value).then(()=>toast("Code copié."));
+}
 async function approveAccessRequest(id){
  try{
   const data=await rpc("admin_approve_access_request",{p_id:id});
@@ -452,7 +462,9 @@ async function approveAccessRequest(id){
   const box=$("accessRequestResult");
   if(box){
     box.classList.remove("hidden");
-    box.innerHTML='<strong>✅ Accès créé pour '+esc(result.label||"")+'</strong><div class="meta" style="margin-top:6px">Code : <strong>'+esc(code)+'</strong></div><div class="access-link" style="margin-top:8px">'+esc(link)+'</div><div class="actions" style="margin-top:9px"><button class="btn primary" onclick="navigator.clipboard?.writeText('+JSON.stringify(link)+').then(()=>toast(\'Lien copié.\'))">📋 Copier le lien</button><button class="btn" onclick="navigator.clipboard?.writeText('+JSON.stringify(code)+').then(()=>toast(\'Code copié.\'))">🔑 Copier le code</button></div>';
+    box.dataset.link=link;
+    box.dataset.code=code;
+    box.innerHTML='<strong>✅ Accès créé pour '+esc(result.label||"")+'</strong><div class="meta" style="margin-top:6px">Code : <strong>'+esc(code)+'</strong></div><div class="access-link" style="margin-top:8px">'+esc(link)+'</div><div class="actions" style="margin-top:9px"><button class="btn primary" onclick="copyAccessRequestLink()">📋 Copier le lien</button><button class="btn" onclick="copyAccessRequestCode()">🔑 Copier le code</button></div>';
   }
   toast("Accès créé.");
   await loadAccessRequests();
