@@ -938,12 +938,31 @@ function startBirthdayCountdown(){
 }
 async function loadHydraDossier(){
  const section=document.getElementById("birthdayHydraSection"),body=document.getElementById("birthdayHydraBody"),meta=document.getElementById("birthdayHydraMeta");
- if(!section||!body)return; body.innerHTML="";
+ if(!section||!body)return;
+ birthdaySet("birthdayHydraSection",true);
+ if(meta)meta.textContent="Chargement de ton dossier personnel…";
+ if(!accessCode){
+   if(meta)meta.textContent="❌ Aucun code d’accès actif.";
+   body.innerHTML='<div class="birthday-item"><strong>Accès Hydra indisponible</strong><span class="form-note">Le code d’invitation n’est pas disponible dans la session.</span></div>';
+   return;
+ }
+ body.innerHTML='<div class="birthday-item">🔄 Chargement de ton dossier personnel…</div>';
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),10000);
  try{
-  const r=await privateRpc("get_my_hydra_dossiers",{p_code:accessCode}),data=await r.json().catch(()=>[]);
-  if(!r.ok)throw new Error(data?.message||data?.error||"Impossible de charger les dossiers Hydra.");
-  const dossiers=Array.isArray(data)?data:[]; birthdayDossiers=dossiers; if(!dossiers.length){ birthdaySet("birthdayHydraSection",false); return; }
-  birthdaySet("birthdayHydraSection",true);
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/get_my_hydra_dossiers",{
+    method:"POST",cache:"no-store",signal:controller.signal,
+    headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},
+    body:JSON.stringify({p_code:accessCode})
+  });
+  const data=await r.json().catch(()=>null);
+  if(!r.ok)throw new Error(data?.message||data?.error||data?.hint||("HTTP "+r.status));
+  const dossiers=Array.isArray(data)?data:[];
+  birthdayDossiers=dossiers;
+  if(!dossiers.length){
+    birthdaySet("birthdayHydraSection",false);
+    return;
+  }
   if(meta)meta.textContent=dossiers.length===1?"1 dossier personnel est associé à ton accès.":dossiers.length+" dossiers personnels sont associés à ton accès.";
   body.innerHTML=dossiers.map((p,index)=>{
    const rows=[["Rôle",p.role],["Fonction",p.function],["Description",p.description],["👕 Tenue parfaite",p.tenue_parfaite||p.outfit||p.tenue]].filter(x=>String(x[1]??"").trim());
@@ -960,9 +979,11 @@ async function loadHydraDossier(){
    return '<details class="hydra-fiche-card hydra-dossier-menu"><summary class="hydra-fiche-summary"><div><span class="hydra-fiche-number">DOSSIER '+(index+1)+'</span><span class="hydra-fiche-name">'+escAny(p.name||("Dossier "+(index+1)))+'</span></div><span class="hydra-fiche-chevron">⌄</span></summary><div class="hydra-fiche-content">'+profileHtml+privateHtml+cluesHtml+relations+toolsHtml+'</div></details>';
   }).join("");
  }catch(e){
-  console.error("loadHydraDossier",e); birthdaySet("birthdayHydraSection",true);
-  if(meta)meta.textContent="❌ Impossible de charger les dossiers Hydra.";
+  console.error("loadHydraDossier",e);
+  if(meta)meta.textContent=e?.name==="AbortError"?"❌ Le chargement Hydra a dépassé 10 secondes.":"❌ Impossible de charger ton dossier Hydra.";
   body.innerHTML='<div class="birthday-item"><strong>Erreur Hydra</strong><span class="form-note">'+escAny(e?.message||"Erreur inconnue")+'</span></div>';
+ }finally{
+  clearTimeout(timeout);
  }
 }
 async function loadBirthdayWall(){
@@ -1093,23 +1114,22 @@ function applyHydraExperienceUI(){
   });
 }
 async function loadBirthdayFeatures(){
+  // Le dossier Hydra est chargé indépendamment : un problème sur un autre module
+  // ne doit jamais laisser le dossier personnel bloqué sur « Chargement… ».
+  await loadHydraDossier();
   try{
     const r=await privateRpc("get_birthday_experience",{p_code:accessCode});
     birthdayConfig=await r.json(); if(!birthdayConfig||typeof birthdayConfig!=="object")birthdayConfig={};
     applyHydraExperienceUI();
     renderHydraWorld();
-
-    await loadHydraDossier();
     startBirthdayCountdown();
     birthdaySet("birthdayModeSection",birthdayConfig.birthday_mode===true);
     if(birthdayConfig.birthday_mode===true){
       document.getElementById("birthdayModeContent").innerHTML='<p style="font-size:18px">La fête est officiellement en mode anniversaire. 🎉</p>';
     }
-
     const schedule=Array.isArray(birthdayConfig.schedule)?birthdayConfig.schedule:[];
     birthdaySet("birthdayScheduleSection",birthdayConfig.schedule_visible===true && schedule.length>0);
     document.getElementById("birthdayScheduleList").innerHTML=schedule.map(x=>'<div class="birthday-item"><strong>'+esc(x.time||"")+' · '+esc(x.title||"")+'</strong><div class="form-note">'+esc(x.description||"")+'</div></div>').join("");
-
     const quiz=birthdayConfig.quiz||{};
     birthdaySet("birthdayQuizSection",quiz.enabled===true && Array.isArray(quiz.questions) && quiz.questions.length>0);
     if(quiz.enabled===true){
@@ -1121,30 +1141,29 @@ async function loadBirthdayFeatures(){
         try{await birthdayRpc("quiz_result",{score,total:quiz.questions.length});}catch{}
       };
     }
-
     birthdaySet("birthdayPollSection",birthdayConfig.poll?.enabled===true);
     await loadBirthdayPoll();
-
     const challenges=Array.isArray(birthdayConfig.challenges)?birthdayConfig.challenges:[];
     birthdaySet("birthdayChallengesSection",challenges.length>0);
     document.getElementById("birthdayChallengesList").innerHTML=challenges.map((x,i)=>'<div class="birthday-item"><strong>'+esc(x.title||"Défi")+'</strong><div class="form-note">'+esc(x.description||"")+'</div><div class="birthday-actions"><button class="btn" onclick="completeBirthdayChallenge('+i+')">✓ Réussi</button></div></div>').join("");
     window.completeBirthdayChallenge=async i=>{try{await birthdayRpc("challenge_done",{challengeIndex:i});showToast("Défi enregistré.");}catch(e){showToast(e.message)}};
-
     const wall=birthdayConfig.wall||{};
     birthdaySet("birthdayWallSection",wall.enabled===true);
     document.getElementById("birthdayWallTitle").textContent=wall.title||"Mur des messages";
     await loadBirthdayWall();
-
     const gallery=birthdayConfig.gallery||{};
     birthdaySet("birthdayGallerySection",gallery.enabled===true);
     await loadBirthdayGallery();
-
     const memories=birthdayConfig.memories||{};
     birthdaySet("birthdayMemoriesSection",memories.enabled===true);
     document.getElementById("birthdayMemoriesTitle").textContent=memories.title||"Souvenirs";
     document.getElementById("birthdayMemoriesIntro").textContent=memories.intro||"";
     document.getElementById("birthdayMemoryStats").innerHTML=(Array.isArray(memories.stats)?memories.stats:[]).map(x=>'<div class="memory-stat"><strong>'+esc(x.label||"")+'</strong><div>'+esc(x.value||"")+'</div></div>').join("");
-  }catch(e){console.warn("birthday features",e)}
+  }catch(e){
+    console.warn("birthday features",e);
+    const meta=document.getElementById("birthdayHydraMeta");
+    if(meta&&birthdayDossiers.length)meta.textContent=birthdayDossiers.length===1?"1 dossier personnel est associé à ton accès.":birthdayDossiers.length+" dossiers personnels sont associés à ton accès.";
+  }
 }
 document.getElementById("birthdayWallForm")?.addEventListener("submit",async e=>{e.preventDefault();try{await birthdayRpc("wall_message",{message:document.getElementById("birthdayWallText").value.trim()});document.getElementById("birthdayWallText").value="";showToast("Message publié.");await loadBirthdayWall()}catch(err){showToast(err.message)}});
 document.getElementById("birthdayGalleryForm")?.addEventListener("submit",async e=>{e.preventDefault();try{const url=document.getElementById("birthdayGalleryUrl").value.trim();if(!/^https?:\/\//i.test(url))throw new Error("URL de photo invalide.");await birthdayRpc("gallery_submission",{url,caption:document.getElementById("birthdayGalleryCaption").value.trim()});document.getElementById("birthdayGalleryUrl").value="";document.getElementById("birthdayGalleryCaption").value="";showToast("Photo ajoutée.");await loadBirthdayGallery()}catch(err){showToast(err.message)}});
