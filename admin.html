@@ -110,7 +110,7 @@
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
     <div class="stat"><b id="countIdeas">0</b><span>Idées</span></div>
     <div class="stat"><b id="countContributions">0</b><span>Participations</span></div>
-    <div class="stat"><b id="countCommunity">0</b><span>Communauté</span></div><div class="stat"><b id="countActivity">0</b><span>Actions enregistrées</span></div><div class="stat"><b id="countVisits">0</b><span>Visites enregistrées</span></div><div class="stat"><b id="countPeople">0</b><span>Personnes</span></div><div class="stat"><b id="countGifts">0</b><span>Cadeaux</span></div><div class="stat"><b id="countAccess">0</b><span>Accès actifs</span></div>
+    <div class="stat"><b id="countCommunity">0</b><span>Communauté</span></div><div class="stat"><b id="countActivity">0</b><span>Actions enregistrées</span></div><div class="stat"><b id="countVisits">0</b><span>Visites enregistrées</span></div><div class="stat"><b id="countPeople">0</b><span>Personnes</span></div><div class="stat"><b id="countGifts">0</b><span>Cadeaux</span></div><div class="stat"><b id="countAccess">0</b><span>Accès actifs</span></div><div class="stat"><b id="countAccessRequests">0</b><span>Demandes d'accès</span></div>
   </div>
 
   <nav class="tabs">
@@ -155,6 +155,11 @@
         <input id="accessCode" required minlength="8" maxlength="64" placeholder="Code d’accès">
         <div class="editor-actions full"><button class="btn primary" type="submit">➕ Créer l’accès</button><button class="btn" type="button" onclick="generateAccessCode()">🎲 Générer</button></div>
       </form>
+    </div>
+    <div class="panel" style="margin-bottom:14px">
+      <div class="section-head"><div><h3 style="margin:0">📨 Demandes de création d’accès</h3><div class="meta">Les personnes peuvent se présenter depuis la page verrouillée. Tu décides ensuite si leur accès est créé.</div></div><button class="btn" onclick="loadAccessRequests()">↻ Actualiser</button></div>
+      <div id="accessRequestResult" class="panel hidden" style="margin:10px 0;background:#eaf8f0;border-color:#c8e8d2"></div>
+      <div id="accessRequestsList" class="list"></div>
     </div>
     <div id="accessStats" class="stats" style="margin-bottom:14px"></div>
     <div id="accessDuplicates" class="list" style="margin-bottom:14px"></div><div id="accessList" class="list"></div>
@@ -423,6 +428,42 @@ function accessUrl(code){
 window.accessUrl=accessUrl;
 window.AccessUrl=accessUrl;
 
+async function loadAccessRequests(){
+ try{
+  const rows=await rpc("admin_list_pending_access_requests",{});
+  const data=Array.isArray(rows)?rows:[];
+  $("countAccessRequests").textContent=data.length;
+  $("accessRequestsList").innerHTML=data.length?data.map(x=>{
+    return '<article class="item"><div style="display:flex;align-items:flex-start;gap:12px"><div style="font-size:28px">'+esc(x.avatar||"👤")+'</div><div><strong>'+esc(x.name)+'</strong><div class="meta">'+esc(x.relation)+' · demande du '+date(x.created_at)+'</div></div></div>'+
+      (x.bio?'<div class="message">'+esc(x.bio)+'</div>':"")+
+      '<div class="actions"><button class="btn success" onclick="approveAccessRequest('+x.id+')">✓ Créer l’accès</button><button class="btn danger" onclick="rejectAccessRequest('+x.id+')">✕ Refuser</button></div></article>';
+  }).join(""):empty("Aucune demande d’accès en attente.");
+ }catch(e){
+  $("accessRequestsList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ Demandes d’accès indisponibles</strong><div class="meta" style="margin-top:8px">'+esc(e?.message||"Erreur inconnue")+'</div></div>';
+  toast(e?.message||"Impossible de charger les demandes.");
+ }
+}
+async function approveAccessRequest(id){
+ try{
+  const data=await rpc("admin_approve_access_request",{p_id:id});
+  const result=data&&typeof data==="object"?data:{};
+  const code=String(result.code||"");
+  const link=code?accessUrl(code):"";
+  const box=$("accessRequestResult");
+  if(box){
+    box.classList.remove("hidden");
+    box.innerHTML='<strong>✅ Accès créé pour '+esc(result.label||"")+'</strong><div class="meta" style="margin-top:6px">Code : <strong>'+esc(code)+'</strong></div><div class="access-link" style="margin-top:8px">'+esc(link)+'</div><div class="actions" style="margin-top:9px"><button class="btn primary" onclick="navigator.clipboard?.writeText('+JSON.stringify(link)+').then(()=>toast(\'Lien copié.\'))">📋 Copier le lien</button><button class="btn" onclick="navigator.clipboard?.writeText('+JSON.stringify(code)+').then(()=>toast(\'Code copié.\'))">🔑 Copier le code</button></div>';
+  }
+  toast("Accès créé.");
+  await loadAccessRequests();
+  await loadAccessCodes();
+  await loadPeople();
+ }catch(e){toast(e.message)}
+}
+async function rejectAccessRequest(id){
+ if(!confirm("Refuser cette demande d’accès ?"))return;
+ try{await rpc("admin_reject_access_request",{p_id:id});toast("Demande refusée.");loadAccessRequests()}catch(e){toast(e.message)}
+}
 async function loadAccessCodes(){
  try{
   const [rows,stats,dups]=await Promise.all([
@@ -749,7 +790,7 @@ function renderActivityBars(s){
 }
 async function refreshAll(){
   const currentTab=sessionStorage.getItem("birthday_admin_tab")||"pending";
-  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadGiftContributionsAdmin(),loadExtensionTelemetry(),loadBirthdayAdmin(),loadSiteAdmin()]);
+  await Promise.all([loadSuggestions(),loadFundraisers(),loadMessages(),loadIdeas(),loadContributions(),loadCommunity(),loadActivity(),loadPeople(),loadGiftAdmin(),loadAccessCodes(),loadAccessRequests(),loadGiftContributionsAdmin(),loadExtensionTelemetry(),loadBirthdayAdmin(),loadSiteAdmin()]);
   activateTab(currentTab,false);
 }
 
