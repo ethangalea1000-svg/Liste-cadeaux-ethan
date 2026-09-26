@@ -619,7 +619,20 @@ async function unlockSite(code){
     authorized=true;
     stage="chargement de la liste";
     const loaded=await loadGiftCatalog();
-    if(!loaded){lockSite("La liste est momentanément indisponible.");return false;}
+    if(!loaded){
+      const diagnostic=accessStatus.textContent;
+      authorized=false;
+      accessCode="";
+      accessLabel="";
+      sessionStorage.removeItem("birthday_list_access");
+      mainContent.classList.add("locked");
+      accessGate.classList.remove("private-locked");
+      updateIdentityLabels();
+      accessStatus.textContent=diagnostic||"❌ La liste est momentanément indisponible.";
+      const change=document.getElementById("changeCodeBtn");
+      if(change)change.hidden=false;
+      return false;
+    }
     sessionStorage.setItem("birthday_list_access",accessCode);
     if(history.replaceState)history.replaceState(null,"",location.pathname+location.hash);
     accessStatus.textContent=accessLabel?"✅ Accès autorisé pour "+accessLabel+".":"✅ Accès autorisé.";
