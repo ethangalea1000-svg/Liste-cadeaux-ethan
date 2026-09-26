@@ -4196,3 +4196,32 @@ select
   'HYDRA_MULTI_RPC_OK' as hydra_multi_status,
   to_regprocedure('public.get_my_hydra_dossiers(text)') is not null as rpc_exists,
   (select count(*) from public.hydra_access_assignments where active=true) as active_assignments;
+
+
+-- ============================================================
+-- HYDRA : CHAMP TENUE PARFAITE
+-- Ajoute le champ tenue_parfaite à tous les personnages Hydra existants.
+update public.birthday_config bc
+set settings = jsonb_set(
+  bc.settings,
+  '{murder_party,players}',
+  (
+    select coalesce(
+      jsonb_agg(
+        value || jsonb_build_object(
+          'tenue_parfaite',
+          coalesce(value->>'tenue_parfaite','')
+        )
+        order by ord
+      ),
+      '[]'::jsonb
+    )
+    from jsonb_array_elements(
+      coalesce(bc.settings->'murder_party'->'players','[]'::jsonb)
+    ) with ordinality as t(value,ord)
+  ),
+  true
+)
+where bc.id=1;
+
+notify pgrst,'reload schema';
