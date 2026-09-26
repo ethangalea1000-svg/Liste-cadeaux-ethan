@@ -978,6 +978,8 @@ async function setHydraPhase(phase){
 async function saveHydraLiveState(){
   try{
     await saveHydraExperienceConfig(cfg=>{
+      cfg.experience.phase=$("hydraPhaseSelect").value||cfg.experience?.phase||"before";
+      cfg.experience.phase_started_at=new Date().toISOString();
       cfg.murder_party.live.status_text=cfg.experience?.phase==="live"?"ENQUÊTE ACTIVE":"Préparation";
       cfg.murder_party.live.active_zone=$("hydraActiveZone").value.trim();
       cfg.murder_party.live.alert={
