@@ -4784,3 +4784,30 @@ select
   to_regprocedure('public.get_private_contributions(text,bigint)') is not null as private_contributions_rpc,
   to_regprocedure('public.get_private_ideas(text)') is not null as private_ideas_rpc,
   to_regprocedure('public.submit_private_message(text,text)') is not null as private_message_rpc;
+
+-- ============================================================
+-- HARDENING LOT C : COMMUNAUTÉ
+-- La page communaute.html utilise déjà les RPC privées.
+-- On retire donc l'accès direct aux tables métier.
+-- ============================================================
+
+drop policy if exists "Public can view community posts" on public.community_posts;
+drop policy if exists "Public can create community posts" on public.community_posts;
+drop policy if exists "Public can view reactions" on public.community_reactions;
+drop policy if exists "Public can react" on public.community_reactions;
+
+revoke select, insert, update, delete on table public.community_posts from anon, authenticated;
+revoke select, insert, update, delete on table public.community_reactions from anon, authenticated;
+revoke usage, select on sequence public.community_posts_id_seq from anon, authenticated;
+revoke usage, select on sequence public.community_reactions_id_seq from anon, authenticated;
+
+select
+  'PRIVATE_LOT_C_OK' as security_status,
+  has_table_privilege('anon','public.community_posts','select') as anon_community_posts_select,
+  has_table_privilege('anon','public.community_posts','insert') as anon_community_posts_insert,
+  has_table_privilege('anon','public.community_reactions','select') as anon_community_reactions_select,
+  has_table_privilege('anon','public.community_reactions','insert') as anon_community_reactions_insert,
+  to_regprocedure('public.get_private_community(text)') is not null as private_community_read_rpc,
+  to_regprocedure('public.create_private_community_post(text,text,text,jsonb)') is not null as private_community_write_rpc,
+  to_regprocedure('public.toggle_private_community_reaction(text,bigint,text)') is not null as private_reaction_rpc,
+  to_regprocedure('public.delete_private_community_post(text,bigint)') is not null as private_community_delete_rpc;
