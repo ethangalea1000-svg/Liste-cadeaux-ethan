@@ -1,5 +1,3 @@
-create extension if not exists pgcrypto;
-
 create table if not exists public.reservations (
   gift_id text primary key,
   name text not null check (char_length(trim(name)) between 1 and 50),
@@ -1838,7 +1836,7 @@ begin
   end if;
 
   loop
-    v_code := 'ETHAN-' || upper(substr(encode(gen_random_bytes(12),'hex'),1,20));
+    v_code := 'ETHAN-' || upper(substr(md5(random()::text || clock_timestamp()::text || p_id::text),1,20));
     exit when not exists(select 1 from public.list_access_codes where code=v_code);
   end loop;
 
