@@ -4510,3 +4510,123 @@ set settings = jsonb_set(
 updated_at = now()
 where id=1;
 
+
+-- ============================================================
+-- HARDENING LOT A : SUGGESTIONS ET CAGNOTTES
+-- ============================================================
+
+drop policy if exists "Public can view approved gift suggestions" on public.gift_suggestions;
+drop policy if exists "Public can create gift suggestions" on public.gift_suggestions;
+revoke select, insert, update, delete on table public.gift_suggestions from anon, authenticated;
+revoke usage, select on sequence public.gift_suggestions_id_seq from anon, authenticated;
+
+create or replace function public.get_private_gift_suggestions(p_code text)
+returns table(id bigint,name text,gift_name text,link text,message text,created_at timestamptz)
+language plpgsql security definer set search_path=public
+as $$
+begin
+  if not exists(select 1 from public.list_access_codes where active=true and code=trim(coalesce(p_code,''))) then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+  return query
+  select s.id,s.name,s.gift_name,s.link,s.message,s.created_at
+  from public.gift_suggestions s
+  where s.status='approved'
+  order by s.created_at desc
+  limit 100;
+end;
+$$;
+
+grant execute on function public.get_private_gift_suggestions(text) to anon;
+
+create or replace function public.submit_private_gift_suggestion(
+  p_code text,p_gift_name text,p_link text default null,p_message text default null
+)
+returns bigint
+language plpgsql security definer set search_path=public
+as $$
+declare v_name text; v_id bigint;
+begin
+  select lac.label into v_name from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  if char_length(trim(coalesce(p_gift_name,''))) not between 1 and 120 then raise exception 'Nom de cadeau invalide.'; end if;
+  if p_link is not null and char_length(trim(p_link))>1000 then raise exception 'Lien invalide.'; end if;
+  if p_message is not null and char_length(trim(p_message))>500 then raise exception 'Message invalide.'; end if;
+  insert into public.gift_suggestions(name,gift_name,link,message,status)
+  values(trim(v_name),trim(p_gift_name),nullif(trim(coalesce(p_link,'')),''),nullif(trim(coalesce(p_message,'')),''),'pending')
+  returning id into v_id;
+  return v_id;
+end;
+$$;
+
+grant execute on function public.submit_private_gift_suggestion(text,text,text,text) to anon;
+
+create or replace function public.delete_private_gift_suggestion(p_code text,p_id bigint)
+returns boolean
+language plpgsql security definer set search_path=public
+as $$
+declare v_name text;
+begin
+  select lac.label into v_name from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  delete from public.gift_suggestions
+  where id=p_id and lower(trim(name))=lower(trim(v_name));
+  return found;
+end;
+$$;
+
+grant execute on function public.delete_private_gift_suggestion(text,bigint) to anon;
+
+drop policy if exists "Public can view approved fundraisers" on public.fundraisers;
+drop policy if exists "Public can create fundraisers" on public.fundraisers;
+revoke select, insert, update, delete on table public.fundraisers from anon, authenticated;
+revoke usage, select on sequence public.fundraisers_id_seq from anon, authenticated;
+
+create or replace function public.get_private_fundraisers(p_code text)
+returns table(id bigint,title text,description text,goal_amount numeric,status text,created_at timestamptz)
+language plpgsql security definer set search_path=public
+as $$
+begin
+  if not exists(select 1 from public.list_access_codes where active=true and code=trim(coalesce(p_code,''))) then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+  return query
+  select f.id,f.title,f.description,f.goal_amount,f.status,f.created_at
+  from public.fundraisers f where f.status='approved'
+  order by f.created_at desc;
+end;
+$$;
+
+grant execute on function public.get_private_fundraisers(text) to anon;
+
+create or replace function public.submit_private_fundraiser(
+  p_code text,p_title text,p_description text,p_goal_amount numeric
+)
+returns bigint
+language plpgsql security definer set search_path=public
+as $$
+declare v_id bigint;
+begin
+  if not exists(select 1 from public.list_access_codes where active=true and code=trim(coalesce(p_code,''))) then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+  if char_length(trim(coalesce(p_title,''))) not between 1 and 120 then raise exception 'Nom de cagnotte invalide.'; end if;
+  if p_description is not null and char_length(trim(p_description))>500 then raise exception 'Description invalide.'; end if;
+  if p_goal_amount is null or p_goal_amount<=0 or p_goal_amount>50000 then raise exception 'Objectif invalide.'; end if;
+  insert into public.fundraisers(title,description,goal_amount,status)
+  values(trim(p_title),nullif(trim(coalesce(p_description,'')),''),round(p_goal_amount,2),'pending')
+  returning id into v_id;
+  return v_id;
+end;
+$$;
+
+grant execute on function public.submit_private_fundraiser(text,text,text,numeric) to anon;
+
+select
+  'PRIVATE_LOT_A_OK' as security_status,
+  has_table_privilege('anon','public.gift_suggestions','select') as anon_gift_suggestions_select,
+  has_table_privilege('anon','public.fundraisers','select') as anon_fundraisers_select,
+  to_regprocedure('public.get_private_gift_suggestions(text)') is not null as private_suggestions_rpc,
+  to_regprocedure('public.get_private_fundraisers(text)') is not null as private_fundraisers_rpc;
