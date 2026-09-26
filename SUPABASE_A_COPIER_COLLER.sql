@@ -1,3 +1,5 @@
+create extension if not exists pgcrypto;
+
 create table if not exists public.reservations (
   gift_id text primary key,
   name text not null check (char_length(trim(name)) between 1 and 50),
