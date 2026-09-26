@@ -4630,3 +4630,157 @@ select
   has_table_privilege('anon','public.fundraisers','select') as anon_fundraisers_select,
   to_regprocedure('public.get_private_gift_suggestions(text)') is not null as private_suggestions_rpc,
   to_regprocedure('public.get_private_fundraisers(text)') is not null as private_fundraisers_rpc;
+
+-- ============================================================
+-- HARDENING LOT B : PARTICIPATIONS, IDÉES ET MESSAGES
+-- ============================================================
+
+drop policy if exists "Public can view contributions" on public.contributions;
+drop policy if exists "Public can create contributions" on public.contributions;
+revoke select, insert, update, delete on table public.contributions from anon, authenticated;
+revoke usage, select on sequence public.contributions_id_seq from anon, authenticated;
+
+create or replace function public.get_private_contributions(p_code text,p_fundraiser_id bigint default null)
+returns table(id bigint,name text,amount numeric,message text,created_at timestamptz,fundraiser_id bigint)
+language plpgsql security definer set search_path=public
+as $$
+begin
+  if not exists(select 1 from public.list_access_codes where active=true and code=trim(coalesce(p_code,''))) then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+  return query
+  select c.id,c.name,c.amount,c.message,c.created_at,c.fundraiser_id
+  from public.contributions c
+  where p_fundraiser_id is null or c.fundraiser_id=p_fundraiser_id
+  order by c.created_at desc
+  limit 500;
+end;
+$$;
+
+grant execute on function public.get_private_contributions(text,bigint) to anon;
+
+create or replace function public.submit_private_contribution(
+  p_code text,p_amount numeric,p_message text,p_fundraiser_id bigint
+)
+returns bigint
+language plpgsql security definer set search_path=public
+as $$
+declare v_name text; v_id bigint;
+begin
+  select lac.label into v_name from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  if p_amount is null or p_amount<1 or p_amount>5000 then raise exception 'Montant invalide.'; end if;
+  if not exists(select 1 from public.fundraisers where id=p_fundraiser_id and status='approved') then raise exception 'Cagnotte invalide.'; end if;
+  if p_message is not null and char_length(trim(p_message))>500 then raise exception 'Message invalide.'; end if;
+  insert into public.contributions(name,amount,message,fundraiser_id)
+  values(trim(v_name),round(p_amount,2),nullif(trim(coalesce(p_message,'')),''),p_fundraiser_id)
+  returning id into v_id;
+  return v_id;
+end;
+$$;
+
+grant execute on function public.submit_private_contribution(text,numeric,text,bigint) to anon;
+
+create or replace function public.delete_private_contribution(p_code text,p_id bigint)
+returns boolean
+language plpgsql security definer set search_path=public
+as $$
+declare v_name text;
+begin
+  select lac.label into v_name from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  delete from public.contributions
+  where id=p_id and lower(trim(name))=lower(trim(v_name));
+  return found;
+end;
+$$;
+
+grant execute on function public.delete_private_contribution(text,bigint) to anon;
+
+drop policy if exists "Public can view ideas" on public.ideas;
+drop policy if exists "Public can create ideas" on public.ideas;
+revoke select, insert, update, delete on table public.ideas from anon, authenticated;
+revoke usage, select on sequence public.ideas_id_seq from anon, authenticated;
+
+create or replace function public.get_private_ideas(p_code text)
+returns table(id bigint,name text,idea text,created_at timestamptz)
+language plpgsql security definer set search_path=public
+as $$
+begin
+  if not exists(select 1 from public.list_access_codes where active=true and code=trim(coalesce(p_code,''))) then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+  return query
+  select i.id,i.name,i.idea,i.created_at from public.ideas i
+  order by i.created_at desc limit 100;
+end;
+$$;
+
+grant execute on function public.get_private_ideas(text) to anon;
+
+create or replace function public.submit_private_idea(p_code text,p_idea text)
+returns bigint
+language plpgsql security definer set search_path=public
+as $$
+declare v_name text; v_id bigint;
+begin
+  select lac.label into v_name from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  if char_length(trim(coalesce(p_idea,''))) not between 1 and 500 then raise exception 'Idée invalide.'; end if;
+  insert into public.ideas(name,idea) values(trim(v_name),trim(p_idea)) returning id into v_id;
+  return v_id;
+end;
+$$;
+
+grant execute on function public.submit_private_idea(text,text) to anon;
+
+create or replace function public.delete_private_idea(p_code text,p_id bigint)
+returns boolean
+language plpgsql security definer set search_path=public
+as $$
+declare v_name text;
+begin
+  select lac.label into v_name from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  delete from public.ideas where id=p_id and lower(trim(name))=lower(trim(v_name));
+  return found;
+end;
+$$;
+
+grant execute on function public.delete_private_idea(text,bigint) to anon;
+
+drop policy if exists "Public can create messages" on public.messages;
+revoke select, insert, update, delete on table public.messages from anon, authenticated;
+revoke usage, select on sequence public.messages_id_seq from anon, authenticated;
+
+create or replace function public.submit_private_message(p_code text,p_message text)
+returns bigint
+language plpgsql security definer set search_path=public
+as $$
+declare v_name text; v_id bigint;
+begin
+  select lac.label into v_name from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,'')) limit 1;
+  if v_name is null then raise exception 'Accès refusé.' using errcode='42501'; end if;
+  if char_length(trim(coalesce(p_message,''))) not between 1 and 500 then raise exception 'Message invalide.'; end if;
+  insert into public.messages(name,message) values(trim(v_name),trim(p_message)) returning id into v_id;
+  return v_id;
+end;
+$$;
+
+grant execute on function public.submit_private_message(text,text) to anon;
+
+select
+  'PRIVATE_LOT_B_OK' as security_status,
+  has_table_privilege('anon','public.contributions','select') as anon_contributions_select,
+  has_table_privilege('anon','public.contributions','insert') as anon_contributions_insert,
+  has_table_privilege('anon','public.ideas','select') as anon_ideas_select,
+  has_table_privilege('anon','public.ideas','insert') as anon_ideas_insert,
+  has_table_privilege('anon','public.messages','insert') as anon_messages_insert,
+  to_regprocedure('public.get_private_contributions(text,bigint)') is not null as private_contributions_rpc,
+  to_regprocedure('public.get_private_ideas(text)') is not null as private_ideas_rpc,
+  to_regprocedure('public.submit_private_message(text,text)') is not null as private_message_rpc;
