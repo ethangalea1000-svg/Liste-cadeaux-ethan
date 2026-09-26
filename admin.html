@@ -596,7 +596,7 @@ async function syncHydraAssignments(accessId){
     ?"✅ Supabase : "+savedNames.length+" dossier(s) enregistré(s) — "+savedNames.join(", ")
     :"✅ Supabase : aucun dossier Hydra attribué.");
   const status=document.getElementById("hydraAssignmentStatus");
-  if(status && !hydraAssignmentsError){
+  if(status){
     status.scrollIntoView({behavior:"smooth",block:"center"});
   }
   await loadAccessCodes();
