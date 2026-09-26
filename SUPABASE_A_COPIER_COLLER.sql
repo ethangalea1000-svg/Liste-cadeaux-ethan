@@ -4003,3 +4003,112 @@ $$;
 grant execute on function public.admin_sync_hydra_access_assignments(bigint,jsonb) to anon;
 
 notify pgrst,'reload schema';
+
+
+
+-- ============================================================
+-- HYDRA : UN SEUL LIEN PAR PERSONNE / PLUSIEURS FICHES
+-- Le code d'accès de la personne suffit désormais pour afficher
+-- tous les dossiers Hydra qui lui sont attribués.
+-- Les anciens jetons privés restent conservés en base pour compatibilité,
+-- mais ils ne sont plus nécessaires pour l'affichage des fiches.
+
+drop function if exists public.get_my_hydra_dossiers(text);
+create or replace function public.get_my_hydra_dossiers(
+  p_code text
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $hydramulti$
+declare
+  v_access_id bigint;
+  v_legacy_name text;
+  v_players jsonb;
+  v_result jsonb := '[]'::jsonb;
+  v_name text;
+  v_player jsonb;
+begin
+  select id, hydra_player_name
+  into v_access_id, v_legacy_name
+  from public.list_access_codes
+  where active=true
+    and code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_access_id is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  select settings->'murder_party'->'players'
+  into v_players
+  from public.birthday_config
+  where id=1;
+
+  -- Nouveau système : plusieurs dossiers pour le même code.
+  for v_name in
+    select haa.hydra_player_name
+    from public.hydra_access_assignments haa
+    where haa.access_id=v_access_id
+      and haa.active=true
+    order by haa.created_at asc
+  loop
+    select value
+    into v_player
+    from jsonb_array_elements(coalesce(v_players,'[]'::jsonb))
+    where lower(trim(value->>'name'))=lower(trim(v_name))
+    limit 1;
+
+    if v_player is not null then
+      v_result := v_result || jsonb_build_array(v_player);
+    end if;
+  end loop;
+
+  -- Compatibilité avec l'ancien champ unique list_access_codes.hydra_player_name.
+  if jsonb_array_length(v_result)=0
+     and coalesce(trim(v_legacy_name),'') <> '' then
+    select value
+    into v_player
+    from jsonb_array_elements(coalesce(v_players,'[]'::jsonb))
+    where lower(trim(value->>'name'))=lower(trim(v_legacy_name))
+    limit 1;
+
+    if v_player is not null then
+      v_result := jsonb_build_array(v_player);
+    end if;
+  end if;
+
+  return v_result;
+end;
+$hydramulti$;
+
+grant execute on function public.get_my_hydra_dossiers(text) to anon;
+
+-- Compatibilité : l'ancienne RPC renvoie désormais la première fiche.
+drop function if exists public.get_my_hydra_dossier(text,text);
+create or replace function public.get_my_hydra_dossier(
+  p_code text,
+  p_hydra_token text default null
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $hydrasingle$
+declare
+  v_all jsonb;
+begin
+  v_all := public.get_my_hydra_dossiers(p_code);
+
+  if jsonb_typeof(v_all)='array' and jsonb_array_length(v_all)>0 then
+    return v_all->0;
+  end if;
+
+  return '{}'::jsonb;
+end;
+$hydrasingle$;
+
+grant execute on function public.get_my_hydra_dossier(text,text) to anon;
+
+notify pgrst,'reload schema';
