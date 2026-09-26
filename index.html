@@ -256,6 +256,20 @@ main.unlocked>.foot{margin-top:24px}
      <div id="birthdayHydraMeta" class="form-note">Dossier privé lié à ton lien Hydra.</div>
      <div id="birthdayHydraBody" class="birthday-list"></div>
    </div>
+ </section>
+ <section class="birthday-section birthday-hidden" id="birthdayHydraWorldSection" data-app-view="anniversaire">
+   <div class="birthday-card">
+     <h2>📜 PROTOCOLE HYDRA — DOSSIER DE LA JOURNÉE</h2>
+     <div id="birthdayHydraInvitation" class="birthday-item"></div>
+     <details style="margin-top:12px">
+       <summary style="cursor:pointer;font-weight:800">🗺️ Les 8 zones</summary>
+       <div id="birthdayHydraZones" class="birthday-list"></div>
+     </details>
+     <details style="margin-top:12px">
+       <summary style="cursor:pointer;font-weight:800">🧳 Les 18 objets clés</summary>
+       <div id="birthdayHydraObjects" class="birthday-list"></div>
+     </details>
+   </div>
  </section><section class="fundraisers-main" data-app-view="participer">
 <div class="panel">
   <h2>🎯 Cagnottes</h2
@@ -833,10 +847,33 @@ async function loadBirthdayPoll(){
 async function voteBirthdayPoll(choice){
   try{await birthdayRpc("poll_vote",{choice});showToast("Vote enregistré.");await loadBirthdayPoll();}catch(e){showToast(e.message)}
 }
+function renderHydraWorld(){
+  const mp=birthdayConfig?.murder_party||{};
+  const inv=mp.invitation||{};
+  birthdaySet("birthdayHydraWorldSection",!!mp.invitation);
+  const invEl=document.getElementById("birthdayHydraInvitation");
+  if(invEl){
+    const phases=Array.isArray(inv.phases)?inv.phases.map(x=>"<li>"+esc(x)+"</li>").join(""):"";
+    invEl.innerHTML='<strong>'+esc(inv.title||"PROTOCOLE HYDRA")+'</strong>'
+      +'<div class="form-note" style="margin-top:6px">'+esc(inv.body||"")+'</div>'
+      +'<div style="margin-top:8px"><strong>📍 Lieu :</strong> '+esc(inv.mission_location||mp.location||"")+'</div>'
+      +'<div><strong>📅 Date :</strong> '+esc(inv.date||mp.date||"")+'</div>'
+      +'<div><strong>⏰ Moment clé :</strong> '+esc(inv.key_moment||mp.key_moment||"")+'</div>'
+      +'<div><strong>👕 Tenue :</strong> '+esc(inv.outfit||"")+'</div>'
+      +(inv.preparation?'<div class="form-note" style="margin-top:8px">'+esc(inv.preparation)+'</div>':"")
+      +(phases?'<div style="margin-top:8px"><strong>Déroulement :</strong><ul>'+phases+'</ul></div>':"")
+      +(inv.note?'<div class="form-note"><strong>Note :</strong> '+esc(inv.note)+'</div>':"");
+  }
+  const zones=document.getElementById("birthdayHydraZones");
+  if(zones)zones.innerHTML=(Array.isArray(mp.zones)?mp.zones:[]).map(z=>'<article class="birthday-item"><strong>'+esc(z.name)+'</strong><div class="form-note">'+esc(z.description||"")+'</div><div style="margin-top:6px"><strong>Ce que les joueurs savent :</strong> '+esc(z.knowledge||"")+'</div><div><strong>Détection de Milo :</strong> '+esc(z.milo_detected||"")+'</div><div><strong>À trouver :</strong> '+esc(z.finds||"")+'</div></article>').join("");
+  const objects=document.getElementById("birthdayHydraObjects");
+  if(objects)objects.innerHTML=(Array.isArray(mp.objects)?mp.objects:[]).map(o=>'<article class="birthday-item"><strong>'+esc(o.name)+'</strong><div class="form-note">'+esc(o.description||"")+'</div></article>').join("");
+}
 async function loadBirthdayFeatures(){
   try{
     const r=await privateRpc("get_birthday_public_config",{});
     birthdayConfig=await r.json(); if(!birthdayConfig||typeof birthdayConfig!=="object")birthdayConfig={};
+    renderHydraWorld();
 
     await loadHydraDossier();
     startBirthdayCountdown();
