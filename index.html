@@ -604,8 +604,8 @@ async function reserveGift(id){
  const name=currentVisitorName();if(!name){showToast("Identité non disponible.");return}
  const r=await privateRpc("reserve_private_gift",{p_code:accessCode,p_gift_id:id,p_name:name});
  const result=await r.json().catch(()=>null);
- if(r.status===409){showToast("Ce cadeau vient d’être réservé.");return}
- if(!r.ok){console.error("Supabase INSERT",r.status,result);showToast("Réservation impossible.");return}
+ if(!r.ok){console.error("Supabase INSERT",r.status,result);showToast(result?.message||"Réservation impossible.");return}
+ if(result!==true){showToast("Ce cadeau vient d’être réservé.");return}
  showToast("Réservation enregistrée pour tout le monde.");
  await loadReservations();
 }
