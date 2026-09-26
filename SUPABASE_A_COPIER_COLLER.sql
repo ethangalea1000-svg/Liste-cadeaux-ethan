@@ -3676,13 +3676,8 @@ begin
     end if;
   end if;
 
-  if not coalesce((
-    select (settings->'murder_party'->>'enabled')::boolean
-    from public.birthday_config
-    where id=1
-  ), false) then
-    return '{}'::jsonb;
-  end if;
+  -- Un lien Hydra privé authentifié suffit pour récupérer le dossier.
+  -- Le dossier ne dépend pas de l'activation générale du mode anniversaire.
 
   select settings->'murder_party'->'players'
   into v_players
