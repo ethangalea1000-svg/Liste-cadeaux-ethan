@@ -625,36 +625,41 @@ declare
   file_item jsonb;
   file_path text;
 begin
-  select label into v_name
-  from public.list_access_codes
-  where active = true and code = trim(coalesce(p_code, ''))
+  select lac.label into v_name
+  from public.list_access_codes lac
+  where lac.active=true and lac.code=trim(coalesce(p_code,''))
   limit 1;
 
   if v_name is null then
-    raise exception 'Accès refusé.' using errcode = '42501';
+    raise exception 'Accès refusé.' using errcode='42501';
   end if;
 
   select attachments into files
   from public.community_posts
-  where id = p_id and lower(trim(name)) = lower(trim(v_name));
+  where id=p_id and lower(trim(name))=lower(trim(v_name));
 
   if files is null then return false; end if;
 
-  for file_item in select value from jsonb_array_elements(coalesce(files, '[]'::jsonb))
+  for file_item in
+    select value from jsonb_array_elements(coalesce(files,'[]'::jsonb))
   loop
-    file_path := regexp_replace(
-      file_item->>'url',
-      '^.*/storage/v1/object/public/community-files/', ''
-    );
+    file_path:=nullif(trim(file_item->>'path'),'');
+    if file_path is null then
+      file_path:=regexp_replace(
+        coalesce(file_item->>'url',''),
+        '^.*/storage/v1/object/public/community-files/',
+        ''
+      );
+    end if;
 
-    if file_path is not null and file_path <> '' then
+    if file_path is not null and file_path<>'' then
       delete from storage.objects
-      where bucket_id = 'community-files' and name = file_path;
+      where bucket_id='community-files' and name=file_path;
     end if;
   end loop;
 
   delete from public.community_posts
-  where id = p_id and lower(trim(name)) = lower(trim(v_name));
+  where id=p_id and lower(trim(name))=lower(trim(v_name));
 
   return found;
 end;
@@ -4917,3 +4922,42 @@ select
   has_table_privilege('anon','public.site_settings','select') as anon_site_settings_select
 ;
 
+
+-- ============================================================
+-- HARDENING LOT D : STOCKAGE COMMUNAUTÉ PRIVÉ
+-- Les pièces jointes ne doivent pas être accessibles par URL
+-- publique. Le site les signe temporairement après vérification
+-- du code d'accès.
+-- ============================================================
+
+update storage.buckets
+set public=false
+where id='community-files';
+
+drop policy if exists "Public can view community files" on storage.objects;
+create policy "Private community files require valid access code"
+on storage.objects
+for select
+to anon
+using (
+  bucket_id='community-files'
+  and name like 'community/%'
+  and exists (
+    select 1
+    from public.list_access_codes
+    where active=true
+      and code=trim(
+        coalesce(
+          (coalesce(nullif(current_setting('request.headers', true), ''), '{}')::jsonb)->>'x-access-code',
+          ''
+        )
+      )
+  )
+);
+
+-- Le téléchargement signé requiert donc SELECT sur storage.objects.
+-- L'upload reste protégé par la politique d'insertion existante.
+select
+  'PRIVATE_STORAGE_OK' as storage_security_status,
+  coalesce((select public=false from storage.buckets where id='community-files'),false) as community_bucket_private,
+  to_regclass('storage.objects') is not null as storage_objects_exists;
