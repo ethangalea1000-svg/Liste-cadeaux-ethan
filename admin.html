@@ -333,6 +333,27 @@ async function rpc(name,body){
 }
 function empty(text){return '<div class="empty">'+esc(text)+'</div>'}
 function showDiagnostic(){ $("diagnostic").style.display="block" }
+async function testSupabaseTransport(){
+  const status=$("adminStatus");
+  status.textContent="🔎 Test de connexion à Supabase…";
+  try{
+    if(navigator.onLine===false){
+      status.textContent="❌ Le navigateur indique qu’il est hors ligne.";
+      return false;
+    }
+    // Test réseau sans lire la réponse : permet de distinguer une coupure réseau
+    // d'un problème CORS/endpoint sur les RPC POST.
+    await fetch(SUPABASE_URL+"/rest/v1/",{method:"GET",mode:"no-cors",cache:"no-store"});
+    status.textContent="✅ Supabase est joignable depuis le navigateur. Le problème est probablement sur l’appel RPC/CORS ou la fonction SQL.";
+    showDiagnostic();
+    return true;
+  }catch(e){
+    console.error("testSupabaseTransport",e);
+    status.textContent="❌ Supabase n’est pas joignable depuis ce navigateur. Vérifie la connexion Internet, le projet Supabase et le domaine d’API.";
+    showDiagnostic();
+    return false;
+  }
+}
 async function authorizeAdmin(code){
   code=String(code||"").trim();
   if(!code){$("adminStatus").textContent="Entre ton code.";return false}
@@ -354,7 +375,9 @@ async function authorizeAdmin(code){
     return true;
   }catch(e){
     console.error("authorizeAdmin",e);
-    $("adminStatus").textContent="❌ Impossible de vérifier le code : "+(e?.message||"erreur inconnue")+".";
+    const detail=String(e?.message||"Erreur réseau");
+    $("adminStatus").textContent="❌ Échec de connexion à Supabase : "+detail+". Clique sur « Tester la connexion » pour distinguer réseau, CORS ou RPC SQL.";
+    showDiagnostic();
     return false;
   }
 }
