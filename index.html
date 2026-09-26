@@ -338,6 +338,9 @@ let siteConfig={};
 let siteUi={};
 function uiText(key,fallback){const v=siteUi&&typeof siteUi[key]==="string"?siteUi[key]:"";return v.trim()?v:fallback;}
 
+function perplexityPromptUrl(prompt){
+  return "https://www.perplexity.ai/search?q="+encodeURIComponent(String(prompt||""));
+}
 function aiSearchUrl(g){
   const prompt='Compare cet article sur le Web en France : "'+g.title+'".\n'
     +'Légende/description exacte : "'+g.desc+'".\n'
@@ -348,7 +351,7 @@ function aiSearchUrl(g){
     +'Cherche aussi l’image correcte en utilisant à la fois le nom et la légende/description. '
     +'Pour les produits non commercialisés, indique-le clairement et donne uniquement la source officielle pertinente. '
     +'Ne propose pas une alternative différente sans le signaler.';
-  return "https://www.perplexity.ai/search?q="+encodeURIComponent(prompt);
+  return perplexityPromptUrl(prompt);
 }
 function comparePricesUrl(g){
   return aiSearchUrl(g);
@@ -782,8 +785,8 @@ async function loadHydraDossier(){
         "Tenue de référence : "+String(p.tenue_parfaite||""),
         "Donne une liste très précise de vêtements à porter : pièce exacte, couleur, matière, coupe pratique, chaussures et accessoires. Reste cohérent avec le rôle, la journée d’anniversaire et un costume facilement réalisable."
       ].join("\\n");
-      const aiUrl="https://www.perplexity.ai/";
-      const aiActions='<div class="hydra-ai-actions"><a class="btn" href="'+aiUrl+'" target="_blank" rel="noopener noreferrer">🤖 Ouvrir l’IA</a><button type="button" class="btn" onclick="copyHydraAiPrompt('+JSON.stringify(aiPrompt)+')">📋 Copier le prompt</button></div>';
+      const aiUrl=perplexityPromptUrl(aiPrompt);
+      const aiActions='<div class="hydra-ai-actions"><a class="btn" href="'+aiUrl+'" target="_blank" rel="noopener noreferrer">🤖 Ouvrir Perplexity avec le prompt</a></div>';
 
       return '<details class="hydra-fiche-card">'
         +'<summary class="hydra-fiche-summary"><div><span class="hydra-fiche-number">FICHE '+(index+1)+'</span><span class="hydra-fiche-name">'+escAny(p.name||("Dossier "+(index+1)))+'</span></div><span class="hydra-fiche-chevron">⌄</span></summary>'
@@ -797,33 +800,7 @@ async function loadHydraDossier(){
     body.innerHTML='<div class="birthday-item"><strong>Erreur Hydra</strong><span class="form-note">'+escAny(e?.message||"Erreur inconnue")+'</span></div>';
   }
 }
-async function copyHydraAiPrompt(prompt){
-  const text=String(prompt||"");
-  try{
-    if(navigator.clipboard&&window.isSecureContext){
-      await navigator.clipboard.writeText(text);
-    }else{
-      const ta=document.createElement("textarea");
-      ta.value=text;
-      ta.setAttribute("readonly","");
-      ta.style.position="fixed";
-      ta.style.opacity="0";
-      ta.style.pointerEvents="none";
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      const ok=document.execCommand("copy");
-      ta.remove();
-      if(!ok)throw new Error("copy-failed");
-    }
-    showToast("Prompt Perplexity copié.");
-  }catch(e){
-    console.error("copyHydraAiPrompt",e);
-    showToast("Impossible de copier le prompt. Essaie encore.");
-  }
-}
-
-async function loadBirthdayWall(){
+async async function loadBirthdayWall(){
   try{
     const rows=await (await privateRpc("get_birthday_interactions",{p_code:accessCode,p_type:"wall_message"})).json();
     const data=Array.isArray(rows)?rows:[];
@@ -1225,7 +1202,7 @@ function render(){
    const reserveHtml=who?'<div class="reserved">Réservé par : '+escapeHtml(who)+'</div><button class="link unreserve" style="width:100%;margin-top:8px">'+escapeHtml(uiText("gift_unreserve_label","Déréserver"))+'</button>':(g.allowReservation&&funded<=0?'<button class="reserve">'+escapeHtml(uiText("gift_reserve_label","Réserver"))+'</button>':"");
    card.innerHTML=`
 <div class="image-wrap"><img class="product-image" src="${escapeHtml(imageUrl)}" alt="Image de ${escapeHtml(g.title)} — ${escapeHtml(g.desc)}" loading="lazy" onerror="this.style.display='none'"><div class="image-label" data-site-ui="gift_image_auto_label">Image auto · nom + légende</div></div><button class="ai-search image-search" type="button">${escapeHtml(uiText("gift_image_label","🖼️ Chercher les images liées"))}</button>
-<div class="top"><div class="cat">${escapeHtml(g.cat)}</div><div class="title">${escapeHtml(g.title)}</div><div class="desc">${escapeHtml(g.desc)}</div><div class="shop-title" data-site-ui="gift_search_title">🛒 Recherche intelligente</div><button class="compare-search compare-offers" type="button">${escapeHtml(uiText("gift_compare_label","🔎 Comparer les prix et vérifier les sites disponibles"))}</button><button class="ai-search ai-web-search" type="button">${escapeHtml(uiText("gift_ai_label","🤖 Chercher sur le Web avec l’IA"))}</button><div class="ai-note">Les résultats s’affichent directement ici : offres, disponibilité, sources et images.</div><div class="ai-results"></div><div class="shop-links">${shops.map(shop=>'<a class="'+escapeHtml(shop.cls||"")+'" href="'+escapeHtml(shop.url||"#")+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(shop.label||"Ouvrir")+'</a>').join("")}</div><div class="offer-note" data-site-ui="gift_offer_note">Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.</div>${fundingHtml}</div>
+<div class="top"><div class="cat">${escapeHtml(g.cat)}</div><div class="title">${escapeHtml(g.title)}</div><div class="desc">${escapeHtml(g.desc)}</div><div class="shop-title" data-site-ui="gift_search_title">🛒 Recherche intelligente</div><button class="compare-search compare-offers" type="button">${escapeHtml(uiText("gift_compare_label","🔎 Comparer les prix et vérifier les sites disponibles"))}</button><button class="ai-search ai-web-search" type="button">${escapeHtml(uiText("gift_ai_label","🤖 Chercher sur le Web avec l’IA"))}</button><a class="ai-search ai-perplexity-link" href="${escapeHtml(aiSearchUrl(g))}" target="_blank" rel="noopener noreferrer">🤖 Demander à Perplexity</a><div class="ai-note">Perplexity s’ouvre avec une requête déjà préparée pour ce cadeau. Les résultats détaillés de la recherche intégrée restent affichés ici.</div><div class="ai-results"></div><div class="shop-links">${shops.map(shop=>'<a class="'+escapeHtml(shop.cls||"")+'" href="'+escapeHtml(shop.url||"#")+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(shop.label||"Ouvrir")+'</a>').join("")}</div><div class="offer-note" data-site-ui="gift_offer_note">Les offres sont recherchées directement chez les vendeurs. Le prix et le stock peuvent changer.</div>${fundingHtml}</div>
 <div class="bottom"><div class="price">${escapeHtml(g.price)} <small>prix indicatif</small></div><div class="row">${reserveHtml}<button class="link copy-gift">${escapeHtml(uiText("gift_copy_label","Copier"))}</button></div></div>`;
    const contribBtn=card.querySelector(".gift-contribute");if(contribBtn)contribBtn.addEventListener("click",()=>contributeToGift(g));const manageContribBtn=card.querySelector(".gift-manage-contrib");if(manageContribBtn)manageContribBtn.addEventListener("click",()=>manageMyGiftContributions(g,card));
    card.querySelector(".compare-offers").addEventListener("click",()=>runAiSearch(g,card,"compare"));
