@@ -1063,7 +1063,7 @@ async function loadIdeas(){
     const list=document.getElementById("ideasList");list.innerHTML="";
     (Array.isArray(rows)?rows:[]).slice(0,10).forEach(x=>{
       const li=document.createElement("li");
-      li.innerHTML="<div><strong>"+escapeHtml(x.name)+"</strong><br><small>"+escapeHtml(x.idea)+"</small></div><div class="item-actions"><button class="delete-btn">Supprimer</button></div>";
+      li.innerHTML='<div><strong>'+escapeHtml(x.name)+'</strong><br><small>'+escapeHtml(x.idea)+'</small></div><div class="item-actions"><button class="delete-btn">Supprimer</button></div>';
       li.querySelector("button").onclick=()=>deleteIdea(x.id,x.name);
       list.appendChild(li);
     });
@@ -1149,7 +1149,7 @@ async function loadSuggestions(){
     const list=document.getElementById("suggestionsList");list.innerHTML="";
     (Array.isArray(rows)?rows:[]).slice(0,8).forEach(x=>{
       const li=document.createElement("li");
-      li.innerHTML="<div><strong>"+escapeHtml(x.gift_name)+"</strong><br><small>"+escapeHtml(x.name)+(x.message?" — "+escapeHtml(x.message):"")+"</small></div><div class="item-actions">"+(x.link?'<a href="'+escapeHtml(x.link)+'" target="_blank" rel="noopener noreferrer">Voir</a>':"")+'<button class="delete-btn">Supprimer</button></div>";
+      li.innerHTML='<div><strong>'+escapeHtml(x.gift_name)+'</strong><br><small>'+escapeHtml(x.name)+(x.message?' — '+escapeHtml(x.message):'')+'</small></div><div class="item-actions">'+(x.link?'<a href="'+escapeHtml(x.link)+'" target="_blank" rel="noopener noreferrer">Voir</a>':"")+'<button class="delete-btn">Supprimer</button></div>';
       li.querySelector(".delete-btn").onclick=()=>deleteSuggestion(x.id,x.name);
       list.appendChild(li);
     });
@@ -1198,7 +1198,7 @@ async function loadContributions(){
     const list=document.getElementById("contribList");list.innerHTML="";
     data.slice(0,8).forEach(x=>{
       const li=document.createElement("li");
-      li.innerHTML="<div><strong>"+escapeHtml(x.name)+"</strong>"+(x.message?"<br><small>"+escapeHtml(x.message)+"</small>":"")+"</div><div class="item-actions"><strong>"+Number(x.amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €</strong><button class="delete-btn">Retirer</button></div>";
+      li.innerHTML='<div><strong>'+escapeHtml(x.name)+'</strong>'+(x.message?'<br><small>'+escapeHtml(x.message)+'</small>':"")+'</div><div class="item-actions"><strong>'+Number(x.amount).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+' €</strong><button class="delete-btn">Retirer</button></div>';
       li.querySelector(".delete-btn").onclick=()=>deleteContribution(x.id,x.name);
       list.appendChild(li);
     });
