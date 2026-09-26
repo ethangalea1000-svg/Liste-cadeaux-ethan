@@ -5361,6 +5361,7 @@ values
   (2,'Ethan','HYDRA-'||upper(substr(md5('2-Ethan-'||random()::text||clock_timestamp()::text),1,24)),true),
   (3,'Ethan','HYDRA-'||upper(substr(md5('3-Ethan-'||random()::text||clock_timestamp()::text),1,24)),true),
   (6,'Cécile','HYDRA-'||upper(substr(md5('6-Cécile-'||random()::text||clock_timestamp()::text),1,24)),true),
+  (6,'Emy','HYDRA-'||upper(substr(md5('6-Emy-parent-'||random()::text||clock_timestamp()::text),1,24)),true),
   (7,'Yannick','HYDRA-'||upper(substr(md5('7-Yannick-'||random()::text||clock_timestamp()::text),1,24)),true),
   (8,'Max','HYDRA-'||upper(substr(md5('8-Max-'||random()::text||clock_timestamp()::text),1,24)),true),
   (9,'Annie','HYDRA-'||upper(substr(md5('9-Annie-'||random()::text||clock_timestamp()::text),1,24)),true),
