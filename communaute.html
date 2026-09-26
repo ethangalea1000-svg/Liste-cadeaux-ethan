@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17192a">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https://ckasbsnzxgwfwfnctioe.supabase.co; media-src 'self' blob: https:; frame-src 'self'">
 <script>
   (function(){
     const key = "__scroll_position__:" + location.pathname + location.search;
@@ -75,19 +78,19 @@
   .reactions{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
-</style>
+.skip-link{position:fixed;left:12px;top:12px;z-index:9999;transform:translateY(-180%);padding:10px 14px;border-radius:10px;background:#fff;color:#17192a;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}.skip-link:focus{transform:none}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #8f92ff;outline-offset:2px}.send,.reaction{min-height:44px}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}\n</style>
 </head>
-<body>
+<body><a class="skip-link" href="#communityContent">Aller directement à la communauté</a>
 <header class="hero"><div class="wrap hero-row"><div><strong>💬 Communauté</strong><div style="margin-top:6px;color:#e8e9f2">Discutez, partagez vos idées et réagissez aux messages.</div></div><a class="back" href="index.html">← Liste</a></div></header>
-<main class="wrap">
+<main class="wrap" id="communityContentMain">
 <section id="accessGate" class="panel" style="max-width:620px;margin:24px auto">
 <h2>🔐 Communauté privée</h2>
 <p class="note">Entre ton code d’invitation pour accéder à la discussion. Ton identité est récupérée automatiquement depuis ce code.</p>
 <form id="accessForm" class="form">
-<input id="accessCodeInput" type="password" maxlength="64" autocomplete="off" placeholder="Code d’invitation *" required>
+<input id="accessCodeInput" type="password" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="64" autocomplete="one-time-code" aria-label="Code d’invitation" placeholder="Code d’invitation *" required>
 <button class="send" type="submit">Accéder à la communauté</button>
 </form>
-<div id="accessStatus" class="note" aria-live="polite"></div>
+<div id="accessStatus" class="note" role="status" aria-live="polite" aria-atomic="true"></div>
 </section>
 <section id="communityContent" class="hidden">
 <section class="panel">
@@ -96,7 +99,7 @@
 <form id="postForm" class="form">
 <textarea id="message" maxlength="500" required placeholder="Ton message *"></textarea>
 <input id="link" type="url" maxlength="500" placeholder="Lien (optionnel)">
-<input id="files" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.txt,.csv,.rtf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.7z">
+<label class="sr-only" for="files">Fichiers à joindre</label><input id="files" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.txt,.csv,.rtf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.7z">
 <div class="note">Images, GIF, vidéos, PDF et documents courants. 6 Mo maximum par fichier. N’envoie pas de document privé ou sensible.</div>
 <button class="send" type="submit">Publier</button>
 <div class="note">Les messages sont visibles par les personnes autorisées. Ton identité est ajoutée automatiquement à partir de ton code.</div>
@@ -107,7 +110,7 @@
 <div id="posts" class="posts"></div>
 </section>
 </main>
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
@@ -243,6 +246,8 @@ document.getElementById("postForm").addEventListener("submit",async e=>{
   if(!message)return;
   if(files.length>5){showToast("Maximum 5 fichiers par message.");return}
   if(files.some(file=>file.size>6*1024*1024)){showToast("Chaque fichier doit faire au maximum 6 Mo.");return}
+  const allowedMime=/^(image\/|video\/|audio\/|application\/pdf$|text\/(plain|csv)$|application\/(rtf|zip|x-7z-compressed|msword|vnd\.openxmlformats-officedocument\.(wordprocessingml\.document|spreadsheetml\.sheet|presentationml\.presentation)))$/i;
+  if(files.some(file=>file.type && !allowedMime.test(file.type))){showToast("Type de fichier non autorisé.");return}
   const attachments=[];
   for(const file of files){
     const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
