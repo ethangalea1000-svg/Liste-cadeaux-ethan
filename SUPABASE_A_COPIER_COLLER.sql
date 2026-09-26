@@ -4935,6 +4935,7 @@ set public=false
 where id='community-files';
 
 drop policy if exists "Public can view community files" on storage.objects;
+drop policy if exists "Private community files require valid access code" on storage.objects;
 create policy "Private community files require valid access code"
 on storage.objects
 for select
