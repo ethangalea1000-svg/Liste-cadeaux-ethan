@@ -1143,7 +1143,8 @@ async function contributeToGift(g){
 }
 
 function render(){
- const qText=search.value.trim().toLowerCase(),cat=category.value;
+ const qText=String(search?.value ?? "").trim().toLowerCase();
+ const cat=String(category?.value ?? "all");
  const filtered=gifts.filter(g=>(!qText||(g.title+" "+g.desc+" "+g.cat).toLowerCase().includes(qText))&&(cat==="all"||g.cat===cat));
  grid.innerHTML="";
  if(!filtered.length)grid.innerHTML='<div class="empty">Aucun cadeau ne correspond à ta recherche.</div>';
