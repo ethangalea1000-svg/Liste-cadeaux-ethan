@@ -300,7 +300,9 @@ function buildHydraBaseMails(){return [
 ]}
 function getHydraMails(){
   const read=getHydraReadIds();
-  const base=buildHydraBaseMails().map(m=>({...m,unread:!read.has(m.id) && m.unread}));
+  const archived=new Set(hydraMailStorage("hydra_mail_archived",[]));
+  const important=hydraMailStorage("hydra_mail_important",{});
+  const base=buildHydraBaseMails().map(m=>({...m,folder:archived.has(m.id)?"archive":m.folder,important:important[m.id]!==undefined?!!important[m.id]:m.important,unread:!read.has(m.id) && m.unread}));
   return base.concat(getHydraExtraMails().map(m=>({...m,unread:!read.has(m.id) && !!m.unread})));
 }
 function renderMails(){
@@ -343,7 +345,7 @@ function showMailComposer({replyTo=null,forward=false}={}){
   const quoted=m?("\n\n--- Message précédent ---\n"+m.body):"";
   $("mailList").innerHTML='<div class="mail-compose"><div class="sub">'+(forward?"TRANSFERT":"RÉPONSE")+' · SIMULATION</div><input id="composeTo" class="input" value="'+esc(to)+'" placeholder="Destinataire"><input id="composeSubject" class="input" style="margin-top:8px" value="'+esc(subject)+'" placeholder="Objet"><textarea id="composeBody" class="input" style="margin-top:8px" placeholder="Message">'+esc(quoted)+'</textarea><div class="actions"><button class="btn primary" id="sendFakeMail">Envoyer (simulation)</button><button class="btn" id="cancelFakeMail">Annuler</button></div><div class="sub" style="margin-top:10px">Une réponse à certains agents peut déclencher une nouvelle communication scénarisée.</div></div>';
   $("mailReader").classList.add("hidden");
-  $("sendFakeMail").onclick=()=>{persistMailReply(m,$("composeTo").value.trim(),$("composeSubject").value.trim(),$("composeBody").value.trim());renderMails()};
+  $("sendFakeMail").onclick=()=>{persistMailReply(m,$("composeTo").value.trim(),$("composeSubject").value.trim(),$("composeBody").value.trim(),{auto:!forward});renderMails()};
   $("cancelFakeMail").onclick=renderMails;
   $("composeBody").focus();
 }
@@ -356,8 +358,23 @@ function openMail(id){
   $("mailBackBtn").onclick=renderMails;
   $("replyMailBtn").onclick=()=>showMailComposer({replyTo:m});
   $("forwardMailBtn").onclick=()=>showMailComposer({replyTo:m,forward:true});
-  $("archiveMailBtn").onclick=()=>{m.folder="archive";if(m.id.startsWith("auto-")||m.id.startsWith("sent-")){const extras=getHydraExtraMails().map(x=>x.id===m.id?{...x,folder:"archive"}:x);hydraMailSave("hydra_mail_extra",extras)}markHydraMailRead(m.id);toast("Message archivé.");renderMails()};
-  $("importantMailBtn").onclick=()=>{const extras=getHydraExtraMails();const next=extras.map(x=>x.id===m.id?{...x,important:!x.important}:x);if(m.id.startsWith("auto-")||m.id.startsWith("sent-"))hydraMailSave("hydra_mail_extra",next);else{localStorage.setItem("hydra_mail_important_"+m.id,m.important?"0":"1")}toast("Statut du message mis à jour.");renderMails()};
+  $("archiveMailBtn").onclick=()=>{
+    if(m.id.startsWith("auto-")||m.id.startsWith("sent-")){
+      const extras=getHydraExtraMails().map(x=>x.id===m.id?{...x,folder:"archive"}:x);hydraMailSave("hydra_mail_extra",extras);
+    }else{
+      const ids=hydraMailStorage("hydra_mail_archived",[]);if(!ids.includes(m.id))ids.push(m.id);hydraMailSave("hydra_mail_archived",ids);
+    }
+    markHydraMailRead(m.id);toast("Message archivé.");renderMails()
+  };
+  $("importantMailBtn").onclick=()=>{
+    const next=!m.important;
+    if(m.id.startsWith("auto-")||m.id.startsWith("sent-")){
+      const extras=getHydraExtraMails().map(x=>x.id===m.id?{...x,important:next}:x);hydraMailSave("hydra_mail_extra",extras);
+    }else{
+      const flags=hydraMailStorage("hydra_mail_important",{});flags[m.id]=next;hydraMailSave("hydra_mail_important",flags);
+    }
+    toast("Statut du message mis à jour.");renderMails()
+  };
 }
 
 function initMailUi(){
