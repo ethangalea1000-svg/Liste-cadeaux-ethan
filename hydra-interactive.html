@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d18">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https://ckasbsnzxgwfwfnctioe.supabase.co; media-src 'self' blob: https:; frame-src 'self'">
+<title>HYDRA INTERACTIVE — Poste de contrôle</title>
+<style>
+:root{--bg:#070b13;--panel:#0d1422;--panel2:#111a2b;--line:#26354b;--text:#eef4ff;--muted:#8ea0b9;--accent:#6f7cff;--cyan:#35d3ff;--green:#38d49a;--amber:#ffbd64;--red:#ff647c;--shadow:0 18px 50px rgba(0,0,0,.28);--r:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#111a2b 0,#070b13 48%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:sticky;top:0;z-index:30;background:rgba(7,11,19,.88);backdrop-filter:blur(16px);border-bottom:1px solid #1b2638}
+.toprow{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:12px}.sig{width:42px;height:42px;border:1px solid #35486a;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#131e34,#0a101b);font-size:20px}.brand b{letter-spacing:.14em;font-size:13px}.brand small{display:block;color:var(--muted);margin-top:2px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #324563;background:#111a2b;color:#eaf1ff;padding:10px 13px;border-radius:11px;font-weight:800;cursor:pointer}.btn:hover{border-color:#5574a8}.btn.primary{background:linear-gradient(135deg,#636bf7,#3b87ff);border-color:#6f7cff}.btn.good{background:#102b23;border-color:#1d684e;color:#91f1c8}.btn.warn{background:#2a2114;border-color:#6c4d20;color:#ffd392}.btn.danger{background:#301820;border-color:#713040;color:#ff9aac}
+.hero{padding:34px 0 26px}.kicker{font-size:11px;letter-spacing:.16em;color:#7f94b4}.hero h1{margin:8px 0 5px;font-size:clamp(29px,5vw,52px);letter-spacing:-.03em}.hero p{margin:0;color:var(--muted);max-width:900px;line-height:1.6}
+.gate{max-width:620px;margin:55px auto}.card{background:linear-gradient(180deg,rgba(17,26,43,.96),rgba(12,18,30,.98));border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:19px}.gate h2{margin-top:0}.input{width:100%;padding:13px 14px;border-radius:11px;border:1px solid #334560;background:#09101b;color:var(--text);font:inherit}.status{margin-top:10px;color:var(--muted);font-size:13px;min-height:20px}
+.hidden{display:none}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric{padding:15px;border:1px solid var(--line);border-radius:16px;background:rgba(13,20,34,.92)}.metric .n{font-size:25px;font-weight:900}.metric .l{font-size:11px;color:var(--muted);margin-top:2px}
+.tabs{display:flex;gap:8px;overflow:auto;padding:12px 0 10px;position:sticky;top:70px;z-index:20;background:rgba(7,11,19,.92);backdrop-filter:blur(14px)}.tab{border:1px solid #2a3951;background:#0d1422;color:#bdc9dc;border-radius:11px;padding:10px 13px;font-weight:850;white-space:nowrap;cursor:pointer}.tab.active{background:#4658de;color:#fff;border-color:#6d7aff}
+.section{display:none}.section.active{display:block}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 12px}.section-head h2{margin:0;font-size:21px}.sub{color:var(--muted);font-size:12px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.search{flex:1 1 260px}.select{padding:12px;border-radius:11px;border:1px solid #334560;background:#09101b;color:var(--text)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.evidence{position:relative;overflow:hidden}.evidence .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#151f33;color:#9fb4db;font-size:10px;font-weight:900;letter-spacing:.05em}.evidence h3{margin:9px 0 6px;font-size:16px}.evidence .body{white-space:pre-wrap;line-height:1.55;color:#d8e2f2}.evidence .footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid #202e43}.pill{padding:4px 8px;border-radius:999px;background:#10241d;border:1px solid #245941;color:#8eeac1;font-size:10px;font-weight:900}.pill.off{background:#1a1a1d;border-color:#3b3b40;color:#9b9ca5}
+.mail{display:grid;grid-template-columns:82px 1fr;gap:13px}.avatar{width:58px;height:58px;border-radius:15px;background:#172239;border:1px solid #344b70;display:grid;place-items:center;font-size:19px;font-weight:900}.mail h3{margin:0 0 3px}.mail .meta{font-size:11px;color:var(--muted)}.mail .body{margin-top:11px;line-height:1.6;white-space:pre-wrap}.mail .actions{margin-top:11px}
+.money{border:1px solid #6b4b1e;background:linear-gradient(135deg,#21180c,#14100b)}.money .amount{font-size:30px;font-weight:950;color:#ffd27e}.money .route{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:14px 0}.routeBox{padding:11px;border:1px solid #5a4627;border-radius:12px;background:#171109}.routeArrow{color:#ffd27e;text-align:center}.kv{display:grid;grid-template-columns:145px 1fr;gap:7px;padding:7px 0;border-bottom:1px solid #223046}.kv:last-child{border-bottom:0}.kv span:first-child{color:var(--muted);font-size:12px}.kv span:last-child{font-weight:750}
+.timeline{display:grid;gap:10px}.event{display:grid;grid-template-columns:95px 1fr;gap:12px;align-items:start}.time{font:800 12px ui-monospace,SFMono-Regular,Consolas,monospace;color:#7edfff;padding-top:3px}.eventBody{border-left:2px solid #2a4d72;padding:0 0 10px 12px}.eventBody b{display:block;margin-bottom:4px}
+.player{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}.role{font-size:11px;color:#9fb4d8}.player .fragment{margin-top:8px;color:#d8e2f2;line-height:1.45}
+.live{display:grid;grid-template-columns:1.3fr .9fr;gap:12px}.liveDisplay{min-height:250px;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 30%,#18294a 0,#0b111d 58%);border:1px solid #294268;border-radius:18px}.phase{font-size:11px;letter-spacing:.18em;color:#8ba6cc}.phaseValue{font-size:38px;font-weight:950;margin:8px 0}.zone{color:#89e8ff}.fields{display:grid;gap:10px}.label{font-size:11px;color:var(--muted);margin-bottom:5px}
+.documents{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.doc{border:1px solid var(--line);padding:15px;border-radius:15px;background:#0b1220}.doc h3{margin:0 0 7px}.doc p{margin:0;color:#d4deee;line-height:1.55;white-space:pre-wrap}
+.notice{padding:10px 12px;border:1px solid #304667;background:#0c1728;border-radius:12px;color:#b7c8e0;font-size:12px;line-height:1.5}.foot{padding:30px 0 45px;color:#63728b;font-size:11px}
+.empty{padding:26px;text-align:center;border:1px dashed #2e3c53;border-radius:14px;color:var(--muted)}.toast{position:fixed;right:18px;bottom:18px;z-index:99;background:#fff;color:#111;padding:11px 14px;border-radius:12px;box-shadow:0 15px 35px rgba(0,0,0,.35);opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cards,.documents,.live{grid-template-columns:1fr}}
+@media(max-width:620px){.wrap{padding:0 11px}.toprow{align-items:flex-start;flex-direction:column;padding:12px 0}.tabs{top:80px}.grid{grid-template-columns:1fr 1fr}.hero{padding-top:24px}.mail{grid-template-columns:1fr}.event{grid-template-columns:72px 1fr}.route{grid-template-columns:1fr!important}.routeArrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap toprow"><div class="brand"><div class="sig">⌁</div><div><b>HYDRA INTERACTIVE</b><small>POSTE DE CONTRÔLE — MAÎTRE DU JEU</small></div></div><div class="actions"><a class="btn" href="admin.html">← Administration</a><button class="btn danger hidden" id="logoutBtn">Verrouiller</button></div></div></header>
+
+<main class="wrap">
+<section id="gate" class="gate card">
+  <div class="kicker">ZONE RESTREINTE</div>
+  <h2>Accès Maître du Jeu</h2>
+  <p class="sub">Cette interface est réservée à l’accès administrateur Ethan. Elle centralise les informations de préparation et de pilotage Hydra.</p>
+  <form id="loginForm" style="display:grid;gap:10px;margin-top:16px">
+    <input id="codeInput" class="input" type="password" maxlength="64" autocomplete="off" placeholder="Code administrateur Ethan">
+    <button class="btn primary" type="submit">Ouvrir HYDRA INTERACTIVE</button>
+  </form>
+  <div id="loginStatus" class="status"></div>
+</section>
+
+<section id="app" class="hidden">
+  <div class="hero">
+    <div class="kicker">PROTOCOLE HYDRA / CONSOLE CENTRALE</div>
+    <h1>HYDRA INTERACTIVE</h1>
+    <p>Une seule interface pour suivre les indices, les flux financiers, les mails de scène, les dossiers, la chronologie et l’état LIVE de l’enquête.</p>
+  </div>
+
+  <div class="grid" id="metrics"></div>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="overview">Vue centrale</button>
+    <button class="tab" data-tab="indices">Indices</button>
+    <button class="tab" data-tab="virements">Virements</button>
+    <button class="tab" data-tab="mails">Mails</button>
+    <button class="tab" data-tab="dossiers">Dossiers</button>
+    <button class="tab" data-tab="chrono">Chronologie</button>
+    <button class="tab" data-tab="documents">Documents</button>
+    <button class="tab" data-tab="live">LIVE</button>
+  </nav>
+
+  <section class="section active" id="overview">
+    <div class="section-head"><div><h2>Vue centrale</h2><div class="sub">État actuel récupéré depuis Supabase.</div></div><button class="btn" id="refreshBtn">↻ Actualiser</button></div>
+    <div class="cards" id="overviewCards"></div>
+  </section>
+
+  <section class="section" id="indices">
+    <div class="section-head"><div><h2>Indices & fragments</h2><div class="sub">Chaque fragment, document spécial et piste de dossier peut être marqué comme exploité sur ce poste.</div></div></div>
+    <div class="toolbar"><input class="input search" id="evidenceSearch" placeholder="Rechercher un indice, un joueur, un mot-clé…"><select class="select" id="evidenceFilter"><option value="all">Tous</option><option value="fragment">Fragments IA</option><option value="document">Documents</option><option value="clue">Chaînes d’indices</option></select></div>
+    <div class="cards" id="evidenceList"></div>
+  </section>
+
+  <section class="section" id="virements">
+    <div class="section-head"><div><h2>Virements & finances</h2><div class="sub">Les flux financiers déjà présents dans le scénario, avec leur source narrative.</div></div></div>
+    <div id="moneyList"></div>
+  </section>
+
+  <section class="section" id="mails">
+    <div class="section-head"><div><h2>Mails de scène</h2><div class="sub">Boîte de lecture des communications importantes déduites des dossiers Hydra actuels.</div></div></div>
+    <div class="cards" id="mailList"></div>
+  </section>
+
+  <section class="section" id="dossiers">
+    <div class="section-head"><div><h2>Dossiers Hydra</h2><div class="sub">Vue MJ complète des personnages, rôles, fragments et documents.</div></div></div>
+    <div class="toolbar"><input class="input search" id="playerSearch" placeholder="Chercher un personnage…"></div>
+    <div class="cards" id="playerList"></div>
+  </section>
+
+  <section class="section" id="chrono">
+    <div class="section-head"><div><h2>Chronologie des preuves</h2><div class="sub">Les horaires explicitement présents dans les dossiers sont regroupés ici.</div></div></div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <section class="section" id="documents">
+    <div class="section-head"><div><h2>Documents MJ</h2><div class="sub">Vérité canonique, documents de fin et éléments réservés au maître du jeu.</div></div></div>
+    <div class="documents" id="docList"></div>
+  </section>
+
+  <section class="section" id="live">
+    <div class="section-head"><div><h2>Pilotage LIVE</h2><div class="sub">Contrôle direct de la phase, de la zone active, de l’alerte et du vote.</div></div></div>
+    <div class="live">
+      <div class="liveDisplay"><div><div class="phase">ÉTAT DU PROTOCOLE</div><div class="phaseValue" id="livePhaseText">—</div><div class="zone" id="liveZoneText">Zone —</div></div></div>
+      <div class="card">
+        <div class="fields">
+          <div><div class="label">Phase</div><select class="select" id="livePhase"><option value="before">AVANT</option><option value="live">LIVE</option><option value="after">APRÈS</option></select></div>
+          <div><div class="label">Zone active</div><input class="input" id="liveZone" maxlength="100" placeholder="Zone Omega"></div>
+          <div><div class="label">Alerte</div><input class="input" id="liveAlert" maxlength="240" placeholder="Message d’alerte"></div>
+          <div><div class="label">Vote</div><input class="input" id="liveVote" maxlength="160" placeholder="Titre du vote"></div>
+          <div class="actions"><button class="btn" data-phase="before">🟢 Avant</button><button class="btn danger" data-phase="live">🔴 Démarrer</button><button class="btn good" data-phase="after">🔵 Débrief</button><button class="btn primary" id="saveLive">💾 Enregistrer</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px"><div class="notice" id="liveStatus">État non chargé.</div></div>
+  </section>
+</section>
+<footer class="foot wrap">HYDRA INTERACTIVE • accès administrateur • les données affichées proviennent de la configuration Hydra actuelle.</footer>
+</main>
+<div id="toast" class="toast"></div>
+
+<script>
+const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
+let adminCode="",cfg={},players=[],interactionRows=[];
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function toast(v){const t=$("toast");t.textContent=v;t.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>t.classList.remove("show"),2200)}
+async function rpc(name,body={}){
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json","x-admin-code":adminCode},body:JSON.stringify(body)});
+  const data=await r.json().catch(()=>null);
+  if(!r.ok) throw new Error(data?.message||data?.hint||data?.details||data?.code||("RPC "+name+" : "+r.status));
+  return data;
+}
+function onlyEthanAdmin(data){
+  return !!data?.authorized && data?.is_admin===true && String(data?.label||"").trim().toLowerCase()==="ethan — administrateur";
+}
+async function authorize(code){
+  $("loginStatus").textContent="Vérification…";
+  try{
+    const data=await rpcNoAuth("authorize_list_access",{p_code:String(code||"").trim()});
+    if(!onlyEthanAdmin(data)){ $("loginStatus").textContent="❌ Seul Ethan — Administrateur peut ouvrir cette console."; return false; }
+    adminCode=String(code||"").trim();sessionStorage.setItem("hydra_interactive_admin",adminCode);
+    $("gate").classList.add("hidden");$("app").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
+    await loadAll();return true;
+  }catch(e){$("loginStatus").textContent="❌ "+e.message;return false}
+}
+async function rpcNoAuth(name,body={}){
+  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const data=await r.json().catch(()=>null);
+  if(!r.ok)throw new Error(data?.message||"Vérification impossible.");
+  return data;
+}
+async function loadAll(){
+  [cfg,interactionRows]=await Promise.all([rpc("get_birthday_config",{}),rpc("admin_list_birthday_interactions",{}).catch(()=>[])]);
+  players=Array.isArray(cfg?.murder_party?.players)?cfg.murder_party.players:[];
+  renderAll();
+}
+function phaseLabel(v){return ({before:"AVANT",live:"LIVE",after:"APRÈS"})[v]||String(v||"—").toUpperCase()}
+function allEvidence(){
+  const out=[];
+  players.forEach(p=>{
+    if(p.fragment)out.push({type:"fragment",player:p.name,title:p.fragment,body:p.fragment,key:p.name+"|fragment"});
+    if(p.special)out.push({type:"document",player:p.name,title:p.special,body:p.special,key:p.name+"|special"});
+    (p.clue_chain||[]).forEach((x,i)=>out.push({type:"clue",player:p.name,title:"Piste "+(i+1),body:x,key:p.name+"|clue|"+i}));
+  });
+  return out;
+}
+function evidenceSeen(key){try{return localStorage.getItem("hydra_seen:"+key)==="1"}catch{return false}}
+function setEvidenceSeen(key,on){try{localStorage.setItem("hydra_seen:"+key,on?"1":"0")}catch{}}
+function renderMetrics(){
+  const live=cfg.experience||{}, mp=cfg.murder_party||{}, ev=allEvidence();
+  $("metrics").innerHTML=[
+    ["Phase",phaseLabel(live.phase),"État du protocole"],
+    ["Dossiers",players.length,"Personnages chargés"],
+    ["Indices",ev.length,"Fragments + documents + pistes"],
+    ["Interactions",Array.isArray(interactionRows)?interactionRows.length:0,"Événements enregistrés"]
+  ].map(x=>'<div class="metric"><div class="n">'+esc(x[1])+'</div><div class="l">'+esc(x[0])+' · '+esc(x[2])+'</div></div>').join("");
+}
+function renderOverview(){
+  const mp=cfg.murder_party||{}, live=cfg.experience||{};
+  const cards=[
+    ["État",phaseLabel(live.phase),"Dernière activation : "+(live.phase_started_at||"—")],
+    ["Zone active",mp.live?.active_zone||"Aucune","Zone pilotée depuis la console"],
+    ["Alerte",mp.live?.alert?.message||"Aucune alerte","Activée : "+(mp.live?.alert?.enabled?"oui":"non")],
+    ["Vote",mp.live?.vote?.title||"Aucun vote","Activé : "+(mp.live?.vote?.enabled?"oui":"non")],
+    ["Financement clé","2,3 M€","Flux repéré par Emilie"],
+    ["Victime","Clone Hydra","Élément de la vérité canonique MJ"]
+  ];
+  $("overviewCards").innerHTML=cards.map(c=>'<article class="card"><div class="sub">'+esc(c[0])+'</div><h3 style="margin:7px 0 4px">'+esc(c[1])+'</h3><div class="sub">'+esc(c[2])+'</div></article>').join("");
+}
+function renderEvidence(){
+  const q=String($("evidenceSearch").value||"").toLowerCase().trim(), f=$("evidenceFilter").value;
+  const rows=allEvidence().filter(e=>(f==="all"||e.type===f)&&(!q||(e.player+" "+e.title+" "+e.body).toLowerCase().includes(q)));
+  $("evidenceList").innerHTML=rows.length?rows.map(e=>{
+    const seen=evidenceSeen(e.key);
+    const labels={fragment:"FRAGMENT IA",document:"DOCUMENT SPÉCIAL",clue:"CHAÎNE D’INDICE"};
+    return '<article class="card evidence"><span class="tag">'+labels[e.type]+'</span><h3>'+esc(e.player)+' — '+esc(e.title)+'</h3><div class="body">'+esc(e.body)+'</div><div class="footer"><span class="pill '+(seen?"":"off")+'">'+(seen?"EXPLOITÉ":"NON EXPLOITÉ")+'</span><button class="btn '+(seen?"":"primary")+' ev-btn" data-key="'+esc(e.key)+'">'+(seen?"↶ Marquer non exploité":"✓ Marquer exploité")+'</button></div></article>';
+  }).join(""):'<div class="empty">Aucun indice ne correspond à la recherche.</div>';
+  document.querySelectorAll(".ev-btn").forEach(b=>b.onclick=()=>{const k=b.dataset.key;setEvidenceSeen(k,!evidenceSeen(k));renderEvidence()});
+}
+function renderMoney(){
+  const p=players.find(x=>x.name==="Emilie");
+  const body=(p?.knowledge||"")+"\n\nDocument : "+(p?.special||"");
+  $("moneyList").innerHTML='<article class="card money"><div class="sub">FLUX FINANCIER HYDRA</div><div class="amount">2 300 000 €</div><div class="route"><div class="routeBox"><b>Origine</b><div class="sub">Flux détecté avant l’incident</div></div><div class="routeArrow">→</div><div class="routeBox"><b>Destination</b><div class="sub">Structure écran / compte offshore</div></div></div><div class="kv"><span>Source</span><span>Emilie — Comptable Hydra</span></div><div class="kv"><span>Indice</span><span>Virement de 2,3 millions vers une structure écran</span></div><div class="kv"><span>Problème</span><span>Date / horodatage incohérent</span></div><div class="kv"><span>Utilité</span><span>Relier le financement au dispositif et aux autres preuves</span></div><div class="notice" style="margin-top:12px">'+esc(body)+'</div></article>';
+}
+function renderMails(){
+  const mails=[
+    {from:"Ethan",subject:"Ordre du Chef Hydra",body:"Distribuer les fragments IA. Ne rien dire sur leur origine.",avatar:"E"},
+    {from:"Fabrice",subject:"Alerte archive",body:"Altération détectée. Source : Hydra-Core. Horodatage incohérent.",avatar:"F"},
+    {from:"Emilie",subject:"Virement suspect",body:"Virement de 2,3 millions vers une structure écran. Date incohérente. Bénéficiaire inconnu.",avatar:"€"},
+    {from:"Jean-Louis Pineau",subject:"Journal de navigation",body:"Déviation non programmée. Trajectoire modifiée sans autorisation.",avatar:"J"},
+    {from:"Emy",subject:"Consigne de distribution",body:"Distribuer les fragments IA. Ne rien dire sur leur origine.",avatar:"E"},
+    {from:"Hydra-Core",subject:"Fragment système",body:"Le protocole Hydra-Core a été déclenché avant l'incident.",avatar:"H"}
+  ];
+  $("mailList").innerHTML=mails.map(m=>'<article class="card mail"><div class="avatar">'+esc(m.avatar)+'</div><div><h3>'+esc(m.subject)+'</h3><div class="meta">De : '+esc(m.from)+' · communication de scène</div><div class="body">'+esc(m.body)+'</div><div class="actions"><button class="btn copy-mail" data-text="'+esc("De : "+m.from+"\nObjet : "+m.subject+"\n\n"+m.body)+'">📋 Copier</button></div></div></article>').join("");
+  document.querySelectorAll(".copy-mail").forEach(b=>b.onclick=async()=>{await navigator.clipboard?.writeText(b.dataset.text||"");toast("Mail copié.")});
+}
+function renderPlayers(){
+  const q=String($("playerSearch").value||"").toLowerCase().trim();
+  const rows=players.filter(p=>(p.name+" "+p.role+" "+(p.function||"")).toLowerCase().includes(q));
+  $("playerList").innerHTML=rows.length?rows.map(p=>'<article class="card player"><div><h3 style="margin:0">'+esc(p.name)+'</h3><div class="role">'+esc(p.role||"")+' · '+esc(p.function||"")+'</div><div class="fragment">'+esc(p.fragment||"Aucun fragment")+'</div><div class="sub" style="margin-top:9px"><b>Document :</b> '+esc(p.special||"—")+'</div><div class="sub" style="margin-top:6px"><b>Objectif :</b> '+esc(p.objective||"—")+'</div></div><button class="btn" data-player="'+esc(p.name)+'">Copier</button></article>').join(""):'<div class="empty">Aucun dossier.</div>';
+  document.querySelectorAll("[data-player]").forEach(b=>b.onclick=async()=>{const p=players.find(x=>x.name===b.dataset.player);if(!p)return;const t=["DOSSIER HYDRA",p.name,p.role,p.function,p.fragment,p.special,p.objective].filter(Boolean).join("\n");await navigator.clipboard?.writeText(t);toast("Dossier copié.")});
+}
+function renderTimeline(){
+  const events=[];
+  const re=/(d{1,2})h(d{2})/g;
+  players.forEach(p=>[...(p.special?[p.special]:[]),...(p.knowledge?[p.knowledge]:[]),...(p.clue_chain||[])].forEach(text=>{
+    let m;while((m=re.exec(String(text))))events.push({time:m[0],text:String(text),player:p.name});
+  }));
+  const fallback=[
+    {time:"20h31",text:"Milo a trouvé un objet Hydra.",player:"Mario / Milo"},
+    {time:"20h52",text:"Déviation non programmée de l’île flottante.",player:"Jean-Louis Pineau"},
+    {time:"21h47",text:"Retrait non autorisé d’un équipement.",player:"Yannick"}
+  ];
+  const rows=events.length?events:fallback;
+  rows.sort((a,b)=>a.time.localeCompare(b.time));
+  $("timeline").innerHTML=rows.map(e=>'<div class="event"><div class="time">'+esc(e.time)+'</div><div class="eventBody"><b>'+esc(e.player)+'</b><span>'+esc(e.text)+'</span></div></div>').join("");
+}
+function renderDocuments(){
+  let truth=cfg.murder_party?.story_truth;
+  if(typeof truth==="string"){try{truth=JSON.parse(truth)}catch{}}
+  let end=cfg.murder_party?.end_documents;
+  if(typeof end==="string"){try{end=JSON.parse(end)}catch{}}
+  const docs=[];
+  if(truth?.title)docs.push({title:truth.title,text:(truth.truth_steps||[]).join("\n\n")});
+  if(truth?.final_conclusion)docs.push({title:"Conclusion finale MJ",text:truth.final_conclusion});
+  (Array.isArray(end)?end:[]).forEach(d=>docs.push({title:d.title,text:d.text}));
+  $("docList").innerHTML=docs.length?docs.map(d=>'<article class="doc"><h3>'+esc(d.title)+'</h3><p>'+esc(d.text)+'</p></article>').join(""):'<div class="empty">Aucun document MJ disponible.</div>';
+}
+function renderLive(){
+  const live=cfg.experience||{}, mp=cfg.murder_party||{}, phase=live.phase||"before";
+  $("livePhase").value=phase;$("liveZone").value=mp.live?.active_zone||"";$("liveAlert").value=mp.live?.alert?.message||"";$("liveVote").value=mp.live?.vote?.title||"";
+  $("livePhaseText").textContent=phaseLabel(phase);$("liveZoneText").textContent="Zone "+(mp.live?.active_zone||"—");
+  $("liveStatus").textContent="Phase : "+phaseLabel(phase)+" · Zone : "+(mp.live?.active_zone||"aucune")+" · Alerte : "+(mp.live?.alert?.enabled?"active":"inactive")+" · Vote : "+(mp.live?.vote?.enabled?"actif":"inactif");
+}
+function renderAll(){renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive()}
+async function saveLive(){
+  try{
+    const next=JSON.parse(JSON.stringify(cfg));
+    next.experience=Object.assign({},next.experience||{}, {phase:$("livePhase").value||"before",phase_started_at:new Date().toISOString()});
+    next.murder_party=Object.assign({},next.murder_party||{});
+    next.murder_party.live=Object.assign({},next.murder_party.live||{},{
+      status_text:($("livePhase").value==="live"?"ENQUÊTE ACTIVE":"Préparation"),
+      active_zone:$("liveZone").value.trim(),
+      alert:{enabled:!!$("liveAlert").value.trim(),message:$("liveAlert").value.trim()},
+      vote:{enabled:!!$("liveVote").value.trim(),title:$("liveVote").value.trim()}
+    });
+    await rpc("admin_save_birthday_config",{p_settings:next});cfg=next;renderAll();toast("État LIVE enregistré.");
+  }catch(e){toast("Impossible d’enregistrer : "+e.message)}
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.tab).classList.add("active")});
+$("refreshBtn").onclick=loadAll;
+$("evidenceSearch").oninput=renderEvidence;$("evidenceFilter").onchange=renderEvidence;$("playerSearch").oninput=renderPlayers;
+document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>{$("livePhase").value=b.dataset.phase;renderLive()});
+$("saveLive").onclick=saveLive;
+$("logoutBtn").onclick=()=>{sessionStorage.removeItem("hydra_interactive_admin");adminCode="";$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");$("loginStatus").textContent="Session verrouillée."};
+$("loginForm").onsubmit=async e=>{e.preventDefault();await authorize($("codeInput").value)};
+const saved=sessionStorage.getItem("hydra_interactive_admin");if(saved){$("codeInput").value=saved;authorize(saved)}
+</script>
+</body>
+</html>
