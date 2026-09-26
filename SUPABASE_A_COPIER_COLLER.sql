@@ -3927,4 +3927,12 @@ $reducecontrib$;
 
 grant execute on function public.reduce_private_contribution(text,bigint,numeric) to anon;
 
+
+
+-- ============================================================
+-- CORRECTIFS HYDRA : attribution de plusieurs dossiers à un accès
+-- ============================================================
+-- Cette section est la référence SQL pour les attributions Hydra.
+-- Toute évolution Hydra doit être ajoutée dans ce fichier.
+
 notify pgrst,'reload schema';
