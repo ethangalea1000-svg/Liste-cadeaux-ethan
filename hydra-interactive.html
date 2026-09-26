@@ -76,6 +76,17 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
 @media(max-width:1100px){.social-layout{grid-template-columns:1fr 1.6fr}.social-right{grid-column:1/-1}.drive-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.calendar-layout,.contacts-grid{grid-template-columns:1fr}}
 @media(max-width:760px){.office-layout,.notes-layout{grid-template-columns:1fr}.office-side{border-right:0;border-bottom:1px solid #23334a}.drive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.social-layout{grid-template-columns:1fr}.social-right{grid-column:auto}}
 
+
+/* === HYDRA 2026 POLISH / BROWSER / GALLERY / QR / INCIDENT MODE === */
+:root{--accent2:#7c6cff;--panelGlow:rgba(102,121,255,.13)}
+button,input,textarea,select{font-family:inherit}.tab{transition:transform .14s,border-color .14s,background .14s,box-shadow .14s}.tab:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.18)}.card,.bank-app,.mail-app,.office-layout,.os-shell,.cam,.post-card,.drive-card{transition:border-color .18s,box-shadow .18s,transform .18s}.card:hover,.drive-card:hover{box-shadow:0 16px 38px rgba(0,0,0,.22)}
+.app-dock{display:flex;gap:8px;overflow:auto;padding:10px 0 12px;scrollbar-width:thin}.dock-btn{flex:0 0 auto;border:1px solid #2e425f;background:#0f1929;color:#dce7f8;border-radius:12px;padding:9px 11px;font-weight:850;cursor:pointer}.dock-btn small{display:block;color:#7f94b1;font-size:9px;margin-top:2px;font-weight:700}.dock-btn:hover,.dock-btn.active{background:#24345a;border-color:#6176b8}.global-search{display:flex;gap:8px;margin-top:10px}.global-search .input{flex:1}.search-result-box{position:relative;margin-top:8px;z-index:5}.search-results{position:absolute;left:0;right:0;top:0;display:grid;gap:5px;padding:8px;border:1px solid #324764;border-radius:12px;background:#09111d;box-shadow:0 18px 40px rgba(0,0,0,.35);max-height:300px;overflow:auto}.search-result{padding:9px 10px;border:1px solid #22344f;border-radius:9px;background:#0d1726;cursor:pointer}.search-result:hover{background:#182640}.search-result b{display:block}.search-result small{color:#7f92ad}
+.browser-shell{border:1px solid #293b56;border-radius:18px;overflow:hidden;background:#0a1019;box-shadow:0 20px 48px rgba(0,0,0,.24)}.browser-top{display:flex;gap:7px;padding:11px;border-bottom:1px solid #24344b;background:#0e1623}.browser-dot{width:10px;height:10px;border-radius:50%;background:#31445f;margin-top:3px}.browser-url{flex:1;padding:9px 11px;border-radius:10px;border:1px solid #30445f;background:#09111b;color:#dce8f8;font:11px ui-monospace,SFMono-Regular,Consolas,monospace}.browser-page{min-height:500px;padding:20px;background:radial-gradient(circle at 30% 10%,#172844 0,#09111b 65%)}.web-hero{padding:22px;border:1px solid #2d4261;border-radius:16px;background:linear-gradient(135deg,#121d30,#0b131f)}.web-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.web-card{padding:12px;border:1px solid #2a3d58;border-radius:12px;background:#0d1724}.web-card h3{margin:6px 0}.web-link{border:0;background:none;color:#9db1ff;padding:0;cursor:pointer;font-weight:850}.browser-page .kpi{font-size:28px;font-weight:950}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.gallery-item{min-height:220px;position:relative;overflow:hidden;border:1px solid #2d415f;border-radius:15px;background:linear-gradient(135deg,#172333,#070b11);cursor:pointer}.gallery-noise{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 5px,rgba(255,255,255,.025) 6px),radial-gradient(circle at 50% 45%,rgba(102,128,170,.28),transparent 48%)}.gallery-content{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:18px;color:#9fb2ca;font:800 12px ui-monospace,SFMono-Regular,Consolas,monospace}.gallery-badge{position:absolute;left:9px;top:9px;padding:4px 7px;border-radius:999px;background:#471721;border:1px solid #8b3b4a;color:#ffb0ba;font-size:8px;font-weight:950}.gallery-foot{position:absolute;left:10px;right:10px;bottom:10px;display:flex;justify-content:space-between;gap:8px;align-items:center}.censor{filter:blur(7px);opacity:.6}.reveal-stamp{padding:5px 7px;border-radius:8px;border:1px solid #2f6856;background:#10271f;color:#94efc9;font-size:9px;font-weight:900}
+.qr-layout{display:grid;grid-template-columns:.7fr 1.3fr;gap:12px}.qr-card{display:grid;place-items:center;min-height:360px}.qr-grid{display:grid;grid-template-columns:repeat(21,7px);gap:2px;padding:13px;background:#fff;border-radius:10px}.qr-cell{width:7px;height:7px;background:#fff}.qr-cell.on{background:#0b0f17}.qr-caption{margin-top:12px;color:#dce7f5;text-align:center}.qr-history{display:grid;gap:7px}.qr-history-item{padding:10px;border:1px solid #2a3c58;border-radius:11px;background:#0e1725;cursor:pointer}.qr-history-item:hover{border-color:#5f74a4}
+.incident-mode{display:none;position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 30%,rgba(82,0,15,.65),rgba(4,6,11,.96) 62%);backdrop-filter:blur(12px)}.incident-mode.active{display:grid;place-items:center}.incident-modal{width:min(850px,calc(100% - 28px));padding:22px;border:1px solid #8c3343;border-radius:20px;background:linear-gradient(180deg,#181016,#0a0d13);box-shadow:0 30px 90px rgba(0,0,0,.55)}.incident-siren{font:950 clamp(24px,5vw,56px) ui-monospace,SFMono-Regular,Consolas,monospace;color:#ff7186;letter-spacing:.08em}.incident-progress{height:12px;border-radius:99px;background:#24141a;overflow:hidden;margin:12px 0}.incident-progress i{display:block;height:100%;width:72%;background:linear-gradient(90deg,#ff5b72,#ffb24d);animation:incidentPulse 1.2s infinite alternate}@keyframes incidentPulse{to{width:87%}}.incident-feed{display:grid;gap:7px;max-height:220px;overflow:auto;margin:12px 0}.incident-feed div{padding:9px;border-left:2px solid #8b3444;background:#130f13;color:#d9cbd0;font-size:11px}
+@media(max-width:900px){.web-grid,.gallery-grid,.qr-layout{grid-template-columns:1fr}.qr-grid{transform:scale(.88);transform-origin:top center}}
+
 </style>
 </head>
 <body>
@@ -114,7 +125,10 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
     <div class="os-launch">
       <button data-launch="overview">⌂ Dashboard</button><button data-launch="intel">🧠 Intelligence</button><button data-launch="mails">✉ Mail</button><button data-launch="terminal">>_ Terminal</button><button data-launch="locker">📁 Evidence</button><button data-launch="live">● LIVE</button>
     </div>
-    <div class="os-command"><input id="osGlobalCommand" class="input" placeholder="Commande globale : STATUS, TRACE 2300K, OPEN INTEL, DECRYPT MIROIR…"><button class="btn primary" id="osGlobalRun">Exécuter</button><div class="os-time" id="osLastAction">READY</div></div>
+    <div class="os-command"><input id="osGlobalCommand" class="input" placeholder="Commande globale : STATUS, TRACE 2300K, OPEN INTEL, BROWSER MIRROR…"><button class="btn primary" id="osGlobalRun">Exécuter</button><div class="os-time" id="osLastAction">READY</div></div>
+    <div class="global-search"><input id="hydraSearch" class="input" placeholder="Recherche universelle : Emilie, 2,3 M€, Fragment 21, archive…"><button class="btn" id="hydraSearchBtn">⌕ Rechercher</button></div>
+    <div class="search-result-box" id="hydraSearchResults"></div>
+    <div class="app-dock" id="appDock"></div>
   </div>
 
   <div class="grid" id="metrics"></div>
@@ -153,6 +167,10 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
     <button class="tab" data-tab="calendar">📅 Agenda</button>
     <button class="tab" data-tab="contacts">👥 Contacts</button>
     <button class="tab" data-tab="notes">🗒️ Notes</button>
+    <button class="tab" data-tab="browser">🌍 Browser</button>
+    <button class="tab" data-tab="photos">🖼️ Gallery</button>
+    <button class="tab" data-tab="qr">▦ QR Lab</button>
+    <button class="tab" data-tab="mission">🎛️ Mission Control</button>
   </nav>
 
   <section class="section active" id="overview">
@@ -399,9 +417,30 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
     <div class="notes-layout"><div class="card"><div class="note-list" id="noteList"></div><button class="btn primary" id="noteNew" style="width:100%;margin-top:8px">＋ Nouvelle note</button></div><div class="card note-editor"><input id="noteTitle" class="input" placeholder="Titre"><textarea id="noteBody" class="input" placeholder="Écris ici…"></textarea><div class="actions" style="margin-top:9px"><button class="btn primary" id="noteSave">💾 Enregistrer</button><button class="btn danger" id="noteDelete">Supprimer</button></div></div></div>
   </section>
 
+
+  <section class="section" id="browser">
+    <div class="section-head"><div><h2>🌍 HYDRA Browser</h2><div class="sub">Navigateur interne fictif pour consulter les sites et archives du protocole.</div></div><span class="sim-badge">LOCAL WEB</span></div>
+    <div class="browser-shell">
+      <div class="browser-top"><span class="browser-dot"></span><span class="browser-dot"></span><span class="browser-dot"></span><input id="browserUrl" class="browser-url" value="https://intra.hydra.local/dashboard"><button class="mini-btn" id="browserGo">↵</button></div>
+      <div class="browser-page" id="browserPage"></div>
+    </div>
+  </section>
+  <section class="section" id="photos">
+    <div class="section-head"><div><h2>🖼️ HYDRA Gallery</h2><div class="sub">Captures et preuves visuelles fictives. Certaines sont censurées jusqu'à déblocage.</div></div><span class="sim-badge">EVIDENCE VISUALS</span></div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+  <section class="section" id="qr">
+    <div class="section-head"><div><h2>▦ HYDRA QR Lab</h2><div class="sub">Codes visuels fictifs utilisés comme mécanisme de déblocage dans l'expérience.</div></div></div>
+    <div class="qr-layout"><div class="card qr-card"><div id="qrVisual"></div><div class="qr-caption" id="qrCaption">Aucun code sélectionné.</div><div class="actions" style="margin-top:12px"><button class="btn primary" id="qrGenerate">Générer</button><button class="btn" id="qrSimulate">Simuler le scan</button></div></div><aside class="card"><div class="panel-title"><h3>Codes disponibles</h3><span class="sim-badge">NON SCANNABLE</span></div><div class="qr-history" id="qrHistory"></div><div class="notice" style="margin-top:12px">Ces motifs sont volontairement des codes visuels de jeu et ne déclenchent aucune action externe.</div></aside></div>
+  </section>
+  <section class="section" id="mission">
+    <div class="section-head"><div><h2>🎛️ Mission Control</h2><div class="sub">Tableau de pilotage global des applications et de l'état de la soirée.</div></div><button class="btn danger" id="incidentModeOpen">🚨 INCIDENT MAJEUR</button></div>
+    <div class="advanced-grid three" id="missionCards"></div>
+  </section>
+
 <footer class="foot wrap">HYDRA INTERACTIVE • accès administrateur • les données affichées proviennent de la configuration Hydra actuelle.</footer>
 </main>
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast"></div><div id="incidentMode" class="incident-mode"><div class="incident-modal"><div class="sub">HYDRA CORE // PRIORITY EVENT</div><div class="incident-siren">INCIDENT MAJEUR</div><div class="panel-muted">Le protocole passe en mode d'urgence narratif.</div><div class="incident-progress"><i></i></div><div class="incident-feed" id="incidentModeFeed"></div><div class="actions"><button class="btn danger" id="incidentModeClose">Reprendre le contrôle</button><button class="btn" id="incidentModeSignal">Émettre un signal</button></div></div></div>
 
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
@@ -694,7 +733,12 @@ function runGlobalCommand(){
   if(u.includes("TERMINAL")){hydraGo("terminal");return}
   if(u.includes("SURVEILLANCE")){hydraGo("surveillance");return}
   if(u.includes("SIGNAL")){hydraGo("signal");return}
-  toast("Commande inconnue. Essaie STATUS, TRACE 2300K, OPEN INTEL ou DECRYPT MIROIR.");
+  if(u.includes("BROWSER")||u.includes("INTRANET")){hydraGo("browser");return}
+  if(u.includes("PHOTO")||u.includes("GALLERY")){hydraGo("photos");return}
+  if(u.includes("QR")){hydraGo("qr");return}
+  if(u.includes("MISSION")){hydraGo("mission");return}
+  if(u.includes("INCIDENT")){$("incidentModeOpen")?.click();return}
+  toast("Commande inconnue. Essaie STATUS, TRACE 2300K, OPEN INTEL, BROWSER MIRROR ou INCIDENT.");
 }
 function renderIntel(){
   const nodes=[
@@ -963,7 +1007,72 @@ function noteData(){return hydraStore("hydra_notes",[{"id":"n1","title":"Idées 
 function renderNotes(id=window.__noteActive||noteData()[0]?.id){const notes=noteData();const d=notes.find(x=>x.id===id)||notes[0];if(!d)return;$("noteList").innerHTML=notes.map(n=>'<button class="note-btn '+(n.id===d.id?"active":"")+'" data-note="'+n.id+'">'+esc(n.title)+'</button>').join("");$("noteTitle").value=d.title;$("noteBody").value=d.body;window.__noteActive=d.id;document.querySelectorAll("[data-note]").forEach(b=>b.onclick=()=>renderNotes(b.dataset.note))}
 function initNotes(){if(window.__notesInit)return;window.__notesInit=true;renderNotes();$("noteSave").onclick=()=>{const notes=noteData().map(n=>n.id===window.__noteActive?{...n,title:$("noteTitle").value.trim()||"Sans titre",body:$("noteBody").value}:n);hydraSet("hydra_notes",notes);renderNotes();toast("Note enregistrée.")};$("noteNew").onclick=()=>{const notes=noteData(),d={id:"n-"+Date.now(),title:"Nouvelle note",body:""};notes.push(d);hydraSet("hydra_notes",notes);renderNotes(d.id);$("noteBody").focus()};$("noteDelete").onclick=()=>{const notes=noteData().filter(n=>n.id!==window.__noteActive);hydraSet("hydra_notes",notes);renderNotes(notes[0]?.id)}}
 
-function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();renderOsShell();renderIntel();renderClassified();renderSignal();renderForensic();initPuzzle();renderComms();renderRadio();renderMap();renderTrust();renderIncidents();renderLab();renderEvidenceLocker();initTerminal();renderSurveillance();renderNews();renderProgress();renderAICore();initOsShell();initAdvancedUi();initSocial();initWord();initSheets();renderDrive();renderCalendar();renderContacts();initNotes();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
+
+function renderDock(){
+  const apps=[["overview","⌂","Accueil"],["intel","🧠","Intel"],["mails","✉","Mail"],["social","🌐","Réseau"],["word","📄","Word"],["sheets","📊","Sheets"],["browser","🌍","Browser"],["photos","🖼️","Gallery"],["terminal","〉_","Terminal"],["mission","🎛️","Mission"]];
+  $("appDock").innerHTML=apps.map(a=>'<button class="dock-btn" data-dock="'+a[0]+'">'+a[1]+'<small>'+a[2]+'</small></button>').join("");
+  document.querySelectorAll("[data-dock]").forEach(b=>b.onclick=()=>hydraGo(b.dataset.dock));
+}
+function buildSearchIndex(){
+  return [
+    ["Emilie","Personnage · Finance","mails"],["Fabrice","Personnage · Archives","forensic"],["2,3 M€","Virement suspect","virements"],["HYDRA-23MIRROR-021","Référence financière","forensic"],["Protocole Miroir","Dossier central","intel"],["Fragment 21","Fragment classifié","classified"],["Archive originale","Preuve Fabrice","locker"],["Yoan","Sabotage repenti","dossiers"],["Hydra-Core","Noyau du protocole","aicore"],["Milo","Chien détecteur","dossiers"],["Snow","Chat détecteur","dossiers"],["Alpha","Signal fictionnel","lab"],["Omega","Signal fictionnel","lab"]
+  ];
+}
+function renderGlobalSearch(){
+  const q=String($("hydraSearch")?.value||"").trim().toLowerCase();
+  if(!q){$("hydraSearchResults").innerHTML="";return}
+  const hits=buildSearchIndex().filter(x=>(x[0]+" "+x[1]).toLowerCase().includes(q)).slice(0,8);
+  $("hydraSearchResults").innerHTML='<div class="search-results">'+(hits.length?hits.map(x=>'<div class="search-result" data-search-tab="'+x[2]+'"><b>'+esc(x[0])+'</b><small>'+esc(x[1])+'</small></div>').join(""):'<div class="search-result"><b>Aucun résultat</b><small>Essaie Emilie, Miroir, 2,3 M€, archive…</small></div>')+'</div>';
+  document.querySelectorAll("[data-search-tab]").forEach(b=>b.onclick=()=>{hydraGo(b.dataset.searchTab);$("hydraSearch").value="";$("hydraSearchResults").innerHTML=""});
+}
+function initGlobalSearch(){
+  if(window.__searchInit)return;window.__searchInit=true;
+  $("hydraSearch").addEventListener("input",renderGlobalSearch);$("hydraSearchBtn").onclick=renderGlobalSearch;
+  $("hydraSearch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();renderGlobalSearch()}if(e.key==="Escape"){$("hydraSearch").value="";renderGlobalSearch()}});
+}
+function browserPageFor(url){
+  const u=String(url||"").toLowerCase();
+  if(u.includes("finance"))return {title:"HYDRA FINANCE",html:'<div class="web-hero"><div class="kicker">MIRROR FINANCE NETWORK</div><h1>Flux opérationnels</h1><p class="sub">Portail interne fictif — aucune transaction réelle.</p><div class="kpi">2 300 000 €</div><p class="sub">Structure écran · Miroir Holdings · 21:32</p></div><div class="web-grid"><div class="web-card"><div class="sub">RÉFÉRENCE</div><h3>HYDRA-23MIRROR-021</h3></div><div class="web-card"><div class="sub">STATUT</div><h3 class="danger-text">À VÉRIFIER</h3></div><div class="web-card"><div class="sub">ACTION</div><button class="web-link" data-web-open="virements">Ouvrir l'opération →</button></div></div>'};
+  if(u.includes("archive"))return {title:"HYDRA ARCHIVE",html:'<div class="web-hero"><div class="kicker">DIGITAL ARCHIVE</div><h1>Archive Mirror</h1><p class="sub">Une version originale est conservée sous scellé.</p></div><div class="web-grid"><div class="web-card"><div class="sub">ORIGINALE</div><h3>ALT-ORIG</h3><p class="sub">Empreinte de référence.</p></div><div class="web-card"><div class="sub">COPIE</div><h3>MODIFIÉE</h3><p class="sub">Divergence détectée.</p></div><div class="web-card"><div class="sub">ACTION</div><button class="web-link" data-web-open="forensic">Lancer une analyse →</button></div></div>'};
+  if(u.includes("network")||u.includes("social"))return {title:"HYDRA NETWORK",html:'<div class="web-hero"><div class="kicker">SOCIAL INTERNAL</div><h1>HYDRA Network</h1><p class="sub">Actualités des agents et signaux de la mission.</p><div class="web-grid"><div class="web-card"><h3>#ProtocoleMiroir</h3><p class="sub">11 mentions</p></div><div class="web-card"><h3>#2300000EUR</h3><p class="sub">7 mentions</p></div><div class="web-card"><button class="web-link" data-web-open="social">Ouvrir le réseau →</button></div></div></div>'};
+  return {title:"HYDRA INTRANET",html:'<div class="web-hero"><div class="kicker">INTRANET HYDRA</div><h1>Bienvenue sur le réseau interne</h1><p class="sub">Choisis un portail.</p></div><div class="web-grid"><div class="web-card"><h3>Finance</h3><button class="web-link" data-web-url="https://finance.hydra.local">Ouvrir →</button></div><div class="web-card"><h3>Archive</h3><button class="web-link" data-web-url="https://archive.hydra.local">Ouvrir →</button></div><div class="web-card"><h3>Network</h3><button class="web-link" data-web-url="https://network.hydra.local">Ouvrir →</button></div></div>'};
+}
+function renderBrowser(){
+  const url=$("browserUrl").value||"https://intra.hydra.local/dashboard";const page=browserPageFor(url);$("browserPage").innerHTML=page.html;document.querySelectorAll("[data-web-url]").forEach(b=>b.onclick=()=>{$("browserUrl").value=b.dataset.webUrl;renderBrowser()});document.querySelectorAll("[data-web-open]").forEach(b=>b.onclick=()=>hydraGo(b.dataset.webOpen));
+}
+function initBrowser(){if(window.__browserInit)return;window.__browserInit=true;$("browserGo").onclick=renderBrowser;$("browserUrl").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();renderBrowser()}});renderBrowser()}
+function deterministicBits(text){
+  let seed=0;for(let i=0;i<text.length;i++)seed=(seed*31+text.charCodeAt(i))>>>0;return()=>{seed=(1664525*seed+1013904223)>>>0;return seed%2};
+}
+function makeHydraVisualCode(text){
+  const next=deterministicBits(text);const size=21;const cells=[];const reserved=new Set();
+  const mark=(x,y)=>{for(let yy=0;yy<7;yy++)for(let xx=0;xx<7;xx++){const edge=xx===0||yy===0||xx===6||yy===6,inner=xx>=2&&xx<=4&&yy>=2&&yy<=4;cells.push('<span class="qr-cell '+((edge||inner)?"on":"")+'"></span>');reserved.add((x+xx)+','+(y+yy))}};
+  const grid=Array.from({length:size},()=>Array(size).fill(false));
+  const finder=(ox,oy)=>{for(let y=0;y<7;y++)for(let x=0;x<7;x++)grid[oy+y][ox+x]=(x===0||x===6||y===0||y===6||(x>=2&&x<=4&&y>=2&&y<=4))};
+  finder(0,0);finder(14,0);finder(0,14);let count=0;
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){if((x<7&&y<7)||(x>=14&&y<7)||(x<7&&y>=14))continue;grid[y][x]=next()?true:false;count++}
+  return '<div class="qr-grid">'+grid.flat().map(v=>'<span class="qr-cell '+(v?"on":"")+'"></span>').join("")+'</div>';
+}
+function qrEntries(){return [["QR-MIROIR","MIROIR-21","Déverrouillage registre Miroir"],["QR-OMEGA","OMEGA","Niveau final"],["QR-CORE","CORE","Architecture originale"],["QR-FRAGMENT","FRAGMENT21","Fragment 21"]]}
+function renderQr(selected=window.__qrSelected||"QR-MIROIR"){
+  window.__qrSelected=selected;const x=qrEntries().find(v=>v[0]===selected)||qrEntries()[0];$("qrVisual").innerHTML=makeHydraVisualCode(x[1]);$("qrCaption").innerHTML='<b>'+esc(x[0])+'</b><br><span class="sub">'+esc(x[2])+' · clé '+esc(x[1])+'</span>';$("qrHistory").innerHTML=qrEntries().map(v=>'<div class="qr-history-item" data-qr="'+v[0]+'"><b>'+v[0]+'</b><div class="panel-muted">'+v[2]+'</div></div>').join("");document.querySelectorAll("[data-qr]").forEach(b=>b.onclick=()=>renderQr(b.dataset.qr))}
+function initQr(){if(window.__qrInit)return;window.__qrInit=true;renderQr();$("qrGenerate").onclick=()=>renderQr();$("qrSimulate").onclick=()=>{const x=qrEntries().find(v=>v[0]===window.__qrSelected)||qrEntries()[0];if(x[1]==="MIROIR-21"){hydraAddUnlock("MIROIR");hydraAddUnlock("FRAGMENT21")}if(x[1]==="OMEGA")hydraAddUnlock("OMEGA");if(x[1]==="CORE")hydraAddUnlock("CORE");if(x[1]==="FRAGMENT21")hydraAddUnlock("FRAGMENT21");renderClassified();renderEvidenceLocker();pushSignal("Code visuel "+x[0]+" validé.","QR");toast("Scan simulé : accès narratif accordé.")}}
+function renderGallery(){
+  const items=[["CAM-01","Centre Hydra","Fragment IA 18 reçu",true],["CAM-02","Archive","Fabrice sécurise l'original",true],["CAM-03","Finance","Mouvement 2,3 M€",true],["CAM-04","Miroir","Signal intermittent",hydraHasUnlock("OMEGA")],["E-06","Livre Ancien","Page manquante",hydraHasUnlock("CORE")],["E-07","Dossier milliardaire","Document final",hydraHasUnlock("OMEGA")]];
+  $("galleryGrid").innerHTML=items.map(x=>'<article class="gallery-item"><span class="gallery-badge">● FICTION REC</span><div class="gallery-noise '+(x[3]?"":"censor")+'"></div><div class="gallery-content">'+esc(x[0])+'<br>'+esc(x[1])+'<br><small>'+esc(x[2])+'</small></div><div class="gallery-foot"><span class="panel-muted">'+(x[3]?"VISIBLE":"VERROUILLÉ")+'</span><span class="reveal-stamp">'+(x[3]?"OUVRIR":"CLASSIFIÉ")+'</span></div></article>').join("");
+}
+function renderMission(){
+  const phase=phaseLabel(cfg.experience?.phase||"before"),alerts=Number(localStorage.getItem("hydra_incident_escalation")||0),unlocks=hydraUnlocks().length;
+  $("missionCards").innerHTML=[["PROTOCOLE",phase,"Phase actuelle"],["ALERTES",String(alerts),"Escalades locales"],["ACCÈS",String(unlocks),"Clés déverrouillées"],["MAIL","ACTIF","Messagerie de scène"],["FINANCE","2,3 M€","Piste prioritaire"],["CORE","ONLINE","Moteur de simulation"],["RÉSEAU","ACTIF","HYDRA Network"],["BUREAUTIQUE","ACTIVE","Word + Sheets + Drive"],["SURVEILLANCE","4 FLUX","Caméras fictives"],["PROGRESSION",String(Math.min(100,35+unlocks*12))+" %","Score global narratif"],["PHASE FINALE","21:30","Accusation finale"],["SECURITY","SECURE","Simulation locale"]].map(x=>'<article class="card"><div class="sub">'+esc(x[0])+'</div><h3 style="margin:7px 0">'+esc(x[1])+'</h3><div class="panel-muted">'+esc(x[2])+'</div></article>').join("");
+}
+function initIncidentMode(){
+  if(window.__incidentModeInit)return;window.__incidentModeInit=true;
+  $("incidentModeOpen").onclick=()=>{const m=$("incidentMode");m.classList.add("active");$("incidentModeFeed").innerHTML=["HYDRA-CORE : priorité maximale.","Finance : recoupement suspendu.","Archive : mode lecture seule.","Surveillance : 4 flux synchronisés.","Direction : protocole d'urgence narratif activé."].map(x=>'<div>'+x+'</div>').join("")};
+  $("incidentModeClose").onclick=()=>$("incidentMode").classList.remove("active");
+  $("incidentModeSignal").onclick=()=>{pushSignal("SIGNAL D’URGENCE ÉMIS PAR LA DIRECTION.","INCIDENT");toast("Signal d'urgence envoyé dans la simulation.")};
+}
+
+function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();renderOsShell();renderIntel();renderClassified();renderSignal();renderForensic();initPuzzle();renderComms();renderRadio();renderMap();renderTrust();renderIncidents();renderLab();renderEvidenceLocker();initTerminal();renderSurveillance();renderNews();renderProgress();renderAICore();initOsShell();initAdvancedUi();initSocial();initWord();initSheets();renderDrive();renderCalendar();renderContacts();initNotes();renderDock();initGlobalSearch();initBrowser();renderGallery();initQr();renderMission();initIncidentMode();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
 async function saveLive(){
   try{
     const next=JSON.parse(JSON.stringify(cfg));
