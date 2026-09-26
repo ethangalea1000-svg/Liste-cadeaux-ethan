@@ -267,6 +267,28 @@
         </div>
       </div>
       <div class="meta">Le programme (fonction 3) reste caché tant que « Publier le programme » n’est pas activé.</div>
+      <div class="panel" style="margin-top:14px;background:#101525;color:#fff;border-color:#26364a">
+        <h3 style="margin-top:0">🛰️ Pilotage Hydra — phases & scène</h3>
+        <div class="birthday-grid">
+          <div><label class="meta" style="color:#aebed0">Phase visible aux invités</label>
+            <select id="hydraPhaseSelect">
+              <option value="before">AVANT — préparation</option>
+              <option value="live">LIVE — enquête active</option>
+              <option value="after">APRÈS — débriefing</option>
+            </select>
+          </div>
+          <div><label class="meta" style="color:#aebed0">Zone active</label><input id="hydraActiveZone" maxlength="100" placeholder="Ex. Zone Omega"></div>
+          <div><label class="meta" style="color:#aebed0">Alerte live</label><input id="hydraAlertMessage" maxlength="240" placeholder="Message d’alerte (optionnel)"></div>
+          <div><label class="meta" style="color:#aebed0">Vote live</label><input id="hydraVoteTitle" maxlength="160" placeholder="Titre du vote (optionnel)"></div>
+          <div class="full actions">
+            <button class="btn" onclick="setHydraPhase('before')">🟢 Ouvrir avant</button>
+            <button class="btn danger" onclick="setHydraPhase('live')">🔴 Démarrer HYDRA</button>
+            <button class="btn success" onclick="setHydraPhase('after')">🔵 Passer au débrief</button>
+            <button class="btn" onclick="saveHydraLiveState()">💾 Enregistrer scène</button>
+          </div>
+        </div>
+        <div id="hydraPhaseStatus" class="meta" style="color:#aebed0;margin-top:8px">Phase non chargée.</div>
+      </div>
     </div>
 
     <div class="panel" style="margin-bottom:14px">
@@ -912,6 +934,11 @@ async function loadBirthdayAdmin(){
     $("birthdayModeEnabled").checked=cfg.birthday_mode===true;
     $("birthdayScheduleVisible").checked=cfg.schedule_visible===true;
     $("birthdayConfigEditor").value=JSON.stringify(cfg,null,2);
+    $("hydraPhaseSelect").value=cfg.experience?.phase||"before";
+    $("hydraActiveZone").value=cfg.murder_party?.live?.active_zone||"";
+    $("hydraAlertMessage").value=cfg.murder_party?.live?.alert?.message||"";
+    $("hydraVoteTitle").value=cfg.murder_party?.live?.vote?.title||"";
+    $("hydraPhaseStatus").textContent="Phase actuelle : "+(cfg.experience?.phase||"before")+" · dernière activation : "+(cfg.experience?.phase_started_at||"—");
     renderHydraMasterDossier(cfg);
     const players=cfg.murder_party?.players||[];
     $("hydraPlayers").innerHTML=players.length?players.map((p,i)=>'<article class="item hydra-player"><div><strong>'+esc(p.name||"")+'</strong> · <span class="badge">'+esc(p.role||"")+'</span><div class="sub">'+esc(p.function||"")+'</div><div class="sub" style="margin-top:7px"><strong>👕 Tenue parfaite :</strong> '+esc(p.tenue_parfaite||"Non renseignée")+'</div><div class="sub" style="margin-top:7px"><strong>Document :</strong> '+esc(p.special||"")+'</div><div class="sub" style="margin-top:4px"><strong>Fragment :</strong> '+esc(p.fragment||"")+'</div></div><button class="btn" onclick="copyHydra('+i+')">📋 Copier</button></article>').join(""):empty("Aucun dossier Hydra.");
@@ -927,6 +954,43 @@ async function saveBirthdayQuick(){
     $("birthdayConfigEditor").value=JSON.stringify(cfg,null,2);
     toast("Configuration anniversaire enregistrée.");
   }catch(e){toast(e.message)}
+}
+async function saveHydraExperienceConfig(mutator){
+  const cfg=await getBirthdayConfig();
+  cfg.experience=Object.assign({},cfg.experience||{});
+  cfg.murder_party=Object.assign({},cfg.murder_party||{});
+  cfg.murder_party.live=Object.assign({},cfg.murder_party.live||{});
+  mutator(cfg);
+  await rpc("admin_save_birthday_config",{p_settings:cfg});
+  $("birthdayConfigEditor").value=JSON.stringify(cfg,null,2);
+  renderHydraMasterDossier(cfg);
+  toast("Configuration Hydra enregistrée.");
+}
+async function setHydraPhase(phase){
+  try{
+    await saveHydraExperienceConfig(cfg=>{
+      cfg.experience.phase=phase;
+      cfg.experience.phase_started_at=new Date().toISOString();
+    });
+    await loadBirthdayAdmin();
+  }catch(e){toast("Impossible de changer la phase : "+e.message)}
+}
+async function saveHydraLiveState(){
+  try{
+    await saveHydraExperienceConfig(cfg=>{
+      cfg.murder_party.live.status_text=cfg.experience?.phase==="live"?"ENQUÊTE ACTIVE":"Préparation";
+      cfg.murder_party.live.active_zone=$("hydraActiveZone").value.trim();
+      cfg.murder_party.live.alert={
+        enabled:!!$("hydraAlertMessage").value.trim(),
+        message:$("hydraAlertMessage").value.trim()
+      };
+      cfg.murder_party.live.vote={
+        enabled:!!$("hydraVoteTitle").value.trim(),
+        title:$("hydraVoteTitle").value.trim()
+      };
+    });
+    await loadBirthdayAdmin();
+  }catch(e){toast("Impossible d’enregistrer la scène : "+e.message)}
 }
 async function deployBirthdaySchedule(visible){
   try{
