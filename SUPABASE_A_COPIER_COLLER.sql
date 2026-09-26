@@ -2856,7 +2856,7 @@ returns table(
 language plpgsql
 security definer
 set search_path = public
-as $
+as $$
 declare
   v_code_exists boolean;
   v_name text;
@@ -2950,7 +2950,7 @@ begin
   where haa.access_id=p_access_id
   order by haa.created_at asc;
 end;
-$;
+$$;
 
 grant execute on function public.admin_sync_hydra_access_assignments(bigint,jsonb) to anon;
 
