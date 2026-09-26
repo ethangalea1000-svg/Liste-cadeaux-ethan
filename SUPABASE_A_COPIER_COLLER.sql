@@ -4112,3 +4112,87 @@ $hydrasingle$;
 grant execute on function public.get_my_hydra_dossier(text,text) to anon;
 
 notify pgrst,'reload schema';
+
+
+-- ============================================================
+-- FIX IMMÉDIAT HYDRA : RPC MULTI-FICHES
+-- À exécuter si Supabase indique :
+-- "Could not find the function public.get_my_hydra_dossiers(p_code)"
+
+drop function if exists public.get_my_hydra_dossiers(text);
+
+create or replace function public.get_my_hydra_dossiers(
+  p_code text
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path=public
+as $hydramultifinal$
+declare
+  v_access_id bigint;
+  v_legacy_name text;
+  v_players jsonb;
+  v_result jsonb := '[]'::jsonb;
+  v_name text;
+  v_player jsonb;
+begin
+  select lac.id, lac.hydra_player_name
+  into v_access_id, v_legacy_name
+  from public.list_access_codes lac
+  where lac.active=true
+    and lac.code=trim(coalesce(p_code,''))
+  limit 1;
+
+  if v_access_id is null then
+    raise exception 'Accès refusé.' using errcode='42501';
+  end if;
+
+  select bc.settings->'murder_party'->'players'
+  into v_players
+  from public.birthday_config bc
+  where bc.id=1;
+
+  for v_name in
+    select haa.hydra_player_name
+    from public.hydra_access_assignments haa
+    where haa.access_id=v_access_id
+      and haa.active=true
+    order by haa.created_at asc
+  loop
+    select p
+    into v_player
+    from jsonb_array_elements(coalesce(v_players,'[]'::jsonb)) p
+    where lower(trim(p->>'name'))=lower(trim(v_name))
+    limit 1;
+
+    if v_player is not null then
+      v_result := v_result || jsonb_build_array(v_player);
+    end if;
+  end loop;
+
+  if jsonb_array_length(v_result)=0
+     and coalesce(trim(v_legacy_name),'') <> '' then
+    select p
+    into v_player
+    from jsonb_array_elements(coalesce(v_players,'[]'::jsonb)) p
+    where lower(trim(p->>'name'))=lower(trim(v_legacy_name))
+    limit 1;
+
+    if v_player is not null then
+      v_result := jsonb_build_array(v_player);
+    end if;
+  end if;
+
+  return v_result;
+end;
+$hydramultifinal$;
+
+grant execute on function public.get_my_hydra_dossiers(text) to anon;
+
+notify pgrst,'reload schema';
+
+select
+  'HYDRA_MULTI_RPC_OK' as hydra_multi_status,
+  to_regprocedure('public.get_my_hydra_dossiers(text)') is not null as rpc_exists,
+  (select count(*) from public.hydra_access_assignments where active=true) as active_assignments;
