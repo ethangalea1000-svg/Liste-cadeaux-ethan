@@ -397,6 +397,7 @@ function comparePricesUrl(g){
 }
 const GIFT_AI_URL=SUPABASE_URL+"/functions/v1/gift-search";
 function escAny(value){return escapeHtml(String(value??""))}
+function esc(value){return escapeHtml(String(value??""))}
 function aiResultHtml(result){
   const offers=Array.isArray(result.offers)?result.offers.filter(x=>x&&x.url).slice(0,8):[];
   const images=Array.isArray(result.images)?result.images.filter(x=>x&&x.imageUrl&&x.sourceUrl).slice(0,6):[];
