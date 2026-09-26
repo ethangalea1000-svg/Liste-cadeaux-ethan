@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17192a">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https://ckasbsnzxgwfwfnctioe.supabase.co; media-src 'self' blob: https:; frame-src 'self'">
 <script>
   (function(){
     const key = "__scroll_position__:" + location.pathname + location.search;
@@ -66,12 +69,12 @@ footer{max-width:900px;margin:0 auto;padding:0 20px 35px;color:var(--muted);font
   footer{padding:0 10px 25px}
   .back{display:inline-block;padding:7px 0}
 }
-</style>
+.skip-link{position:fixed;left:12px;top:12px;z-index:9999;transform:translateY(-180%);padding:10px 14px;border-radius:10px;background:#fff;color:#17192a;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}.skip-link:focus{transform:none}a:focus-visible{outline:3px solid #8f92ff;outline-offset:2px}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}\n</style>
 </head>
-<body>
+<body><a class="skip-link" href="#privacyMain">Aller directement au contenu</a>
 <header><div class="wrap"><a class="back" href="index.html">← Retour à la liste</a><h1>🔒 Confidentialité</h1><div>Informations sur les données personnelles et leur utilisation sur ce site.</div></div></header>
 
-<main class="wrap">
+<main class="wrap" id="privacyMain">
 <section class="card">
 <h2>1. À quoi sert cette page ?</h2>
 <p>Cette page décrit, de manière adaptée à ce projet personnel, quelles informations peuvent être demandées, enregistrées ou transmises lorsque tu utilises la liste de cadeaux, les demandes d’accès, la communauté, les modules d’anniversaire ou l’extension associée.</p>
