@@ -3962,10 +3962,10 @@ begin
       where haa.access_id=p_access_id
         and lower(trim(haa.hydra_player_name))=lower(v_name)
     ) then
-      update public.hydra_access_assignments
+      update public.hydra_access_assignments haa
       set active=true
-      where access_id=p_access_id
-        and lower(trim(hydra_player_name))=lower(v_name);
+      where haa.access_id=p_access_id
+        and lower(trim(haa.hydra_player_name))=lower(v_name);
     else
       loop
         v_private_token :=
