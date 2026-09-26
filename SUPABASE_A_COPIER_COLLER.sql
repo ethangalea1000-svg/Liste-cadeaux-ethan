@@ -913,6 +913,7 @@ $peopleaccess$;
 
 grant execute on function public.admin_list_people_access() to anon;
 
+drop function if exists public.admin_list_access_usage();
 create or replace function public.admin_list_access_usage()
 returns table(
   access_id bigint,
@@ -920,6 +921,7 @@ returns table(
   access_code text,
   active_access boolean,
   is_admin_access boolean,
+  hydra_player_name text,
   authorization_count bigint,
   last_authorized_at timestamptz,
   duplicate_count_for_name bigint
@@ -938,6 +940,7 @@ begin
     lac.code as access_code,
     lac.active as active_access,
     lac.is_admin as is_admin_access,
+    lac.hydra_player_name,
     count(la.id)::bigint as authorization_count,
     max(la.authorized_at) as last_authorized_at,
     (
@@ -948,7 +951,7 @@ begin
   from public.list_access_codes as lac
   left join public.list_access_authorizations as la
     on la.access_id = lac.id
-  group by lac.id,lac.label,lac.code,lac.active,lac.is_admin
+  group by lac.id,lac.label,lac.code,lac.active,lac.is_admin,lac.hydra_player_name
   order by lac.created_at desc;
 end;
 $accessusage$;
@@ -1703,6 +1706,9 @@ revoke all on table public.list_access_authorizations from anon, authenticated;
 alter table public.list_access_codes enable row level security;
 revoke all on table public.list_access_codes from anon, authenticated;
 alter table public.list_access_codes add column if not exists is_admin boolean not null default false;
+alter table public.list_access_codes
+  add column if not exists hydra_player_name text;
+
 
 -- ============================================================
 -- DEMANDES DE CRÉATION D'ACCÈS
@@ -2712,6 +2718,54 @@ begin
 $$;
 
 grant execute on function public.admin_set_access_code_status(bigint,boolean) to anon;
+-- ============================================================
+-- ADMIN : attribution explicite d'un dossier Hydra à un accès
+-- ============================================================
+
+drop function if exists public.admin_assign_hydra_access(bigint,text);
+create or replace function public.admin_assign_hydra_access(
+  p_access_id bigint,
+  p_hydra_player_name text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $hydraassign$
+declare
+  v_player_name text := nullif(trim(coalesce(p_hydra_player_name,'')),'');
+  v_exists boolean := false;
+begin
+  perform public.assert_admin_header();
+
+  if not exists(select 1 from public.list_access_codes where id=p_access_id) then
+    raise exception 'Accès introuvable.';
+  end if;
+
+  if v_player_name is not null then
+    select exists(
+      select 1
+      from jsonb_array_elements(
+        coalesce((select settings->'murder_party'->'players' from public.birthday_config where id=1),'[]'::jsonb)
+      ) p
+      where lower(trim(p->>'name')) = lower(v_player_name)
+    ) into v_exists;
+
+    if not v_exists then
+      raise exception 'Joueur Hydra introuvable.';
+    end if;
+  end if;
+
+  update public.list_access_codes
+  set hydra_player_name = v_player_name
+  where id = p_access_id;
+
+  return found;
+end;
+$hydraassign$;
+
+grant execute on function public.admin_assign_hydra_access(bigint,text) to anon;
+
 
 create or replace function public.admin_delete_access_code(p_id bigint)
 returns boolean language plpgsql security definer set search_path=public
@@ -3488,11 +3542,12 @@ set search_path=public
 as $hydrapublic$
 declare
   v_name text;
+  v_hydra_player_name text;
   v_players jsonb;
   v_player jsonb;
 begin
-  select label
-  into v_name
+  select label, hydra_player_name
+  into v_name, v_hydra_player_name
   from public.list_access_codes
   where active=true and code=trim(coalesce(p_code,''))
   limit 1;
@@ -3517,9 +3572,16 @@ begin
   select value
   into v_player
   from jsonb_array_elements(coalesce(v_players,'[]'::jsonb))
-  where lower(trim(value->>'name')) = lower(trim(v_name))
-     or lower(trim(v_name)) like lower(trim(value->>'name')) || '%'
-  order by case when lower(trim(value->>'name')) = lower(trim(v_name)) then 0 else 1 end
+  where (v_hydra_player_name is not null and lower(trim(value->>'name')) = lower(trim(v_hydra_player_name)))
+     or (v_hydra_player_name is null and (
+       lower(trim(value->>'name')) = lower(trim(v_name))
+       or lower(trim(v_name)) like lower(trim(value->>'name')) || '%'
+     ))
+  order by case
+    when v_hydra_player_name is not null and lower(trim(value->>'name')) = lower(trim(v_hydra_player_name)) then 0
+    when lower(trim(value->>'name')) = lower(trim(v_name)) then 1
+    else 2
+  end
   limit 1;
 
   return coalesce(v_player,'{}'::jsonb);
