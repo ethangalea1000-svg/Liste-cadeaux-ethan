@@ -4811,3 +4811,38 @@ select
   to_regprocedure('public.create_private_community_post(text,text,text,jsonb)') is not null as private_community_write_rpc,
   to_regprocedure('public.toggle_private_community_reaction(text,bigint,text)') is not null as private_reaction_rpc,
   to_regprocedure('public.delete_private_community_post(text,bigint)') is not null as private_community_delete_rpc;
+
+
+-- DIAGNOSTIC FINAL DE SÉCURITÉ — À EXÉCUTER APRÈS TOUT LE FICHIER
+select
+  'FINAL_SECURITY_CHECK' as status,
+  has_table_privilege('anon','public.reservations','select') as reservations_select,
+  has_table_privilege('anon','public.reservations','insert') as reservations_insert,
+  has_table_privilege('anon','public.reservations','delete') as reservations_delete,
+  has_table_privilege('anon','public.gift_suggestions','select') as suggestions_select,
+  has_table_privilege('anon','public.gift_suggestions','insert') as suggestions_insert,
+  has_table_privilege('anon','public.fundraisers','select') as fundraisers_select,
+  has_table_privilege('anon','public.fundraisers','insert') as fundraisers_insert,
+  has_table_privilege('anon','public.contributions','select') as contributions_select,
+  has_table_privilege('anon','public.contributions','insert') as contributions_insert,
+  has_table_privilege('anon','public.ideas','select') as ideas_select,
+  has_table_privilege('anon','public.ideas','insert') as ideas_insert,
+  has_table_privilege('anon','public.messages','insert') as messages_insert,
+  has_table_privilege('anon','public.community_posts','select') as community_select,
+  has_table_privilege('anon','public.community_posts','insert') as community_insert,
+  has_table_privilege('anon','public.community_reactions','select') as reactions_select,
+  has_table_privilege('anon','public.community_reactions','insert') as reactions_insert,
+  (
+    to_regprocedure('public.get_private_reservations(text)') is not null
+    and to_regprocedure('public.reserve_private_gift(text,text,text)') is not null
+    and to_regprocedure('public.cancel_private_reservation(text,text,text)') is not null
+    and to_regprocedure('public.get_private_gift_suggestions(text)') is not null
+    and to_regprocedure('public.submit_private_gift_suggestion(text,text,text,text)') is not null
+    and to_regprocedure('public.get_private_fundraisers(text)') is not null
+    and to_regprocedure('public.submit_private_fundraiser(text,text,text,numeric)') is not null
+    and to_regprocedure('public.get_private_contributions(text,bigint)') is not null
+    and to_regprocedure('public.submit_private_contribution(text,numeric,text,bigint)') is not null
+    and to_regprocedure('public.get_private_ideas(text)') is not null
+    and to_regprocedure('public.submit_private_idea(text,text)') is not null
+    and to_regprocedure('public.submit_private_message(text,text)') is not null
+  ) as private_rpc_set_complete;
