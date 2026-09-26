@@ -31,6 +31,36 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
 .empty{padding:26px;text-align:center;border:1px dashed #2e3c53;border-radius:14px;color:var(--muted)}.toast{position:fixed;right:18px;bottom:18px;z-index:99;background:#fff;color:#111;padding:11px 14px;border-radius:12px;box-shadow:0 15px 35px rgba(0,0,0,.35);opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cards,.documents,.live{grid-template-columns:1fr}}
 @media(max-width:620px){.wrap{padding:0 11px}.toprow{align-items:flex-start;flex-direction:column;padding:12px 0}.tabs{top:80px}.grid{grid-template-columns:1fr 1fr}.hero{padding-top:24px}.mail{grid-template-columns:1fr}.event{grid-template-columns:72px 1fr}.route{grid-template-columns:1fr!important}.routeArrow{transform:rotate(90deg)}}
+
+/* === HYDRA OS EXPANSION === */
+.os-shell{margin:0 0 16px;padding:14px;border:1px solid #263b59;border-radius:18px;background:linear-gradient(180deg,#0e1727,#09111d);box-shadow:0 18px 45px rgba(0,0,0,.22)}
+.os-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.os-brand{display:flex;align-items:center;gap:10px}.os-mark{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#5b63ff,#25c7ff);font-weight:950}.os-brand b{letter-spacing:.08em;font-size:12px}.os-brand small{display:block;color:#7589a6;font-size:10px;margin-top:2px}
+.os-status{display:flex;gap:7px;flex-wrap:wrap}.os-chip{padding:6px 9px;border-radius:999px;border:1px solid #2c405d;background:#101c2d;color:#a9bcda;font-size:10px;font-weight:900}.os-chip.live{color:#8df0c7;border-color:#245b48;background:#0e241c}.os-chip.warn{color:#ffd18d;border-color:#614a27;background:#21180c}
+.os-launch{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.os-launch button{border:1px solid #2f4462;background:#111b2c;color:#dfe9fb;border-radius:10px;padding:8px 10px;font-weight:850;cursor:pointer}.os-launch button:hover{border-color:#5e78a6}
+.os-command{display:flex;gap:8px;margin-top:10px}.os-command input{flex:1}.os-time{font:800 12px ui-monospace,SFMono-Regular,Consolas,monospace;color:#80ddff;min-width:86px;text-align:right;padding:12px 2px}
+.advanced-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.advanced-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.panel-title h3{margin:0}.panel-muted{font-size:11px;color:#8093ae}
+.intel-layout{display:grid;grid-template-columns:1.4fr .8fr;gap:12px}.intel-canvas{min-height:430px;overflow:auto;border:1px solid #253752;border-radius:16px;background:radial-gradient(circle at 50% 50%,#132642 0,#09111c 65%);padding:8px}.intel-canvas svg{width:100%;min-width:720px;height:420px}.graph-link{stroke:#365074;stroke-width:2;opacity:.8}.graph-link.hot{stroke:#7b86ff;stroke-width:3}.graph-node{cursor:pointer}.graph-node circle{fill:#152238;stroke:#436086;stroke-width:2}.graph-node.hot circle{fill:#272451;stroke:#8a90ff}.graph-node text{fill:#dce7f8;font-size:11px;font-weight:800;text-anchor:middle}.intel-detail{min-height:430px}.intel-detail .big{font-size:26px;font-weight:950;margin:6px 0}.intel-tag{display:inline-flex;padding:4px 8px;border-radius:999px;background:#141f32;border:1px solid #334863;color:#a9bbd5;font-size:10px;font-weight:900}.intel-kv{display:grid;grid-template-columns:105px 1fr;gap:8px;border-bottom:1px solid #223047;padding:9px 0;font-size:12px}.intel-kv span:first-child{color:#8396b2}
+.classified-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.classified-card{position:relative;min-height:185px}.classified-card.locked{filter:saturate(.55);opacity:.78}.classified-lock{position:absolute;right:13px;top:13px}.level-public{color:#8ee7c1}.level-conf{color:#ffd18d}.level-top{color:#ff9aac}.unlock-line{margin-top:12px;display:flex;gap:8px}.unlock-line input{flex:1}.unlocked-stamp{display:inline-flex;margin-top:10px;padding:4px 7px;border-radius:999px;background:#102820;border:1px solid #1d5c46;color:#8ff0c6;font-size:10px;font-weight:900}
+.signal-feed{display:grid;gap:8px;max-height:430px;overflow:auto}.signal-item{display:grid;grid-template-columns:72px 1fr auto;gap:10px;padding:11px 12px;border:1px solid #243650;border-radius:12px;background:#0e1726}.signal-time{font:800 11px ui-monospace,SFMono-Regular,Consolas,monospace;color:#7edfff}.signal-text{font-size:12px;line-height:1.45}.signal-type{font-size:9px;color:#94a8c5;font-weight:900}
+.forensic-layout{display:grid;grid-template-columns:.7fr 1.3fr;gap:12px}.forensic-list{display:grid;gap:7px}.forensic-btn{border:1px solid #2b3d59;background:#0d1522;color:#dbe6f7;padding:10px;border-radius:11px;text-align:left;cursor:pointer}.forensic-btn.active{background:#26375b;border-color:#657bf4}.forensic-report{min-height:330px}.scan-line{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #233149;font-size:12px}.scan-line span:first-child{color:#8497b3}
+.puzzle-layout{display:grid;grid-template-columns:1fr .8fr;gap:12px}.fragment-bank{display:flex;flex-wrap:wrap;gap:8px;padding:14px;border:1px dashed #355170;border-radius:14px;background:#0b1422;min-height:150px}.p-frag{border:1px solid #435d80;background:#132239;color:#e8f0ff;padding:9px 11px;border-radius:10px;cursor:pointer;font-weight:850}.p-frag.selected{background:#3f50a7;border-color:#7888ff}.sequence{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;padding:10px;border-radius:12px;background:#0b1320;border:1px solid #253752}.seq-pill{padding:7px 9px;border-radius:999px;background:#18283f;border:1px solid #3d5675;font-size:11px}.puzzle-result{margin-top:12px;min-height:46px}.success-box{padding:12px;border-radius:12px;background:#0f2a20;border:1px solid #245e49;color:#99f0cb}.fail-box{padding:12px;border-radius:12px;background:#2a171c;border:1px solid #63313d;color:#ffabb9}
+.comms-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:12px}.contact-list{display:grid;gap:7px}.contact-btn{border:1px solid #2a3c57;background:#0d1522;color:#dbe5f6;padding:10px;border-radius:11px;text-align:left;cursor:pointer}.contact-btn.active{background:#243450;border-color:#6579a8}.comms-log{min-height:310px;padding:14px;border:1px solid #253752;border-radius:15px;background:#09111c}.bubble{max-width:85%;padding:10px 12px;border-radius:13px;margin-bottom:8px;line-height:1.5;font-size:12px}.bubble.hydra{background:#152239;border:1px solid #304967}.bubble.me{background:#263661;border:1px solid #576fac;margin-left:auto}.bubble small{display:block;color:#8297b3;font-size:9px;margin-top:4px}
+.radio-panel{display:grid;grid-template-columns:.8fr 1.2fr;gap:12px}.radio-console{min-height:310px;background:#05090f;border:1px solid #1c2c43;border-radius:16px;padding:16px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#7ef1cc}.radio-console .rx{color:#93baff}.radio-console .tx{color:#ffd48e}
+.map-panel{min-height:430px;overflow:auto;border:1px solid #273a57;border-radius:16px;background:radial-gradient(circle at 50% 50%,#15324a 0,#08101b 70%);padding:7px}.map-panel svg{min-width:820px;width:100%;height:410px}.map-zone{cursor:pointer}.map-zone rect{fill:#111f31;stroke:#3b5675;stroke-width:2}.map-zone.active rect{fill:#25366b;stroke:#7688ff}.map-zone text{fill:#dce7f8;font-size:11px;font-weight:900;text-anchor:middle}.map-path{stroke:#2f6c87;stroke-dasharray:6 7;stroke-width:2;fill:none}
+.matrix-wrap{overflow:auto}.trust-matrix{width:100%;border-collapse:collapse;font-size:11px}.trust-matrix th,.trust-matrix td{border:1px solid #253650;padding:8px;text-align:center}.trust-matrix th{background:#111c2c;color:#a9bbd4;position:sticky;top:0}.trust-matrix td:first-child{font-weight:850;text-align:left}.trust-a{color:#83ecc0}.trust-b{color:#ffd18e}.trust-c{color:#ff98ab}
+.incidents{display:grid;gap:9px}.incident{display:grid;grid-template-columns:70px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid #293b55;border-radius:13px;background:#0d1522}.incident-level{font-size:10px;font-weight:950;text-align:center}.incident-bar{height:8px;border-radius:99px;background:#162238;overflow:hidden;margin-top:6px}.incident-bar i{display:block;height:100%;background:linear-gradient(90deg,#5565f7,#44c7f4);width:0}.incident-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.lab-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.lab-card{min-height:210px}.meter{height:10px;border-radius:99px;background:#172237;overflow:hidden;margin:9px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#586bff,#35d6ff);width:40%}.fictional-note{margin-top:10px;color:#8ba0bb;font-size:10px;line-height:1.5}
+.evidence-locker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.e-slot{min-height:130px;padding:13px;border:1px solid #2b3e59;border-radius:14px;background:linear-gradient(180deg,#101928,#0a111b);cursor:pointer}.e-slot.locked{opacity:.6;filter:saturate(.4)}.e-slot.discovered{border-color:#416d64;background:linear-gradient(180deg,#10241f,#0a1512)}.e-code{font:900 10px ui-monospace,SFMono-Regular,Consolas,monospace;color:#7d9abb}.e-title{font-weight:900;margin-top:8px}.e-foot{margin-top:8px;font-size:10px;color:#7d91ab}
+.terminal{display:grid;grid-template-columns:1fr .7fr;gap:12px}.term-box{background:#04070c;border:1px solid #1c2a40;border-radius:16px;min-height:380px;padding:15px;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#7ce6c5;overflow:auto}.term-line{white-space:pre-wrap}.term-prompt{display:flex;gap:7px;margin-top:10px}.term-prompt span{color:#6f7fff}.term-prompt input{flex:1;background:transparent;border:0;outline:0;color:#eaf3ff;font:inherit}.term-help{min-height:380px}.cmd-chip{display:inline-flex;padding:6px 8px;border:1px solid #314766;border-radius:999px;background:#0d1726;color:#b8c8df;font:10px ui-monospace,SFMono-Regular,Consolas,monospace;margin:4px 4px 0 0;cursor:pointer}
+.surv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cam{position:relative;overflow:hidden;min-height:245px;border:1px solid #293c58;border-radius:16px;background:linear-gradient(135deg,#15212d,#060b11);box-shadow:inset 0 0 80px rgba(48,83,116,.18)}.cam:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 5px,rgba(255,255,255,.025) 6px,transparent 7px);pointer-events:none}.cam-feed{height:100%;display:grid;place-items:center;color:#87a1bc;font:900 14px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;text-align:center}.cam-badge{position:absolute;left:11px;top:10px;padding:4px 7px;background:#4b151f;border:1px solid #8d3d4d;color:#ffafb9;border-radius:999px;font-size:9px;font-weight:950}.cam-time{position:absolute;right:11px;top:10px;color:#9cb0ca;font:900 9px ui-monospace,SFMono-Regular,Consolas,monospace}.cam-controls{position:absolute;left:11px;right:11px;bottom:11px;display:flex;justify-content:space-between;gap:8px}.news-list{display:grid;gap:9px}.news-item{padding:13px;border:1px solid #293b55;border-radius:13px;background:linear-gradient(135deg,#101a2a,#0b111c)}.news-meta{font-size:9px;color:#778ba7;letter-spacing:.08em;font-weight:900}.news-item h3{margin:6px 0}.news-item p{margin:0;color:#c9d5e7;line-height:1.55;font-size:12px}
+.progress-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.progress-card{padding:13px;border:1px solid #293b55;border-radius:13px;background:#0e1624}.progress-top{display:flex;justify-content:space-between;gap:8px}.progress-bar{height:9px;border-radius:99px;background:#172238;overflow:hidden;margin-top:10px}.progress-bar i{display:block;height:100%;background:linear-gradient(90deg,#6a76ff,#34d2ff)}.progress-meta{margin-top:6px;font-size:10px;color:#8195af}
+.ai-grid{display:grid;grid-template-columns:1fr .8fr;gap:12px}.ai-console{min-height:300px;padding:16px;border:1px solid #293d59;border-radius:16px;background:radial-gradient(circle at 20% 10%,#1a2847 0,#09111b 65%)}.ai-result{white-space:pre-wrap;line-height:1.6;color:#dbe7f6}.ai-input{display:flex;gap:8px;margin-top:12px}.ai-input textarea{min-height:110px;resize:vertical}.score-card{display:grid;gap:9px}.score-line{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #253650;font-size:11px}.score-line span:first-child{color:#8295ae}
+.toast.os-toast{background:#0d1727;color:#e9f1ff;border:1px solid #344a69;box-shadow:0 15px 40px rgba(0,0,0,.4)}
+@media(max-width:1000px){.advanced-grid.three,.classified-grid,.lab-grid,.progress-grid,.evidence-locker{grid-template-columns:repeat(2,minmax(0,1fr))}.intel-layout,.forensic-layout,.puzzle-layout,.comms-grid,.radio-panel,.terminal,.ai-grid{grid-template-columns:1fr}.surv-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.advanced-grid,.classified-grid,.lab-grid,.progress-grid,.evidence-locker{grid-template-columns:1fr}.incident{grid-template-columns:1fr}.os-command{flex-wrap:wrap}.os-time{text-align:left}}
+
 </style>
 </head>
 <body>
@@ -55,6 +85,23 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
     <p>Une seule interface pour suivre les indices, les flux financiers, les mails de scène, les dossiers, la chronologie et l’état LIVE de l’enquête.</p>
   </div>
 
+  
+  <div class="os-shell">
+    <div class="os-head">
+      <div class="os-brand"><div class="os-mark">H</div><div><b>HYDRA OS // CONTROL DESK</b><small>PROTOCOLE MIROIR · ENVIRONNEMENT DE SIMULATION</small></div></div>
+      <div class="os-status">
+        <span class="os-chip live" id="osClock">00:00:00</span>
+        <span class="os-chip live">● SECURE</span>
+        <span class="os-chip" id="osPhaseChip">PHASE —</span>
+        <span class="os-chip warn" id="osAlertChip">ALERTES 0</span>
+      </div>
+    </div>
+    <div class="os-launch">
+      <button data-launch="overview">⌂ Dashboard</button><button data-launch="intel">🧠 Intelligence</button><button data-launch="mails">✉ Mail</button><button data-launch="terminal">>_ Terminal</button><button data-launch="locker">📁 Evidence</button><button data-launch="live">● LIVE</button>
+    </div>
+    <div class="os-command"><input id="osGlobalCommand" class="input" placeholder="Commande globale : STATUS, TRACE 2300K, OPEN INTEL, DECRYPT MIROIR…"><button class="btn primary" id="osGlobalRun">Exécuter</button><div class="os-time" id="osLastAction">READY</div></div>
+  </div>
+
   <div class="grid" id="metrics"></div>
 
   <nav class="tabs">
@@ -66,6 +113,24 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
     <button class="tab" data-tab="chrono">Chronologie</button>
     <button class="tab" data-tab="documents">Documents</button>
     <button class="tab" data-tab="live">LIVE</button>
+
+    <button class="tab" data-tab="intel">🧠 Intel</button>
+    <button class="tab" data-tab="classified">🗂️ Classifiés</button>
+    <button class="tab" data-tab="signal">📡 Signal</button>
+    <button class="tab" data-tab="forensic">🔎 Forensique</button>
+    <button class="tab" data-tab="puzzle">🧩 Décryptage</button>
+    <button class="tab" data-tab="comms">💬 Canal</button>
+    <button class="tab" data-tab="radio">📞 Communications</button>
+    <button class="tab" data-tab="map">🛰️ Carte</button>
+    <button class="tab" data-tab="trust">📊 Trust Matrix</button>
+    <button class="tab" data-tab="incidents">🚨 Incidents</button>
+    <button class="tab" data-tab="lab">🧪 Laboratoire</button>
+    <button class="tab" data-tab="locker">📁 Evidence Locker</button>
+    <button class="tab" data-tab="terminal">🖥️ Terminal</button>
+    <button class="tab" data-tab="surveillance">👁️ Surveillance</button>
+    <button class="tab" data-tab="news">📰 Hydra News</button>
+    <button class="tab" data-tab="progress">📈 Progression</button>
+    <button class="tab" data-tab="aicore">🤖 AI Core</button>
   </nav>
 
   <section class="section active" id="overview">
@@ -165,6 +230,92 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
     <div class="card" style="margin-top:12px"><div class="notice" id="liveStatus">État non chargé.</div></div>
   </section>
 </section>
+
+  <section class="section" id="intel">
+    <div class="section-head"><div><h2>🧠 Intelligence Center</h2><div class="sub">Graphe relationnel des personnages, preuves, flux et noyaux narratifs.</div></div><span class="sim-badge">GRAPH ENGINE</span></div>
+    <div class="intel-layout"><div class="intel-canvas" id="intelGraph"></div><aside class="card intel-detail" id="intelDetail"><div class="sub">SÉLECTIONNE UN NŒUD</div><div class="big">Aucune sélection</div><p class="sub">Clique sur une personne, une preuve ou un protocole.</p></aside></div>
+  </section>
+
+  <section class="section" id="classified">
+    <div class="section-head"><div><h2>🗂️ Dossiers classifiés</h2><div class="sub">Accès progressif aux documents de niveau supérieur.</div></div></div>
+    <div class="classified-grid" id="classifiedGrid"></div>
+  </section>
+
+  <section class="section" id="signal">
+    <div class="section-head"><div><h2>📡 Hydra Signal</h2><div class="sub">Flux opérationnel fictionnel avec événements simulés et notifications.</div></div><div class="actions"><button class="btn" id="signalStart">▶ Flux</button><button class="btn" id="signalBurst">⚡ Injecter</button></div></div>
+    <div class="card"><div class="signal-feed" id="signalFeed"></div></div>
+  </section>
+
+  <section class="section" id="forensic">
+    <div class="section-head"><div><h2>🔎 Analyse forensique</h2><div class="sub">Examen narratif de documents, métadonnées fictives et incohérences.</div></div></div>
+    <div class="forensic-layout"><div class="card"><div class="panel-title"><h3>Pièces à examiner</h3></div><div class="forensic-list" id="forensicList"></div></div><div class="card forensic-report" id="forensicReport"></div></div>
+  </section>
+
+  <section class="section" id="puzzle">
+    <div class="section-head"><div><h2>🧩 Puzzle & Décryptage</h2><div class="sub">Remets les fragments dans le bon ordre pour obtenir une clé narrative.</div></div></div>
+    <div class="puzzle-layout"><div class="card"><div class="panel-title"><h3>Fragments</h3><span class="panel-muted">Clique dans l’ordre</span></div><div class="fragment-bank" id="puzzleBank"></div><div style="margin-top:12px"><div class="panel-muted">Séquence choisie</div><div class="sequence" id="puzzleSequence"></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="puzzleCheck">Vérifier</button><button class="btn" id="puzzleReset">Réinitialiser</button></div><div class="puzzle-result" id="puzzleResult"></div></div><aside class="card"><div class="panel-title"><h3>Clé obtenue</h3></div><div class="notice" id="puzzleKey">Aucune clé validée.</div><div class="sub" style="margin-top:12px">Indice narratif : « Ce qui semble être une fin peut n’être qu’une copie. »</div></aside></div>
+  </section>
+
+  <section class="section" id="comms">
+    <div class="section-head"><div><h2>💬 Canal sécurisé</h2><div class="sub">Messagerie interne fictive entre agents du protocole.</div></div></div>
+    <div class="comms-grid"><div class="card"><div class="contact-list" id="contactList"></div></div><div class="card"><div class="panel-title"><h3 id="commsTitle">Canal Hydra</h3><span class="sim-badge">LOCAL</span></div><div class="comms-log" id="commsLog"></div><div class="actions" style="margin-top:10px"><button class="btn" id="commsPing">PING</button><button class="btn primary" id="commsReply">Réponse simulée</button></div></div></div>
+  </section>
+
+  <section class="section" id="radio">
+    <div class="section-head"><div><h2>📞 Communications</h2><div class="sub">Journal radio scénarisé, messages horodatés et lecture terminale fictive.</div></div><span class="sim-badge">RX/TX</span></div>
+    <div class="radio-panel"><div class="radio-console" id="radioConsole"></div><div class="card"><div class="panel-title"><h3>Canaux disponibles</h3></div><div class="actions"><button class="btn" data-radio="CH-01">CH-01 Direction</button><button class="btn" data-radio="CH-03">CH-03 Terrain</button><button class="btn" data-radio="CH-07">CH-07 Archive</button></div><div class="notice" style="margin-top:12px">Les transmissions sont entièrement scénarisées. Aucun appel réel n'est effectué.</div></div></div>
+  </section>
+
+  <section class="section" id="map">
+    <div class="section-head"><div><h2>🛰️ Carte opérationnelle</h2><div class="sub">Carte fictive des zones du protocole avec événements cliquables.</div></div></div>
+    <div class="map-panel" id="opMap"></div><div class="card" style="margin-top:12px" id="mapDetail"><div class="sub">ZONE</div><h3>Aucune zone sélectionnée</h3><p class="sub">Clique sur une zone.</p></div>
+  </section>
+
+  <section class="section" id="trust">
+    <div class="section-head"><div><h2>📊 Trust Matrix</h2><div class="sub">Matrice narrative : alliances, doutes, conflits et flux d'information.</div></div></div>
+    <div class="card matrix-wrap"><table class="trust-matrix" id="trustMatrix"></table></div>
+  </section>
+
+  <section class="section" id="incidents">
+    <div class="section-head"><div><h2>🚨 Incident Center</h2><div class="sub">Suit les anomalies et fait évoluer leur état dans la console.</div></div><button class="btn" id="incidentEscalate">⚠ Escalade générale</button></div>
+    <div class="incidents" id="incidentList"></div>
+  </section>
+
+  <section class="section" id="lab">
+    <div class="section-head"><div><h2>🧪 Laboratoire narratif</h2><div class="sub">Analyse fictionnelle des signaux Alpha/Omega. Aucun produit ni substance réelle n'est utilisé.</div></div></div>
+    <div class="lab-grid" id="labGrid"></div>
+  </section>
+
+  <section class="section" id="locker">
+    <div class="section-head"><div><h2>📁 Evidence Locker</h2><div class="sub">Coffre-fort des preuves. Les cases se débloquent au fil des interactions.</div></div><button class="btn" id="lockerReveal">↻ Rescanner</button></div>
+    <div class="evidence-locker" id="evidenceLocker"></div>
+  </section>
+
+  <section class="section" id="terminal">
+    <div class="section-head"><div><h2>🖥️ Terminal Hydra</h2><div class="sub">Console de commandes entièrement fictive.</div></div><span class="sim-badge">LOCAL SIM</span></div>
+    <div class="terminal"><div class="term-box" id="terminalOutput"><div class="term-line">HYDRA-CORE boot sequence…</div><div class="term-line">Type HELP for available commands.</div><div class="term-prompt"><span>HYDRA&gt;</span><input id="terminalInput" autocomplete="off" spellcheck="false" placeholder="STATUS"></div></div><aside class="card term-help"><div class="panel-title"><h3>Commandes rapides</h3></div><div id="termChips"></div><div class="notice" style="margin-top:13px">Le terminal ne touche à aucun système réel. Il pilote uniquement la simulation du dossier.</div></aside></div>
+  </section>
+
+  <section class="section" id="surveillance">
+    <div class="section-head"><div><h2>👁️ Surveillance</h2><div class="sub">Faux flux vidéo de la mission, avec événements scénarisés.</div></div><span class="sim-badge">SIMULATED FEEDS</span></div>
+    <div class="surv-grid" id="surveillanceGrid"></div>
+  </section>
+
+  <section class="section" id="news">
+    <div class="section-head"><div><h2>📰 Hydra News</h2><div class="sub">Journal interne confidentiel des événements de la soirée.</div></div><button class="btn" id="newsRefresh">↻ Actualiser</button></div>
+    <div class="news-list" id="newsList"></div>
+  </section>
+
+  <section class="section" id="progress">
+    <div class="section-head"><div><h2>📈 Progression</h2><div class="sub">État narratif des agents, indices, fragments et missions.</div></div></div>
+    <div class="progress-grid" id="progressGrid"></div>
+  </section>
+
+  <section class="section" id="aicore">
+    <div class="section-head"><div><h2>🤖 HYDRA-CORE // AI ANALYSIS ENGINE</h2><div class="sub">Moteur d'analyse fictif basé sur des règles scénarisées.</div></div><span class="sim-badge">NO EXTERNAL AI</span></div>
+    <div class="ai-grid"><div class="ai-console"><div class="sub">CONSOLE</div><div class="ai-result" id="aiResult">Prêt. Soumets un nom, un indice ou une question narrative.</div><div class="ai-input"><textarea id="aiInput" class="input" placeholder="Ex. Analyse Emilie, relie le virement au Protocole Miroir…"></textarea><button class="btn primary" id="aiRun">Analyser</button></div></div><aside class="card score-card" id="aiScore"></aside></div>
+  </section>
+
 <footer class="foot wrap">HYDRA INTERACTIVE • accès administrateur • les données affichées proviennent de la configuration Hydra actuelle.</footer>
 </main>
 <div id="toast" class="toast"></div>
@@ -423,7 +574,275 @@ function renderLive(){
   $("livePhaseText").textContent=phaseLabel(phase);$("liveZoneText").textContent="Zone "+(mp.live?.active_zone||"—");
   $("liveStatus").textContent="Phase : "+phaseLabel(phase)+" · Zone : "+(mp.live?.active_zone||"aucune")+" · Alerte : "+(mp.live?.alert?.enabled?"active":"inactive")+" · Vote : "+(mp.live?.vote?.enabled?"actif":"inactif");
 }
-function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
+
+function hydraStore(key,fallback){return hydraMailStorage(key,fallback)}
+function hydraSet(key,value){hydraMailSave(key,value)}
+function hydraUnlocks(){return hydraStore("hydra_unlocks",[])}
+function hydraHasUnlock(k){return hydraUnlocks().includes(k)}
+function hydraAddUnlock(k){const a=hydraUnlocks();if(!a.includes(k)){a.push(k);hydraSet("hydra_unlocks",a)}}
+function hydraGo(tab){activateHydraTab(tab,true);document.getElementById(tab)?.scrollIntoView({behavior:"smooth",block:"start"})}
+function nowClock(){return new Date().toLocaleTimeString("fr-FR",{hour12:false})}
+function renderOsShell(){
+  const live=cfg.experience||{};
+  $("osClock").textContent=nowClock();
+  $("osPhaseChip").textContent="PHASE "+phaseLabel(live.phase||"before").toUpperCase();
+  const alerts=(cfg.murder_party?.live?.alert?.enabled?1:0)+(Number(localStorage.getItem("hydra_incident_escalation")||0));
+  $("osAlertChip").textContent="ALERTES "+alerts;
+}
+function initOsShell(){
+  if(window.__hydraOsInit)return;window.__hydraOsInit=true;
+  document.querySelectorAll("[data-launch]").forEach(b=>b.onclick=()=>hydraGo(b.dataset.launch));
+  $("osGlobalRun").onclick=runGlobalCommand;
+  $("osGlobalCommand").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runGlobalCommand()}});
+  setInterval(renderOsShell,1000);
+}
+function runGlobalCommand(){
+  const raw=String($("osGlobalCommand").value||"").trim();
+  if(!raw)return;
+  const u=raw.toUpperCase();
+  $("osLastAction").textContent=nowClock();
+  $("osGlobalCommand").value="";
+  if(u==="STATUS"){toast("HYDRA OS : "+phaseLabel(cfg.experience?.phase||"before"));hydraGo("overview");return}
+  if(u.includes("OPEN INTEL")||u.includes("INTELLIGENCE")){hydraGo("intel");return}
+  if(u.includes("OPEN MAIL")){hydraGo("mails");return}
+  if(u.includes("OPEN EVIDENCE")){hydraGo("locker");return}
+  if(u.includes("TRACE 2300")||u.includes("TRACE 2,3")){hydraGo("virements");localStorage.setItem("hydra_focus_tx","tx-2300");setTimeout(()=>{document.querySelector('.bank-tx[data-bank-tx="tx-2300"]')?.click()},450);return}
+  if(u.includes("DECRYPT MIROIR")){hydraGo("puzzle");return}
+  if(u.includes("TERMINAL")){hydraGo("terminal");return}
+  if(u.includes("SURVEILLANCE")){hydraGo("surveillance");return}
+  if(u.includes("SIGNAL")){hydraGo("signal");return}
+  toast("Commande inconnue. Essaie STATUS, TRACE 2300K, OPEN INTEL ou DECRYPT MIROIR.");
+}
+function renderIntel(){
+  const nodes=[
+    {id:"emilie",label:"EMILIE",x:110,y:90,type:"PERSON",detail:"Comptabilité Hydra",facts:["A détecté le mouvement de 2,3 M€","Référence HYDRA-23MIRROR-021"]},
+    {id:"virement",label:"2,3 M€",x:290,y:90,type:"FINANCE",detail:"Flux suspect",facts:["Miroir Holdings","Horodatage 21:32"]},
+    {id:"mirror",label:"MIROIR",x:470,y:90,type:"PROTOCOLE",detail:"Protocole Miroir",facts:["Identité de la victime","Architecture du dispositif"]},
+    {id:"clone",label:"CLONE",x:650,y:90,type:"IDENTITÉ",detail:"Victime",facts:["Élément central du scénario"]},
+    {id:"core",label:"HYDRA-CORE",x:470,y:260,type:"SYSTEME",detail:"Noyau opérationnel",facts:["Manipulation des preuves","Fragments IA"]},
+    {id:"yoan",label:"YOAN",x:290,y:260,type:"PERSON",detail:"Sabotage",facts:["Participation partielle","But initial inconnu"]},
+    {id:"fabrice",label:"FABRICE",x:650,y:260,type:"PERSON",detail:"Archive numérique",facts:["Archive altérée","Copie originale conservée"]},
+    {id:"book",label:"LIVRE ANCIEN",x:110,y:260,type:"PREUVE",detail:"Page manquante",facts:["Relie les lignées","Connecte l'identité cachée"]}
+  ];
+  const links=[["emilie","virement"],["virement","mirror"],["mirror","clone"],["mirror","core"],["yoan","core"],["fabrice","core"],["book","clone"],["emilie","core"],["fabrice","book"]];
+  $("intelGraph").innerHTML='<svg viewBox="0 0 760 380" aria-label="Graphe Hydra">'+links.map(([a,b])=>{const A=nodes.find(n=>n.id===a),B=nodes.find(n=>n.id===b);return '<line class="graph-link" data-link="'+a+'-'+b+'" x1="'+A.x+'" y1="'+A.y+'" x2="'+B.x+'" y2="'+B.y+'"/>'}).join("")+nodes.map(n=>'<g class="graph-node" data-intel="'+n.id+'" transform="translate('+n.x+','+n.y+')"><circle r="34"></circle><text y="3">'+esc(n.label)+'</text></g>').join("")+'</svg>';
+  const select=id=>{const x=nodes.find(n=>n.id===id);if(!x)return;document.querySelectorAll(".graph-node").forEach(g=>g.classList.toggle("hot",g.dataset.intel===id));$("intelDetail").innerHTML='<div class="sub">'+esc(x.type)+'</div><div class="big">'+esc(x.label)+'</div><div class="intel-tag">'+esc(x.detail)+'</div>'+x.facts.map(f=>'<div class="intel-kv"><span>Fait</span><span>'+esc(f)+'</span></div>').join("")};
+  document.querySelectorAll("[data-intel]").forEach(g=>g.onclick=()=>select(g.dataset.intel));
+  select("mirror");
+}
+function renderClassified(){
+  const docs=[
+    {id:"c1",level:"PUBLIC",title:"Briefing opérationnel",desc:"Vue générale du protocole et rôles visibles.",unlock:true},
+    {id:"c2",level:"CONFIDENTIEL",title:"Registre Miroir",desc:"Corrélation financière et archive de travail.",unlock:hydraHasUnlock("MIROIR")},
+    {id:"c3",level:"CONFIDENTIEL",title:"Fragment 21",desc:"Corrélation entre identité et noyau Hydra.",unlock:hydraHasUnlock("FRAGMENT21")},
+    {id:"c4",level:"TOP SECRET",title:"Architecture originale",desc:"Document réservé au niveau final du dossier.",unlock:hydraHasUnlock("OMEGA")},
+    {id:"c5",level:"TOP SECRET",title:"Dossier du Milliardaire",desc:"Pièce finale de vérité narrative.",unlock:hydraHasUnlock("CORE")}
+  ];
+  $("classifiedGrid").innerHTML=docs.map(d=>'<article class="card classified-card '+(d.unlock?"":"locked")+'"><div class="classified-lock">'+(d.unlock?"🔓":"🔒")+'</div><div class="sub '+(d.level==="PUBLIC"?"level-public":d.level==="CONFIDENTIEL"?"level-conf":"level-top")+'">'+d.level+'</div><h3>'+esc(d.title)+'</h3><p class="sub">'+esc(d.desc)+'</p>'+(d.unlock?'<span class="unlocked-stamp">ACCÈS ACCORDÉ</span>':'<div class="unlock-line"><input class="input" data-class-code="'+d.id+'" placeholder="Code de déverrouillage"><button class="btn" data-class-unlock="'+d.id+'">Ouvrir</button></div>')+'</article>').join("");
+  const codes={c2:"MIROIR",c3:"FRAGMENT21",c4:"OMEGA",c5:"CORE"};
+  document.querySelectorAll("[data-class-unlock]").forEach(b=>b.onclick=()=>{const id=b.dataset.classUnlock,inp=document.querySelector('[data-class-code="'+id+'"]');if(String(inp?.value||"").trim().toUpperCase()===codes[id]){hydraAddUnlock(codes[id]);renderClassified();renderEvidenceLocker();toast("Accès classifié déverrouillé.")}else toast("Code refusé.")});
+}
+function pushSignal(text,type="SYSTEM"){
+  const old=hydraStore("hydra_signal",[]);old.unshift({time:nowClock(),text,type});hydraSet("hydra_signal",old.slice(0,35));renderSignal();
+}
+function renderSignal(){
+  const base=[
+    {time:"21:34",text:"Emilie signale une divergence financière.",type:"FINANCE"},
+    {time:"21:12",text:"Fabrice conserve une copie originale.",type:"ARCHIVE"},
+    {time:"20:52",text:"Déviation de navigation détectée.",type:"NAVIGATION"},
+    {time:"20:31",text:"Fragment IA 18 reçu.",type:"CORE"},
+    {time:"20:10",text:"Phase finale prête.",type:"LIVE"}
+  ];
+  const stored=hydraStore("hydra_signal",[]);
+  const rows=stored.length?stored:base;
+  $("signalFeed").innerHTML=rows.map(e=>'<div class="signal-item"><div class="signal-time">'+esc(e.time)+'</div><div class="signal-text">'+esc(e.text)+'</div><div class="signal-type">'+esc(e.type)+'</div></div>').join("");
+}
+function renderForensic(selected="money"){
+  const docs=[
+    {id:"money",title:"Relevé HYDRA 2300K",meta:["Référence","HYDRA-23MIRROR-021","Horodatage","21:32","Anomalie","Concordance incomplète"],analysis:"Le flux apparaît avant plusieurs événements associés dans le journal narratif. La piste demande un recoupement avec Emilie et le dossier Miroir."},
+    {id:"archive",title:"Archive numérique",meta:["Origine","Fabrice","Empreinte","ALT-ORIG","Anomalie","Version modifiée"],analysis:"La copie de travail ne correspond pas à l’archive originale conservée par Fabrice."},
+    {id:"nav",title:"Journal navigation",meta:["Source","Jean-Louis Pineau","Point","20h52","Anomalie","Route non planifiée"],analysis:"Une déviation figure dans le journal sans correspondance dans le planning de mission."},
+    {id:"fragment",title:"Fragment IA 18",meta:["Source","Hydra-Core","Zone","2","Statut","Signal narratif"],analysis:"Le fragment mentionne Alpha/Omega uniquement comme éléments fictionnels du protocole."}
+  ];
+  $("forensicList").innerHTML=docs.map(d=>'<button class="forensic-btn '+(d.id===selected?"active":"")+'" data-forensic="'+d.id+'">'+esc(d.title)+'</button>').join("");
+  const d=docs.find(x=>x.id===selected)||docs[0];
+  $("forensicReport").innerHTML='<div class="sub">RAPPORT FORENSIQUE</div><h3 style="margin:7px 0 10px">'+esc(d.title)+'</h3>'+d.meta.reduce((s,x,i)=>i%2===0?s+'<div class="scan-line"><span>'+esc(x)+'</span><b>'+esc(d.meta[i+1])+'</b></div>':s,"")+'<div class="notice" style="margin-top:12px">'+esc(d.analysis)+'</div>';
+  document.querySelectorAll("[data-forensic]").forEach(b=>b.onclick=()=>renderForensic(b.dataset.forensic));
+}
+function initPuzzle(){
+  const fragments=["COPIE","MIROIR","VIVANT","ORIGINAL","CACHE"];
+  let state=hydraStore("hydra_puzzle",[]);
+  const draw=()=>{$("puzzleBank").innerHTML=fragments.map(f=>'<button class="p-frag '+(state.includes(f)?"selected":"")+'" data-pfrag="'+f+'">'+f+'</button>').join("");$("puzzleSequence").innerHTML=state.length?state.map((x,i)=>'<span class="seq-pill">'+(i+1)+". "+esc(x)+'</span>').join(""):'<span class="panel-muted">Séquence vide</span>';document.querySelectorAll("[data-pfrag]").forEach(b=>b.onclick=()=>{const f=b.dataset.pfrag;if(state.includes(f))state=state.filter(x=>x!==f);else state.push(f);hydraSet("hydra_puzzle",state);draw()})};
+  draw();
+  $("puzzleCheck").onclick=()=>{const answer=["COPIE","MIROIR","VIVANT","ORIGINAL","CACHE"];const ok=state.join("|")===answer.join("|");$("puzzleResult").innerHTML=ok?'<div class="success-box">Séquence validée. Clé narrative : MIROIR-21.</div>':'<div class="fail-box">Séquence incorrecte. Recoupe les termes avec les mails et le graphe.</div>';if(ok){hydraAddUnlock("MIROIR");hydraAddUnlock("FRAGMENT21");$("puzzleKey").textContent="MIROIR-21 / accès au registre Miroir.";renderClassified();renderEvidenceLocker();pushSignal("Séquence de décryptage validée.","PUZZLE")}};
+  $("puzzleReset").onclick=()=>{state=[];hydraSet("hydra_puzzle",state);draw();$("puzzleResult").innerHTML=""};
+}
+function renderComms(){
+  const people=["Emilie","Fabrice","Max","Emy","Hydra-Core"];
+  const active=window.__commsActive||"Emilie";
+  const scripts={
+    "Emilie":[["Emilie","Le virement reste ma priorité."],["me","Je recoupe avec Miroir."],["Emilie","Alors regarde la référence HYDRA-23MIRROR-021."]],
+    "Fabrice":[["Fabrice","J'ai gardé l'original."],["me","Peux-tu confirmer l'empreinte ?"],["Fabrice","Oui. La copie modifiée n'est pas identique."]],
+    "Max":[["Max","J'ai trois connexions utiles dans les dossiers."],["me","Lesquelles ?"],["Max","Miroir, Hydra-Core et la chronologie."]],
+    "Emy":[["Emy","Les fragments doivent rester séparés."],["me","Je garde leur origine confidentielle."],["Emy","Bonne procédure."]],
+    "Hydra-Core":[["Hydra-Core","REQUÊTE ACCEPTÉE."],["me","Identifie la corrélation."],["Hydra-Core","CORRÉLATION : PROTOCOLE MIROIR."]]
+  };
+  $("contactList").innerHTML=people.map(p=>'<button class="contact-btn '+(p===active?"active":"")+'" data-contact="'+p+'">'+p+'<span style="float:right">›</span></button>').join("");
+  $("commsTitle").textContent="Canal · "+active;
+  const log=scripts[active]||[];
+  $("commsLog").innerHTML=log.map(x=>'<div class="bubble '+(x[0]==="me"?"me":"hydra")+'"><b>'+esc(x[0])+'</b><div>'+esc(x[1])+'</div><small>'+nowClock()+'</small></div>').join("");
+  document.querySelectorAll("[data-contact]").forEach(b=>b.onclick=()=>{window.__commsActive=b.dataset.contact;renderComms()});
+  $("commsPing").onclick=()=>{pushSignal("PING confirmé sur le canal "+active,"COMMS");toast("PING · "+active+" · OK")};
+  $("commsReply").onclick=()=>{toast("Réponse simulée de "+active);pushSignal("Réponse reçue sur "+active,"COMMS")};
+}
+function renderRadio(){
+  const channel=window.__radioChannel||"CH-01";
+  const logs={
+    "CH-01":[["RX","21:18","Direction Hydra","Situation stable. Maintenir le protocole."],["RX","21:32","Finance","Mouvement financier confirmé."],["TX","21:35","Poste MJ","Recoupement demandé."]],
+    "CH-03":[["RX","20:52","Terrain","Déviation non planifiée."],["RX","21:04","Terrain","Retour au point de contrôle."],["TX","21:06","Poste MJ","Journal conservé."]],
+    "CH-07":[["RX","21:12","Archive","Copie originale sécurisée."],["RX","21:24","Archive","Signature à comparer."],["TX","21:28","Poste MJ","Comparaison lancée."]]
+  };
+  $("radioConsole").innerHTML=(logs[channel]||[]).map(x=>'<div class="'+(x[0]==="TX"?"tx":"rx")+'">['+esc(x[1])+'] '+esc(x[0])+' · '+esc(x[2])+'\n'+esc(x[3])+'\n\n</div>').join("");
+  document.querySelectorAll("[data-radio]").forEach(b=>b.onclick=()=>{window.__radioChannel=b.dataset.radio;renderRadio()});
+}
+function renderMap(){
+  const zones=[
+    {id:"centre",x:70,y:70,w:190,h:110,label:"CENTRE HYDRA",desc:"Poste de coordination."},
+    {id:"archive",x:330,y:50,w:180,h:110,label:"ARCHIVE",desc:"Zone de conservation des données."},
+    {id:"finance",x:580,y:75,w:170,h:110,label:"FINANCE",desc:"Point de rapprochement du virement."},
+    {id:"terrain",x:180,y:245,w:190,h:105,label:"TERRAIN",desc:"Zone de déplacement et d’observation."},
+    {id:"miroir",x:470,y:230,w:210,h:120,label:"MIROIR",desc:"Zone liée au protocole narratif."}
+  ];
+  $("opMap").innerHTML='<svg viewBox="0 0 820 410">'+[
+    '<path class="map-path" d="M165 125 L420 105 L665 130 M165 125 L275 298 L575 290 L665 130"/>',
+    ...zones.map(z=>'<g class="map-zone '+(z.id==="miroir"?"active":"")+'" data-zone="'+z.id+'"><rect x="'+z.x+'" y="'+z.y+'" rx="18" width="'+z.w+'" height="'+z.h+'"></rect><text x="'+(z.x+z.w/2)+'" y="'+(z.y+z.h/2+4)+'">'+z.label+'</text></g>')
+  ].join("")+'</svg>';
+  const select=id=>{const z=zones.find(x=>x.id===id)||zones[0];document.querySelectorAll(".map-zone").forEach(g=>g.classList.toggle("active",g.dataset.zone===z.id));$("mapDetail").innerHTML='<div class="sub">ZONE</div><h3>'+esc(z.label)+'</h3><p>'+esc(z.desc)+'</p><div class="sub">Statut : surveillance fictionnelle active.</div>'};
+  document.querySelectorAll("[data-zone]").forEach(b=>b.onclick=()=>select(b.dataset.zone));select("miroir");
+}
+function renderTrust(){
+  const names=["Emilie","Fabrice","Max","Yoan","Emy","Cécile","Hydra-Core"];
+  const vals={
+    "Emilie":{"Fabrice":"B","Max":"A","Yoan":"C","Emy":"B","Cécile":"B","Hydra-Core":"C"},
+    "Fabrice":{"Emilie":"B","Max":"B","Yoan":"C","Emy":"B","Cécile":"B","Hydra-Core":"C"},
+    "Max":{"Emilie":"A","Fabrice":"B","Yoan":"C","Emy":"B","Cécile":"A","Hydra-Core":"C"},
+    "Yoan":{"Emilie":"C","Fabrice":"C","Max":"B","Emy":"B","Cécile":"B","Hydra-Core":"C"},
+    "Emy":{"Emilie":"B","Fabrice":"B","Max":"B","Yoan":"B","Cécile":"A","Hydra-Core":"B"},
+    "Cécile":{"Emilie":"B","Fabrice":"B","Max":"A","Yoan":"B","Emy":"A","Hydra-Core":"C"},
+    "Hydra-Core":{"Emilie":"C","Fabrice":"C","Max":"C","Yoan":"C","Emy":"B","Cécile":"C"}
+  };
+  const label=v=>v==="A"?"ALLIÉ":v==="B"?"DOUTE":"CONFLIT";const cls=v=>v==="A"?"trust-a":v==="B"?"trust-b":"trust-c";
+  $("trustMatrix").innerHTML='<thead><tr><th>Agent</th>'+names.map(n=>'<th>'+n+'</th>').join("")+'</tr></thead><tbody>'+names.map(a=>'<tr><td>'+a+'</td>'+names.map(b=>a===b?'<td>—</td>':'<td class="'+cls(vals[a]?.[b]||"B")+'">'+label(vals[a]?.[b]||"B")+'</td>').join("")+'</tr>').join("")+'</tbody>';
+}
+function renderIncidents(){
+  let rows=hydraStore("hydra_incidents",[
+    {id:"i1",level:"HIGH",title:"Mouvement financier",desc:"2,3 M€ à recouper",p:70},
+    {id:"i2",level:"MED",title:"Archive modifiée",desc:"Copie originale à protéger",p:45},
+    {id:"i3",level:"MED",title:"Route non planifiée",desc:"Journal 20h52",p:35},
+    {id:"i4",level:"LOW",title:"Fragment 18",desc:"Corrélation en attente",p:20}
+  ]);
+  $("incidentList").innerHTML=rows.map(i=>'<article class="incident"><div class="incident-level '+(i.level==="HIGH"?"level-top":"level-conf")+'">'+i.level+'</div><div><b>'+esc(i.title)+'</b><div class="panel-muted">'+esc(i.desc)+'</div><div class="incident-bar"><i style="width:'+i.p+'%"></i></div></div><div class="incident-actions"><button class="mini-btn" data-inc-minus="'+i.id+'">−</button><button class="mini-btn" data-inc-plus="'+i.id+'">+</button><button class="mini-btn" data-inc-close="'+i.id+'">✓</button></div></article>').join("");
+  document.querySelectorAll("[data-inc-minus],[data-inc-plus],[data-inc-close]").forEach(b=>b.onclick=()=>{const rows2=rows.map(x=>x.id===b.dataset.incMinus?{...x,p:Math.max(0,x.p-10)}:x.id===b.dataset.incPlus?{...x,p:Math.min(100,x.p+10)}:x.id===b.dataset.incClose?{...x,p:100}:x);hydraSet("hydra_incidents",rows2);renderIncidents();renderOsShell()});
+}
+function renderLab(){
+  const items=[
+    {name:"SIGNAL ALPHA",value:68,desc:"Anomalie narrative détectée."},
+    {name:"SIGNAL OMEGA",value:82,desc:"Corrélation forte avec le protocole."},
+    {name:"COHÉRENCE",value:41,desc:"Plus la valeur monte, plus les dossiers concordent."}
+  ];
+  $("labGrid").innerHTML=items.map(x=>'<article class="card lab-card"><div class="sub">LECTURE FICTIONNELLE</div><h3>'+esc(x.name)+'</h3><div class="meter"><i style="width:'+x.value+'%"></i></div><b>'+x.value+' %</b><p class="sub">'+esc(x.desc)+'</p><div class="fictional-note">Aucune mesure physique réelle. Valeur purement scénarisée.</div></article>').join("");
+}
+function renderEvidenceLocker(){
+  const items=[
+    ["E01","Relevé 2,3 M€",true,"Mouvement financier clé"],
+    ["E02","Archive originale",hydraHasUnlock("MIROIR"),"Copie conservée par Fabrice"],
+    ["E03","Journal navigation",true,"Anomalie 20h52"],
+    ["E04","Fragment IA 18",true,"Signal Hydra-Core"],
+    ["E05","Fragment IA 21",hydraHasUnlock("FRAGMENT21"),"Corrélation d’identité"],
+    ["E06","Page du Livre Ancien",hydraHasUnlock("CORE"),"Lien entre lignées"],
+    ["E07","Message du milliardaire",hydraHasUnlock("OMEGA"),"Document final"],
+    ["E08","Dossier clone",hydraHasUnlock("OMEGA"),"Identité narrative"],
+    ["E09","Carte de zone",true,"Repérage opérationnel"],
+    ["E10","Registre sécurité",true,"Anomalie pré-incident"],
+    ["E11","Note du Chef Hydra",hydraHasUnlock("CORE"),"Consigne finale"],
+    ["E12","Synthèse des zones",hydraHasUnlock("FRAGMENT21"),"Recoupement Alpha/Omega"]
+  ];
+  $("evidenceLocker").innerHTML=items.map(x=>'<article class="e-slot '+(x[2]?"discovered":"locked")+'" data-elock="'+x[0]+'"><div class="e-code">'+x[0]+' · '+(x[2]?"UNLOCKED":"LOCKED")+'</div><div class="e-title">'+(x[2]?"📄 ":"🔒 ")+esc(x[1])+'</div><div class="e-foot">'+esc(x[3])+'</div></article>').join("");
+  document.querySelectorAll("[data-elock]").forEach(b=>b.onclick=()=>toast(b.classList.contains("discovered")?"Preuve ouverte : "+b.querySelector(".e-title").textContent:"Preuve verrouillée — continue l’enquête."));
+}
+function runTerminalCommand(raw){
+  const cmd=String(raw||"").trim();if(!cmd)return;
+  const out=$("terminalOutput"),line=document.createElement("div");line.className="term-line";line.textContent="> "+cmd;out.insertBefore(line,out.querySelector(".term-prompt"));
+  const u=cmd.toUpperCase();
+  let res="";
+  if(u==="HELP")res="STATUS | SCAN EMILIE | TRACE 2300K | TRACE FABRICE | DECRYPT MIROIR | UNLOCK OMEGA | UNLOCK CORE | SIGNAL | CLEAR";
+  else if(u==="STATUS")res="HYDRA STATUS\nPHASE: "+phaseLabel(cfg.experience?.phase||"before").toUpperCase()+"\nSECURITY: SECURE\nCORE: ONLINE\nALERTS: "+localStorage.getItem("hydra_incident_escalation","0");
+  else if(u.includes("SCAN EMILIE"))res="SCAN EMILIE\n3 connexions détectées\nFinance → Miroir\nMiroir → Hydra-Core";
+  else if(u.includes("TRACE 2300"))res="TRACE 2300K\nRéférence : HYDRA-23MIRROR-021\nRoute : MIRROR HOLDINGS\nStatut : à recouper";
+  else if(u.includes("TRACE FABRICE"))res="TRACE FABRICE\nArchive originale sécurisée\nEmpreinte : ALT-ORIG";
+  else if(u==="DECRYPT MIROIR"){res="DECRYPT OK\nClé narrative : MIROIR-21";hydraAddUnlock("MIROIR");hydraAddUnlock("FRAGMENT21");renderClassified();renderEvidenceLocker();pushSignal("Terminal : décryptage MIROIR-21 validé.","TERMINAL");}
+  else if(u==="UNLOCK OMEGA"){hydraAddUnlock("OMEGA");res="ACCESS GRANTED\nTOP SECRET / OMEGA";renderClassified();renderEvidenceLocker();pushSignal("Terminal : accès OMEGA accordé.","SECURITY")}
+  else if(u==="UNLOCK CORE"){hydraAddUnlock("CORE");res="ACCESS GRANTED\nARCHITECTURE ORIGINALE";renderClassified();renderEvidenceLocker();pushSignal("Terminal : accès CORE accordé.","SECURITY")}
+  else if(u==="SIGNAL"){pushSignal("Commande SIGNAL exécutée.","TERMINAL");res="SIGNAL BURST SENT";}
+  else if(u==="CLEAR"){[...out.querySelectorAll(".term-line")].forEach(x=>x.remove());res="Console cleared.";}
+  else res="Commande inconnue. HELP pour la liste.";
+  const rr=document.createElement("div");rr.className="term-line";rr.textContent=res;out.insertBefore(rr,out.querySelector(".term-prompt"));out.scrollTop=out.scrollHeight;$("terminalInput").value="";
+}
+function initTerminal(){
+  if(window.__termInit)return;window.__termInit=true;
+  $("terminalInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runTerminalCommand(e.target.value)}});
+  const chips=["STATUS","SCAN EMILIE","TRACE 2300K","TRACE FABRICE","DECRYPT MIROIR","UNLOCK OMEGA","UNLOCK CORE","HELP"];
+  $("termChips").innerHTML=chips.map(c=>'<button class="cmd-chip" data-cmd="'+c+'">'+c+'</button>').join("");
+  document.querySelectorAll("[data-cmd]").forEach(b=>b.onclick=()=>{$("terminalInput").value=b.dataset.cmd;runTerminalCommand(b.dataset.cmd)});
+}
+function renderSurveillance(){
+  const cams=[
+    ["CAM-01","CENTRE HYDRA","20:31","Fragment 18 reçu"],
+    ["CAM-02","ARCHIVE","21:12","Fabrice sécurise une copie"],
+    ["CAM-03","FINANCE","21:32","Mouvement détecté"],
+    ["CAM-04","MIROIR","21:47","Signal intermittent"]
+  ];
+  $("surveillanceGrid").innerHTML=cams.map(c=>'<article class="cam"><span class="cam-badge">● REC FICTION</span><span class="cam-time">'+c[2]+'</span><div class="cam-feed">'+c[1]+'<br><small style="opacity:.7">'+c[3].toUpperCase()+'</small></div><div class="cam-controls"><button class="mini-btn" data-cam="'+c[0]+'">Inspecter</button><span class="panel-muted">'+c[0]+'</span></div></article>').join("");
+  document.querySelectorAll("[data-cam]").forEach(b=>b.onclick=()=>{pushSignal("Inspection de "+b.dataset.cam+" demandée.","SURVEILLANCE");toast(b.dataset.cam+" · capture simulée enregistrée.")});
+}
+function renderNews(){
+  const news=[
+    ["21:47","ALERTE","Un signal intermittent apparaît dans la zone Miroir."],
+    ["21:35","FINANCE","Le dossier 2,3 M€ passe en surveillance renforcée."],
+    ["21:24","ARCHIVE","La copie originale de Fabrice devient prioritaire."],
+    ["21:04","NAVIGATION","La trajectoire a été recoupée avec le journal."],
+    ["20:31","SYSTEME","Fragment IA 18 intégré au graphe d’intelligence."]
+  ];
+  $("newsList").innerHTML=news.map(n=>'<article class="news-item"><div class="news-meta">'+n[0]+' · '+n[1]+'</div><h3>'+esc(n[2].split(" — ")[0])+'</h3><p>'+esc(n[2])+'</p></article>').join("");
+}
+function renderProgress(){
+  const names=["Ethan","Emilie","Fabrice","Max","Yoan","Emy","Tony","Lino","Cécile"];
+  const seed={Ethan:100,Emilie:74,Fabrice:66,Max:58,Yoan:49,Emy:52,Tony:44,Lino:40,Cécile:61};
+  const puzzle=hydraHasUnlock("FRAGMENT21")?15:0,omega=hydraHasUnlock("OMEGA")?15:0;
+  $("progressGrid").innerHTML=names.map(name=>{const p=Math.min(100,seed[name]+puzzle+omega);return '<article class="progress-card"><div class="progress-top"><b>'+name+'</b><span class="panel-muted">'+p+'%</span></div><div class="progress-bar"><i style="width:'+p+'%"></i></div><div class="progress-meta">Dossier · indices · mission</div></article>'}).join("");
+}
+function renderAICore(){
+  $("aiScore").innerHTML='<div class="panel-title"><h3>Analyse système</h3><span class="sim-badge">RULE ENGINE</span></div>'+[
+    ["Connexions détectées","7"],
+    ["Pistes financières","3"],
+    ["Anomalies chronologiques","4"],
+    ["Fragments corrélés","2"],
+    ["Niveau de cohérence","61 %"]
+  ].map(x=>'<div class="score-line"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join("")+'<div class="notice">Le moteur répond à partir des données de la simulation, sans service IA externe.</div>';
+}
+function runAICore(){
+  const q=String($("aiInput").value||"").trim();if(!q)return;
+  const u=q.toLowerCase();let lines=["ANALYSE HYDRA-CORE","────────────────────────"];
+  if(u.includes("emilie")||u.includes("2,3")||u.includes("2300"))lines.push("ENTITÉ : EMILIE","→ connexion : finance","→ référence : HYDRA-23MIRROR-021","→ anomalie : horodatage à recouper","CONCLUSION : la piste financière rejoint le Protocole Miroir.");
+  else if(u.includes("fabrice")||u.includes("archive"))lines.push("ENTITÉ : FABRICE","→ archive originale conservée","→ version altérée détectée","CONCLUSION : comparer les empreintes.");
+  else if(u.includes("miroir"))lines.push("PROTOCOLE : MIROIR","→ identité de la victime","→ architecture du dispositif","→ noyau : HYDRA-CORE");
+  else if(u.includes("yoan"))lines.push("ENTITÉ : YOAN","→ sabotage : confirmé dans le récit","→ finalité initiale : inconnue","CONCLUSION : ne pas confondre action et intention.");
+  else lines.push("Requête enregistrée.","Corrélations possibles : Miroir / Finance / Archive / Hydra-Core.","Suggestion : TRACE 2300K.");
+  $("aiResult").textContent=lines.join("\n");
+  pushSignal("HYDRA-CORE a analysé une requête.","AI");
+}
+
+function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();renderOsShell();renderIntel();renderClassified();renderSignal();renderForensic();initPuzzle();renderComms();renderRadio();renderMap();renderTrust();renderIncidents();renderLab();renderEvidenceLocker();initTerminal();renderSurveillance();renderNews();renderProgress();renderAICore();initOsShell();initAdvancedUi();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
 async function saveLive(){
   try{
     const next=JSON.parse(JSON.stringify(cfg));
@@ -437,6 +856,17 @@ async function saveLive(){
     });
     await rpc("admin_save_birthday_config",{p_settings:next});cfg=next;renderAll();toast("État LIVE enregistré.");
   }catch(e){toast("Impossible d’enregistrer : "+e.message)}
+}
+function initAdvancedUi(){
+  if(window.__hydraAdvancedInit)return;window.__hydraAdvancedInit=true;
+  $("signalBurst").onclick=()=>{const msgs=["Mouvement détecté dans la zone Miroir.","Nouveau paquet de données reçu.","Anomalie de chronologie détectée.","Nouvelle corrélation entre archive et finance.","Hydra-Core demande une vérification."];pushSignal(msgs[Math.floor(Math.random()*msgs.length)],"BURST")};
+  $("signalStart").onclick=()=>{if(window.__signalTimer){clearInterval(window.__signalTimer);window.__signalTimer=null;$("signalStart").textContent="▶ Flux"}else{$("signalStart").textContent="■ Stop";window.__signalTimer=setInterval(()=>{$("signalBurst").click()},9000);}};
+  $("incidentEscalate").onclick=()=>{const x=Number(localStorage.getItem("hydra_incident_escalation")||0)+1;localStorage.setItem("hydra_incident_escalation",String(x));pushSignal("Niveau d’alerte augmenté à "+x+".","INCIDENT");renderIncidents();renderOsShell();toast("Alerte générale escaladée.")};
+  $("lockerReveal").onclick=()=>{renderEvidenceLocker();toast("Coffre rescanné.")};
+  $("newsRefresh").onclick=()=>{renderNews();pushSignal("Hydra News actualisé.","NEWS")};
+  $("aiRun").onclick=runAICore;
+  $("aiInput").addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();runAICore()}});
+  renderOsShell();
 }
 function activateHydraTab(tabName,scroll=true){
   const valid=document.querySelector('.tab[data-tab="'+tabName+'"]')?tabName:"overview";
