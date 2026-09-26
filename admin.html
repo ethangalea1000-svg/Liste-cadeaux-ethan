@@ -574,7 +574,7 @@ async function loadAccessCodes(){
       +'<div class="access-link">'+esc(url)+'</div>'
       +hydraSummary
       +hydraBox
-      +'<div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.active_access)+')">'+(x.active_access?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin_access)+')">'+(x.is_admin_access?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div>'
+      +'<div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="regenerateAccessCode('+x.access_id+')">🔄 Régénérer le code</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.active_access)+')">'+(x.active_access?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin_access)+')">'+(x.is_admin_access?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div>'
       +'</article>';
   }).join(""):empty("Aucun accès créé.");
  }catch(e){
@@ -674,6 +674,18 @@ function generateAccessCode(){
  let code="ETHAN-";
  for(let i=0;i<length;i++) code+=chars[random[i]%chars.length];
  $("accessCode").value=code;
+}
+
+async function regenerateAccessCode(id){
+  if(!confirm("Régénérer le code de cet accès ? L’ancien code cessera immédiatement de fonctionner."))return;
+  try{
+    const code=String(await rpc("admin_regenerate_access_code",{p_id:Number(id)})||"").trim();
+    if(!code)throw new Error("Supabase n’a pas renvoyé le nouveau code.");
+    toast("✅ Nouveau code : "+code);
+    await loadAccessCodes();
+  }catch(e){
+    toast("❌ "+(e?.message||"Impossible de régénérer le code."));
+  }
 }
 async function toggleAccess(id,active){
  try{await rpc("admin_set_access_code_status",{p_id:id,p_active:active});toast(active?"Accès activé.":"Accès désactivé.");loadAccessCodes()}catch(e){toast(e.message)}
