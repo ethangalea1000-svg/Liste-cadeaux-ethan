@@ -270,7 +270,9 @@ function renderMoney(){
   });
   const countEl=$("bankSearch"); if(countEl)countEl.title=rows.length+" opération(s)";
 }
+let bankUiInitialized=false,mailUiInitialized=false;
 function initBankUi(){
+  if(bankUiInitialized)return; bankUiInitialized=true;
   $("bankSearch")?.addEventListener("input",renderMoney);
   $("bankFilter")?.addEventListener("change",renderMoney);
   $("bankRefreshBtn")?.addEventListener("click",()=>{renderMoney();toast("Compte Hydra actualisé.")});
@@ -308,6 +310,7 @@ function openMail(id){
   $("mailBackBtn").onclick=renderMails;
 }
 function initMailUi(){
+  if(mailUiInitialized)return; mailUiInitialized=true;
   window.__hydraMailFolder="inbox";
   document.querySelectorAll(".mail-folder").forEach(btn=>btn.onclick=()=>{window.__hydraMailFolder=btn.dataset.folder;renderMails()});
   $("mailSearch")?.addEventListener("input",renderMails);
