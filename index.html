@@ -764,11 +764,11 @@ async function loadHydraDossier(){
         ["Ce que tu sais au début",p.knowledge],
         ["Objectif",p.objective],
         ["Document spécial",p.special_text||p.special],
-        ["👕 Tenue parfaite",p.tenue_parfaite||p.outfit||p.tenue],
+        ["👕 Tenue parfaite",p.tenue_parfaite||p.outfit||p.tenue||"À définir"],
         ["Règle spéciale",p.rule],
         ["Accroche",p.fictional_hook],
         ["Fragment IA",p.fragment]
-      ].filter(x=>String(x[1]||"").trim());
+      ].filter(x=>String(x[1]??"").trim());
 
       const content=p.scenario&&String(p.scenario).trim()
         ? '<div class="hydra-fiche-scenario">'+escAny(p.scenario)+'</div>'
