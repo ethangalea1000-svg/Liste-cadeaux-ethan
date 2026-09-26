@@ -195,6 +195,7 @@ body.theme-hydra .birthday-item *{color:inherit!important}
 body.theme-hydra .hydra-decoration-card{background:#0e1826;border-color:#294156}
 body.theme-hydra .hydra-safety-note{background:#201b0e;border-color:#725b20;color:#f5d98a}
 body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{background:#0b111c;color:#edf7ff;border-color:#30465b}
+.experience-hidden{display:none!important}
 @media(max-width:700px){
   .hydra-mobile-nav{top:8px}
   .hydra-status-strip{grid-template-columns:1fr}
@@ -911,6 +912,30 @@ function applyHydraExperienceUI(){
   };
   if(phaseLabel)phaseLabel.textContent=labels[phase]?.[0]||"PROTOCOLE HYDRA";
   if(phaseText)phaseText.textContent=labels[phase]?.[1]||"";
+  const heroTag=document.getElementById("siteTag"),heroTitle=document.getElementById("siteHeroTitle"),heroDesc=document.getElementById("siteHeroDescription");
+  if(role==="player" && phase==="live"){
+    if(heroTag)heroTag.textContent="🛰️ PROTOCOLE HYDRA";
+    if(heroTitle)heroTitle.textContent="Enquête active";
+    if(heroDesc)heroDesc.textContent="Ton téléphone devient ton poste d’enquête : zones, objets, dossier, défis et votes.";
+  }else if(role==="player" && phase==="after"){
+    if(heroTag)heroTag.textContent="🔓 HYDRA — DÉBRIEFING";
+    if(heroTitle)heroTitle.textContent="La partie est terminée";
+    if(heroDesc)heroDesc.textContent="Retrouve les souvenirs et le débriefing de l’enquête.";
+  }else{
+    if(heroTag)heroTag.textContent="🎁 Noël & Anniversaire 2026";
+    if(heroTitle)heroTitle.textContent="La liste d’Ethan";
+    if(heroDesc)heroDesc.textContent="Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.";
+  }
+  if(helperTitle){
+    if(role==="player" && phase==="live") helperTitle.textContent="Poste d’enquête";
+    else if(role==="player") helperTitle.textContent="Anniversaire d’Ethan";
+    else helperTitle.textContent="Ta liste de cadeaux";
+  }
+  if(helperText){
+    if(role==="player" && phase==="live") helperText.textContent="Utilise les outils Hydra sans quitter ton téléphone.";
+    else if(role==="player") helperText.textContent="Prépare ton personnage et consulte les informations autorisées.";
+    else helperText.textContent="Recherche un cadeau, filtre par catégorie et réserve ce qui te plaît.";
+  }
   const tabMap={liste:"gifts",participer:"fundraisers",communaute:"community",anniversaire:"hydra"};
   document.querySelectorAll("[data-view-target]").forEach(tab=>{
     const target=tab.dataset.viewTarget;
