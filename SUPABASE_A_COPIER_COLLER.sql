@@ -5223,3 +5223,18 @@ select
   (select settings->'experience'->>'phase' from public.birthday_config where id=1) as phase,
   (select settings->'murder_party'->'live' is not null from public.birthday_config where id=1) as live_state_present,
   to_regprocedure('public.get_birthday_experience(text)') is not null as experience_rpc_exists;
+
+
+-- ============================================================
+-- FINAL HYDRA EXPERIENCE AUDIT
+-- ============================================================
+
+select
+  'FINAL_HYDRA_EXPERIENCE_AUDIT' as audit_status,
+  to_regprocedure('public.get_birthday_experience(text)') is not null as experience_rpc,
+  to_regprocedure('public.get_birthday_public_config()') is not null as safe_public_rpc,
+  (select settings->'experience'->>'phase' from public.birthday_config where id=1) as phase,
+  (select jsonb_array_length(coalesce(settings->'murder_party'->'decorations','[]'::jsonb)) from public.birthday_config where id=1) as decorations_count,
+  (select jsonb_array_length(coalesce(settings->'murder_party'->'zones','[]'::jsonb)) from public.birthday_config where id=1) as zones_count,
+  (select jsonb_array_length(coalesce(settings->'murder_party'->'objects','[]'::jsonb)) from public.birthday_config where id=1) as objects_count,
+  (select count(*) from public.hydra_access_assignments where active=true) as active_player_assignments;
