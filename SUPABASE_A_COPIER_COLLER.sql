@@ -5405,3 +5405,58 @@ select
   (select jsonb_array_length(coalesce(settings->'murder_party'->'zones','[]'::jsonb)) from public.birthday_config where id=1) as zones_count,
   (select jsonb_array_length(coalesce(settings->'murder_party'->'objects','[]'::jsonb)) from public.birthday_config where id=1) as objects_count,
   (select count(*) from public.hydra_access_assignments where active=true) as active_player_assignments;
+
+
+-- ============================================================
+-- CENTRE ANNIVERSAIRE — MODULES ACTIFS + TENUE YANNICK
+-- Synchronisation des modules visibles dans l'onglet Anniversaire.
+-- ============================================================
+update public.birthday_config
+set settings = settings
+  || jsonb_build_object(
+    'birthday_mode', true,
+    'schedule_visible', true,
+    'schedule', jsonb_build_array(
+      jsonb_build_object('time','14h30','title','Accueil des agents','description','Accueil, remise des accès et découverte du dossier Hydra.'),
+      jsonb_build_object('time','15h00','title','Acte I — Briefing','description','Présentation des personnages, règles et premiers documents.'),
+      jsonb_build_object('time','15h30','title','Acte II — Enquête libre','description','Zones, objets, interrogatoires et premières énigmes.'),
+      jsonb_build_object('time','17h00','title','Acte III — Recoupement','description','Fragments IA, archives, livre ancien et flux financiers.'),
+      jsonb_build_object('time','19h00','title','Pause / dîner','description','Pause conviviale avant la phase finale.'),
+      jsonb_build_object('time','21h10','title','Acte IV — Niveau final','description','Moment clé de l’anniversaire et ouverture du dernier niveau d’indices.'),
+      jsonb_build_object('time','21h30','title','Acte V — Accusation finale','description','Derniers recoupements, accusation et épilogue Hydra.')
+    ),
+    'quiz', jsonb_build_object('enabled',true,'title','🧠 Quiz Hydra — Qui connaît Ethan ?','questions',jsonb_build_array(
+      jsonb_build_object('question','Quelle est la date de l’anniversaire d’Ethan ?','options',jsonb_build_array('23 décembre','24 décembre','1er janvier'),'correct',0),
+      jsonb_build_object('question','Quel est le nom du protocole central de l’enquête ?','options',jsonb_build_array('Protocole Miroir','Protocole Alpha','Protocole Phoenix'),'correct',0),
+      jsonb_build_object('question','Quel personnage analyse les flux financiers Hydra ?','options',jsonb_build_array('Emilie','Max','Cécile'),'correct',0),
+      jsonb_build_object('question','Quel personnage est l’archiviste numérique ?','options',jsonb_build_array('Fabrice','Tony','Lino'),'correct',0),
+      jsonb_build_object('question','À quelle heure le moment clé de l’anniversaire est-il prévu ?','options',jsonb_build_array('20h10','21h10','22h10'),'correct',1)
+    )),
+    'poll', jsonb_build_object('enabled',true,'title','🗳️ Vote en direct — Quelle piste explorer ?','options',jsonb_build_array('Les archives et horodatages','Le Livre Ancien','Les flux financiers','Les symboles et objets')),
+    'challenges', jsonb_build_array(
+      jsonb_build_object('title','🧩 Défi 1 — Agent observateur','description','Repère un détail inhabituel dans le décor et note-le.'),
+      jsonb_build_object('title','🧩 Défi 2 — Recoupement','description','Trouve deux informations provenant de deux dossiers différents qui se répondent.'),
+      jsonb_build_object('title','🧩 Défi 3 — Code Hydra','description','Identifie un symbole, mot-clé ou fragment qui mérite une vérification.'),
+      jsonb_build_object('title','🧩 Défi 4 — Chronologie','description','Reconstitue trois événements dans le bon ordre.'),
+      jsonb_build_object('title','🧩 Défi 5 — Équipe','description','Fais confirmer une piste par un autre agent avant de la considérer comme solide.')
+    ),
+    'wall', jsonb_build_object('enabled',true,'title','💬 Mur des messages — Transmission Hydra'),
+    'gallery', jsonb_build_object('enabled',true,'title','📸 Galerie de la fête','items',jsonb_build_array()),
+    'memories', jsonb_build_object('enabled',true,'title','📖 Archives de l’anniversaire','intro','Les statistiques et souvenirs se construiront au fil des interactions.','stats',jsonb_build_array(
+      jsonb_build_object('label','Enquête','value','PROTOCOLE HYDRA'),
+      jsonb_build_object('label','Date','value','23 décembre 2026'),
+      jsonb_build_object('label','Moment clé','value','21h10'),
+      jsonb_build_object('label','Dossiers','value','21 personnages')
+    ))
+  ),
+  updated_at=now()
+where id=1;
+
+update public.birthday_config
+set settings=jsonb_set(settings,'{murder_party,players}',(
+  select jsonb_agg(case when p->>'name'='Yannick'
+    then jsonb_set(p,'{tenue_parfaite}',to_jsonb('Polo noir, veste softshell gris anthracite, pantalon cargo noir, chaussures noires sobres, badge Sécurité Hydra et petite lampe LED.'::text))
+    else p end)
+  from jsonb_array_elements(settings->'murder_party'->'players') p
+)),updated_at=now()
+where id=1;
