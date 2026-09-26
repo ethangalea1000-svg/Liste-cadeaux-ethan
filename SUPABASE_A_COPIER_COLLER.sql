@@ -2692,6 +2692,8 @@ security definer
 set search_path = public
 as $accesslist$
 begin
+  perform public.assert_admin_header();
+
   if not exists (
     select 1
     from public.list_access_codes
