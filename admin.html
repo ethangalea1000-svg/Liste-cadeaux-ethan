@@ -108,7 +108,7 @@
   </div>
 </section>
 <section id="dashboard" class="hidden">
-  <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" onclick="showAnnouncement()">📢 Faire une annonce</button><button class="btn" onclick="activateTab('hydra');loadAccessCodes()">🧩 Voir Hydra</button><button class="btn" onclick="showDiagnostic()">🔧 Tester Supabase</button><button class="btn admin-signout" onclick="adminLogout()">Se déconnecter</button></div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" onclick="showAnnouncement()">📢 Faire une annonce</button><a class="btn primary" href="hydra-interactive.html">⌁ HYDRA INTERACTIVE</a><button class="btn" onclick="activateTab('hydra');loadAccessCodes()">🧩 Voir Hydra</button><button class="btn" onclick="showDiagnostic()">🔧 Tester Supabase</button><button class="btn admin-signout" onclick="adminLogout()">Se déconnecter</button></div>
 <div id="announcementBox" class="panel hidden" style="margin-top:12px"><div class="section-head"><h2>📢 Nouvelle annonce</h2><button class="btn" onclick="hideAnnouncement()">Fermer</button></div><div style="display:grid;gap:10px"><input id="announcementMessage" maxlength="500" placeholder="Texte de l’annonce…"><input id="announcementLink" maxlength="500" placeholder="Lien facultatif (https://…)"><div class="actions"><button class="btn primary" onclick="publishAnnouncement()">Publier l’annonce</button></div></div></div><div class="stats">
     <div class="stat"><b id="countSuggestions">0</b><span>À valider</span></div>
     <div class="stat"><b id="countMessages">0</b><span>Messages</span></div>
