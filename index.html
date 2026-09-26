@@ -250,8 +250,8 @@ main.unlocked>.foot{margin-top:24px}
 </section>
  <section class="birthday-section birthday-hidden" id="birthdayHydraSection" data-app-view="anniversaire">
    <div class="birthday-card">
-     <h2 id="birthdayHydraSectionTitle">🕵️ Mon dossier Hydra</h2>
-     <div id="birthdayHydraMeta" class="form-note"></div>
+     <h2 id="birthdayHydraSectionTitle">🕵️ MON DOSSIER HYDRA</h2>
+     <div id="birthdayHydraMeta" class="form-note">Dossier privé lié à ton lien Hydra.</div>
      <div id="birthdayHydraBody" class="birthday-list"></div>
    </div>
  </section><section class="fundraisers-main" data-app-view="participer">
@@ -736,13 +736,26 @@ function startBirthdayCountdown(){
   tick(); birthdayCountdownTimer=setInterval(tick,1000);
 }
 async function loadHydraDossier(){
+  const section=document.getElementById("birthdayHydraSection"),body=document.getElementById("birthdayHydraBody"),meta=document.getElementById("birthdayHydraMeta");
+  if(!section||!body)return;
+  // Le lien privé Hydra doit rester visible même si le chargement du dossier échoue.
+  if(!hydraToken){
+    birthdaySet("birthdayHydraSection",false);
+    return;
+  }
+  birthdaySet("birthdayHydraSection",true);
+  if(meta)meta.textContent="🔐 Vérification de ton lien Hydra privé…";
+  if(body)body.innerHTML='<div class="birthday-item"><strong>⏳ Chargement du dossier Hydra…</strong><span class="form-note">Le contenu privé est en cours de récupération.</span></div>';
   try{
-    const r=await privateRpc("get_my_hydra_dossier",{p_code:accessCode,p_hydra_token:hydraToken||null});
+    const r=await privateRpc("get_my_hydra_dossier",{p_code:accessCode,p_hydra_token:hydraToken});
     const p=await r.json().catch(()=>({}));
-    const section=document.getElementById("birthdayHydraSection"),body=document.getElementById("birthdayHydraBody"),meta=document.getElementById("birthdayHydraMeta");
-    if(!section||!body||!p||!p.name){birthdaySet("birthdayHydraSection",false);return}
-    birthdaySet("birthdayHydraSection",true);
-    if(meta)meta.textContent="Dossier personnel réservé à "+(p.name||"ce joueur")+".";
+    if(!r.ok)throw new Error(p?.message||p?.error||"Réponse Hydra invalide.");
+    if(!p||!p.name){
+      if(meta)meta.textContent="⚠️ Lien Hydra reçu, mais aucun dossier ne correspond à ce jeton.";
+      body.innerHTML='<div class="birthday-item"><strong>⚠️ Dossier Hydra introuvable</strong><span class="form-note">Le lien est bien reconnu, mais l’attribution correspondante n’a pas été trouvée dans Supabase.</span></div>';
+      return;
+    }
+    if(meta)meta.textContent="🕵️ Dossier personnel réservé à "+(p.name||"ce joueur")+".";
     const rows=[
       ["Rôle",p.role],["Fonction",p.function],["Description",p.description],["Ce que tu sais au début",p.knowledge],["Objectif",p.objective],
       ["Document spécial",p.special_text||p.special],["Règle spéciale",p.rule],["Accroche",p.fictional_hook],["Fragment IA",p.fragment]
@@ -750,7 +763,11 @@ async function loadHydraDossier(){
     body.innerHTML=(p.scenario&&String(p.scenario).trim()
       ? '<div class="birthday-item"><div class="message">'+escAny(p.scenario)+'</div></div>'
       : rows.map(x=>'<div class="birthday-item"><strong>'+escAny(x[0])+'</strong><span class="form-note">'+escAny(x[1])+'</span></div>').join(""));
-  }catch{birthdaySet("birthdayHydraSection",false)}
+  }catch(e){
+    console.error("loadHydraDossier",e);
+    if(meta)meta.textContent="❌ Erreur lors du chargement du dossier Hydra.";
+    body.innerHTML='<div class="birthday-item"><strong>❌ Impossible de charger le dossier Hydra</strong><span class="form-note">'+escAny(e?.message||"Erreur inconnue")+'</span></div>';
+  }
 }
 
 async function loadBirthdayWall(){
