@@ -2856,7 +2856,7 @@ returns table(
 language plpgsql
 security definer
 set search_path = public
-as $$
+as $
 declare
   v_code_exists boolean;
   v_name text;
@@ -2874,9 +2874,9 @@ begin
 
   -- Vérification de chaque personnage demandé.
   for v_name in
-    select distinct trim(value#>>'{}')
-    from jsonb_array_elements(p_players) value
-    where trim(value#>>'{}') <> ''
+    select distinct trim(value)
+    from jsonb_array_elements_text(p_players) value
+    where trim(value) <> ''
   loop
     if not exists(
       select 1
@@ -2896,14 +2896,14 @@ begin
     and not exists(
       select 1
       from jsonb_array_elements(p_players) value
-      where lower(trim(value#>>'{}')) = lower(trim(haa.hydra_player_name))
+      where lower(trim(value)) = lower(trim(haa.hydra_player_name))
     );
 
   -- Crée les nouvelles attributions avec un jeton privé aléatoire.
   for v_name in
-    select distinct trim(value#>>'{}')
-    from jsonb_array_elements(p_players) value
-    where trim(value#>>'{}') <> ''
+    select distinct trim(value)
+    from jsonb_array_elements_text(p_players) value
+    where trim(value) <> ''
   loop
     if not exists(
       select 1
@@ -2950,7 +2950,7 @@ begin
   where haa.access_id=p_access_id
   order by haa.created_at asc;
 end;
-$$;
+$;
 
 grant execute on function public.admin_sync_hydra_access_assignments(bigint,jsonb) to anon;
 
