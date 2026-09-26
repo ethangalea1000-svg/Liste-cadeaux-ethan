@@ -85,7 +85,7 @@
   .empty{padding:20px 12px}
 }
 .toast{position:fixed;right:18px;bottom:18px;background:#17192a;color:#fff;padding:12px 15px;border-radius:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:20}
-.birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px;resize:vertical}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}.admin-editor-note{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:12px;color:var(--muted)}.quick-preview{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,#fff,#f8f9ff)}.site-color{height:46px;padding:4px}.hydra-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hydra-editor-grid .full{grid-column:1/-1}.hydra-editor-grid textarea{min-height:95px;resize:vertical}.hydra-editor-grid .scenario{min-height:230px}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}.hydra-editor-grid{grid-template-columns:1fr}.hydra-editor-grid .full{grid-column:auto}}
+.birthday-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.birthday-grid .full{grid-column:1/-1}.code-editor{width:100%;min-height:170px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;border:1px solid var(--line);border-radius:11px;padding:12px;resize:vertical}.hydra-player{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.hydra-player .sub{font-size:12px;color:var(--muted);margin-top:3px}.admin-editor-note{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:12px;color:var(--muted)}.quick-preview{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(180deg,#fff,#f8f9ff)}.site-color{height:46px;padding:4px}.hydra-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hydra-editor-grid .full{grid-column:1/-1}.hydra-editor-grid textarea{min-height:95px;resize:vertical}.hydra-editor-grid .scenario{min-height:230px}.hydra-access-select{margin-top:10px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#f8f9fc;font:inherit;font-weight:700;width:100%}.hydra-access-label{font-size:12px;color:var(--muted);margin-top:7px}@media(max-width:700px){.birthday-grid{grid-template-columns:1fr}.birthday-grid .full{grid-column:auto}.hydra-player{grid-template-columns:1fr}.hydra-editor-grid{grid-template-columns:1fr}.hydra-editor-grid .full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -487,14 +487,20 @@ async function rejectAccessRequest(id){
 }
 async function loadAccessCodes(){
  try{
-  const [rows,stats,dups]=await Promise.all([
+  const [rows,stats,dups,birthdayCfg]=await Promise.all([
     rpc("admin_list_access_usage",{}),
     rpc("admin_list_access_stats",{}),
-    rpc("admin_list_access_duplicates",{})
+    rpc("admin_list_access_duplicates",{}),
+    getBirthdayConfig().catch(()=>({}))
   ]);
   const data=Array.isArray(rows)?rows:[];
   const s=(Array.isArray(stats)?stats[0]:stats)||{};
   const duplicates=Array.isArray(dups)?dups:[];
+  const hydraPlayers=Array.isArray(birthdayCfg?.murder_party?.players)?birthdayCfg.murder_party.players:[];
+  const hydraOptions=[
+    '<option value="">— Aucun dossier Hydra assigné —</option>',
+    ...hydraPlayers.map(p=>'<option value="'+esc(p.name||"")+'">'+esc(p.name||"")+' — '+esc(p.role||"Joueur Hydra")+'</option>')
+  ].join("");
   $("countAccess").textContent=Number(s.active_accesses||0);
   $("accessStats").innerHTML=[
     '<div class="stat"><b>'+Number(s.active_accesses||0)+'</b><span>accès actifs</span></div>',
@@ -507,11 +513,24 @@ async function loadAccessCodes(){
     :'<div class="panel" style="background:#eaf8f0;border-color:#c8e8d2"><strong>✅ Aucun doublon détecté.</strong><div class="meta">Chaque nom correspond actuellement à un seul accès.</div></div>';
   $("accessList").innerHTML=data.length?data.map(x=>{
     const url=accessUrl(x.access_code);
-    return '<article class="item"><div class="meta">'+date(x.last_authorized_at||x.created_at)+(x.authorization_count?' · '+Number(x.authorization_count)+' accès autorisé(s)': ' · jamais utilisé')+'</div><div><strong>'+esc(x.person_name)+'</strong> · <span class="badge">'+(x.active_access?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin_access?'<span class="access-admin-badge">ADMIN</span>':"")+(Number(x.duplicate_count_for_name)>1?'<span class="access-admin-badge" style="background:#fff0d8;color:#9a5b00">DOUBLON</span>':"")+'</div><div class="access-link">'+esc(url)+'</div><div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.active_access)+')">'+(x.active_access?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin_access)+')">'+(x.is_admin_access?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div></article>';
+    const currentHydra=String(x.hydra_player_name||"");
+    const hydraSelect=hydraPlayers.length
+      ? '<div class="hydra-access-label">🧩 Dossier Hydra attribué à cet accès</div><select class="hydra-access-select" data-access-id="'+Number(x.access_id)+'" onchange="assignHydra(this.dataset.accessId,this.value)">'+hydraOptions.replace('value="'+esc(currentHydra)+'"','value="'+esc(currentHydra)+'" selected')+'</select>'
+      : '<div class="hydra-access-label">🧩 Joueurs Hydra indisponibles — charge la configuration anniversaire après avoir exécuté le SQL à jour.</div>';
+    return '<article class="item"><div class="meta">'+date(x.last_authorized_at||x.created_at)+(x.authorization_count?' · '+Number(x.authorization_count)+' accès autorisé(s)': ' · jamais utilisé')+'</div><div><strong>'+esc(x.person_name)+'</strong> · <span class="badge">'+(x.active_access?"ACTIF":"DÉSACTIVÉ")+'</span> '+(x.is_admin_access?'<span class="access-admin-badge">ADMIN</span>':"")+(Number(x.duplicate_count_for_name)>1?'<span class="access-admin-badge" style="background:#fff0d8;color:#9a5b00">DOUBLON</span>':"")+'</div><div class="access-link">'+esc(url)+'</div>'+hydraSelect+'<div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button><button class="btn" onclick="toggleAccess('+x.access_id+','+(!x.active_access)+')">'+(x.active_access?"Désactiver":"Activer")+'</button><button class="btn" onclick="toggleAdmin('+x.access_id+','+(!x.is_admin_access)+')">'+(x.is_admin_access?"Retirer admin":"👑 Mettre admin")+'</button><button class="btn danger" onclick="deleteAccess('+x.access_id+')">Supprimer</button></div></article>';
   }).join(""):empty("Aucun accès créé.");
  }catch(e){
   $("accessList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ SQL des accès à actualiser</strong><div class="message">Exécute la dernière version de <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase, puis recharge cette page.</div><div class="meta" style="margin-top:8px">'+esc(e?.message||"Erreur inconnue")+'</div></div>';
   toast(e?.message||"Impossible de charger les accès.");
+ }
+}
+async function assignHydra(accessId, playerName){
+ try{
+  await rpc("admin_assign_hydra_access",{p_access_id:Number(accessId),p_hydra_player_name:playerName||null});
+  toast(playerName?("Dossier Hydra attribué à "+playerName+"."):"Dossier Hydra retiré.");
+ }catch(e){
+  toast(e?.message||"Attribution Hydra impossible.");
+  await loadAccessCodes();
  }
 }
 async function createAccess(e){
