@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">ActuIA — Le magazine de l'intelligence artificielle</title>
+  <desc id="desc">Visuel éditorial du magazine ActuIA, dédié à l'intelligence artificielle.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1230"/>
+      <stop offset=".52" stop-color="#182d72"/>
+      <stop offset="1" stop-color="#5d2f9f"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#69e8ff"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="34"/></filter>
+  </defs>
+  <rect width="1200" height="750" rx="36" fill="url(#bg)"/>
+  <circle cx="1030" cy="120" r="210" fill="#55d6ff" opacity=".14" filter="url(#blur)"/>
+  <circle cx="170" cy="650" r="250" fill="#9d7cff" opacity=".14" filter="url(#blur)"/>
+  <path d="M0 560 C220 470 410 700 650 545 S1000 380 1200 480" fill="none" stroke="#6fe7ff" stroke-opacity=".16" stroke-width="2"/>
+  <path d="M0 590 C220 500 420 730 660 570 S1020 410 1200 515" fill="none" stroke="#c2a7ff" stroke-opacity=".14" stroke-width="2"/>
+  <rect x="54" y="52" width="1092" height="646" rx="28" fill="none" stroke="#ffffff" stroke-opacity=".14"/>
+  <text x="74" y="115" fill="#b8c8ee" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" letter-spacing="6">LE MAGAZINE DE</text>
+  <text x="70" y="245" fill="#ffffff" font-family="Arial,Helvetica,sans-serif" font-size="142" font-weight="900" letter-spacing="-7">ActuIA</text>
+  <rect x="76" y="285" width="430" height="8" rx="4" fill="url(#glow)"/>
+  <text x="76" y="337" fill="#e5edff" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="700">INTELLIGENCE ARTIFICIELLE</text>
+  <text x="76" y="378" fill="#b6c5e3" font-family="Arial,Helvetica,sans-serif" font-size="19">Recherche · outils · entreprises · société · éthique</text>
+  <g transform="translate(76 520)">
+    <rect width="230" height="82" rx="16" fill="#081126" fill-opacity=".68" stroke="#6fe7ff" stroke-opacity=".35"/>
+    <text x="22" y="31" fill="#91eaff" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" letter-spacing="2">FORMAT</text>
+    <text x="22" y="59" fill="#ffffff" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="900">68 PAGES</text>
+  </g>
+  <g transform="translate(322 520)">
+    <rect width="230" height="82" rx="16" fill="#081126" fill-opacity=".68" stroke="#a78bfa" stroke-opacity=".35"/>
+    <text x="22" y="31" fill="#c2b0ff" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" letter-spacing="2">RYTHME</text>
+    <text x="22" y="59" fill="#ffffff" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="900">4 N° / AN</text>
+  </g>
+  <g transform="translate(568 520)">
+    <rect width="230" height="82" rx="16" fill="#081126" fill-opacity=".68" stroke="#ffffff" stroke-opacity=".2"/>
+    <text x="22" y="31" fill="#b7c5df" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="800" letter-spacing="2">ABONNEMENT</text>
+    <text x="22" y="59" fill="#ffffff" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="900">27,60 € / AN</text>
+  </g>
+  <text x="900" y="613" fill="#d7e4ff" font-family="Arial,Helvetica,sans-serif" font-size="16" text-anchor="middle">ACTUALITÉ · ANALYSE · IA</text>
+</svg>
