@@ -258,10 +258,16 @@ body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{backgro
   <button class="app-tab" type="button" data-view-target="communaute">
     <span class="app-tab-icon">💬</span><span><b>Communauté</b><small>Messages & idées</small></span>
   </button>
-  <button class="app-tab" type="button" data-view-target="aide">
-    <span class="app-tab-icon">❓</span><span><b>Comment ça marche</b><small>Guide du site</small></span>
-  </button>
 </nav>
+<button type="button" id="floatingHelpBtn" aria-label="Comment ça marche" title="Comment ça marche">❓</button>
+<style>
+#floatingHelpBtn{position:fixed;right:14px;top:14px;z-index:9000;width:46px;height:46px;border:0;border-radius:50%;background:#fff;box-shadow:0 5px 20px rgba(0,0,0,.18);font-size:21px;cursor:pointer}
+#floatingHelpBtn:hover{transform:translateY(-1px)}
+@media(max-width:650px){#floatingHelpBtn{right:10px;top:10px;width:42px;height:42px;font-size:19px}}
+</style>
+<script>
+document.getElementById("floatingHelpBtn")?.addEventListener("click",()=>document.querySelector('[data-view-target="aide"]')?.click());
+</script>
 <div class="view-helper private-ui" id="viewHelper">
   <div>
     <strong id="viewHelperTitle">Ta liste de cadeaux</strong>
