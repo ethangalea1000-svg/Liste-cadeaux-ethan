@@ -433,6 +433,37 @@ async function loadFundraisers(){
 }
 async function fundraiserStatus(id,status){try{await rpc("admin_set_fundraiser_status",{p_id:id,p_status:status});toast(status==="approved"?"Cagnotte validée.":"Cagnotte refusée.");loadFundraisers()}catch(e){toast(e.message)}}
 
+async function shareAccessLink(code,label){
+  const clean=String(code||"").trim();
+  const person=String(label||"").trim()||"cette personne";
+  if(!clean){
+    toast("❌ Aucun code d’accès disponible pour "+person+".");
+    return;
+  }
+  const url=accessUrl(clean);
+  const shareData={
+    title:"Accès à la liste de cadeaux",
+    text:"Voici ton lien d’accès personnel.",
+    url
+  };
+  try{
+    if(navigator.share){
+      await navigator.share(shareData);
+      toast("✓ Lien partagé pour "+person+".");
+      return;
+    }
+  }catch(e){
+    if(e?.name==="AbortError")return;
+  }
+  try{
+    await navigator.clipboard.writeText(url);
+    toast("✓ Lien de "+person+" copié.");
+  }catch(e){
+    window.prompt("Copie ce lien pour "+person+":",url);
+  }
+}
+window.shareAccessLink=shareAccessLink;
+
 async function loadPeople(){
  try{
   const rows=await rpc("admin_list_people_access",{});
