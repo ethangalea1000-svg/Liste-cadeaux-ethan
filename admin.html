@@ -442,8 +442,8 @@ async function shareAccessLink(code,label){
   }
   const url=accessUrl(clean);
   const shareData={
-    title:"Accès à la liste de cadeaux",
-    text:"Voici ton lien d’accès personnel.",
+    title:"🎁 Ton accès à la liste de cadeaux",
+    text:"Salut "+person+" ! 🎁\n\nVoici ton lien d’accès personnel à la liste de cadeaux. Il te permet de consulter les cadeaux disponibles et de réserver celui que tu souhaites, afin d’éviter les doublons.\n\nÀ bientôt !",
     url
   };
   try{
@@ -456,10 +456,11 @@ async function shareAccessLink(code,label){
     if(e?.name==="AbortError")return;
   }
   try{
-    await navigator.clipboard.writeText(url);
-    toast("✓ Lien de "+person+" copié.");
+    const message=shareData.text+"\n\n"+url;
+    await navigator.clipboard.writeText(message);
+    toast("✓ Message et lien de "+person+" copiés.");
   }catch(e){
-    window.prompt("Copie ce lien pour "+person+":",url);
+    window.prompt("Copie ce message pour "+person+":",shareData.text+"\n\n"+url);
   }
 }
 window.shareAccessLink=shareAccessLink;
