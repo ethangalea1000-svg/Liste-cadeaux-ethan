@@ -87,10 +87,194 @@ button,input,textarea,select{font-family:inherit}.tab{transition:transform .14s,
 .incident-mode{display:none;position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 30%,rgba(82,0,15,.65),rgba(4,6,11,.96) 62%);backdrop-filter:blur(12px)}.incident-mode.active{display:grid;place-items:center}.incident-modal{width:min(850px,calc(100% - 28px));padding:22px;border:1px solid #8c3343;border-radius:20px;background:linear-gradient(180deg,#181016,#0a0d13);box-shadow:0 30px 90px rgba(0,0,0,.55)}.incident-siren{font:950 clamp(24px,5vw,56px) ui-monospace,SFMono-Regular,Consolas,monospace;color:#ff7186;letter-spacing:.08em}.incident-progress{height:12px;border-radius:99px;background:#24141a;overflow:hidden;margin:12px 0}.incident-progress i{display:block;height:100%;width:72%;background:linear-gradient(90deg,#ff5b72,#ffb24d);animation:incidentPulse 1.2s infinite alternate}@keyframes incidentPulse{to{width:87%}}.incident-feed{display:grid;gap:7px;max-height:220px;overflow:auto;margin:12px 0}.incident-feed div{padding:9px;border-left:2px solid #8b3444;background:#130f13;color:#d9cbd0;font-size:11px}
 @media(max-width:900px){.web-grid,.gallery-grid,.qr-layout{grid-template-columns:1fr}.qr-grid{transform:scale(.88);transform-origin:top center}}
 
+
+/* === HYDRA VIRTUAL MACHINE === */
+.vm-overlay{position:fixed;inset:0;z-index:500;background:#03050a;color:#eef4ff;display:none;overflow:hidden;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.vm-overlay.open{display:block}
+.vm-boot{position:absolute;inset:0;background:#020409;display:grid;place-items:center;padding:28px}
+.vm-boot-inner{width:min(820px,92vw);font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;color:#9fb7d7}
+.vm-logo{font:900 44px/1 system-ui;letter-spacing:.22em;color:#dce8ff;text-align:center;margin-bottom:10px}
+.vm-sub{text-align:center;color:#6f87a8;font-size:11px;letter-spacing:.2em;margin-bottom:28px}
+.vm-log{min-height:180px;border:1px solid #1c2b42;border-radius:14px;background:linear-gradient(180deg,#07101a,#04070d);padding:15px;box-shadow:0 20px 70px rgba(0,0,0,.45)}
+.vm-log-line{opacity:.9}
+.vm-progress{height:5px;background:#0e1724;border-radius:999px;overflow:hidden;margin-top:18px}
+.vm-progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#5e66ff,#29d7ff);box-shadow:0 0 18px #4f81ff;transition:width .25s}
+.vm-desktop{position:absolute;inset:0;background:
+radial-gradient(circle at 18% 20%,rgba(64,91,170,.23),transparent 26%),
+radial-gradient(circle at 78% 28%,rgba(37,211,255,.14),transparent 24%),
+linear-gradient(135deg,#07101d 0%,#040811 55%,#060a13 100%);
+display:none}
+.vm-desktop.active{display:block}
+.vm-wallpaper-grid{position:absolute;inset:0;opacity:.12;background-image:linear-gradient(rgba(120,155,210,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(120,155,210,.16) 1px,transparent 1px);background-size:42px 42px}
+.vm-topbar{position:absolute;left:0;right:0;top:0;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid rgba(77,105,145,.28);background:rgba(5,10,18,.72);backdrop-filter:blur(16px);z-index:20}
+.vm-brand-mini{display:flex;align-items:center;gap:9px;font-weight:950;letter-spacing:.11em;font-size:11px}
+.vm-orb{width:23px;height:23px;border-radius:7px;background:linear-gradient(135deg,#5964ff,#27d4ff);display:grid;place-items:center;font-size:11px}
+.vm-top-actions{display:flex;align-items:center;gap:8px}
+.vm-status-dot{width:7px;height:7px;border-radius:50%;background:#40e0a3;box-shadow:0 0 12px #40e0a3}
+.vm-clock{font:800 11px ui-monospace,SFMono-Regular,Consolas,monospace;color:#8fdfff}
+.vm-desktop-grid{position:absolute;top:64px;left:24px;display:grid;grid-template-columns:repeat(2,92px);gap:18px 14px;z-index:5}
+.vm-icon{border:1px solid transparent;background:transparent;color:#dae7fa;border-radius:13px;padding:9px 6px;cursor:pointer;text-align:center;font:inherit}
+.vm-icon:hover,.vm-icon:focus{background:rgba(62,91,137,.26);border-color:rgba(113,146,201,.4);outline:none}
+.vm-icon .ico{width:54px;height:54px;margin:0 auto 7px;border-radius:16px;display:grid;place-items:center;font-size:24px;background:linear-gradient(145deg,#17253c,#0c1626);border:1px solid #304563;box-shadow:0 10px 22px rgba(0,0,0,.22)}
+.vm-icon small{display:block;font-size:10px;font-weight:800;color:#cbd9ee;white-space:nowrap}
+.vm-window{position:absolute;left:220px;top:105px;width:min(760px,calc(100vw - 270px));height:min(520px,calc(100vh - 170px));min-width:320px;min-height:220px;border:1px solid #334968;border-radius:15px;overflow:hidden;background:#09111c;box-shadow:0 28px 90px rgba(0,0,0,.55),0 0 0 1px rgba(100,140,210,.06);display:none;z-index:10}
+.vm-window.active{display:block}
+.vm-window.maximized{left:12px!important;top:54px!important;width:calc(100vw - 24px)!important;height:calc(100vh - 108px)!important}
+.vm-titlebar{height:38px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 9px 0 13px;background:linear-gradient(180deg,#122039,#0e1727);border-bottom:1px solid #283c58;cursor:grab;user-select:none}
+.vm-titlebar:active{cursor:grabbing}
+.vm-title{font-size:11px;font-weight:950;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.vm-winctrls{display:flex;gap:5px}
+.vm-winctrl{width:24px;height:22px;border-radius:6px;border:1px solid #2d425f;background:#111b2b;color:#bdd0eb;cursor:pointer;font-weight:900}
+.vm-winctrl:hover{border-color:#607aa4}
+.vm-winctrl.close:hover{border-color:#a64c63;color:#ffb4c2}
+.vm-content{height:calc(100% - 38px);overflow:auto;padding:14px;background:
+radial-gradient(circle at 20% 0%,rgba(54,79,128,.11),transparent 26%),#08101b}
+.vm-card{border:1px solid #263a56;border-radius:12px;background:#0d1726;padding:12px;margin-bottom:10px}
+.vm-card h3{margin:0 0 7px;font-size:15px}
+.vm-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vm-kpi{font-size:25px;font-weight:950;margin-top:4px}
+.vm-muted{color:#8194b0;font-size:11px;line-height:1.5}
+.vm-terminal{height:100%;display:flex;flex-direction:column;background:#05090f}
+.vm-terminal-out{flex:1;overflow:auto;padding:14px;font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;color:#9be7c9}
+.vm-terminal-row{display:flex;border-top:1px solid #182436}
+.vm-terminal-row span{padding:12px 0 12px 14px;color:#4dd9b0;font:800 12px ui-monospace,SFMono-Regular,Consolas,monospace}
+.vm-terminal-row input{flex:1;border:0;outline:0;background:#05090f;color:#dcecff;padding:12px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace}
+.vm-taskbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);height:54px;min-width:min(760px,calc(100vw - 28px));display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 8px;border:1px solid #304766;border-radius:16px;background:rgba(9,16,27,.78);backdrop-filter:blur(18px);box-shadow:0 20px 60px rgba(0,0,0,.38);z-index:30}
+.vm-task-btn{width:44px;height:42px;border:1px solid transparent;border-radius:11px;background:transparent;color:#d7e3f7;cursor:pointer;font-size:18px}
+.vm-task-btn:hover,.vm-task-btn.active{background:#17263c;border-color:#344d70}
+.vm-task-sep{width:1px;height:27px;background:#2b3e59;margin:0 4px}
+.vm-task-power{border-color:#493044;background:#20121c;color:#ffadbd}
+.vm-task-power:hover{border-color:#854c60}
+.vm-start-menu{position:absolute;left:14px;bottom:76px;width:min(350px,calc(100vw - 28px));border:1px solid #334a69;border-radius:16px;background:rgba(7,13,22,.94);backdrop-filter:blur(18px);box-shadow:0 24px 80px rgba(0,0,0,.48);padding:14px;display:none;z-index:31}
+.vm-start-menu.open{display:block}
+.vm-start-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.vm-start-search{width:100%;padding:10px 11px;border-radius:10px;border:1px solid #30445f;background:#0b1422;color:#eef4ff}
+.vm-start-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.vm-start-item{padding:10px;border-radius:10px;border:1px solid transparent;background:#0d1726;color:#dce8f8;text-align:left;cursor:pointer}
+.vm-start-item:hover{border-color:#425e84;background:#122038}
+.vm-lock{position:absolute;right:14px;bottom:88px;border:1px solid #3b4f6c;background:rgba(8,14,23,.9);color:#c5d4e9;border-radius:10px;padding:8px 10px;font-weight:850;cursor:pointer;z-index:32}
+.vm-toast{position:absolute;top:55px;right:14px;z-index:40;padding:9px 11px;border-radius:10px;border:1px solid #3a5272;background:rgba(9,16,27,.94);color:#d9e7f9;font-size:11px;opacity:0;transform:translateY(-5px);pointer-events:none;transition:.18s}
+.vm-toast.show{opacity:1;transform:none}
+.vm-shutdown{position:absolute;inset:0;display:none;place-items:center;background:#020408;z-index:100}
+.vm-shutdown.active{display:grid}
+.vm-shutdown h2{font-size:28px;letter-spacing:.12em;margin:0 0 8px}
+.vm-shutdown p{color:#7185a4;font-size:11px;text-align:center}
+@media(max-width:700px){
+  .vm-desktop-grid{grid-template-columns:repeat(3,78px);left:12px;gap:10px 7px}
+  .vm-window{left:10px;top:58px;width:calc(100vw - 20px);height:calc(100vh - 130px)}
+  .vm-grid2{grid-template-columns:1fr}
+  .vm-taskbar{gap:2px}
+  .vm-task-btn{width:39px}
+}
+
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap toprow"><div class="brand"><div class="sig">⌁</div><div><b>HYDRA INTERACTIVE</b><small>POSTE DE CONTRÔLE — MAÎTRE DU JEU</small></div></div><div class="actions"><a class="btn" href="admin.html">← Administration</a><button class="btn danger hidden" id="logoutBtn">Verrouiller</button></div></div></header>
+<!-- === HYDRA VIRTUAL MACHINE === -->
+<div id="hydraVM" class="vm-overlay" aria-hidden="true">
+  <div id="vmBoot" class="vm-boot">
+    <div class="vm-boot-inner">
+      <div class="vm-logo">HYDRA</div>
+      <div class="vm-sub">VIRTUAL OPERATING ENVIRONMENT // MIROIR BUILD 21.09</div>
+      <div id="vmBootLog" class="vm-log"></div>
+      <div class="vm-progress"><i id="vmBootProgress"></i></div>
+    </div>
+  </div>
+  <div id="vmDesktop" class="vm-desktop">
+    <div class="vm-wallpaper-grid"></div>
+    <div class="vm-topbar">
+      <div class="vm-brand-mini"><span class="vm-orb">H</span> HYDRA VIRTUAL MACHINE</div>
+      <div class="vm-top-actions"><span class="vm-status-dot"></span><span>LOCAL SANDBOX</span><span class="vm-clock" id="vmClock">00:00:00</span></div>
+    </div>
+    <div class="vm-desktop-grid">
+      <button class="vm-icon" data-vm-app="intel"><span class="ico">🧠</span><small>Intelligence</small></button>
+      <button class="vm-icon" data-vm-app="mail"><span class="ico">✉</span><small>HYDRA Mail</small></button>
+      <button class="vm-icon" data-vm-app="finance"><span class="ico">€</span><small>Finance</small></button>
+      <button class="vm-icon" data-vm-app="browser"><span class="ico">🌐</span><small>Browser</small></button>
+      <button class="vm-icon" data-vm-app="evidence"><span class="ico">📁</span><small>Evidence</small></button>
+      <button class="vm-icon" data-vm-app="terminal"><span class="ico">&gt;_</span><small>Terminal</small></button>
+    </div>
+    <div id="vmStartMenu" class="vm-start-menu">
+      <div class="vm-start-head"><b>HYDRA // APPLICATIONS</b><span class="vm-muted">VM-01</span></div>
+      <input id="vmStartSearch" class="vm-start-search" placeholder="Rechercher une application…">
+      <div class="vm-start-grid">
+        <button class="vm-start-item" data-vm-app="intel">🧠 Intelligence Center</button>
+        <button class="vm-start-item" data-vm-app="mail">✉ HYDRA Mail</button>
+        <button class="vm-start-item" data-vm-app="finance">€ Finance</button>
+        <button class="vm-start-item" data-vm-app="browser">🌐 Browser</button>
+        <button class="vm-start-item" data-vm-app="evidence">📁 Evidence Locker</button>
+        <button class="vm-start-item" data-vm-app="terminal">&gt;_ Terminal</button>
+      </div>
+    </div>
+    <button id="vmLock" class="vm-lock">🔒 Verrouiller la VM</button>
+    <div id="vmToast" class="vm-toast"></div>
+    <div id="vmWindows">
+      <div class="vm-window" id="vmWinIntel" data-vm-window="intel">
+        <div class="vm-titlebar"><div class="vm-title">🧠 INTELLIGENCE CENTER <span class="vm-muted">/ LIVE</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="intel">—</button><button class="vm-winctrl" data-vm-max="intel">□</button><button class="vm-winctrl close" data-vm-close="intel">×</button></div></div>
+        <div class="vm-content">
+          <div class="vm-grid2">
+            <div class="vm-card"><div class="vm-muted">PROTOCOLE</div><div class="vm-kpi">MIROIR</div><div class="vm-muted">Architecture narrative active</div></div>
+            <div class="vm-card"><div class="vm-muted">COEUR</div><div class="vm-kpi" style="color:#71e4bb">ONLINE</div><div class="vm-muted">Hydra-Core · simulation locale</div></div>
+          </div>
+          <div class="vm-card"><h3>Corrélations prioritaires</h3><div class="vm-muted">Emilie → mouvement 2,3 M€ → Miroir Holdings<br>Fabrice → archive originale → divergence<br>Yoan → sabotage → chronologie</div></div>
+          <div class="vm-card"><h3>État système</h3><div class="vm-muted">4 flux de surveillance · 21 dossiers · 4 clés narratives · sécurité : simulation</div></div>
+        </div>
+      </div>
+      <div class="vm-window" id="vmWinMail" data-vm-window="mail" style="left:260px;top:125px">
+        <div class="vm-titlebar"><div class="vm-title">✉ HYDRA MAIL <span class="vm-muted">/ SECURE SIM</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="mail">—</button><button class="vm-winctrl" data-vm-max="mail">□</button><button class="vm-winctrl close" data-vm-close="mail">×</button></div></div>
+        <div class="vm-content">
+          <div class="vm-card"><div class="vm-muted">INBOX · NON LU</div><h3>URGENT — mouvement de 2,3 M€</h3><p class="vm-muted">Emilie · 21:32 · Simulation</p><p>Une opération inhabituelle vient d’être repérée dans le scénario. Référence : HYDRA-23MIRROR-021.</p></div>
+          <div class="vm-card"><h3>Archive altérée — vérification demandée</h3><p class="vm-muted">Fabrice · pièce jointe fictive · lecture seule</p></div>
+          <button class="btn primary" data-vm-main="mails">Ouvrir HYDRA Mail complet</button>
+        </div>
+      </div>
+      <div class="vm-window" id="vmWinFinance" data-vm-window="finance" style="left:300px;top:145px">
+        <div class="vm-titlebar"><div class="vm-title">€ HYDRA MONEY <span class="vm-muted">/ FICTIONAL BANK</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="finance">—</button><button class="vm-winctrl" data-vm-max="finance">□</button><button class="vm-winctrl close" data-vm-close="finance">×</button></div></div>
+        <div class="vm-content">
+          <div class="vm-card"><div class="vm-muted">SOLDE NARRATIF</div><div class="vm-kpi">12 847 320,64 €</div><div class="vm-muted">Compte fictif · aucune transaction réelle</div></div>
+          <div class="vm-grid2"><div class="vm-card"><h3>− 2 300 000 €</h3><div class="vm-muted">Miroir Holdings · suspect</div></div><div class="vm-card"><h3>HYDRA-23MIRROR-021</h3><div class="vm-muted">Référence interne</div></div></div>
+          <button class="btn primary" data-vm-main="virements">Ouvrir HYDRA Money complet</button>
+        </div>
+      </div>
+      <div class="vm-window" id="vmWinBrowser" data-vm-window="browser" style="left:350px;top:90px">
+        <div class="vm-titlebar"><div class="vm-title">🌐 HYDRA BROWSER <span class="vm-muted">/ INTRANET ONLY</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="browser">—</button><button class="vm-winctrl" data-vm-max="browser">□</button><button class="vm-winctrl close" data-vm-close="browser">×</button></div></div>
+        <div class="vm-content">
+          <div class="vm-card"><div class="vm-muted">ADDRESS</div><div style="font:12px ui-monospace,SFMono-Regular,Consolas,monospace;margin-top:7px">https://intra.hydra.local/dashboard</div></div>
+          <div class="vm-card"><h3>HYDRA Intranet</h3><p class="vm-muted">Finance · Archive · Network · Evidence · Intelligence</p>
+            <div class="actions" style="margin-top:9px"><button class="btn" data-vm-main="browser">Ouvrir Browser complet</button><button class="btn" data-vm-main="intel">Intelligence</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="vm-window" id="vmWinEvidence" data-vm-window="evidence" style="left:390px;top:105px">
+        <div class="vm-titlebar"><div class="vm-title">📁 EVIDENCE LOCKER <span class="vm-muted">/ CLASSIFIED</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="evidence">—</button><button class="vm-winctrl" data-vm-max="evidence">□</button><button class="vm-winctrl close" data-vm-close="evidence">×</button></div></div>
+        <div class="vm-content">
+          <div class="vm-card"><h3>ARCHIVE ORIGINALE</h3><div class="vm-muted">CAM-02 · Fabrice · empreinte de référence</div></div>
+          <div class="vm-card"><h3>FRAGMENT 21</h3><div class="vm-muted">Clé narrative : FRAGMENT21 · accès simulation</div></div>
+          <div class="vm-card"><h3>PAGE MANQUANTE</h3><div class="vm-muted">Livre Ancien · connexion avec le récit Miroir</div></div>
+          <button class="btn primary" data-vm-main="locker">Ouvrir le coffre complet</button>
+        </div>
+      </div>
+      <div class="vm-window" id="vmWinTerminal" data-vm-window="terminal" style="left:180px;top:120px;width:700px;height:460px">
+        <div class="vm-titlebar"><div class="vm-title">&gt;_ HYDRA TERMINAL <span class="vm-muted">/ LOCAL SHELL</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="terminal">—</button><button class="vm-winctrl" data-vm-max="terminal">□</button><button class="vm-winctrl close" data-vm-close="terminal">×</button></div></div>
+        <div class="vm-content" style="padding:0"><div class="vm-terminal"><div id="vmTermOut" class="vm-terminal-out"></div><div class="vm-terminal-row"><span>hydra@vm:~$</span><input id="vmTermInput" autocomplete="off" spellcheck="false" placeholder="help"></div></div></div>
+      </div>
+    </div>
+    <div class="vm-taskbar">
+      <button id="vmStart" class="vm-task-btn" title="Applications">◈</button>
+      <div class="vm-task-sep"></div>
+      <button class="vm-task-btn" data-vm-app="intel" title="Intelligence">🧠</button>
+      <button class="vm-task-btn" data-vm-app="mail" title="Mail">✉</button>
+      <button class="vm-task-btn" data-vm-app="finance" title="Finance">€</button>
+      <button class="vm-task-btn" data-vm-app="browser" title="Browser">🌐</button>
+      <button class="vm-task-btn" data-vm-app="terminal" title="Terminal">&gt;_</button>
+      <div class="vm-task-sep"></div>
+      <button id="vmExit" class="vm-task-btn vm-task-power" title="Éteindre">⏻</button>
+    </div>
+    <div id="vmShutdown" class="vm-shutdown"><div><h2>HYDRA VM</h2><p>Extinction du terminal virtuel…<br>État narratif conservé dans ce navigateur.</p></div></div>
+  </div>
+</div>
+
 
 <main class="wrap">
 <section id="gate" class="gate card">
@@ -123,7 +307,7 @@ button,input,textarea,select{font-family:inherit}.tab{transition:transform .14s,
       </div>
     </div>
     <div class="os-launch">
-      <button data-launch="overview">⌂ Dashboard</button><button data-launch="intel">🧠 Intelligence</button><button data-launch="mails">✉ Mail</button><button data-launch="terminal">>_ Terminal</button><button data-launch="locker">📁 Evidence</button><button data-launch="live">● LIVE</button>
+      <button id="launchVm" class="btn primary">🖥️ Lancer HYDRA VM</button><button data-launch="overview">⌂ Dashboard</button><button data-launch="intel">🧠 Intelligence</button><button data-launch="mails">✉ Mail</button><button data-launch="terminal">>_ Terminal</button><button data-launch="locker">📁 Evidence</button><button data-launch="live">● LIVE</button>
     </div>
     <div class="os-command"><input id="osGlobalCommand" class="input" placeholder="Commande globale : STATUS, TRACE 2300K, OPEN INTEL, BROWSER MIRROR…"><button class="btn primary" id="osGlobalRun">Exécuter</button><div class="os-time" id="osLastAction">READY</div></div>
     <div class="global-search"><input id="hydraSearch" class="input" placeholder="Recherche universelle : Emilie, 2,3 M€, Fragment 21, archive…"><button class="btn" id="hydraSearchBtn">⌕ Rechercher</button></div>
@@ -1072,7 +1256,7 @@ function initIncidentMode(){
   $("incidentModeSignal").onclick=()=>{pushSignal("SIGNAL D’URGENCE ÉMIS PAR LA DIRECTION.","INCIDENT");toast("Signal d’urgence envoyé dans la simulation.")};
 }
 
-function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();renderOsShell();renderIntel();renderClassified();renderSignal();renderForensic();initPuzzle();renderComms();renderRadio();renderMap();renderTrust();renderIncidents();renderLab();renderEvidenceLocker();initTerminal();renderSurveillance();renderNews();renderProgress();renderAICore();initOsShell();initAdvancedUi();initSocial();initWord();initSheets();renderDrive();renderCalendar();renderContacts();initNotes();renderDock();initGlobalSearch();initBrowser();renderGallery();initQr();renderMission();initIncidentMode();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
+function renderAll(){const y=window.scrollY;renderMetrics();renderOverview();renderEvidence();renderMoney();renderMails();renderPlayers();renderTimeline();renderDocuments();renderLive();initBankUi();initMailUi();renderOsShell();renderIntel();renderClassified();renderSignal();renderForensic();initPuzzle();renderComms();renderRadio();renderMap();renderTrust();renderIncidents();renderLab();renderEvidenceLocker();initTerminal();renderSurveillance();renderNews();renderProgress();renderAICore();initOsShell();initAdvancedUi();initSocial();initWord();initSheets();renderDrive();renderCalendar();renderContacts();initNotes();renderDock();initGlobalSearch();initBrowser();initHydraVM();renderGallery();initQr();renderMission();initIncidentMode();requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));}
 async function saveLive(){
   try{
     const next=JSON.parse(JSON.stringify(cfg));
@@ -1124,6 +1308,77 @@ $("saveLive").onclick=saveLive;
 $("logoutBtn").onclick=()=>{sessionStorage.removeItem("hydra_interactive_admin");adminCode="";$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");$("loginStatus").textContent="Session verrouillée."};
 $("loginForm").onsubmit=async e=>{e.preventDefault();await authorize($("codeInput").value)};
 const saved=sessionStorage.getItem("hydra_interactive_admin");if(saved){$("codeInput").value=saved;authorize(saved)}
+
+/* === HYDRA VM CONTROLLER === */
+function initHydraVM(){
+  if(window.__hydraVmInit)return;
+  window.__hydraVmInit=true;
+  const overlay=$("hydraVM"),boot=$("vmBoot"),desk=$("vmDesktop"),log=$("vmBootLog"),bar=$("vmBootProgress");
+  const msgs=["POST CHECK................. OK","Loading HYDRA kernel........ OK","Mounting narrative volume... OK","Syncing dossier index....... OK","Initializing secure shell... OK","Starting local desktop....... OK"];
+  let vmClockTimer=null,z=20,drag=null;
+  function vmToast(msg){$("vmToast").textContent=msg;$("vmToast").classList.add("show");clearTimeout(window.__vmToastTimer);window.__vmToastTimer=setTimeout(()=>$("vmToast").classList.remove("show"),1800)}
+  function tick(){const d=new Date();$("vmClock").textContent=d.toLocaleTimeString("fr-FR",{hour12:false});}
+  function openWin(name){
+    const w=document.querySelector('[data-vm-window="'+name+'"]');if(!w)return;
+    document.querySelectorAll(".vm-window").forEach(x=>x.classList.remove("active"));
+    w.classList.add("active");w.style.zIndex=String(++z);
+    $("vmStartMenu").classList.remove("open");
+    document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.toggle("active",x.dataset.vmApp===name));
+    if(name==="terminal"&&!$("vmTermOut").dataset.ready){$("vmTermOut").dataset.ready="1";termPrint("HYDRA VM shell ready.");termPrint("Tape HELP pour afficher les commandes.");}
+  }
+  function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+'"]');if(!w)return;w.classList.remove("active");w.classList.remove("maximized");document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"))}
+  function maxWin(name){const w=document.querySelector('[data-vm-window="'+name+'"]');if(w)w.classList.toggle("maximized")}
+  function termPrint(s){$("vmTermOut").insertAdjacentHTML("beforeend",'<div>'+esc(String(s))+'</div>');$("vmTermOut").scrollTop=$("vmTermOut").scrollHeight}
+  function runTerm(raw){
+    const cmd=raw.trim().toLowerCase();if(!cmd)return;
+    termPrint("hydra@vm:~$ "+raw);
+    if(cmd==="help"||cmd==="?"){termPrint("STATUS · OPEN INTEL · OPEN MAIL · OPEN FINANCE · OPEN BROWSER · OPEN EVIDENCE · SCAN · CLEAR · ABOUT · SHUTDOWN");return}
+    if(cmd==="status"){termPrint("VM-01 · ONLINE · LOCAL SANDBOX · CORE ONLINE · NARRATIVE SECURE");return}
+    if(cmd==="scan"){termPrint("Scanning fictional workspace… 21 dossiers / 4 keys / 0 external connections");return}
+    if(cmd==="clear"){$("vmTermOut").innerHTML="";return}
+    if(cmd==="about"){termPrint("HYDRA Virtual Machine · interface immersive fictive · aucune action système réelle.");return}
+    if(cmd==="shutdown"){shutdown();return}
+    const map={"open intel":"intel","open mail":"mail","open finance":"finance","open browser":"browser","open evidence":"evidence"};
+    if(map[cmd]){openWin(map[cmd]);return}
+    termPrint("Commande inconnue. Tape HELP.");
+  }
+  function boot(){
+    overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+    desk.classList.remove("active");boot.style.display="grid";log.innerHTML="";bar.style.width="0%";
+    let i=0;clearInterval(window.__vmBootTimer);
+    window.__vmBootTimer=setInterval(()=>{
+      if(i<msgs.length){log.insertAdjacentHTML("beforeend",'<div class="vm-log-line">['+String(i+1).padStart(2,"0")+'] '+msgs[i]+'</div>');bar.style.width=Math.round(((i+1)/msgs.length)*100)+"%";i++;return}
+      clearInterval(window.__vmBootTimer);boot.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);vmToast("HYDRA VM démarrée.");openWin("intel");
+    },260);
+  }
+  function shutdown(){
+    const s=$("vmShutdown");s.classList.add("active");clearInterval(vmClockTimer);
+    setTimeout(()=>{s.classList.remove("active");desk.classList.remove("active");boot.style.display="grid";overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";document.querySelectorAll(".vm-window").forEach(x=>{x.classList.remove("active","maximized")});document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));$("vmStartMenu").classList.remove("open");},900);
+  }
+  window.__hydraStartVM=boot;
+  $("launchVm").onclick=boot;
+  $("vmExit").onclick=shutdown;
+  $("vmStart").onclick=()=>$("vmStartMenu").classList.toggle("open");
+  $("vmLock").onclick=()=>{vmToast("Session VM verrouillée.");$("vmStartMenu").classList.remove("open")};
+  document.querySelectorAll("[data-vm-app]").forEach(b=>b.onclick=()=>openWin(b.dataset.vmApp));
+  document.querySelectorAll("[data-vm-close]").forEach(b=>b.onclick=e=>{e.stopPropagation();closeWin(b.dataset.vmClose)});
+  document.querySelectorAll("[data-vm-min]").forEach(b=>b.onclick=e=>{e.stopPropagation();closeWin(b.dataset.vmMin)});
+  document.querySelectorAll("[data-vm-max]").forEach(b=>b.onclick=e=>{e.stopPropagation();maxWin(b.dataset.vmMax)});
+  document.querySelectorAll("[data-vm-main]").forEach(b=>b.onclick=()=>{const tab=b.dataset.vmMain;if(tab==="locker"){shutdown();setTimeout(()=>hydraGo("locker"),950)}else{shutdown();setTimeout(()=>hydraGo(tab),950)}});  
+  $("vmStartSearch").addEventListener("input",e=>{const q=e.target.value.toLowerCase();document.querySelectorAll(".vm-start-item").forEach(b=>b.style.display=b.textContent.toLowerCase().includes(q)?"block":"none")});
+  $("vmTermInput").addEventListener("keydown",e=>{if(e.key==="Enter"){const v=e.target.value;e.target.value="";runTerm(v)}});
+  document.querySelectorAll(".vm-titlebar").forEach(tb=>{
+    tb.addEventListener("pointerdown",e=>{
+      const w=tb.parentElement;if(w.classList.contains("maximized")||e.target.closest(".vm-winctrl"))return;
+      drag={w,startX:e.clientX,startY:e.clientY,origX:w.offsetLeft,origY:w.offsetTop};w.style.zIndex=String(++z);tb.setPointerCapture?.(e.pointerId);
+    });
+    tb.addEventListener("pointermove",e=>{if(!drag||drag.w!==tb.parentElement)return;const nx=Math.max(8,Math.min(window.innerWidth-80,drag.origX+e.clientX-drag.startX));const ny=Math.max(48,Math.min(window.innerHeight-110,drag.origY+e.clientY-drag.startY));drag.w.style.left=nx+"px";drag.w.style.top=ny+"px"});
+    tb.addEventListener("pointerup",()=>drag=null);
+    tb.addEventListener("pointercancel",()=>drag=null);
+  });
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open")){$("vmStartMenu").classList.remove("open");const active=document.querySelector(".vm-window.active");if(active)closeWin(active.dataset.vmWindow);else shutdown()}});
+}
+
 </script>
 </body>
 </html>
