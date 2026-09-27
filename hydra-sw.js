@@ -1,4 +1,4 @@
-const CACHE="hydra-os-v5";
+const CACHE="hydra-os-v6";
 self.addEventListener("install",e=>e.waitUntil((async()=>{
   const c=await caches.open(CACHE),s=self.registration.scope;
   try{
