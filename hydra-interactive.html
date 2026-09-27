@@ -190,6 +190,22 @@ body.hydra-reduced-motion *,body.hydra-reduced-motion *::before,body.hydra-reduc
 .vm-app-grid button{min-height:58px;text-align:left;padding:10px;border:1px solid #263a58;border-radius:12px;background:#101b2b;color:#dce8f7;cursor:pointer;font-weight:800}
 .vm-app-grid button:hover{background:#182943;border-color:#4d6f9b;transform:translateY(-1px)}
 .vm-start-head{display:flex;justify-content:space-between;align-items:center}
+</style><style id="hydra-vm-native-mode">
+/* HYDRA NATIVE VM — la VM EST l'interface */
+body.hydra-vm-native > main.wrap > #app{display:none!important}
+body.hydra-vm-native{background:#02050a!important;overflow:hidden!important}
+body.hydra-vm-native .vm-overlay{z-index:99999}
+body.hydra-vm-native .vm-desktop{inset:0}
+body.hydra-vm-native .vm-window[data-vm-window="__section"]{left:calc(50% - min(500px, 42vw));top:62px;width:min(1000px,calc(100vw - 40px));height:calc(100vh - 138px)}
+body.hydra-vm-native .vm-window[data-vm-window="__section"].maximized{left:12px!important;top:54px!important;width:calc(100vw - 24px)!important;height:calc(100vh - 108px)!important}
+body.hydra-vm-native .vm-content .section{min-height:100%;box-sizing:border-box}
+body.hydra-vm-native .vm-content .section.active{display:block}
+body.hydra-vm-native .vm-content .section:not(.active){display:none}
+body.hydra-vm-native .vm-topbar{height:46px}
+body.hydra-vm-native .vm-taskbar{bottom:10px}
+@media(max-width:700px){
+  body.hydra-vm-native .vm-window[data-vm-window="__section"]{left:6px;top:54px;width:calc(100vw - 12px);height:calc(100vh - 124px)}
+}
 </style></head>
 <body>
 <!-- === HYDRA OS 2.0 GLOBAL LAYER === -->
@@ -684,7 +700,10 @@ async function authorize(code){
     if(!onlyEthanAdmin(data)){ $("loginStatus").textContent="❌ Seul Ethan — Administrateur peut ouvrir cette console."; return false; }
     adminCode=String(code||"").trim();sessionStorage.setItem("hydra_interactive_admin",adminCode);
     $("gate").classList.add("hidden");$("app").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
-    await loadAll();return true;
+    document.body.classList.add("hydra-vm-native");
+    await loadAll();
+    window.__hydraStartVM?.();
+    return true;
   }catch(e){$("loginStatus").textContent="❌ "+e.message;return false}
 }
 async function rpcNoAuth(name,body={}){
@@ -1340,7 +1359,7 @@ $("refreshBtn").onclick=loadAll;
 $("evidenceSearch").oninput=renderEvidence;$("evidenceFilter").onchange=renderEvidence;$("playerSearch").oninput=renderPlayers;
 document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>{$("livePhase").value=b.dataset.phase;renderLive()});
 $("saveLive").onclick=saveLive;
-$("logoutBtn").onclick=()=>{sessionStorage.removeItem("hydra_interactive_admin");adminCode="";$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");$("loginStatus").textContent="Session verrouillée."};
+$("logoutBtn").onclick=()=>{sessionStorage.removeItem("hydra_interactive_admin");adminCode="";document.body.classList.remove("hydra-vm-native");$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");$("loginStatus").textContent="Session verrouillée.";};
 $("loginForm").onsubmit=async e=>{e.preventDefault();await authorize($("codeInput").value)};
 const saved=sessionStorage.getItem("hydra_interactive_admin");if(saved){$("codeInput").value=saved;authorize(saved)}
 
@@ -1423,7 +1442,27 @@ function initHydraVM(){
   }
   function shutdown(){
     const s=$("vmShutdown");s.classList.add("active");clearInterval(vmClockTimer);
-    setTimeout(()=>{s.classList.remove("active");const vmSection=$("vmAppContent")&&$("vmAppContent").querySelector(".section");if(vmSection)restoreSectionFromVM(vmSection);desk.classList.remove("active");vmBootScreen.style.display="grid";overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";document.querySelectorAll(".vm-window").forEach(x=>{x.classList.remove("active","maximized")});document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));$("vmStartMenu").classList.remove("open");},900);
+    setTimeout(()=>{
+      s.classList.remove("active");
+      const vmSection=$("vmAppContent")&&$("vmAppContent").querySelector(".section");
+      if(vmSection)restoreSectionFromVM(vmSection);
+      sessionStorage.removeItem("hydra_vm_app");
+      document.body.classList.remove("hydra-vm-native");
+      desk.classList.remove("active");
+      vmBootScreen.style.display="grid";
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden","true");
+      document.body.style.overflow="";
+      document.querySelectorAll(".vm-window").forEach(x=>{x.classList.remove("active","maximized")});
+      document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));
+      $("vmStartMenu").classList.remove("open");
+      $("app").classList.add("hidden");
+      $("gate").classList.remove("hidden");
+      $("logoutBtn").classList.add("hidden");
+      sessionStorage.removeItem("hydra_interactive_admin");
+      adminCode="";
+      $("loginStatus").textContent="Session verrouillée — HYDRA VM arrêtée.";
+    },900);
   }
   window.__hydraStartVM=boot;
   $("launchVm").onclick=boot;
