@@ -1727,8 +1727,40 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
     const cmd=raw.trim().toLowerCase();if(!cmd)return;
     termPrint("hydra@vm:~$ "+raw);
     const cfg=window.__hydraTerminalConfig;
+    const catalog=Array.isArray(cfg?.catalog)?cfg.catalog:[];
+    if(cmd==="help"||cmd==="help all"||cmd==="help main"){
+      if(catalog.length){
+        const groups={};
+        catalog.forEach(x=>(groups[x.category]??=[]).push(x));
+        termPrint("HYDRA COMMAND CENTER // "+catalog.length+" COMMANDES // "+Object.keys(groups).length+" CATÉGORIES");
+        Object.entries(groups).forEach(([cat,list])=>{
+          termPrint(" ");
+          termPrint("["+String(cat).toUpperCase()+"]");
+          list.forEach(x=>termPrint(String(x.name).toUpperCase().padEnd(25)+" — "+String(x.description||"Commande simulée")));
+        });
+      }else{
+        termPrint("Catalogue HYDRA en cours de chargement. Tape HELP à nouveau.");
+      }
+      return;
+    }
+    if(cmd.startsWith("help ")){
+      const q=cmd.slice(5).trim();
+      const matches=catalog.filter(x=>String(x.name).toLowerCase().includes(q)||String(x.category).toLowerCase().includes(q));
+      if(matches.length){matches.forEach(x=>termPrint(String(x.name).toUpperCase()+" — "+String(x.description||"Commande simulée")));return;}
+    }
+    const entry=catalog.find(x=>String(x.name).toLowerCase()===cmd);
+    if(entry){
+      termPrint("HYDRA SIMULATION");
+      termPrint("Commande : "+String(entry.name).toUpperCase());
+      termPrint("Catégorie : "+String(entry.category||"HYDRA"));
+      termPrint("Description : "+String(entry.description||"Commande disponible."));
+      if(entry.syntax)termPrint("Syntaxe : "+String(entry.syntax));
+      if(entry.example)termPrint("Exemple : "+String(entry.example));
+      termPrint("Exécution simulée : OK");
+      termPrint("Aucun système réel n’est modifié.");
+      return;
+    }
     if(cfg?.commands){
-      if(cmd==="help"){termPrint(cfg.commands.help);return}
       if(cmd==="ls"){termPrint(cfg.commands.ls);return}
       if(cmd==="cat note_interne.txt"){termPrint(cfg.commands["cat note_interne.txt"]);return}
       if(cmd==="cat journal.log"){termPrint(cfg.commands["cat journal.log"]);return}
