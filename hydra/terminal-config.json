@@ -1,0 +1,13 @@
+{
+  "commands": {
+    "help": "Commandes disponibles : ls (lister), cat [fichier] (lire), login [utilisateur] (connexion)",
+    "ls": "Fichiers : note_interne.txt, journal.log, archive_chiffree.dat",
+    "cat note_interne.txt": "De : RH\nÀ : Tout le personnel\nSuite aux récents incidents, l'accès au serveur confidentiel a été restreint. Le mot de passe système par défaut est le matricule de la victime.",
+    "cat journal.log": "[04:23:12] Connexion réussie de l'utilisateur 'Directeur'\n[04:25:45] ALERTE : Téléchargement massif de données vers une IP inconnue\n[04:26:01] Session corrompue brutalement.",
+    "cat archive_chiffree.dat": "ERREUR : Ce fichier est chiffré. Utilisez la commande 'login admin' pour saisir les privilèges."
+  },
+  "secrets": {
+    "admin_password": "4815",
+    "unlocked_content": "FÉLICITATIONS ACTE 2 : L'archive contient la preuve du chantage. La victime transférait des fonds pour couvrir le suspect principal. Le code du coffre physique de la pièce est : 9-3-4-2."
+  }
+}
