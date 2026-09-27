@@ -1109,13 +1109,29 @@ function renderIncidents(){
   $("incidentList").innerHTML=rows.map(i=>'<article class="incident"><div class="incident-level '+(i.level==="HIGH"?"level-top":"level-conf")+'">'+i.level+'</div><div><b>'+esc(i.title)+'</b><div class="panel-muted">'+esc(i.desc)+'</div><div class="incident-bar"><i style="width:'+i.p+'%"></i></div></div><div class="incident-actions"><button class="mini-btn" data-inc-minus="'+i.id+'">−</button><button class="mini-btn" data-inc-plus="'+i.id+'">+</button><button class="mini-btn" data-inc-close="'+i.id+'">✓</button></div></article>').join("");
   document.querySelectorAll("[data-inc-minus],[data-inc-plus],[data-inc-close]").forEach(b=>b.onclick=()=>{const rows2=rows.map(x=>x.id===b.dataset.incMinus?{...x,p:Math.max(0,x.p-10)}:x.id===b.dataset.incPlus?{...x,p:Math.min(100,x.p+10)}:x.id===b.dataset.incClose?{...x,p:100}:x);hydraSet("hydra_incidents",rows2);renderIncidents();renderOsShell()});
 }
+const HYDRA_TOXIN_CANON={
+  alpha:{
+    label:"ALPHA",
+    role:"Contrôle",
+    effect:"Dans le récit, Alpha provoque une obéissance temporaire puis une absence de souvenir de la séquence.",
+    clues:"Zone 2 · traces Alpha · dossier Hydra · fragments IA",
+    narrative:"Alpha sert à expliquer qu’un agent puisse avoir accompli une action sans en garder le souvenir."
+  },
+  omega:{
+    label:"OMEGA",
+    role:"Chaos",
+    effect:"Dans le récit, Omega provoque une désorientation temporaire, des perceptions altérées et des comportements incohérents.",
+    clues:"Zone 3 · traces Omega · objets brisés · témoignages contradictoires",
+    narrative:"Omega sert à fabriquer de fausses pistes et à faire soupçonner un personnage à tort."
+  }
+};
 function renderLab(){
   const items=[
-    {name:"SIGNAL ALPHA",value:68,desc:"Anomalie narrative détectée."},
-    {name:"SIGNAL OMEGA",value:82,desc:"Corrélation forte avec le protocole."},
-    {name:"COHÉRENCE",value:41,desc:"Plus la valeur monte, plus les dossiers concordent."}
+    {name:"SIGNAL ALPHA",value:68,desc:HYDRA_TOXIN_CANON.alpha.effect,detail:HYDRA_TOXIN_CANON.alpha.narrative,clues:HYDRA_TOXIN_CANON.alpha.clues},
+    {name:"SIGNAL OMEGA",value:82,desc:HYDRA_TOXIN_CANON.omega.effect,detail:HYDRA_TOXIN_CANON.omega.narrative,clues:HYDRA_TOXIN_CANON.omega.clues},
+    {name:"COHÉRENCE",value:41,desc:"Plus la valeur monte, plus les dossiers concordent.",detail:"Le recoupement Alpha/Omega permet de distinguer contrôle et chaos dans l’enquête.",clues:"Zones 2 + 3 · fragments IA · témoignages"}
   ];
-  $("labGrid").innerHTML=items.map(x=>'<article class="card lab-card"><div class="sub">LECTURE FICTIONNELLE</div><h3>'+esc(x.name)+'</h3><div class="meter"><i style="width:'+x.value+'%"></i></div><b>'+x.value+' %</b><p class="sub">'+esc(x.desc)+'</p><div class="fictional-note">Aucune mesure physique réelle. Valeur purement scénarisée.</div></article>').join("");
+  $("labGrid").innerHTML=items.map(x=>'<article class="card lab-card"><div class="sub">LECTURE FICTIONNELLE</div><h3>'+esc(x.name)+'</h3><div class="meter"><i style="width:'+x.value+'%"></i></div><b>'+x.value+' %</b><p class="sub">'+esc(x.desc)+'</p><div class="notice"><b>Fonction narrative :</b> '+esc(x.detail)+'<br><span class="panel-muted">Indices : '+esc(x.clues)+'</span></div><div class="fictional-note">Éléments entièrement fictifs du scénario. Aucune mesure ou utilisation réelle.</div></article>').join("");
 }
 function renderEvidenceLocker(){
   const items=[
@@ -1253,7 +1269,7 @@ function renderDock(){
 }
 function buildSearchIndex(){
   return [
-    ["Emilie","Personnage · Finance","mails"],["Fabrice","Personnage · Archives","forensic"],["2,3 M€","Virement suspect","virements"],["HYDRA-23MIRROR-021","Référence financière","forensic"],["Protocole Miroir","Dossier central","intel"],["Fragment 21","Fragment classifié","classified"],["Archive originale","Preuve Fabrice","locker"],["Yoan","Sabotage repenti","dossiers"],["Hydra-Core","Noyau du protocole","aicore"],["Milo","Chien détecteur","dossiers"],["Snow","Chat détecteur","dossiers"],["Alpha","Signal fictionnel","lab"],["Omega","Signal fictionnel","lab"]
+    ["Emilie","Personnage · Finance","mails"],["Fabrice","Personnage · Archives","forensic"],["2,3 M€","Virement suspect","virements"],["HYDRA-23MIRROR-021","Référence financière","forensic"],["Protocole Miroir","Dossier central","intel"],["Fragment 21","Fragment classifié","classified"],["Archive originale","Preuve Fabrice","locker"],["Yoan","Sabotage repenti","dossiers"],["Hydra-Core","Noyau du protocole","aicore"],["Milo","Chien détecteur","dossiers"],["Snow","Chat détecteur","dossiers"],["Alpha","Contrôle · Zone 2 · traces narratives","lab"],["Omega","Chaos · Zone 3 · traces narratives","lab"]
   ];
 }
 function renderGlobalSearch(){
