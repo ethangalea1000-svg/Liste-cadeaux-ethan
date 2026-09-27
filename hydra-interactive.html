@@ -171,7 +171,7 @@ radial-gradient(circle at 20% 0%,rgba(54,79,128,.11),transparent 26%),#08101b}
   .vm-task-btn{width:39px}
 }
 
-<style id="hydra-vm-ux-max">.vm-window{transition:opacity .14s ease,transform .14s ease}.vm-window.vm-focused{box-shadow:0 34px 100px rgba(0,0,0,.62),0 0 0 1px rgba(90,190,255,.18)}.vm-task-btn{position:relative}.vm-task-btn.running:after{content:"";position:absolute;left:50%;bottom:2px;width:5px;height:5px;border-radius:50%;background:#65ddff;transform:translateX(-50%);box-shadow:0 0 8px #65ddff}.vm-start-grid{grid-template-columns:repeat(3,1fr);max-height:58vh;overflow:auto}.vm-start-item{min-height:62px;display:flex;align-items:center;gap:9px}.vm-start-item .appico{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#15243a;border:1px solid #304765;flex:0 0 auto}.vm-app-sub{display:block;color:#7287a5;font-size:9px;margin-top:2px}@media(max-width:700px){.vm-start-grid{grid-template-columns:repeat(2,1fr)}}</style><style id="hydra-vm-ux-pro">
+<style id="hydra-vm-ux-max">.vm-window{transition:opacity .14s ease,transform .14s ease}.vm-window.vm-focused{box-shadow:0 34px 100px rgba(0,0,0,.62),0 0 0 1px rgba(90,190,255,.18)}.vm-task-btn{position:relative}.vm-task-btn.running:after{content:"";position:absolute;left:50%;bottom:2px;width:5px;height:5px;border-radius:50%;background:#65ddff;transform:translateX(-50%);box-shadow:0 0 8px #65ddff}.vm-start-grid{grid-template-columns:repeat(3,1fr);max-height:58vh;overflow:auto}.vm-start-item{min-height:62px;display:flex;align-items:center;gap:9px}.vm-start-item .appico{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#15243a;border:1px solid #304765;flex:0 0 auto}.vm-app-sub{display:block;color:#7287a5;font-size:9px;margin-top:2px}@media(max-width:700px){.vm-start-grid{grid-template-columns:repeat(2,1fr)}}.murder-party-modal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,5,10,.78);backdrop-filter:blur(12px)}.murder-party-modal.open{display:flex}.murder-party-box{width:min(1080px,96vw);max-height:90vh;overflow:auto;border:1px solid #5d4b25;border-radius:22px;background:linear-gradient(180deg,#17130d,#0b1019 55%);box-shadow:0 30px 90px rgba(0,0,0,.6);padding:22px}.murder-party-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}.murder-party-kicker{font-size:10px;letter-spacing:.18em;color:#d2a75d}.murder-party-title{font-size:clamp(25px,4vw,42px);font-weight:950;margin:5px 0}.murder-party-sub{color:#9eabbf;line-height:1.5}.murder-party-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}.murder-party-action{min-height:120px;border:1px solid #3a4558;border-radius:15px;background:#101827;color:#edf3ff;padding:14px;text-align:left;cursor:pointer}.murder-party-action:hover{border-color:#c59a50;transform:translateY(-1px)}.murder-party-action b{display:block;font-size:14px}.murder-party-action small{display:block;color:#8291a8;margin-top:7px;line-height:1.45}.murder-party-status{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.murder-party-status span{padding:6px 9px;border-radius:999px;border:1px solid #39465a;background:#0e1725;color:#aebed2;font-size:10px;font-weight:850}.murder-party-status .live{color:#91efc7;border-color:#275b48;background:#0d241b}@media(max-width:760px){.murder-party-grid{grid-template-columns:1fr 1fr}}@media(max-width:480px){.murder-party-grid{grid-template-columns:1fr}.murder-party-box{padding:15px}}</style><style id="hydra-vm-ux-pro">
 .vm-window{will-change:left,top,width,height;transition:box-shadow .14s ease,opacity .12s ease,transform .12s ease}
 .vm-window.vm-focused{box-shadow:0 34px 110px rgba(0,0,0,.68),0 0 0 1px rgba(91,220,255,.24)}
 .vm-window.vm-minimized{display:none!important}
@@ -375,7 +375,7 @@ body.hydra-vm-native .vm-taskbar{bottom:10px}
       </div>
     </div>
     <div class="os-launch">
-      <button id="launchVm" class="btn primary">🖥️ Lancer HYDRA VM</button><button data-launch="overview">⌂ Dashboard</button><button data-launch="intel">🧠 Intelligence</button><button data-launch="mails">✉ Mail</button><button data-launch="terminal">>_ Terminal</button><button data-launch="locker">📁 Evidence</button><button data-launch="live">● LIVE</button>
+      <button id="launchVm" class="btn primary">🖥️ Lancer HYDRA VM</button><button id="murderPartyOpen" class="btn warn">🎭 MURDER PARTY · Meneur de jeu</button><button data-launch="overview">⌂ Dashboard</button><button data-launch="intel">🧠 Intelligence</button><button data-launch="mails">✉ Mail</button><button data-launch="terminal">>_ Terminal</button><button data-launch="locker">📁 Evidence</button><button data-launch="live">● LIVE</button>
     </div>
     <div class="os-command"><input id="osGlobalCommand" class="input" placeholder="Commande globale : STATUS, TRACE 2300K, OPEN INTEL, BROWSER MIRROR…"><button class="btn primary" id="osGlobalRun">Exécuter</button><div class="os-time" id="osLastAction">READY</div></div>
     <div class="global-search"><input id="hydraSearch" class="input" placeholder="Recherche universelle : Emilie, 2,3 M€, Fragment 21, archive…"><button class="btn" id="hydraSearchBtn">⌕ Rechercher</button></div>
@@ -705,7 +705,7 @@ body.hydra-vm-native .vm-taskbar{bottom:10px}
 
 <footer class="foot wrap">HYDRA INTERACTIVE • accès administrateur • les données affichées proviennent de la configuration Hydra actuelle.</footer>
 </main>
-<div id="toast" class="toast"></div><div id="incidentMode" class="incident-mode"><div class="incident-modal"><div class="sub">HYDRA CORE // PRIORITY EVENT</div><div class="incident-siren">INCIDENT MAJEUR</div><div class="panel-muted">Le protocole passe en mode d’urgence narratif.</div><div class="incident-progress"><i></i></div><div class="incident-feed" id="incidentModeFeed"></div><div class="actions"><button class="btn danger" id="incidentModeClose">Reprendre le contrôle</button><button class="btn" id="incidentModeSignal">Émettre un signal</button></div></div></div>
+<div id="murderPartyModal" class="murder-party-modal" aria-hidden="true"><div class="murder-party-box" role="dialog" aria-modal="true" aria-labelledby="murderPartyTitle"><div class="murder-party-head"><div><div class="murder-party-kicker">PROTOCOLE HYDRA // MURDER PARTY</div><div id="murderPartyTitle" class="murder-party-title">🎭 MENEUR DE JEU</div><div class="murder-party-sub">Centre de contrôle de la Murder Party. Les commandes ci-dessous pilotent uniquement la simulation narrative.</div></div><button class="btn" id="murderPartyClose">Fermer</button></div><div class="murder-party-status"><span class="live">● MURDER PARTY ACTIVE</span><span id="murderPartyPhase">Phase : briefing</span><span id="murderPartyTimer">Chronomètre : 00:00</span></div><div class="murder-party-grid"><button class="murder-party-action" data-mj="start"><b>▶ Démarrer la partie</b><small>Lance la session et affiche le statut de départ.</small></button><button class="murder-party-action" data-mj="phase"><b>⏭️ Phase suivante</b><small>Fait progresser le déroulé de la Murder Party.</small></button><button class="murder-party-action" data-mj="clue"><b>🔓 Débloquer un indice</b><small>Déclenche un indice narratif pour les joueurs.</small></button><button class="murder-party-action" data-mj="incident"><b>🚨 Déclencher un événement</b><small>Ouvre l'Incident Majeur déjà présent dans HYDRA.</small></button><button class="murder-party-action" data-mj="vote"><b>🗳️ Lancer les votes</b><small>Annonce une phase de vote dans la simulation.</small></button><button class="murder-party-action" data-mj="progress"><b>👥 Suivre la progression</b><small>Ouvre Mission Control pour suivre l’état de l’enquête.</small></button><button class="murder-party-action" data-mj="intel"><b>🧠 Ouvrir Intelligence Center</b><small>Accède au graphe des relations et des pistes.</small></button><button class="murder-party-action" data-mj="notes"><b>🗒️ Notes du meneur</b><small>Ouvre le carnet privé du maître du jeu.</small></button><button class="murder-party-action" data-mj="end"><b>🏁 Terminer la partie</b><small>Affiche la fin de session sans supprimer les données locales.</small></button></div><div class="notice" style="margin-top:16px">Mode meneur : les actions sont des commandes de scénario. Elles ne donnent aucun accès réel au système de l’ordinateur.</div></div></div><div id="toast" class="toast"></div><div id="incidentMode" class="incident-mode"><div class="incident-modal"><div class="sub">HYDRA CORE // PRIORITY EVENT</div><div class="incident-siren">INCIDENT MAJEUR</div><div class="panel-muted">Le protocole passe en mode d’urgence narratif.</div><div class="incident-progress"><i></i></div><div class="incident-feed" id="incidentModeFeed"></div><div class="actions"><button class="btn danger" id="incidentModeClose">Reprendre le contrôle</button><button class="btn" id="incidentModeSignal">Émettre un signal</button></div></div></div>
 
 <script>
 const SUPABASE_URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
@@ -1797,5 +1797,31 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
     }
   }
 })();
-</script><script src="./hydra-audio.js" defer></script><script src="./hydra-vm-pix.js" defer></script><script src="./hydra-vm-expansion.js" defer></script></body>
+</script><script src="./hydra-audio.js" defer></script><script src="./hydra-vm-pix.js" defer></script><script src="./hydra-vm-expansion.js" defer></script><script>/* === MURDER PARTY CONTROLLER === */
+(function(){
+ const modal=$("murderPartyModal"),openBtn=$("murderPartyOpen"),closeBtn=$("murderPartyClose");
+ if(!modal||!openBtn)return;
+ let phase=0,startedAt=null,timer=null;
+ const phases=["briefing","indices","recoupement","accusations","final"];
+ const phaseEl=$("murderPartyPhase"),timerEl=$("murderPartyTimer");
+ const show=()=>{modal.classList.add("open");modal.setAttribute("aria-hidden","false");};
+ const hide=()=>{modal.classList.remove("open");modal.setAttribute("aria-hidden","true");};
+ const notify=t=>{try{window.hydraSound?.("click")}catch{};toast("MURDER PARTY · "+t)};
+ const setTimer=()=>{if(!startedAt)return;const s=Math.floor((Date.now()-startedAt)/1000),m=String(Math.floor(s/60)).padStart(2,"0"),sec=String(s%60).padStart(2,"0");timerEl.textContent="Chronomètre : "+m+":"+sec};
+ openBtn.addEventListener("click",show);closeBtn?.addEventListener("click",hide);
+ modal.addEventListener("click",e=>{if(e.target===modal)hide()});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("open"))hide()});
+ document.querySelectorAll("[data-mj]").forEach(b=>b.addEventListener("click",()=>{
+   const a=b.dataset.mj;
+   if(a==="start"){phase=0;startedAt=Date.now();clearInterval(timer);timer=setInterval(setTimer,1000);phaseEl.textContent="Phase : "+phases[phase];notify("partie démarrée");}
+   if(a==="phase"){phase=Math.min(phases.length-1,phase+1);phaseEl.textContent="Phase : "+phases[phase];notify("phase suivante : "+phases[phase]);}
+   if(a==="clue"){notify("indice débloqué — à annoncer aux joueurs");window.hydraSound?.("success");}
+   if(a==="incident"){hide();$("incidentModeOpen")?.click();}
+   if(a==="vote"){notify("phase de vote annoncée");}
+   if(a==="progress"){hide();window.hydraGo?.("mission");}
+   if(a==="intel"){hide();window.hydraGo?.("intel");}
+   if(a==="notes"){hide();window.hydraGo?.("notes");}
+   if(a==="end"){clearInterval(timer);startedAt=null;timerEl.textContent="Chronomètre : 00:00";notify("partie terminée");}
+ }));
+})();</script></body>
 </html>
