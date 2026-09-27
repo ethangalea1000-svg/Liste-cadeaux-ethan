@@ -167,7 +167,7 @@ radial-gradient(circle at 20% 0%,rgba(54,79,128,.11),transparent 26%),#08101b}
   .vm-task-btn{width:39px}
 }
 
-</style>
+<style id="hydra-vm-ux-max">.vm-window{transition:opacity .14s ease,transform .14s ease}.vm-window.vm-focused{box-shadow:0 34px 100px rgba(0,0,0,.62),0 0 0 1px rgba(90,190,255,.18)}.vm-task-btn{position:relative}.vm-task-btn.running:after{content:"";position:absolute;left:50%;bottom:2px;width:5px;height:5px;border-radius:50%;background:#65ddff;transform:translateX(-50%);box-shadow:0 0 8px #65ddff}.vm-start-grid{grid-template-columns:repeat(3,1fr);max-height:58vh;overflow:auto}.vm-start-item{min-height:62px;display:flex;align-items:center;gap:9px}.vm-start-item .appico{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#15243a;border:1px solid #304765;flex:0 0 auto}.vm-app-sub{display:block;color:#7287a5;font-size:9px;margin-top:2px}@media(max-width:700px){.vm-start-grid{grid-template-columns:repeat(2,1fr)}}</style></style>
 <link rel="manifest" href="./hydra-manifest.json"><style>/* === HYDRA OS 2.0 / PWA + UX HARDENING === */
 :focus-visible{outline:2px solid #72dfff;outline-offset:3px;border-radius:8px}
 body.hydra-reduced-motion *,body.hydra-reduced-motion *::before,body.hydra-reduced-motion *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
@@ -1431,7 +1431,35 @@ function initHydraVM(){
     document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.toggle("active",x.dataset.vmApp===name));
     if(name==="terminal"&&!$("vmTermOut").dataset.ready){$("vmTermOut").dataset.ready="1";termPrint("HYDRA VM shell ready.");termPrint("Tape HELP pour afficher les commandes.");}
   }
-  function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+'"]');if(!w)return;w.classList.remove("active");w.classList.remove("maximized");document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"))}
+  function hydraAppCatalog(){
+  return [
+    ["overview","⌂","Poste de contrôle","Centre"],["indices","🔎","Indices","Enquête"],["virements","€","HYDRA Money","Finance"],
+    ["mails","✉","HYDRA Mail","Communication"],["dossiers","🗂","Dossiers","Renseignement"],["chrono","◷","Chronologie","Enquête"],
+    ["documents","📄","Documents","Archives"],["live","●","LIVE","Pilotage"],["intel","🧠","Intelligence Center","Renseignement"],
+    ["classified","🗂","Classifiés","Sécurité"],["signal","📡","Signal","Réseau"],["forensic","🔬","Forensique","Analyse"],
+    ["puzzle","🧩","Décryptage","Enquête"],["comms","💬","Canal","Communication"],["radio","📞","Communications","Communication"],
+    ["map","🛰","Carte","Navigation"],["trust","📊","Trust Matrix","Analyse"],["incidents","🚨","Incidents","Sécurité"],
+    ["lab","🧪","Laboratoire","Analyse"],["locker","📁","Evidence Locker","Archives"],["terminal",">_","Terminal","Système"],
+    ["surveillance","👁","Surveillance","Sécurité"],["news","📰","HYDRA News","Information"],["progress","📈","Progression","Pilotage"],
+    ["aicore","🤖","Hydra-CORE","IA"],["social","🌐","HYDRA Network","Réseau"],["word","📄","HYDRA Word","Bureautique"],
+    ["sheets","📊","HYDRA Sheets","Bureautique"],["drive","☁","HYDRA Drive","Fichiers"],["calendar","📅","Agenda","Organisation"],
+    ["contacts","👥","Contacts","Organisation"],["notes","🗒","Notes","Bureautique"],["browser","🌍","HYDRA Browser","Web interne"],
+    ["photos","🖼","Galerie","Archives"],["qr","▦","QR Lab","Analyse"],["mission","🎛","Mission Control","Pilotage"]
+  ];
+}
+function renderHydraLauncher(filter=""){
+  const grid=$("vmStartGrid"); if(!grid)return;
+  const q=String(filter).trim().toLowerCase();
+  const apps=hydraAppCatalog().filter(a=>!q||a[0].toLowerCase().includes(q)||a[2].toLowerCase().includes(q)||a[3].toLowerCase().includes(q));
+  grid.innerHTML=apps.map(a=>'<button class="vm-start-item" data-launch-app="'+esc(a[0])+'"><span class="appico">'+esc(a[1])+'</span><span><b>'+esc(a[2])+'</b><small class="vm-app-sub">'+esc(a[3])+'</small></span></button>').join("")||'<div class="vm-muted" style="padding:14px;grid-column:1/-1">Aucune application trouvée.</div>';
+  grid.querySelectorAll("[data-launch-app]").forEach(b=>b.onclick=()=>{openWin(b.dataset.launchApp);$("vmStartMenu").classList.remove("open")});
+}
+function focusVmWindow(w){
+  if(!w)return;
+  document.querySelectorAll(".vm-window").forEach(x=>x.classList.remove("vm-focused"));
+  w.classList.add("vm-focused"); w.style.zIndex=String(++z);
+}
+function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+'"]');if(!w)return;w.classList.remove("active","maximized","vm-focused");document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"))}
   function maxWin(name){const w=document.querySelector('[data-vm-window="'+name+'"]');if(w)w.classList.toggle("maximized")}
   function termPrint(s){$("vmTermOut").insertAdjacentHTML("beforeend",'<div>'+esc(String(s))+'</div>');$("vmTermOut").scrollTop=$("vmTermOut").scrollHeight}
   function runTerm(raw){
@@ -1505,6 +1533,10 @@ function initHydraVM(){
   $("vmStart").onclick=()=>$("vmStartMenu").classList.toggle("open");
   $("vmLock").onclick=()=>{vmToast("Session VM verrouillée.");$("vmStartMenu").classList.remove("open")};
   document.querySelectorAll("[data-vm-app]").forEach(b=>b.onclick=()=>openWin(b.dataset.vmApp));
+  renderHydraLauncher();
+  $("vmStartSearch")?.addEventListener("input",e=>renderHydraLauncher(e.target.value));
+  document.querySelectorAll(".vm-icon[data-vm-open]").forEach(icon=>icon.addEventListener("dblclick",()=>openWin(icon.dataset.vmOpen)));
+  document.querySelectorAll(".vm-titlebar").forEach(t=>t.addEventListener("pointerdown",()=>focusVmWindow(t.closest(".vm-window"))));
   document.querySelectorAll("[data-vm-section]").forEach(b=>b.onclick=()=>openSectionInVM(b.dataset.vmSection));
   document.querySelectorAll("[data-vm-close]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.vmClose==="__section"){const s=$("vmAppContent").querySelector(".section");if(s)restoreSectionFromVM(s);closeWin("__section");return}closeWin(b.dataset.vmClose)});
   document.querySelectorAll("[data-vm-min]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.vmMin==="__section"){closeWin("__section");return}closeWin(b.dataset.vmMin)});
