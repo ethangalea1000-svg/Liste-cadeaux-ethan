@@ -5,8 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090d18">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https://ckasbsnzxgwfwfnctioe.supabase.co; media-src 'self' blob: https:; frame-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https://ckasbsnzxgwfwfnctioe.supabase.co; media-src 'self' blob: https:; frame-src 'self'">
 <title>HYDRA INTERACTIVE — Poste de contrôle</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.3.0/css/xterm.css">
+<script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.3.0/lib/xterm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
 <style>
 :root{--bg:#070b13;--panel:#0d1422;--panel2:#111a2b;--line:#26354b;--text:#eef4ff;--muted:#8ea0b9;--accent:#6f7cff;--cyan:#35d3ff;--green:#38d49a;--amber:#ffbd64;--red:#ff647c;--shadow:0 18px 50px rgba(0,0,0,.28);--r:18px}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#111a2b 0,#070b13 48%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
@@ -577,6 +581,18 @@ body.hydra-vm-native .vm-taskbar{bottom:10px}
   <section class="section" id="locker">
     <div class="section-head"><div><h2>📁 Evidence Locker</h2><div class="sub">Coffre-fort des preuves. Les cases se débloquent au fil des interactions.</div></div><button class="btn" id="lockerReveal">↻ Rescanner</button></div>
     <div class="evidence-locker" id="evidenceLocker"></div>
+  </section>
+
+  <section class="section" id="terminal-pro-app">
+    <div class="section-head"><div><h2>⌁ HYDRA TERMINAL PRO</h2><div class="sub">Émulation VT moderne — recherche, redimensionnement et rendu ANSI.</div></div><span class="sim-badge">XTERM</span></div>
+    <div class="terminal-pro card" style="padding:0;overflow:hidden"><div id="terminalProMount" style="height:min(620px,70vh);background:#05070b"></div></div>
+    <div class="camera-controls" style="margin-top:10px"><button class="btn primary" id="terminalProLaunch">▶ Initialiser le terminal</button><button class="btn" id="terminalProClear">Effacer</button><button class="btn" id="terminalProFit">Ajuster</button><span class="notice">Simulation locale : aucune commande système réelle.</span></div>
+  </section>
+
+  <section class="section" id="code">
+    <div class="section-head"><div><h2>⌘ HYDRA CODE</h2><div class="sub">Éditeur virtuel pour les fichiers de l'environnement HYDRA.</div></div><span class="sim-badge">MONACO</span></div>
+    <div class="card" style="padding:0;overflow:hidden"><div id="monacoEditor" style="height:min(650px,72vh)"></div></div>
+    <div class="camera-controls" style="margin-top:10px"><button class="btn primary" id="codeLoadSample">Charger un dossier</button><button class="btn" id="codeReset">Réinitialiser</button><span class="notice">Éditeur local : les modifications restent dans la session navigateur.</span></div>
   </section>
 
   <section class="section" id="terminal">
@@ -1227,6 +1243,41 @@ function cameraStop(update=true){if(hydraCameraStream){hydraCameraStream.getTrac
 async function cameraCapture(){if(!hydraCameraStream)return;const v=$("hydraCameraVideo"),canvas=$("hydraCameraCanvas"),w=v.videoWidth,h=v.videoHeight;if(!w||!h)return;canvas.width=w;canvas.height=h;canvas.getContext("2d").drawImage(v,0,0,w,h);const blob=await new Promise(r=>canvas.toBlob(r,"image/jpeg",.92));if(!blob)return;window.__hydraCameraBlob=blob;const url=URL.createObjectURL(blob);$("cameraShot").innerHTML='<img alt="Capture caméra HYDRA" src="'+url+'">';$("cameraDownload").disabled=false;cameraStatus("Capture locale créée — "+w+"×"+h)}
 async function cameraSwitch(){await cameraEnumerate();if(hydraCameraDevices.length<2)return;const cur=$("cameraDevice")?.value,idx=Math.max(0,hydraCameraDevices.findIndex(d=>d.deviceId===cur));await cameraStart(hydraCameraDevices[(idx+1)%hydraCameraDevices.length]?.deviceId)}
 function initHydraCamera(){if(window.__hydraCameraInit)return;window.__hydraCameraInit=true;$("cameraStart")?.addEventListener("click",()=>cameraStart($("cameraDevice")?.value||null));$("cameraStop")?.addEventListener("click",()=>cameraStop());$("cameraCapture")?.addEventListener("click",cameraCapture);$("cameraSwitch")?.addEventListener("click",cameraSwitch);$("cameraDevice")?.addEventListener("change",e=>e.target.value&&cameraStart(e.target.value));$("cameraQuality")?.addEventListener("change",()=>hydraCameraStream&&cameraStart($("cameraDevice")?.value||null));$("cameraDownload")?.addEventListener("click",()=>{if(window.__hydraCameraBlob){const a=document.createElement("a");a.href=URL.createObjectURL(window.__hydraCameraBlob);a.download="hydra-capture.jpg";a.click()}});cameraEnumerate()}
+let hydraXterm=null,hydraXtermFit=null,hydraMonaco=null;
+function initHydraProTerminal(){
+ if(hydraXterm||!window.Terminal)return;
+ const mount=$("terminalProMount");if(!mount)return;
+ hydraXterm=new Terminal({cursorBlink:true,scrollback:2000,convertEol:true,theme:{background:"#05070b",foreground:"#dbe8ff",cursor:"#6fe0ff",selectionBackground:"#28415e"},fontFamily:"ui-monospace, SFMono-Regular, Consolas, monospace",fontSize:13});
+ hydraXterm.open(mount);
+ if(window.FitAddon?.FitAddon){hydraXtermFit=new FitAddon.FitAddon();hydraXterm.loadAddon(hydraXtermFit);hydraXtermFit.fit()}
+ hydraXterm.writeln("\x1b[1;36mHYDRA-CORE TERMINAL PRO\x1b[0m");
+ hydraXterm.writeln("\x1b[90mVT emulator · LOCAL SIM · no real system access\x1b[0m");
+ hydraXterm.writeln("");
+ hydraXterm.write("\x1b[1;35mHYDRA>\x1b[0m ");
+ let line="";
+ hydraXterm.onData(data=>{
+   if(data==="\r"){hydraXterm.write("\r\n");const cmd=line.trim();if(cmd){hydraXterm.writeln("["+new Date().toLocaleTimeString("fr-FR")+"] "+cmd);const key=cmd.toLowerCase();const out=(window.HYDRA_TERM_COMMANDS&&window.HYDRA_TERM_COMMANDS[key])||({"help":"Commandes : HELP · LS · STATUS · CLEAR · DOSSIERS · EVIDENCE · MIROIR · CORE · DATE"}[key]||"Commande inconnue — tape HELP.");if(key==="clear"){hydraXterm.clear()}else hydraXterm.writeln(String(out).replace(/\n/g,"\r\n"))}line="";hydraXterm.write("\x1b[1;35mHYDRA>\x1b[0m ")}
+   else if(data==="\u007f"){if(line){line=line.slice(0,-1);hydraXterm.write("\b \b")}}
+   else if(data.charCodeAt(0)>=32){line+=data;hydraXterm.write(data)}
+ });
+}
+function initHydraMonaco(){
+ if(hydraMonaco||!window.require)return;
+ const el=$("monacoEditor");if(!el)return;
+ window.require.config({paths:{vs:"https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs"}});
+ window.require(["vs/editor/editor.main"],function(monaco){
+   hydraMonaco=monaco.editor.create(el,{value:"// HYDRA CODE\n// Environnement virtuel local\n\nconst protocol = \"MIROIR\";\nconst status = \"ONLINE\";\n",language:"javascript",theme:"vs-dark",automaticLayout:true,minimap:{enabled:true},fontSize:13,roundedSelection:false,scrollBeyondLastLine:false});
+   window.__hydraMonaco=monaco;
+ });
+}
+function initHydraExternalApps(){
+ $("terminalProLaunch")?.addEventListener("click",()=>{initHydraProTerminal();hydraXterm?.focus()});
+ $("terminalProClear")?.addEventListener("click",()=>hydraXterm?.clear());
+ $("terminalProFit")?.addEventListener("click",()=>hydraXtermFit?.fit());
+ $("codeLoadSample")?.addEventListener("click",()=>{initHydraMonaco();if(hydraMonaco)hydraMonaco.setValue("// DOSSIER HYDRA\nconst evidence = [\"MIROIR\", \"ALPHA\", \"OMEGA\"];\nconst mode = \"FICTION\\";\n")});
+ $("codeReset")?.addEventListener("click",()=>hydraMonaco?.setValue("// HYDRA CODE\n// Environnement virtuel local\n"));
+ window.addEventListener("resize",()=>hydraXtermFit?.fit());
+}
 function renderSurveillance(){
   const cams=[
     ["CAM-01","CENTRE HYDRA","20:31","Fragment 18 reçu"],
@@ -1494,7 +1545,7 @@ function initHydraVM(){
     ["surveillance","👁","Surveillance","Sécurité"],["news","📰","HYDRA News","Information"],["progress","📈","Progression","Pilotage"],
     ["aicore","🤖","Hydra-CORE","IA"],["social","🌐","HYDRA Network","Réseau"],["word","📄","HYDRA Word","Bureautique"],
     ["sheets","📊","HYDRA Sheets","Bureautique"],["drive","☁","HYDRA Drive","Fichiers"],["calendar","📅","Agenda","Organisation"],
-    ["contacts","👥","Contacts","Organisation"],["notes","🗒","Notes","Bureautique"],["browser","🌍","HYDRA Browser","Web interne"],["camera","📷","HYDRA CAM","Media"],
+    ["contacts","👥","Contacts","Organisation"],["notes","🗒","Notes","Bureautique"],["browser","🌍","HYDRA Browser","Web interne"],["camera","📷","HYDRA CAM","Media"],["code","⌘","HYDRA CODE","Development"],["terminal-pro-app","⌁","TERMINAL PRO","System"],
     ["photos","🖼","Galerie","Archives"],["qr","▦","QR Lab","Analyse"],["mission","🎛","Mission Control","Pilotage"]
   ];
 }
@@ -1584,7 +1635,7 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
     let i=0;clearInterval(window.__vmBootTimer);
     window.__vmBootTimer=setInterval(()=>{
       if(i<msgs.length){log.insertAdjacentHTML("beforeend",'<div class="vm-log-line">['+String(i+1).padStart(2,"0")+'] '+msgs[i]+'</div>');bar.style.width=Math.round(((i+1)/msgs.length)*100)+"%";i++;return}
-      clearInterval(window.__vmBootTimer);vmBootScreen.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);hydraVmAddResizeHandles();initHydraCamera();vmToast("HYDRA OS démarré — toutes les applications sont disponibles.");openSectionInVM("overview");
+      clearInterval(window.__vmBootTimer);vmBootScreen.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);hydraVmAddResizeHandles();initHydraCamera();initHydraExternalApps();vmToast("HYDRA OS démarré — toutes les applications sont disponibles.");openSectionInVM("overview");
     },260);
   }
   function shutdown(){
