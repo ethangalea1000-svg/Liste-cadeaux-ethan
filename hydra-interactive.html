@@ -167,7 +167,20 @@ radial-gradient(circle at 20% 0%,rgba(54,79,128,.11),transparent 26%),#08101b}
   .vm-task-btn{width:39px}
 }
 
-<style id="hydra-vm-ux-max">.vm-window{transition:opacity .14s ease,transform .14s ease}.vm-window.vm-focused{box-shadow:0 34px 100px rgba(0,0,0,.62),0 0 0 1px rgba(90,190,255,.18)}.vm-task-btn{position:relative}.vm-task-btn.running:after{content:"";position:absolute;left:50%;bottom:2px;width:5px;height:5px;border-radius:50%;background:#65ddff;transform:translateX(-50%);box-shadow:0 0 8px #65ddff}.vm-start-grid{grid-template-columns:repeat(3,1fr);max-height:58vh;overflow:auto}.vm-start-item{min-height:62px;display:flex;align-items:center;gap:9px}.vm-start-item .appico{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#15243a;border:1px solid #304765;flex:0 0 auto}.vm-app-sub{display:block;color:#7287a5;font-size:9px;margin-top:2px}@media(max-width:700px){.vm-start-grid{grid-template-columns:repeat(2,1fr)}}</style></style>
+<style id="hydra-vm-ux-max">.vm-window{transition:opacity .14s ease,transform .14s ease}.vm-window.vm-focused{box-shadow:0 34px 100px rgba(0,0,0,.62),0 0 0 1px rgba(90,190,255,.18)}.vm-task-btn{position:relative}.vm-task-btn.running:after{content:"";position:absolute;left:50%;bottom:2px;width:5px;height:5px;border-radius:50%;background:#65ddff;transform:translateX(-50%);box-shadow:0 0 8px #65ddff}.vm-start-grid{grid-template-columns:repeat(3,1fr);max-height:58vh;overflow:auto}.vm-start-item{min-height:62px;display:flex;align-items:center;gap:9px}.vm-start-item .appico{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#15243a;border:1px solid #304765;flex:0 0 auto}.vm-app-sub{display:block;color:#7287a5;font-size:9px;margin-top:2px}@media(max-width:700px){.vm-start-grid{grid-template-columns:repeat(2,1fr)}}</style><style id="hydra-vm-ux-pro">
+.vm-window{will-change:left,top,width,height;transition:box-shadow .14s ease,opacity .12s ease,transform .12s ease}
+.vm-window.vm-focused{box-shadow:0 34px 110px rgba(0,0,0,.68),0 0 0 1px rgba(91,220,255,.24)}
+.vm-window.vm-minimized{display:none!important}
+.vm-resize-handle{position:absolute;z-index:8}
+.vm-resize-handle.n{top:-3px;left:12px;right:12px;height:7px;cursor:ns-resize}.vm-resize-handle.s{bottom:-3px;left:12px;right:12px;height:7px;cursor:ns-resize}
+.vm-resize-handle.e{right:-3px;top:12px;bottom:12px;width:7px;cursor:ew-resize}.vm-resize-handle.w{left:-3px;top:12px;bottom:12px;width:7px;cursor:ew-resize}
+.vm-resize-handle.ne{right:-3px;top:-3px;width:12px;height:12px;cursor:nesw-resize}.vm-resize-handle.nw{left:-3px;top:-3px;width:12px;height:12px;cursor:nwse-resize}
+.vm-resize-handle.se{right:-3px;bottom:-3px;width:12px;height:12px;cursor:nwse-resize}.vm-resize-handle.sw{left:-3px;bottom:-3px;width:12px;height:12px;cursor:nesw-resize}
+.vm-workspaces{display:flex;gap:4px;margin-left:8px}.vm-workspace{width:22px;height:22px;border:1px solid #2c4260;border-radius:7px;background:#0d1726;color:#91a8c5;font-size:9px;cursor:pointer}.vm-workspace.active{background:#17304a;color:#72dfff;border-color:#4e7198}
+.vm-context{position:absolute;z-index:90;min-width:190px;padding:6px;border:1px solid #304967;border-radius:12px;background:rgba(7,13,22,.97);box-shadow:0 20px 70px rgba(0,0,0,.5);display:none}.vm-context.open{display:block}.vm-context button{display:block;width:100%;padding:9px;border:0;border-radius:8px;background:transparent;color:#dce8f8;text-align:left;cursor:pointer}.vm-context button:hover{background:#14243a}
+.vm-shortcut-hint{position:absolute;left:14px;bottom:78px;color:#6f86a5;font:9px ui-monospace,SFMono-Regular,Consolas,monospace;z-index:20}
+@media(max-width:700px){.vm-workspaces{display:none}.vm-shortcut-hint{display:none}}
+</style></style>
 <link rel="manifest" href="./hydra-manifest.json"><style>/* === HYDRA OS 2.0 / PWA + UX HARDENING === */
 :focus-visible{outline:2px solid #72dfff;outline-offset:3px;border-radius:8px}
 body.hydra-reduced-motion *,body.hydra-reduced-motion *::before,body.hydra-reduced-motion *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
@@ -1454,6 +1467,39 @@ function renderHydraLauncher(filter=""){
   grid.innerHTML=apps.map(a=>'<button class="vm-start-item" data-launch-app="'+esc(a[0])+'"><span class="appico">'+esc(a[1])+'</span><span><b>'+esc(a[2])+'</b><small class="vm-app-sub">'+esc(a[3])+'</small></span></button>').join("")||'<div class="vm-muted" style="padding:14px;grid-column:1/-1">Aucune application trouvée.</div>';
   grid.querySelectorAll("[data-launch-app]").forEach(b=>b.onclick=()=>{openWin(b.dataset.launchApp);$("vmStartMenu").classList.remove("open")});
 }
+function hydraVmAddResizeHandles(){
+  document.querySelectorAll(".vm-window").forEach(w=>{
+    if(w.querySelector(".vm-resize-handle"))return;
+    ["n","s","e","w","ne","nw","se","sw"].forEach(dir=>{
+      const h=document.createElement("div");h.className="vm-resize-handle "+dir;h.dataset.resize=dir;w.appendChild(h);
+      h.addEventListener("pointerdown",e=>{
+        if(w.classList.contains("maximized"))return;
+        e.preventDefault();e.stopPropagation();focusVmWindow(w);
+        const r=w.getBoundingClientRect(), sx=e.clientX, sy=e.clientY, sw=r.width, sh=r.height, sl=r.left, st=r.top;
+        const minW=320,minH=220;
+        const move=ev=>{
+          let left=sl,top=st,width=sw,height=sh;
+          if(dir.includes("e"))width=Math.max(minW,sw+ev.clientX-sx);
+          if(dir.includes("s"))height=Math.max(minH,sh+ev.clientY-sy);
+          if(dir.includes("w")){width=Math.max(minW,sw+sx-ev.clientX);left=sl+(ev.clientX-sx)}
+          if(dir.includes("n")){height=Math.max(minH,sh+sy-ev.clientY);top=st+(ev.clientY-sy)}
+          w.style.left=Math.max(8,left)+"px";w.style.top=Math.max(48,top)+"px";w.style.width=Math.min(width,window.innerWidth-16)+"px";w.style.height=Math.min(height,window.innerHeight-90)+"px";
+        };
+        const up=()=>{window.removeEventListener("pointermove",move);window.removeEventListener("pointerup",up)};
+        window.addEventListener("pointermove",move);window.addEventListener("pointerup",up,{once:true});
+      });
+    });
+  });
+}
+function hydraVmSnap(w,side){
+  if(!w)return;
+  w.classList.remove("maximized","vm-snapped");
+  const gap=10,top=48,bottom=66,W=window.innerWidth,H=window.innerHeight-top-bottom;
+  if(side==="max"){w.style.left=gap+"px";w.style.top=top+"px";w.style.width=(W-gap*2)+"px";w.style.height=H+"px";w.classList.add("maximized")}
+  else if(side==="left"){w.style.left=gap+"px";w.style.top=top+"px";w.style.width=Math.floor(W/2-gap*1.5)+"px";w.style.height=H+"px";w.classList.add("vm-snapped")}
+  else if(side==="right"){w.style.left=Math.ceil(W/2)+"px";w.style.top=top+"px";w.style.width=Math.floor(W/2-gap*1.5)+"px";w.style.height=H+"px";w.classList.add("vm-snapped")}
+  focusVmWindow(w);
+}
 function focusVmWindow(w){
   if(!w)return;
   document.querySelectorAll(".vm-window").forEach(x=>x.classList.remove("vm-focused"));
@@ -1500,7 +1546,7 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
     let i=0;clearInterval(window.__vmBootTimer);
     window.__vmBootTimer=setInterval(()=>{
       if(i<msgs.length){log.insertAdjacentHTML("beforeend",'<div class="vm-log-line">['+String(i+1).padStart(2,"0")+'] '+msgs[i]+'</div>');bar.style.width=Math.round(((i+1)/msgs.length)*100)+"%";i++;return}
-      clearInterval(window.__vmBootTimer);vmBootScreen.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);vmToast("HYDRA OS démarré — toutes les applications sont disponibles.");openSectionInVM("overview");
+      clearInterval(window.__vmBootTimer);vmBootScreen.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);hydraVmAddResizeHandles();vmToast("HYDRA OS démarré — toutes les applications sont disponibles.");openSectionInVM("overview");
     },260);
   }
   function shutdown(){
@@ -1530,7 +1576,17 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
   window.__hydraStartVM=boot;
   $("launchVm").onclick=boot;
   $("vmExit").onclick=shutdown;
-  $("vmStart").onclick=()=>$("vmStartMenu").classList.toggle("open");
+  $("vmStart").onclick=()=>{renderHydraLauncher($("vmStartSearch")?.value||"");$("vmStartMenu").classList.toggle("open");};
+  document.addEventListener("pointerdown",e=>{const ctx=$("vmContext");if(ctx&&!ctx.contains(e.target)&&!e.target.closest(".vm-icon"))ctx.classList.remove("open")});
+  document.querySelectorAll(".vm-window").forEach(w=>w.addEventListener("pointerdown",()=>focusVmWindow(w)));
+  document.addEventListener("keydown",e=>{
+    if(!overlay.classList.contains("open"))return;
+    const active=document.querySelector(".vm-window.vm-focused,.vm-window.active");
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="m"){e.preventDefault();if(active)active.classList.toggle("vm-minimized");return}
+    if(e.key==="F11"){e.preventDefault();if(active)hydraVmSnap(active,active.classList.contains("maximized")?"restore":"max");return}
+    if(e.altKey&&e.key==="ArrowLeft"){e.preventDefault();if(active)hydraVmSnap(active,"left");return}
+    if(e.altKey&&e.key==="ArrowRight"){e.preventDefault();if(active)hydraVmSnap(active,"right");return}
+  });
   $("vmLock").onclick=()=>{vmToast("Session VM verrouillée.");$("vmStartMenu").classList.remove("open")};
   document.querySelectorAll("[data-vm-app]").forEach(b=>b.onclick=()=>openWin(b.dataset.vmApp));
   renderHydraLauncher();
