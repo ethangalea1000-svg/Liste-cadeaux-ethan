@@ -168,8 +168,32 @@ radial-gradient(circle at 20% 0%,rgba(54,79,128,.11),transparent 26%),#08101b}
 }
 
 </style>
-</head>
+<link rel="manifest" href="./hydra-manifest.json"><style>/* === HYDRA OS 2.0 / PWA + UX HARDENING === */
+:focus-visible{outline:2px solid #72dfff;outline-offset:3px;border-radius:8px}
+body.hydra-reduced-motion *,body.hydra-reduced-motion *::before,body.hydra-reduced-motion *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+.os-global-status{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
+.os-global-status .state{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid #2c405d;border-radius:999px;background:#0f1a2a;color:#a9bcda;font-size:10px;font-weight:900}
+.os-global-status .dot{width:7px;height:7px;border-radius:50%;background:#54e3ae;box-shadow:0 0 12px #54e3ae}.os-global-status .dot.off{background:#ffbd64;box-shadow:0 0 12px #ffbd64}
+.hydra-command-palette{position:fixed;inset:0;z-index:1000;display:none;background:rgba(2,5,10,.72);backdrop-filter:blur(12px);padding:9vh 16px 16px}
+.hydra-command-palette.open{display:block}.hydra-cmd-box{width:min(760px,100%);margin:auto;border:1px solid #3c5680;border-radius:20px;background:#0b1320;box-shadow:0 30px 90px rgba(0,0,0,.55);overflow:hidden}
+.hydra-cmd-head{display:flex;gap:10px;align-items:center;padding:14px;border-bottom:1px solid #253650}.hydra-cmd-head input{flex:1;background:transparent;border:0;outline:0;color:#fff;font:700 16px inherit}
+.hydra-cmd-list{max-height:55vh;overflow:auto;padding:8px}.hydra-cmd-item{width:100%;display:flex;justify-content:space-between;gap:10px;text-align:left;border:1px solid transparent;background:transparent;color:#dbe6f7;padding:11px 12px;border-radius:11px;cursor:pointer}
+.hydra-cmd-item:hover,.hydra-cmd-item.selected{background:#182943;border-color:#334d70}.hydra-cmd-item small{color:#7f94b2}.hydra-cmd-foot{padding:9px 13px;border-top:1px solid #253650;color:#70829e;font-size:10px}
+.hydra-toast-stack{position:fixed;right:16px;bottom:16px;z-index:900;display:grid;gap:8px;max-width:min(390px,calc(100vw - 32px))}.hydra-toast2{padding:11px 13px;border:1px solid #385171;border-radius:12px;background:#101a2a;color:#dce8fa;box-shadow:0 15px 40px rgba(0,0,0,.35);font-size:12px}.hydra-toast2 strong{display:block;margin-bottom:3px}
+.hydra-shortcuts{font:800 10px ui-monospace,SFMono-Regular,Consolas,monospace;color:#7890af}@media(max-width:620px){.hydra-command-palette{padding-top:4vh}.hydra-cmd-list{max-height:65vh}}
+@media(prefers-reduced-motion:reduce){.hydra-command-palette *{transition:none!important}}
+</style></head>
 <body>
+<!-- === HYDRA OS 2.0 GLOBAL LAYER === -->
+<div id="hydraCommandPalette" class="hydra-command-palette" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="hydraCmdTitle">
+  <div class="hydra-cmd-box">
+    <div class="hydra-cmd-head"><span aria-hidden="true">⌘</span><input id="hydraCmdInput" type="search" autocomplete="off" placeholder="Rechercher un module, une preuve, une commande…" aria-label="Recherche HYDRA"><button class="mini-btn" id="hydraCmdClose" type="button">Échap</button></div>
+    <div id="hydraCmdTitle" class="sr-only">Palette de commandes HYDRA</div>
+    <div id="hydraCmdList" class="hydra-cmd-list" role="listbox"></div>
+    <div class="hydra-cmd-foot">↑ ↓ naviguer · Entrée ouvrir · Ctrl/Cmd+K ouvrir</div>
+  </div>
+</div>
+<div id="hydraToastStack" class="hydra-toast-stack" aria-live="polite" aria-atomic="false"></div>
 <header class="top"><div class="wrap toprow"><div class="brand"><div class="sig">⌁</div><div><b>HYDRA INTERACTIVE</b><small>POSTE DE CONTRÔLE — MAÎTRE DU JEU</small></div></div><div class="actions"><a class="btn" href="admin.html">← Administration</a><button class="btn danger hidden" id="logoutBtn">Verrouiller</button></div></div></header>
 <!-- === HYDRA VIRTUAL MACHINE === -->
 <div id="hydraVM" class="vm-overlay" aria-hidden="true">
@@ -1380,5 +1404,23 @@ function initHydraVM(){
 }
 
 </script>
+<script>/* === HYDRA OS 2.0 GLOBAL CONTROLLER === */
+(function(){
+  const $=id=>document.getElementById(id), modules=[
+    ["overview","Poste de contrôle","Vue centrale"],["intel","Intelligence Center","Graphe des relations"],["mail","HYDRA Mail","Messagerie fictive"],["money","HYDRA Money","Finances narratives"],["browser","HYDRA Browser","Intranet simulé"],["forensic","Analyse Forensique","Inspection des preuves"],["locker","Evidence Locker","Coffre des preuves"],["classified","Dossiers classifiés","Documents à débloquer"],["timeline","Chronologie","Frise de mission"],["signal","HYDRA Signal","Flux temps réel"],["social","HYDRA Network","Réseau interne"],["word","HYDRA Word","Documents"],["sheets","HYDRA Sheets","Tableur"],["drive","HYDRA Drive","Fichiers"],["calendar","Agenda Hydra","Planning"],["contacts","Contacts Hydra","Annuaire"],["notes","Notes privées","Bloc-notes"],["terminal","Terminal Hydra","Console fictive"],["surveillance","Surveillance","CCTV simulée"],["mission","Mission Control","Pilotage global"],["incident","Incident Center","Alertes"],["lab","Laboratoire","Simulation Alpha/Omega"],["qr","QR Lab","Clés narratives"],["gallery","Galerie","Captures fictives"],["news","Hydra News","Actualités internes"],["progress","Progression","État de l’enquête"],["ai","Hydra-CORE","Analyse scénarisée"]
+  ];
+  let open=false,selected=0,previousFocus=null;
+  function toast(t,m){const h=$("hydraToastStack");if(!h)return;const e=document.createElement("div");e.className="hydra-toast2";e.innerHTML="<strong>"+t+"</strong><span>"+m+"</span>";h.appendChild(e);setTimeout(()=>e.remove(),3200)}
+  function rows(q){const s=(q||"").toLowerCase().trim(), extra=[["__vm","Lancer HYDRA Virtual Machine","Bureau virtuel immersif"],["__incident","Déclencher le mode Incident","Simulation d’urgence"],["__refresh","Actualiser les données","Recharger l’état HYDRA"],["__motion","Basculer les animations","Confort visuel"]];return modules.concat(extra).map(x=>({id:x[0],title:x[1],desc:x[2]})).filter(x=>(x.title+" "+x.desc).toLowerCase().includes(s))}
+  function render(q){const l=$("hydraCmdList"),r=rows(q);if(!l)return;selected=Math.max(0,Math.min(selected,Math.max(0,r.length-1)));l.innerHTML=r.map((x,i)=>'<button type="button" class="hydra-cmd-item '+(i===selected?"selected":"")+'" role="option" aria-selected="'+(i===selected?'true':'false')+'" data-cmd="'+x.id+'"><span><b>'+x.title+'</b></span><small>'+x.desc+'</small></button>').join("");l.querySelectorAll("[data-cmd]").forEach((b,i)=>b.onclick=()=>run(r[i]))}
+  function close(){const p=$("hydraCommandPalette");if(!p)return;open=false;p.classList.remove("open");p.setAttribute("aria-hidden","true");if(previousFocus&&previousFocus.focus)previousFocus.focus()}
+  function run(x){if(!x)return;if(x.id==="__vm"){window.__hydraStartVM&&window.__hydraStartVM();close();return}if(x.id==="__incident"){const b=$("incidentModeOpen");b&&b.click();close();return}if(x.id==="__refresh"){const b=$("refreshBtn");b&&b.click();close();return}if(x.id==="__motion"){document.body.classList.toggle("hydra-reduced-motion");localStorage.setItem("hydra_reduced_motion",document.body.classList.contains("hydra-reduced-motion")?"1":"0");toast("Confort visuel",document.body.classList.contains("hydra-reduced-motion")?"Animations réduites.":"Animations réactivées.");close();return}if(typeof window.hydraGo==="function")window.hydraGo(x.id);else if(typeof window.activateHydraTab==="function")window.activateHydraTab(x.id,true);close()}
+  function show(){const p=$("hydraCommandPalette");if(!p)return;previousFocus=document.activeElement;open=true;p.classList.add("open");p.setAttribute("aria-hidden","false");selected=0;render("");$("hydraCmdInput").focus()}
+  function status(){const host=document.querySelector(".os-shell")||document.querySelector(".hero");if(!host||$("hydraGlobalStatus"))return;const r=document.createElement("div");r.id="hydraGlobalStatus";r.className="os-global-status";r.innerHTML='<span class="state"><span id="hydraOnlineDot" class="dot"></span><span id="hydraOnlineText">Réseau disponible</span></span><span class="state">PWA READY</span><span class="state hydra-shortcuts">CTRL/CMD+K · PALETTE</span>';host.appendChild(r);const sync=()=>{const on=navigator.onLine;const d=$("hydraOnlineDot");d&&d.classList.toggle("off",!on);const t=$("hydraOnlineText");t&&(t.textContent=on?"Réseau disponible":"Mode hors-ligne — cache local")};sync();addEventListener("online",sync);addEventListener("offline",sync)}
+  function pwa(){if("serviceWorker"in navigator)navigator.serviceWorker.register("./hydra-sw.js").then(()=>toast("HYDRA OS","Cache PWA local prêt.")).catch(()=>{});if(localStorage.getItem("hydra_reduced_motion")==="1"||matchMedia("(prefers-reduced-motion: reduce)").matches)document.body.classList.add("hydra-reduced-motion");addEventListener("beforeinstallprompt",e=>{e.preventDefault();window.__hydraInstallPrompt=e})}
+  document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();open?close():show();return}if(!open)return;if(e.key==="Escape"){e.preventDefault();close();return}const r=rows($("hydraCmdInput").value);if(e.key==="ArrowDown"){e.preventDefault();selected=(selected+1)%Math.max(1,r.length);render($("hydraCmdInput").value)}if(e.key==="ArrowUp"){e.preventDefault();selected=(selected-1+Math.max(1,r.length))%Math.max(1,r.length);render($("hydraCmdInput").value)}if(e.key==="Enter"){e.preventDefault();run(r[selected])}});
+  document.addEventListener("DOMContentLoaded",()=>{status();pwa();const i=$("hydraCmdInput");i&&i.addEventListener("input",()=>{selected=0;render(i.value)});const c=$("hydraCmdClose");c&&(c.onclick=close)});
+  window.__hydraOpenCommandPalette=show;window.__hydraToast=toast;
+})();</script>
 </body>
 </html>
