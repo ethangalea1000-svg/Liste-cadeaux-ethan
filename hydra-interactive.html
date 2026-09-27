@@ -1918,58 +1918,55 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
    if(a==="end"){clearInterval(timer);startedAt=null;timerEl.textContent="Chronomètre : 00:00";notify("partie terminée");}
  }));
 })();</script><script>
-/* HYDRA LOGIN FAILSAFE — indépendant du contrôleur principal */
+/* /* HYDRA LOGIN — fallback unique et persistant */
 (function(){
-  function boot(){
-    const form=document.getElementById("loginForm");
-    const input=document.getElementById("codeInput");
-    const status=document.getElementById("loginStatus");
-    if(!form||!input||!status)return;
-    function msg(text,type){
-      status.textContent=text;
-      status.className="status "+type;
-      status.style.display="block";
-      status.style.visibility="visible";
-      status.style.opacity="1";
-    }
-    if(!status.textContent) msg("● HYDRA prêt — saisis le code administrateur.", "info");
-    form.onsubmit=async function(e){
-      e.preventDefault();
-      const code=input.value.trim();
-      if(!code){msg("⚠️ Saisis le code administrateur Ethan.","warn");input.focus();return;}
-      msg("⏳ Vérification du code auprès de HYDRA / Supabase…","info");
-      try{
-        if(typeof window.authorize==="function"){
-          const ok=await window.authorize(code);
-          if(ok)return;
-        }else{
-          const r=await fetch("https://ckasbsnzxgwfwfnctioe.supabase.co/rest/v1/rpc/authorize_list_access",{
-            method:"POST",
-            headers:{
-              "apikey":"sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4",
-              "Authorization":"Bearer sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4",
-              "Content-Type":"application/json",
-              "Accept":"application/json"
-            },
-            body:JSON.stringify({p_code:code})
-          });
-          const data=await r.json().catch(()=>null);
-          if(!r.ok)throw new Error(data?.message||data?.hint||("HTTP "+r.status));
-          if(data?.rate_limited){msg("⏳ Trop de tentatives. Réessaie plus tard.","warn");return;}
-          if(!data?.authorized){msg("❌ Code incorrect ou accès désactivé.","error");return;}
-          if(data?.is_admin!==true||String(data?.label||"").trim().toLowerCase()!=="ethan — administrateur"){
-            msg("❌ Cet accès n’est pas l’administrateur Ethan.","error");return;
-          }
-          msg("✓ Code validé. Recharge la page pour ouvrir HYDRA.","ok");
-        }
-      }catch(err){
-        msg("❌ Erreur de connexion : "+(err?.message||String(err)),"error");
-      }
-    };
+  const URL="https://ckasbsnzxgwfwfnctioe.supabase.co";
+  const KEY="sb_publishable_e9u2wbkr12SRgxPDIB-EkA_I4QnQsF4";
+  const SESSION="hydra_interactive_admin";
+  async function check(code){
+    const r=await fetch(URL+"/rest/v1/rpc/authorize_list_access",{
+      method:"POST",cache:"no-store",
+      headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":"application/json",Accept:"application/json"},
+      body:JSON.stringify({p_code:code})
+    });
+    const data=await r.json().catch(()=>null);
+    if(!r.ok) throw new Error(data?.message||data?.hint||("HTTP "+r.status));
+    return data;
   }
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});
-  else boot();
-})();
-</script>
-</body>
+  function show(text,type){
+    const s=document.getElementById("loginStatus"); if(!s)return;
+    s.textContent=text; s.className="status "+type;
+    s.style.display="block"; s.style.visibility="visible"; s.style.opacity="1";
+  }
+  async function login(code){
+    code=String(code||"").trim();
+    if(!code){show("⚠️ Saisis le code administrateur Ethan.","warn");return;}
+    show("⏳ Vérification du code auprès de HYDRA / Supabase…","info");
+    try{
+      const d=await check(code);
+      if(d?.rate_limited){show("⏳ Trop de tentatives. Réessaie plus tard.","warn");return;}
+      if(!d?.authorized){show("❌ Code incorrect ou accès désactivé.","error");return;}
+      if(d?.is_admin!==true||String(d?.label||"").trim().toLowerCase()!=="ethan — administrateur"){
+        show("❌ Cet accès n’est pas l’administrateur Ethan.","error");return;
+      }
+      sessionStorage.setItem(SESSION,code);
+      const gate=document.getElementById("gate"),app=document.getElementById("app"),logout=document.getElementById("logoutBtn");
+      if(gate)gate.classList.add("hidden");
+      if(app)app.classList.remove("hidden");
+      if(logout)logout.classList.remove("hidden");
+      document.body.classList.add("hydra-vm-native");
+      show("✓ Accès administrateur Ethan validé.","ok");
+      if(typeof window.__hydraStartVM==="function") window.__hydraStartVM();
+    }catch(e){show("❌ Erreur de connexion : "+(e?.message||String(e)),"error");}
+  }
+  function boot(){
+    const form=document.getElementById("loginForm"),input=document.getElementById("codeInput");
+    if(!form||!input)return;
+    form.onsubmit=e=>{e.preventDefault();login(input.value);};
+    const saved=sessionStorage.getItem(SESSION);
+    if(saved){input.value=saved;login(saved);}
+    else show("● HYDRA prêt — saisis le code administrateur.","info");
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
+})();</body>
 </html>
