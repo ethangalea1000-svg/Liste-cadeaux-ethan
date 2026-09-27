@@ -1274,7 +1274,7 @@ function initHydraExternalApps(){
  $("terminalProLaunch")?.addEventListener("click",()=>{initHydraProTerminal();hydraXterm?.focus()});
  $("terminalProClear")?.addEventListener("click",()=>hydraXterm?.clear());
  $("terminalProFit")?.addEventListener("click",()=>hydraXtermFit?.fit());
- $("codeLoadSample")?.addEventListener("click",()=>{initHydraMonaco();if(hydraMonaco)hydraMonaco.setValue("// DOSSIER HYDRA\nconst evidence = [\"MIROIR\", \"ALPHA\", \"OMEGA\"];\nconst mode = \"FICTION\\";\n")});
+ $("codeLoadSample")?.addEventListener("click",()=>{initHydraMonaco();if(hydraMonaco)hydraMonaco.setValue("// DOSSIER HYDRA\nconst evidence = [\"MIROIR\", \"ALPHA\", \"OMEGA\"];\nconst mode = \"FICTION\";\n")});
  $("codeReset")?.addEventListener("click",()=>hydraMonaco?.setValue("// HYDRA CODE\n// Environnement virtuel local\n"));
  window.addEventListener("resize",()=>hydraXtermFit?.fit());
 }
