@@ -148,7 +148,18 @@ const sites=[
 ["Pix","https://pix.org","Plateforme éducative"],
 ["Wikipedia","https://fr.wikipedia.org","Encyclopédie"],
 ["OpenStreetMap","https://www.openstreetmap.org","Cartographie"],
-["Supabase","https://supabase.com","Plateforme de données"]
+["Supabase","https://supabase.com","Plateforme de données"],
+["OpenAI","https://openai.com","Recherche et IA"],
+["OWASP","https://owasp.org","Sécurité Web"],
+["W3C","https://www.w3.org","Standards du Web"],
+["Python Docs","https://docs.python.org/3/","Documentation Python"],
+["JavaScript.info","https://javascript.info","Cours JavaScript"],
+["Stack Overflow","https://stackoverflow.com","Questions et réponses développeurs"],
+["GitLab","https://gitlab.com","Forge Git et CI/CD"],
+["npm","https://www.npmjs.com","Packages JavaScript"],
+["Can I Use","https://caniuse.com","Compatibilité des fonctionnalités Web"],
+["Internet Archive","https://archive.org","Archives du Web"],
+["CNIL","https://www.cnil.fr","Protection des données"]
 ];
 function browserRender(url){
  const u=(url||"").trim()||sites[0][1];const match=sites.find(s=>s[1]===u);
