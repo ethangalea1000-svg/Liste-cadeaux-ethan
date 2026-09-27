@@ -1,0 +1,29 @@
+{
+  "desktop_icons": [
+    { "id": "folder_docs", "label": "Mes Documents", "type": "folder" },
+    { "id": "app_mail", "label": "Messagerie (2)", "type": "app_email" },
+    { "id": "file_note", "label": "Lisez-moi.txt", "type": "text_file" }
+  ],
+  "text_files": {
+    "file_note": "Si vous lisez ceci, c'est qu'il est trop tard. Quelqu'un a modifié un élément important du dossier. Les indices sont dans mes mails. Ne faites confiance à personne."
+  },
+  "emails": [
+    {
+      "id": 1,
+      "from": "docteur.lenoir@sante.fr",
+      "subject": "Résultats d'analyses",
+      "date": "26/09/2026",
+      "body": "Cher ami, une anomalie inhabituelle apparaît dans le dossier. Avez-vous remarqué quelque chose d'étrange ? Venez me voir rapidement.",
+      "is_locked": false
+    },
+    {
+      "id": 2,
+      "from": "heritage@notaires-associes.com",
+      "subject": "Modification du testament",
+      "date": "25/09/2026",
+      "body": "Le document a été modifié selon vos souhaits. Votre ex-associé est officiellement retiré de la succession au profit de votre neveu. Le mot de passe de signature électronique est votre année de rencontre : 1998.",
+      "is_locked": true,
+      "password_hint": "Année de rencontre avec l'associé"
+    }
+  ]
+}
