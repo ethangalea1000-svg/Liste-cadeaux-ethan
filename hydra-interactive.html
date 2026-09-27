@@ -1215,6 +1215,48 @@ function runTerminalCommand(raw){
  else if(u==="UNLOCK CORE"){hydraAddUnlock("CORE");res="ACCESS GRANTED\nARCHITECTURE ORIGINALE";renderClassified();renderEvidenceLocker();pushSignal("Terminal : accès CORE accordé.","SECURITY")}
  else if(u==="SIGNAL"){pushSignal("Commande SIGNAL exécutée.","TERMINAL");res="SIGNAL BURST SENT";}
  else if(u==="CLEAR"){[...$("terminalOutput").querySelectorAll(".term-line")].forEach(x=>x.remove());res="Console cleared.";}
+ else {
+   const terminalCommands={
+    "help":"Liste des commandes : ls, cd, cat, clear, system, network, status, whoami, date, version, history",
+    "ls":"Dossiers disponibles:\n/Documents\n/Logs\n/System_Data",
+    "date":"Dimanche 27 Septembre 2026 - 13:40:22",
+    "version":"OS Quantum v4.12.9 - Build 2026-09",
+    "whoami":"Utilisateur actuel : invite_externe (Droits restreints)",
+    "history":"1. ls\n2. cd Documents\n3. cat note.txt\n4. clear\n5. login admin",
+    "system":"CPU: 94% | RAM: 14.2GB/16GB | Temp: 74°C | Statut: INSTABLE",
+    "status":"Alerte : 3 fichiers système corrompus détectés. Restauration impossible.",
+    "network":"IP Locale : 192.168.1.45\nPasserelle : 192.168.1.1\nStatut: Connecté au réseau du Manoir",
+    "ping":"Usage: ping [adresse_ip] (simulation)",
+    "ping 192.168.1.1":"Réponse de 192.168.1.1 : octets=32 temps=4ms TTL=64",
+    "netstat":"Connexions actives :\nPort 80 (HTTP) -> Établie avec l'extérieur\nPort 443 (HTTPS) -> Établie avec l'extérieur",
+    "firewall":"Pare-feu actif. Mode : Bloquer les intrusions externes.",
+    "ssh":"Erreur : Client SSH non configuré sur cette session.",
+    "sudo":"Erreur : L'utilisateur 'invite_externe' n'est pas dans le fichier sudoers. Cet incident sera signalé.",
+    "decrypt":"Usage: decrypt [nom_du_fichier] (Nécessite les privilèges admin)",
+    "scan":"Analyse du réseau local en cours... 4 appareils trouvés (Routeur, Serveur_Central, Caméra_Salon, Inconnu).",
+    "cd":"Usage: cd [nom_du_dossier] (Ex: cd Documents)",
+    "cd documents":"Vous êtes maintenant dans /Documents. Tapez 'ls' pour voir les fichiers.",
+    "cd logs":"Vous êtes maintenant dans /Logs. Tapez 'ls' pour voir les fichiers.",
+    "cd system_data":"Accès refusé. Niveau de sécurité insuffisant.",
+    "cd . .":"Retour au répertoire racine /",
+    "cat":"Usage: cat [nom_du_fichier] (Ex: cat note.txt)",
+    "matrix":"Initialisation du protocole...\n01010100 01001000 01000101 00100000 01001011 01001001 01001100 01001100 01000101 01010010 (Le tueur est parmi vous)",
+    "hack":"Tentative d'intrusion forcée...\n[██████████████░░░░░] 75%\nÉCHEC : Contre-mesures activées par le système.",
+    "hello":"Bonjour. Que cherchez-vous dans ce système ?",
+    "credit":"Développé en secret par le Département Technique du projet.",
+    "exit":"Déconnexion impossible. Le système est verrouillé en mode urgence.",
+    "shutdown":"Erreur : Droits d'administrateur requis pour éteindre la machine.",
+    "reboot":"Redémarrage impossible. Erreur critique matérielle.",
+    "self-destruct":"Protocole d'autodestruction activé... Mais non, je rigole.",
+    "joke":"Pourquoi les plongeurs plongent-ils toujours en arrière et jamais en avant ? Parce que sinon ils tombent dans le bateau.",
+    "login":"Usage: login [nom_utilisateur]",
+    "login admin":"Veuillez entrer le mot de passe administrateur :",
+    "hint":"Indice disponible : Cherchez le mot de passe dans les e-mails de la secrétaire."
+   };
+   const key=cmd.toLowerCase();
+   if(Object.prototype.hasOwnProperty.call(terminalCommands,key)) res=terminalCommands[key];
+   else res="Commande inconnue. Tape HELP ou TAB pour les suggestions.";
+ }
  else res="Commande inconnue. Tape HELP ou TAB pour les suggestions.";
  termPrint(res,"out");$("terminalInput").value="";$("termAutocomplete").classList.remove("open");
 }
