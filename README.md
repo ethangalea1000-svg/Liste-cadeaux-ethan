@@ -276,3 +276,54 @@ Pour les applications natives, le dépôt contient actuellement le squelette et 
 
 **Liste de cadeaux d’Ethan — 2026**  
 Projet personnel réalisé avec HTML, CSS, JavaScript, GitHub et Supabase.
+
+
+## 📚 Documentation du projet
+
+- [Politique de confidentialité](confidentialite.html)
+- [Mentions légales](MENTIONS_LEGALES.md)
+- [Sécurité](SECURITY.md)
+- [Politique cookies et stockage local](POLITIQUE_COOKIES.md)
+- [Architecture technique](ARCHITECTURE.md)
+
+> Les documents de conformité décrivent le fonctionnement actuellement observé dans le dépôt. Les informations d'identité du responsable de publication et les durées de conservation définitives doivent être complétées et validées par le responsable du site avant une diffusion publique définitive.
+
+## 🧱 Architecture actuelle
+
+Le frontend est publié avec GitHub Pages et utilise Supabase pour les données applicatives, les RPC et certains fichiers. HYDRA VM ajoute un environnement interactif avec gestionnaire de fenêtres, terminal xterm.js, Monaco Editor, caméra navigateur et CCTV entièrement fictive.
+
+### HYDRA CAM
+
+Deux modes sont distincts :
+
+- **Caméra réelle** : accès uniquement après autorisation du navigateur et action de l'utilisateur.
+- **CCTV FICTION** : flux Canvas générés localement, explicitement marqués comme simulation.
+
+Aucune vidéo fictive ne doit être présentée comme une captation réelle.
+
+### Supabase
+
+Les tables exposées à la Data API doivent être protégées par RLS et par des grants correspondant exactement aux opérations nécessaires. Supabase recommande cette approche pour les applications utilisant directement la Data API. citeturn0search0turn0search13
+
+Les clés secrètes/service-role ne doivent jamais être placées dans le frontend. Une clé publishable/anon n'est pas un secret, mais elle nécessite des politiques RLS correctement configurées. citeturn0search8
+
+## 🔧 Développement
+
+Avant de publier une modification importante :
+
+1. vérifier les erreurs JavaScript ;
+2. vérifier les IDs HTML dupliqués ;
+3. vérifier les RPC Supabase utilisés ;
+4. vérifier les politiques RLS des tables modifiées ;
+5. vérifier les pages d'information si une donnée ou un service change ;
+6. vérifier les licences des dépendances externes.
+
+## 🔒 Vie privée
+
+Le projet applique le principe de minimisation : ne collecter que les données nécessaires aux fonctionnalités réellement utilisées. La CNIL recommande d'informer les personnes des finalités, de la base juridique, des catégories de données, des destinataires, des droits et, le cas échéant, des transferts hors UE. citeturn0search7turn0search14
+
+Pour les caméras, les personnes filmées doivent être informées et leur vie privée ainsi que leur droit à l'image doivent être respectés. citeturn0search3
+
+## 📌 Licence
+
+Le dépôt contient des composants tiers. Chaque dépendance conserve sa propre licence. Toute redistribution du code doit respecter les licences et notices correspondantes.
