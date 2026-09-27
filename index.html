@@ -249,6 +249,9 @@ body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{backgro
   <button class="app-tab" type="button" data-view-target="anniversaire">
     <span class="app-tab-icon">🎂</span><span><b>Anniversaire</b><small>Jeu & fête</small></span>
   </button>
+  <button class="app-tab" type="button" data-view-target="hydra">
+    <span class="app-tab-icon">🕵️</span><span><b>HYDRA</b><small>Dossier</small></span>
+  </button>
   <button class="app-tab" type="button" data-view-target="participer">
     <span class="app-tab-icon">💶</span><span><b>Participer</b><small>Cagnottes</small></span>
   </button>
@@ -272,7 +275,7 @@ body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{backgro
   </div>
 </section>
 
-<section class="birthday-section" id="birthdayHydraSection" data-app-view="anniversaire">
+<section class="birthday-section" id="birthdayHydraSection" data-app-view="hydra">
    <div class="birthday-card hydra-user-card">
      <details id="birthdayHydraAccordion" class="hydra-user-menu" open>
        <summary class="hydra-user-summary">
@@ -354,7 +357,7 @@ body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{backgro
     <div id="birthdayMemoryStats" class="memory-stats"></div>
   </div>
 </section>
- <section class="birthday-section birthday-hidden hydra-world-section" id="birthdayHydraWorldSection" data-app-view="anniversaire">
+ <section class="birthday-section birthday-hidden hydra-world-section" id="birthdayHydraWorldSection" data-app-view="hydra">
    <div class="birthday-card hydra-world-card">
      <div id="hydraExperienceStatus" class="hydra-status-strip">
        <div><strong id="hydraPhaseLabel">PROTOCOLE HYDRA</strong><small id="hydraPhaseText">Préparation de l’expérience.</small></div>
@@ -574,7 +577,8 @@ const grid=document.getElementById("grid"),search=document.getElementById("searc
   const topBtn=document.getElementById("viewTopBtn");
   const info={
     liste:{title:"Ta liste de cadeaux",text:"Recherche un cadeau, filtre par catégorie et réserve ce qui te plaît."},
-    anniversaire:{title:"Anniversaire d’Ethan",text:"Retrouve le compte à rebours, les jeux, la galerie, les souvenirs et ton dossier Hydra."},
+    anniversaire:{title:"Anniversaire d’Ethan",text:"Retrouve le compte à rebours, les jeux, la galerie et les souvenirs de la fête."},
+    hydra:{title:"HYDRA",text:"Ouvre ton dossier personnel et découvre uniquement les informations associées à ton accès."},
     participer:{title:"Participer",text:"Gère les cagnottes, tes participations et les propositions de cadeaux."},
     communaute:{title:"Communauté",text:"Présente-toi, écris à Ethan et partage des idées pour améliorer le site."}
   };
@@ -1077,17 +1081,17 @@ function applyHydraExperienceUI(){
     else if(role==="player") helperText.textContent="Prépare ton personnage et consulte les informations autorisées.";
     else helperText.textContent="Recherche un cadeau, filtre par catégorie et réserve ce qui te plaît.";
   }
-  const tabMap={liste:"gifts",participer:"fundraisers",communaute:"community",anniversaire:"hydra"};
+  const tabMap={liste:"gifts",participer:"fundraisers",communaute:"community",anniversaire:"birthday",hydra:"hydra"};
   document.querySelectorAll("[data-view-target]").forEach(tab=>{
     const target=tab.dataset.viewTarget;
     let visible=true;
-    if(role==="player" && phase==="live") visible=target==="anniversaire";
-    if(role==="guest" && target==="anniversaire") visible=true;
+    if(role==="player" && phase==="live") visible=target==="hydra";
+    if(target==="hydra") visible=(role==="player" || perms.hydra===true || perms.hydra_dossier===true);
     tab.hidden=!visible;
   });
   document.querySelectorAll("[data-app-view]").forEach(el=>{
     if(role==="player" && phase==="live"){
-      el.classList.toggle("experience-hidden",el.dataset.appView!=="anniversaire");
+      el.classList.toggle("experience-hidden",el.dataset.appView!=="hydra");
     }else{
       el.classList.remove("experience-hidden");
     }
