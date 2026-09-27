@@ -182,6 +182,14 @@ body.hydra-reduced-motion *,body.hydra-reduced-motion *::before,body.hydra-reduc
 .hydra-toast-stack{position:fixed;right:16px;bottom:16px;z-index:900;display:grid;gap:8px;max-width:min(390px,calc(100vw - 32px))}.hydra-toast2{padding:11px 13px;border:1px solid #385171;border-radius:12px;background:#101a2a;color:#dce8fa;box-shadow:0 15px 40px rgba(0,0,0,.35);font-size:12px}.hydra-toast2 strong{display:block;margin-bottom:3px}
 .hydra-shortcuts{font:800 10px ui-monospace,SFMono-Regular,Consolas,monospace;color:#7890af}@media(max-width:620px){.hydra-command-palette{padding-top:4vh}.hydra-cmd-list{max-height:65vh}}
 @media(prefers-reduced-motion:reduce){.hydra-command-palette *{transition:none!important}}
+</style><style>
+.vm-section-host{overflow:hidden}.vm-section-content{height:calc(100% - 42px);overflow:auto;padding:0!important}
+.vm-section-content>.section{display:block!important;min-height:100%;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.vm-section-content>.section .section-head{position:sticky;top:0;z-index:4;background:rgba(7,12,21,.94);backdrop-filter:blur(10px)}
+.vm-app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;margin-top:12px;max-height:48vh;overflow:auto}
+.vm-app-grid button{min-height:58px;text-align:left;padding:10px;border:1px solid #263a58;border-radius:12px;background:#101b2b;color:#dce8f7;cursor:pointer;font-weight:800}
+.vm-app-grid button:hover{background:#182943;border-color:#4d6f9b;transform:translateY(-1px)}
+.vm-start-head{display:flex;justify-content:space-between;align-items:center}
 </style></head>
 <body>
 <!-- === HYDRA OS 2.0 GLOBAL LAYER === -->
@@ -222,7 +230,7 @@ body.hydra-reduced-motion *,body.hydra-reduced-motion *::before,body.hydra-reduc
     <div id="vmStartMenu" class="vm-start-menu">
       <div class="vm-start-head"><b>HYDRA // APPLICATIONS</b><span class="vm-muted">VM-01</span></div>
       <input id="vmStartSearch" class="vm-start-search" placeholder="Rechercher une application…">
-      <div class="vm-start-grid">
+      <div class="vm-start-grid"><button type="button" class="vm-start-item" data-vm-section="overview">⌂ Dashboard</button><button type="button" class="vm-start-item" data-vm-section="indices">🔎 Indices</button><button type="button" class="vm-start-item" data-vm-section="virements">€ Finance</button><button type="button" class="vm-start-item" data-vm-section="mails">✉ Mail</button><button type="button" class="vm-start-item" data-vm-section="dossiers">🗂 Dossiers</button><button type="button" class="vm-start-item" data-vm-section="chrono">◷ Chronologie</button><button type="button" class="vm-start-item" data-vm-section="documents">📄 Documents</button><button type="button" class="vm-start-item" data-vm-section="live">● LIVE</button><button type="button" class="vm-start-item" data-vm-section="intel">🧠 Intelligence</button><button type="button" class="vm-start-item" data-vm-section="classified">🗂 Classifiés</button><button type="button" class="vm-start-item" data-vm-section="signal">📡 Signal</button><button type="button" class="vm-start-item" data-vm-section="forensic">🔬 Forensique</button><button type="button" class="vm-start-item" data-vm-section="puzzle">🧩 Décryptage</button><button type="button" class="vm-start-item" data-vm-section="comms">💬 Canal</button><button type="button" class="vm-start-item" data-vm-section="radio">📞 Communications</button><button type="button" class="vm-start-item" data-vm-section="map">🛰 Carte</button><button type="button" class="vm-start-item" data-vm-section="trust">📊 Trust Matrix</button><button type="button" class="vm-start-item" data-vm-section="incidents">🚨 Incidents</button><button type="button" class="vm-start-item" data-vm-section="lab">🧪 Laboratoire</button><button type="button" class="vm-start-item" data-vm-section="locker">📁 Evidence</button><button type="button" class="vm-start-item" data-vm-section="surveillance">👁 Surveillance</button><button type="button" class="vm-start-item" data-vm-section="news">📰 Hydra News</button><button type="button" class="vm-start-item" data-vm-section="progress">📈 Progression</button><button type="button" class="vm-start-item" data-vm-section="aicore">🤖 AI Core</button><button type="button" class="vm-start-item" data-vm-section="social">🌐 Network</button><button type="button" class="vm-start-item" data-vm-section="word">📄 Word</button><button type="button" class="vm-start-item" data-vm-section="sheets">📊 Sheets</button><button type="button" class="vm-start-item" data-vm-section="drive">☁ Drive</button><button type="button" class="vm-start-item" data-vm-section="calendar">📅 Agenda</button><button type="button" class="vm-start-item" data-vm-section="contacts">👥 Contacts</button><button type="button" class="vm-start-item" data-vm-section="notes">🗒 Notes</button><button type="button" class="vm-start-item" data-vm-section="browser">🌍 Browser</button><button type="button" class="vm-start-item" data-vm-section="photos">🖼 Gallery</button><button type="button" class="vm-start-item" data-vm-section="qr">▦ QR Lab</button><button type="button" class="vm-start-item" data-vm-section="mission">🎛 Mission Control</button>
         <button class="vm-start-item" data-vm-app="intel">🧠 Intelligence Center</button>
         <button class="vm-start-item" data-vm-app="mail">✉ HYDRA Mail</button>
         <button class="vm-start-item" data-vm-app="finance">€ Finance</button>
@@ -233,7 +241,10 @@ body.hydra-reduced-motion *,body.hydra-reduced-motion *::before,body.hydra-reduc
     </div>
     <button id="vmLock" class="vm-lock">🔒 Verrouiller la VM</button>
     <div id="vmToast" class="vm-toast"></div>
-    <div id="vmWindows">
+    <div id="vmWindows"><div class="vm-window vm-section-host" id="vmWinApp" data-vm-window="__section" style="left:70px;top:70px;width:min(1180px,calc(100vw - 140px));height:min(760px,calc(100vh - 150px))">
+  <div class="vm-titlebar"><div class="vm-title"><span id="vmAppIcon">◈</span> <span id="vmAppTitle">HYDRA APPLICATION</span> <span class="vm-muted">/ VM NATIVE</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="__section">—</button><button class="vm-winctrl" data-vm-max="__section">□</button><button class="vm-winctrl close" data-vm-close="__section">×</button></div></div>
+  <div class="vm-content vm-section-content" id="vmAppContent"></div>
+</div>
       <div class="vm-window" id="vmWinIntel" data-vm-window="intel">
         <div class="vm-titlebar"><div class="vm-title">🧠 INTELLIGENCE CENTER <span class="vm-muted">/ LIVE</span></div><div class="vm-winctrls"><button class="vm-winctrl" data-vm-min="intel">—</button><button class="vm-winctrl" data-vm-max="intel">□</button><button class="vm-winctrl close" data-vm-close="intel">×</button></div></div>
         <div class="vm-content">
@@ -1342,8 +1353,40 @@ function initHydraVM(){
   let vmClockTimer=null,z=20,drag=null;
   function vmToast(msg){$("vmToast").textContent=msg;$("vmToast").classList.add("show");clearTimeout(window.__vmToastTimer);window.__vmToastTimer=setTimeout(()=>$("vmToast").classList.remove("show"),1800)}
   function tick(){const d=new Date();$("vmClock").textContent=d.toLocaleTimeString("fr-FR",{hour12:false});}
+  function openSectionInVM(tabName){
+    const section=document.getElementById(tabName), host=$("vmAppContent"), win=$("vmWinApp");
+    if(!section||!host||!win)return false;
+    if(section.parentElement!==host){
+      if(section.dataset.vmOriginalParent!=="1"){
+        section.dataset.vmOriginalParent="1";
+        section._hydraOriginalParent=section.parentElement;
+        section._hydraOriginalNext=section.nextSibling;
+      }
+      host.appendChild(section);
+    }
+    document.querySelectorAll(".section").forEach(x=>{if(x!==section)x.classList.remove("active")});
+    section.classList.add("active");
+    const labels={overview:["⌂","Poste de contrôle"],indices:["🔎","Indices"],virements:["€","HYDRA Money"],mails:["✉","HYDRA Mail"],dossiers:["🗂","Dossiers"],chrono:["◷","Chronologie"],documents:["📄","Documents"],live:["●","LIVE"],intel:["🧠","Intelligence Center"],classified:["🗂","Classifiés"],signal:["📡","Signal"],forensic:["🔬","Forensique"],puzzle:["🧩","Décryptage"],comms:["💬","Canal"],radio:["📞","Communications"],map:["🛰","Carte"],trust:["📊","Trust Matrix"],incidents:["🚨","Incidents"],lab:["🧪","Laboratoire"],locker:["📁","Evidence Locker"],terminal:[" >_","Terminal"],surveillance:["👁","Surveillance"],news:["📰","Hydra News"],progress:["📈","Progression"],aicore:["🤖","Hydra-CORE"],social:["🌐","HYDRA Network"],word:["📄","HYDRA Word"],sheets:["📊","HYDRA Sheets"],drive:["☁","HYDRA Drive"],calendar:["📅","Agenda"],contacts:["👥","Contacts"],notes:["🗒","Notes"],browser:["🌍","HYDRA Browser"],photos:["🖼","Galerie"],qr:["▦","QR Lab"],mission:["🎛","Mission Control"]};
+    const meta=labels[tabName]||["◈",tabName.toUpperCase()];
+    $("vmAppIcon").textContent=meta[0];$("vmAppTitle").textContent=meta[1];
+    win.classList.add("active");win.style.zIndex=String(++z);
+    $("vmStartMenu").classList.remove("open");
+    document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.toggle("active",x.dataset.vmApp===tabName));
+    sessionStorage.setItem("hydra_vm_app",tabName);
+    return true;
+  }
+  function restoreSectionFromVM(section){
+    if(!section||!section._hydraOriginalParent)return;
+    const p=section._hydraOriginalParent,n=section._hydraOriginalNext;
+    if(n&&n.parentNode===p)p.insertBefore(section,n);else p.appendChild(section);
+    section.classList.remove("active");delete section._hydraOriginalParent;delete section._hydraOriginalNext;
+    section.removeAttribute("data-vm-original-parent");
+  }
   function openWin(name){
-    const w=document.querySelector('[data-vm-window="'+name+'"]');if(!w)return;
+    if(name==="__section"){const saved=sessionStorage.getItem("hydra_vm_app")||"overview";return openSectionInVM(saved)}
+    const sectionTabs=["overview","indices","virements","mails","dossiers","chrono","documents","live","intel","classified","signal","forensic","puzzle","comms","radio","map","trust","incidents","lab","locker","terminal","surveillance","news","progress","aicore","social","word","sheets","drive","calendar","contacts","notes","browser","photos","qr","mission"];
+    if(sectionTabs.includes(name) && !["terminal","intel","browser"].includes(name)) return openSectionInVM(name);
+    const w=document.querySelector('[data-vm-window="'+name+'"]');if(!w)return openSectionInVM(name);
     document.querySelectorAll(".vm-window").forEach(x=>x.classList.remove("active"));
     w.classList.add("active");w.style.zIndex=String(++z);
     $("vmStartMenu").classList.remove("open");
@@ -1372,7 +1415,7 @@ function initHydraVM(){
     let i=0;clearInterval(window.__vmBootTimer);
     window.__vmBootTimer=setInterval(()=>{
       if(i<msgs.length){log.insertAdjacentHTML("beforeend",'<div class="vm-log-line">['+String(i+1).padStart(2,"0")+'] '+msgs[i]+'</div>');bar.style.width=Math.round(((i+1)/msgs.length)*100)+"%";i++;return}
-      clearInterval(window.__vmBootTimer);vmBootScreen.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);vmToast("HYDRA VM démarrée.");openWin("intel");
+      clearInterval(window.__vmBootTimer);vmBootScreen.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);vmToast("HYDRA OS démarré — toutes les applications sont disponibles.");openSectionInVM("overview");
     },260);
   }
   function shutdown(){
@@ -1385,10 +1428,11 @@ function initHydraVM(){
   $("vmStart").onclick=()=>$("vmStartMenu").classList.toggle("open");
   $("vmLock").onclick=()=>{vmToast("Session VM verrouillée.");$("vmStartMenu").classList.remove("open")};
   document.querySelectorAll("[data-vm-app]").forEach(b=>b.onclick=()=>openWin(b.dataset.vmApp));
-  document.querySelectorAll("[data-vm-close]").forEach(b=>b.onclick=e=>{e.stopPropagation();closeWin(b.dataset.vmClose)});
-  document.querySelectorAll("[data-vm-min]").forEach(b=>b.onclick=e=>{e.stopPropagation();closeWin(b.dataset.vmMin)});
+  document.querySelectorAll("[data-vm-section]").forEach(b=>b.onclick=()=>openSectionInVM(b.dataset.vmSection));
+  document.querySelectorAll("[data-vm-close]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.vmClose==="__section"){const s=$("vmAppContent").querySelector(".section");if(s)restoreSectionFromVM(s);closeWin("__section");return}closeWin(b.dataset.vmClose)});
+  document.querySelectorAll("[data-vm-min]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.vmMin==="__section"){closeWin("__section");return}closeWin(b.dataset.vmMin)});
   document.querySelectorAll("[data-vm-max]").forEach(b=>b.onclick=e=>{e.stopPropagation();maxWin(b.dataset.vmMax)});
-  document.querySelectorAll("[data-vm-main]").forEach(b=>b.onclick=()=>{const tab=b.dataset.vmMain;if(tab==="locker"){shutdown();setTimeout(()=>hydraGo("locker"),950)}else{shutdown();setTimeout(()=>hydraGo(tab),950)}});  
+  document.querySelectorAll("[data-vm-main]").forEach(b=>b.onclick=()=>{const tab=b.dataset.vmMain;openSectionInVM(tab)});  
   $("vmStartSearch").addEventListener("input",e=>{const q=e.target.value.toLowerCase();document.querySelectorAll(".vm-start-item").forEach(b=>b.style.display=b.textContent.toLowerCase().includes(q)?"block":"none")});
   $("vmTermInput").addEventListener("keydown",e=>{if(e.key==="Enter"){const v=e.target.value;e.target.value="";runTerm(v)}});
   document.querySelectorAll(".vm-titlebar").forEach(tb=>{
