@@ -53,7 +53,7 @@ a{color:#a8b4ff}.wrap{max-width:1320px;margin:auto;padding:0 18px}.top{position:
 .incidents{display:grid;gap:9px}.incident{display:grid;grid-template-columns:70px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid #293b55;border-radius:13px;background:#0d1522}.incident-level{font-size:10px;font-weight:950;text-align:center}.incident-bar{height:8px;border-radius:99px;background:#162238;overflow:hidden;margin-top:6px}.incident-bar i{display:block;height:100%;background:linear-gradient(90deg,#5565f7,#44c7f4);width:0}.incident-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .lab-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.lab-card{min-height:210px}.meter{height:10px;border-radius:99px;background:#172237;overflow:hidden;margin:9px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#586bff,#35d6ff);width:40%}.fictional-note{margin-top:10px;color:#8ba0bb;font-size:10px;line-height:1.5}
 .evidence-locker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.e-slot{min-height:130px;padding:13px;border:1px solid #2b3e59;border-radius:14px;background:linear-gradient(180deg,#101928,#0a111b);cursor:pointer}.e-slot.locked{opacity:.6;filter:saturate(.4)}.e-slot.discovered{border-color:#416d64;background:linear-gradient(180deg,#10241f,#0a1512)}.e-code{font:900 10px ui-monospace,SFMono-Regular,Consolas,monospace;color:#7d9abb}.e-title{font-weight:900;margin-top:8px}.e-foot{margin-top:8px;font-size:10px;color:#7d91ab}
-.terminal{display:grid;grid-template-columns:1fr .7fr;gap:12px}.term-box{background:#04070c;border:1px solid #1c2a40;border-radius:16px;min-height:380px;padding:15px;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#7ce6c5;overflow:auto}.term-line{white-space:pre-wrap}.term-prompt{display:flex;gap:7px;margin-top:10px}.term-prompt span{color:#6f7fff}.term-prompt input{flex:1;background:transparent;border:0;outline:0;color:#eaf3ff;font:inherit}.term-help{min-height:380px}.cmd-chip{display:inline-flex;padding:6px 8px;border:1px solid #314766;border-radius:999px;background:#0d1726;color:#b8c8df;font:10px ui-monospace,SFMono-Regular,Consolas,monospace;margin:4px 4px 0 0;cursor:pointer}
+.terminal-pro{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:12px}.terminal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 11px;background:#08111c;border:1px solid #1c2a40;border-bottom:0;border-radius:14px 14px 0 0;color:#8fa6c4;font:10px ui-monospace,SFMono-Regular,Consolas,monospace}.term-lights{display:flex;gap:5px}.term-lights i{width:8px;height:8px;border-radius:50%;display:block;background:#34445a}.term-lights i:nth-child(1){background:#ff6b6b}.term-lights i:nth-child(2){background:#ffc857}.term-lights i:nth-child(3){background:#52d273}.term-box.pro{border-radius:0 0 14px 14px;min-height:470px}.term-status{display:flex;gap:8px;align-items:center}.term-status b{color:#65e0b6}.term-autocomplete{display:none;position:absolute;left:0;right:0;bottom:48px;padding:6px;background:#08111c;border:1px solid #2b415f;border-radius:10px;box-shadow:0 15px 45px rgba(0,0,0,.45);z-index:5}.term-autocomplete.open{display:block}.term-suggestion{display:flex;justify-content:space-between;padding:7px 9px;border-radius:7px;color:#d7e4f4;font:11px ui-monospace,SFMono-Regular,Consolas,monospace}.term-suggestion.selected{background:#13263d;color:#70dcff}.term-wrap{position:relative}.term-cmd-desc{color:#7890ad;font-size:9px}.term-side-title{font-size:10px;color:#7890ad;text-transform:uppercase;letter-spacing:.08em}.term-history{max-height:210px;overflow:auto;display:grid;gap:4px;margin-top:8px}.term-history button{border:1px solid #243852;background:#0a1421;color:#aebfd5;border-radius:8px;padding:7px;text-align:left;font:10px ui-monospace,SFMono-Regular,Consolas,monospace;cursor:pointer}.term-history button:hover{background:#11233a}.term-kbd{display:inline-block;border:1px solid #344b68;border-radius:5px;padding:1px 4px;color:#9fb3cd;background:#0d1827}@media(max-width:850px){.terminal-pro{grid-template-columns:1fr}.term-side{display:none}}.terminal{display:grid;grid-template-columns:1fr .7fr;gap:12px}.term-box{background:#04070c;border:1px solid #1c2a40;border-radius:16px;min-height:380px;padding:15px;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#7ce6c5;overflow:auto}.term-line{white-space:pre-wrap}.term-prompt{display:flex;gap:7px;margin-top:10px}.term-prompt span{color:#6f7fff}.term-prompt input{flex:1;background:transparent;border:0;outline:0;color:#eaf3ff;font:inherit}.term-help{min-height:380px}.cmd-chip{display:inline-flex;padding:6px 8px;border:1px solid #314766;border-radius:999px;background:#0d1726;color:#b8c8df;font:10px ui-monospace,SFMono-Regular,Consolas,monospace;margin:4px 4px 0 0;cursor:pointer}
 .surv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cam{position:relative;overflow:hidden;min-height:245px;border:1px solid #293c58;border-radius:16px;background:linear-gradient(135deg,#15212d,#060b11);box-shadow:inset 0 0 80px rgba(48,83,116,.18)}.cam:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 5px,rgba(255,255,255,.025) 6px,transparent 7px);pointer-events:none}.cam-feed{height:100%;display:grid;place-items:center;color:#87a1bc;font:900 14px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;text-align:center}.cam-badge{position:absolute;left:11px;top:10px;padding:4px 7px;background:#4b151f;border:1px solid #8d3d4d;color:#ffafb9;border-radius:999px;font-size:9px;font-weight:950}.cam-time{position:absolute;right:11px;top:10px;color:#9cb0ca;font:900 9px ui-monospace,SFMono-Regular,Consolas,monospace}.cam-controls{position:absolute;left:11px;right:11px;bottom:11px;display:flex;justify-content:space-between;gap:8px}.news-list{display:grid;gap:9px}.news-item{padding:13px;border:1px solid #293b55;border-radius:13px;background:linear-gradient(135deg,#101a2a,#0b111c)}.news-meta{font-size:9px;color:#778ba7;letter-spacing:.08em;font-weight:900}.news-item h3{margin:6px 0}.news-item p{margin:0;color:#c9d5e7;line-height:1.55;font-size:12px}
 .progress-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.progress-card{padding:13px;border:1px solid #293b55;border-radius:13px;background:#0e1624}.progress-top{display:flex;justify-content:space-between;gap:8px}.progress-bar{height:9px;border-radius:99px;background:#172238;overflow:hidden;margin-top:10px}.progress-bar i{display:block;height:100%;background:linear-gradient(90deg,#6a76ff,#34d2ff)}.progress-meta{margin-top:6px;font-size:10px;color:#8195af}
 .ai-grid{display:grid;grid-template-columns:1fr .8fr;gap:12px}.ai-console{min-height:300px;padding:16px;border:1px solid #293d59;border-radius:16px;background:radial-gradient(circle at 20% 10%,#1a2847 0,#09111b 65%)}.ai-result{white-space:pre-wrap;line-height:1.6;color:#dbe7f6}.ai-input{display:flex;gap:8px;margin-top:12px}.ai-input textarea{min-height:110px;resize:vertical}.score-card{display:grid;gap:9px}.score-line{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #253650;font-size:11px}.score-line span:first-child{color:#8295ae}
@@ -581,7 +581,7 @@ body.hydra-vm-native .vm-taskbar{bottom:10px}
 
   <section class="section" id="terminal">
     <div class="section-head"><div><h2>🖥️ Terminal Hydra</h2><div class="sub">Console de commandes entièrement fictive.</div></div><span class="sim-badge">LOCAL SIM</span></div>
-    <div class="terminal"><div class="term-box" id="terminalOutput"><div class="term-line">HYDRA-CORE boot sequence…</div><div class="term-line">Type HELP for available commands.</div><div class="term-prompt"><span>HYDRA&gt;</span><input id="terminalInput" autocomplete="off" spellcheck="false" placeholder="STATUS"></div></div><aside class="card term-help"><div class="panel-title"><h3>Commandes rapides</h3></div><div id="termChips"></div><div class="notice" style="margin-top:13px">Le terminal ne touche à aucun système réel. Il pilote uniquement la simulation du dossier.</div></aside></div>
+    <div class="terminal-pro"><div><div class="terminal-toolbar"><span class="term-lights"><i></i><i></i><i></i></span><span class="term-status"><b>● ONLINE</b><span>HYDRA-SHELL / LOCAL-SIM</span></span><span id="termClock">--:--:--</span></div><div class="term-wrap"><div class="term-box pro" id="terminalOutput"><div class="term-line">HYDRA-CORE boot sequence…</div><div class="term-line">Shell fictif initialisé.</div><div class="term-line">Tape HELP pour les commandes. TAB pour compléter.</div><div class="term-prompt"><span>HYDRA&gt;</span><input id="terminalInput" autocomplete="off" aria-autocomplete="list" spellcheck="false" placeholder="HELP"><div id="termAutocomplete" class="term-autocomplete" role="listbox"></div></div></div></div></div><aside class="card term-side"><div class="panel-title"><h3>Terminal HYDRA</h3><span class="sim-badge">SIM</span></div><div class="term-side-title">Raccourcis</div><div class="notice"><span class="term-kbd">↑</span> historique · <span class="term-kbd">↓</span> suivant · <span class="term-kbd">TAB</span> compléter · <span class="term-kbd">ESC</span> fermer les suggestions</div><div class="term-side-title" style="margin-top:12px">Commandes rapides</div><div id="termChips"></div><div class="term-side-title" style="margin-top:14px">Historique</div><div id="termHistory" class="term-history"></div><div class="notice" style="margin-top:13px">Terminal entièrement fictif : il ne touche à aucun système réel.</div></aside></div>
   </section>
 
   <section class="section" id="surveillance">
@@ -1164,30 +1164,59 @@ function renderEvidenceLocker(){
   $("evidenceLocker").innerHTML=items.map(x=>'<article class="e-slot '+(x[2]?"discovered":"locked")+'" data-elock="'+x[0]+'"><div class="e-code">'+x[0]+' · '+(x[2]?"UNLOCKED":"LOCKED")+'</div><div class="e-title">'+(x[2]?"📄 ":"🔒 ")+esc(x[1])+'</div><div class="e-foot">'+esc(x[3])+'</div></article>').join("");
   document.querySelectorAll("[data-elock]").forEach(b=>b.onclick=()=>toast(b.classList.contains("discovered")?"Preuve ouverte : "+b.querySelector(".e-title").textContent:"Preuve verrouillée — continue l’enquête."));
 }
+const HYDRA_TERM_COMMANDS=[
+ ["HELP","Afficher l'aide et les commandes disponibles"],["STATUS","État de la simulation"],["SCAN EMILIE","Recouper le dossier Emilie"],["TRACE 2300K","Recouper la piste financière"],["TRACE FABRICE","Inspecter l'archive de Fabrice"],["DECRYPT MIROIR","Débloquer la piste Miroir"],["UNLOCK OMEGA","Débloquer le dossier narratif Omega"],["UNLOCK CORE","Débloquer l'architecture originale"],["SIGNAL","Envoyer un signal fictif"],["CLEAR","Nettoyer la console"]
+];
+let hydraTermHistory=JSON.parse(localStorage.getItem("hydra_term_history")||"[]"),hydraTermHistoryIndex=hydraTermHistory.length,hydraTermSelected=0;
+function termPrint(text,type="out"){
+ const out=$("terminalOutput"),line=document.createElement("div");line.className="term-line "+type;line.textContent=String(text);const prompt=out.querySelector(".term-prompt");out.insertBefore(line,prompt);out.scrollTop=out.scrollHeight;
+}
+function renderTermHistory(){
+ const box=$("termHistory");if(!box)return;box.innerHTML=hydraTermHistory.slice().reverse().slice(0,18).map((x,i)=>'<button type="button" data-term-history="'+esc(x)+'">'+esc(x)+'</button>').join("");
+ box.querySelectorAll("[data-term-history]").forEach(b=>b.onclick=()=>{$("terminalInput").value=b.dataset.termHistory;$("terminalInput").focus()});
+}
+function renderTermSuggestions(q){
+ const box=$("termAutocomplete"),v=String(q||"").toUpperCase();if(!box)return;
+ const list=HYDRA_TERM_COMMANDS.filter(x=>!v||x[0].startsWith(v)).slice(0,7);
+ box.innerHTML=list.map((x,i)=>'<div class="term-suggestion '+(i===hydraTermSelected?"selected":"")+'" role="option"><span>'+esc(x[0])+'</span><span class="term-cmd-desc">'+esc(x[1])+'</span></div>').join("");
+ box.classList.toggle("open",!!v&&!!list.length);
+}
 function runTerminalCommand(raw){
-  const cmd=String(raw||"").trim();if(!cmd)return;
-  const out=$("terminalOutput"),line=document.createElement("div");line.className="term-line";line.textContent="> "+cmd;out.insertBefore(line,out.querySelector(".term-prompt"));
-  const u=cmd.toUpperCase();
-  let res="";
-  if(u==="HELP")res="STATUS | SCAN EMILIE | TRACE 2300K | TRACE FABRICE | DECRYPT MIROIR | UNLOCK OMEGA | UNLOCK CORE | SIGNAL | CLEAR";
-  else if(u==="STATUS")res="HYDRA STATUS\nPHASE: "+phaseLabel(cfg.experience?.phase||"before").toUpperCase()+"\nSECURITY: SECURE\nCORE: ONLINE\nALERTS: "+localStorage.getItem("hydra_incident_escalation","0");
-  else if(u.includes("SCAN EMILIE"))res="SCAN EMILIE\n3 connexions détectées\nFinance → Miroir\nMiroir → Hydra-Core";
-  else if(u.includes("TRACE 2300"))res="TRACE 2300K\nRéférence : HYDRA-23MIRROR-021\nRoute : MIRROR HOLDINGS\nStatut : à recouper";
-  else if(u.includes("TRACE FABRICE"))res="TRACE FABRICE\nArchive originale sécurisée\nEmpreinte : ALT-ORIG";
-  else if(u==="DECRYPT MIROIR"){res="DECRYPT OK\nClé narrative : MIROIR-21";hydraAddUnlock("MIROIR");hydraAddUnlock("FRAGMENT21");renderClassified();renderEvidenceLocker();pushSignal("Terminal : décryptage MIROIR-21 validé.","TERMINAL");}
-  else if(u==="UNLOCK OMEGA"){hydraAddUnlock("OMEGA");res="ACCESS GRANTED\nTOP SECRET / OMEGA";renderClassified();renderEvidenceLocker();pushSignal("Terminal : accès OMEGA accordé.","SECURITY")}
-  else if(u==="UNLOCK CORE"){hydraAddUnlock("CORE");res="ACCESS GRANTED\nARCHITECTURE ORIGINALE";renderClassified();renderEvidenceLocker();pushSignal("Terminal : accès CORE accordé.","SECURITY")}
-  else if(u==="SIGNAL"){pushSignal("Commande SIGNAL exécutée.","TERMINAL");res="SIGNAL BURST SENT";}
-  else if(u==="CLEAR"){[...out.querySelectorAll(".term-line")].forEach(x=>x.remove());res="Console cleared.";}
-  else res="Commande inconnue. HELP pour la liste.";
-  const rr=document.createElement("div");rr.className="term-line";rr.textContent=res;out.insertBefore(rr,out.querySelector(".term-prompt"));out.scrollTop=out.scrollHeight;$("terminalInput").value="";
+ const cmd=String(raw||"").trim();if(!cmd)return;
+ if(cmd.length>120){termPrint("ERREUR : commande trop longue.","err");return}
+ if(hydraTermHistory[hydraTermHistory.length-1]!==cmd){hydraTermHistory.push(cmd);hydraTermHistory=hydraTermHistory.slice(-50);localStorage.setItem("hydra_term_history",JSON.stringify(hydraTermHistory))}
+ hydraTermHistoryIndex=hydraTermHistory.length;renderTermHistory();
+ termPrint("HYDRA> "+cmd,"cmd");
+ const u=cmd.toUpperCase();let res="";
+ if(u==="HELP")res="COMMANDES\n"+HYDRA_TERM_COMMANDS.map(x=>"  "+x[0]+" — "+x[1]).join("\n")+"\n\nRaccourcis : ↑ ↓ historique · TAB autocomplétion · CLEAR console";
+ else if(u==="STATUS")res="HYDRA STATUS\nPHASE: "+phaseLabel(cfg.experience?.phase||"before").toUpperCase()+"\nSECURITY: SECURE\nCORE: ONLINE\nALERTS: "+localStorage.getItem("hydra_incident_escalation","0");
+ else if(u==="SCAN EMILIE")res="SCAN EMILIE\n3 connexions détectées\nFinance → Miroir\nMiroir → Hydra-Core";
+ else if(u==="TRACE 2300K")res="TRACE 2300K\nRéférence : HYDRA-23MIRROR-021\nRoute : MIRROR HOLDINGS\nStatut : à recouper";
+ else if(u==="TRACE FABRICE")res="TRACE FABRICE\nArchive originale sécurisée\nEmpreinte : ALT-ORIG";
+ else if(u==="DECRYPT MIROIR"){hydraAddUnlock("MIROIR");hydraAddUnlock("FRAGMENT21");res="DECRYPT OK\nClé narrative : MIROIR-21";renderClassified();renderEvidenceLocker();pushSignal("Terminal : décryptage MIROIR-21 validé.","TERMINAL");}
+ else if(u==="UNLOCK OMEGA"){hydraAddUnlock("OMEGA");res="ACCESS GRANTED\nTOP SECRET / OMEGA";renderClassified();renderEvidenceLocker();pushSignal("Terminal : accès OMEGA accordé.","SECURITY")}
+ else if(u==="UNLOCK CORE"){hydraAddUnlock("CORE");res="ACCESS GRANTED\nARCHITECTURE ORIGINALE";renderClassified();renderEvidenceLocker();pushSignal("Terminal : accès CORE accordé.","SECURITY")}
+ else if(u==="SIGNAL"){pushSignal("Commande SIGNAL exécutée.","TERMINAL");res="SIGNAL BURST SENT";}
+ else if(u==="CLEAR"){[...$("terminalOutput").querySelectorAll(".term-line")].forEach(x=>x.remove());res="Console cleared.";}
+ else res="Commande inconnue. Tape HELP ou TAB pour les suggestions.";
+ termPrint(res,"out");$("terminalInput").value="";$("termAutocomplete").classList.remove("open");
 }
 function initTerminal(){
-  if(window.__termInit)return;window.__termInit=true;
-  $("terminalInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runTerminalCommand(e.target.value)}});
-  const chips=["STATUS","SCAN EMILIE","TRACE 2300K","TRACE FABRICE","DECRYPT MIROIR","UNLOCK OMEGA","UNLOCK CORE","HELP"];
-  $("termChips").innerHTML=chips.map(c=>'<button class="cmd-chip" data-cmd="'+c+'">'+c+'</button>').join("");
-  document.querySelectorAll("[data-cmd]").forEach(b=>b.onclick=()=>{$("terminalInput").value=b.dataset.cmd;runTerminalCommand(b.dataset.cmd)});
+ if(window.__termInit)return;window.__termInit=true;
+ const input=$("terminalInput");if(!input)return;
+ input.addEventListener("input",e=>{hydraTermSelected=0;renderTermSuggestions(e.target.value)});
+ input.addEventListener("keydown",e=>{
+   if(e.key==="Enter"){e.preventDefault();runTerminalCommand(e.target.value);return}
+   if(e.key==="ArrowUp"&&!$("termAutocomplete").classList.contains("open")){e.preventDefault();hydraTermHistoryIndex=Math.max(0,hydraTermHistoryIndex-1);input.value=hydraTermHistory[hydraTermHistoryIndex]||"";return}
+   if(e.key==="ArrowDown"&&!$("termAutocomplete").classList.contains("open")){e.preventDefault();hydraTermHistoryIndex=Math.min(hydraTermHistory.length,hydraTermHistoryIndex+1);input.value=hydraTermHistory[hydraTermHistoryIndex]||"";return}
+   if(e.key==="Tab"){e.preventDefault();const v=input.value.toUpperCase();const list=HYDRA_TERM_COMMANDS.filter(x=>x[0].startsWith(v));if(list.length===1){input.value=list[0][0];renderTermSuggestions(input.value)}else if(list.length>1){hydraTermSelected=(hydraTermSelected+1)%list.length;renderTermSuggestions(input.value)}return}
+   if(e.key==="Escape")$("termAutocomplete").classList.remove("open");
+ });
+ const chips=["STATUS","SCAN EMILIE","TRACE 2300K","TRACE FABRICE","DECRYPT MIROIR","UNLOCK OMEGA","UNLOCK CORE","HELP"];
+ $("termChips").innerHTML=chips.map(c=>'<button class="cmd-chip" data-cmd="'+esc(c)+'">'+esc(c)+"</button>").join("");
+ document.querySelectorAll("#termChips [data-cmd]").forEach(b=>b.onclick=()=>{input.value=b.dataset.cmd;runTerminalCommand(b.dataset.cmd)});
+ renderTermHistory();renderTermSuggestions("");
+ setInterval(()=>{const x=$("termClock");if(x)x.textContent=new Date().toLocaleTimeString("fr-FR",{hour12:false})},1000);
 }
 function renderSurveillance(){
   const cams=[
