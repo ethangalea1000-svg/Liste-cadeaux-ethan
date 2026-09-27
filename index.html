@@ -279,7 +279,7 @@ document.getElementById("floatingHelpBtn")?.addEventListener("click",()=>documen
 <section class="birthday-section" id="siteHelpSection" data-app-view="aide">
   <div class="birthday-card site-help-card">
     <h2>❓ Comment fonctionne le site ?</h2>
-    <p class="form-note">Voici le fonctionnement en quelques étapes. Tu peux revenir ici à tout moment si tu ne sais plus où aller.</p><button type="button" onclick="window.startGuidedTour?.()" style="margin:8px 0 14px;border:1px solid #ddd;border-radius:10px;padding:9px 12px;background:white;font-weight:700;cursor:pointer">👋 Revoir la visite guidée</button>
+    <p class="form-note">Voici le fonctionnement en quelques étapes. Tu peux revenir ici à tout moment si tu ne sais plus où aller.</p><button type="button" onclick="window.startGuidedTour?.({full:true})" style="margin:8px 0 14px;border:1px solid #ddd;border-radius:10px;padding:9px 12px;background:white;font-weight:700;cursor:pointer">👋 Revoir la visite guidée complète</button>
     <div class="site-help-steps">
       <details open>
         <summary><strong>1. 🎁 Trouver un cadeau</strong></summary>
@@ -874,6 +874,7 @@ async function unlockSite(code,providedHydraToken=""){
     }
     startPrivateRefresh();
     // L'invitation est le premier écran après une identification réussie.
+    if(localStorage.getItem("guided-tour-v2")!=="1") window.__pendingGuidedTour=true;
     showHydraInvitationModal();
     return true;
   }catch(err){
@@ -1649,39 +1650,92 @@ logSiteVisit("Liste principale");
 </script><div style="text-align:center;color:#8a90a3;font-size:10px;padding:8px">Interface mobile • 2026.09.25</div>
 <script src="./hydra-audio.js" defer></script><script>
 (()=> {
-const key="guided-tour-v1";
+const key="guided-tour-v2";
+const css=`
+#guidedTourShade{position:fixed;inset:0;z-index:99990;background:rgba(7,9,18,.58);backdrop-filter:blur(1.5px);pointer-events:none}
+#guidedTourSpot{position:fixed;z-index:99999;border-radius:16px;box-shadow:0 0 0 4px #fff,0 0 0 8px rgba(91,92,226,.58),0 14px 45px rgba(0,0,0,.3);pointer-events:none;transition:all .22s ease}
+#guidedTourBox{position:fixed;z-index:100000;width:min(390px,calc(100vw - 24px));background:#fff;color:#171827;border-radius:20px;padding:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);font-family:inherit}
+#guidedTourBox .gt-kicker{font-size:11px;font-weight:900;letter-spacing:.08em;color:#5b5ce2}
+#guidedTourBox h3{margin:6px 0 7px;font-size:20px;line-height:1.15}
+#guidedTourBox p{margin:0;color:#596073;font-size:14px;line-height:1.55}
+#guidedTourBox .gt-detail{margin-top:10px;padding:10px 11px;border-radius:12px;background:#f3f4fb;color:#363a50;font-size:12px;line-height:1.5}
+#guidedTourBox .gt-progress{height:6px;background:#eceef5;border-radius:99px;overflow:hidden;margin:14px 0 10px}
+#guidedTourBox .gt-progress span{display:block;height:100%;background:#5b5ce2;border-radius:99px}
+#guidedTourBox .gt-meta{display:flex;justify-content:space-between;color:#8a90a3;font-size:11px}
+#guidedTourBox .gt-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+#guidedTourBox button{font:inherit;font-size:12px;padding:9px 12px;border-radius:10px}
+#guidedTourBox .gt-main{background:#5b5ce2;color:#fff;border:0;font-weight:800}
+#guidedTourBox .gt-back,#guidedTourBox .gt-skip{background:#fff;color:#303345;border:1px solid #dfe1e9}
+#guidedTourBox .gt-close{margin-left:auto;background:transparent;border:0;color:#777f91;padding:5px 7px}
+body.guided-tour-active{overflow:hidden}
+@media(max-width:600px){#guidedTourBox{padding:15px}#guidedTourBox h3{font-size:18px}}
+`;
+const st=document.createElement("style");st.id="guidedTourStyles";st.textContent=css;document.head.appendChild(st);
 const steps=[
-["[data-view-target=\"liste\"]","🎁 Liste","Retrouve ici tous les cadeaux et leurs informations."],
-["#search","🔎 Recherche","Utilise la recherche pour trouver rapidement un cadeau."],
-["[data-view-target=\"anniversaire\"]","🎂 Anniversaire","Découvre les jeux, souvenirs et activités de la fête."],
-["[data-view-target=\"hydra\"]","🕵️ HYDRA","Accède à ton dossier personnel si ton accès le permet."],
-["[data-view-target=\"participer\"]","💶 Participer","Retrouve ici les cagnottes et participations."],
-["[data-view-target=\"communaute\"]","💬 Communauté","Consulte les messages et les idées partagées."]
+["#siteHeroTitle","Bienvenue sur ton espace","Ici, tu retrouves toutes les grandes parties du site : cadeaux, anniversaire, HYDRA, participations et communauté.","La visite complète va te montrer quoi faire et à quoi servent les principaux boutons."],
+["#shareBtn","Partager la liste","Ce bouton permet de partager facilement la liste.","Sur téléphone, le menu de partage du système peut s'ouvrir ; sinon le lien peut être copié."],
+["#resetBtn","Actualiser","Recharge les informations de la liste.","Utile après une réservation ou une participation pour récupérer les données les plus récentes."],
+["#redoCodeBtn","Refaire le code","Permet de changer de code d'invitation.","L'accès actuel est retiré puis tu peux entrer un autre code."],
+["#search","Rechercher","Tape le nom ou quelques mots pour retrouver rapidement un cadeau.","La recherche évite de parcourir toute la liste." ,"liste"],
+["#category","Filtrer par catégorie","Choisis une catégorie pour réduire les résultats.","Tu peux utiliser le filtre avec la recherche.","liste"],
+["#grid .card","Fiche cadeau","Chaque carte regroupe image, description, prix indicatif, recherches chez les vendeurs et actions.","Les cartes peuvent aussi afficher le financement et les participations.","liste"],
+["#grid .card .reserve,#grid .card .unreserve","Réserver / dé-réserver","Le bouton de réservation signale qu'un cadeau est déjà pris afin d'éviter les doublons.","Une réservation peut être retirée depuis la même carte.","liste"],
+["[data-view-target=\"anniversaire\"]","Anniversaire","Cet onglet rassemble les fonctions liées à la fête.","Le prochain écran de la visite te montre le contenu de cette partie.","anniversaire"],
+["[data-app-view=\"anniversaire\"]","Contenu Anniversaire","Tu peux y retrouver compte à rebours, activités, quiz et souvenirs selon ce qui est activé.","Fais défiler cette zone pour découvrir les différents modules.","anniversaire"],
+["[data-view-target=\"hydra\"]","HYDRA","Cet onglet ouvre l'espace spécial HYDRA.","Son interface est volontairement différente et le contenu dépend de ton accès.","hydra"],
+["[data-app-view=\"hydra\"]","À l'intérieur de HYDRA","Voici la zone où sont affichés les éléments HYDRA accessibles.","Tu peux revenir aux autres parties avec les onglets en haut.","hydra"],
+["[data-view-target=\"participer\"]","Participer","Cet onglet regroupe les cagnottes et les participations.","Tu peux consulter les objectifs et les formulaires prévus.","participer"],
+["[data-app-view=\"participer\"]","Cagnottes et participations","Les cartes indiquent notamment l'avancement et les informations utiles.","Les formulaires permettent d'effectuer les actions prévues par le site.","participer"],
+["[data-view-target=\"communaute\"]","Communauté","Cet onglet rassemble les fonctions communautaires du site.","La visite te montre ensuite la zone où ces fonctions apparaissent.","communaute"],
+["[data-app-view=\"communaute\"]","Contenu Communauté","Regarde ici les messages, idées et formulaires disponibles.","Avant d'envoyer quelque chose, vérifie les informations demandées.","communaute"],
+["#navCommunity","Communauté publique","Ce lien en haut de page ouvre la page Communauté dédiée.","C'est un lien indépendant des onglets internes.","external"],
+["#navPrivacy","Confidentialité","Ce lien permet de consulter les informations de confidentialité.","Tu peux y revenir quand tu veux pour comprendre les règles du site.","external"],
+["#floatingHelpBtn","Revenir à l'aide","Le bouton ❓ reste visible en haut à droite.","Depuis l'aide, tu peux relancer cette visite complète à tout moment.","help"],
+["#viewHelper","Bandeau de contexte","Ce bandeau indique la partie du site dans laquelle tu te trouves.","Il donne un résumé de la fonction de l'onglet actuel et permet de remonter en haut."]
 ];
-let n=0,box,shade;
-function start(){
- const s=steps[n]; const el=document.querySelector(s[0]);
- if(!el){next();return}
- const r=el.getBoundingClientRect();
- shade=document.createElement("div");
- shade.style.cssText="position:fixed;inset:0;z-index:99990;background:rgba(8,10,20,.48)";
- box=document.createElement("div");
- box.style.cssText="position:fixed;z-index:100000;width:min(350px,calc(100vw - 28px));background:#fff;border-radius:18px;padding:18px;box-shadow:0 18px 60px rgba(0,0,0,.28);font-family:inherit";
- box.innerHTML="<b style='color:#5a56d6;font-size:12px'>VISITE GUIDÉE</b><h3 style='margin:7px 0'>"+s[1]+"</h3><p style='color:#5c6272;line-height:1.5;margin:0'>"+s[2]+"</p><small style='display:block;margin-top:12px;color:#8a90a3'>"+(n+1)+" / "+steps.length+"</small><button id='tourNext' style='margin-top:12px;border:0;border-radius:10px;padding:9px 13px;background:#5a56d6;color:white;font-weight:700'>"+(n===steps.length-1?"Terminer":"Suivant →")+"</button><button id='tourSkip' style='margin:12px 0 0 8px;border:1px solid #ddd;border-radius:10px;padding:9px 13px;background:white'>Passer</button>";
- document.body.append(shade,box);
- const left=Math.max(14,Math.min(innerWidth-364,r.left)),top=r.bottom+16;
- box.style.left=left+"px";box.style.top=(top+230<innerHeight?top:Math.max(14,r.top-230))+"px";
- el.style.position="relative";el.style.zIndex="99999";el.style.boxShadow="0 0 0 3px #fff,0 8px 30px rgba(0,0,0,.25)";
- document.querySelector("#tourNext").onclick=next;
- document.querySelector("#tourSkip").onclick=finish;
+let i=0,box=null,shade=null,spot=null;
+function activate(view){document.querySelector('[data-view-target="'+view+'"]')?.click();}
+function target(step){return document.querySelector(step[0]);}
+function clear(){box?.remove();shade?.remove();spot?.remove();box=shade=spot=null;document.body.classList.remove("guided-tour-active");}
+function position(el){
+ setTimeout(()=>{
+  if(!box||!spot)return;
+  el.scrollIntoView({behavior:"smooth",block:"center",inline:"nearest"});
+  setTimeout(()=>{
+   const r=el.getBoundingClientRect(),w=Math.min(390,innerWidth-24);
+   spot.style.left=Math.max(6,r.left-5)+"px";spot.style.top=Math.max(6,r.top-5)+"px";spot.style.width=Math.max(10,r.width+10)+"px";spot.style.height=Math.max(10,r.height+10)+"px";
+   box.style.width=w+"px";
+   let top=r.bottom+18;if(top+box.offsetHeight>innerHeight-12)top=r.top-box.offsetHeight-18;if(top<12)top=12;
+   let left=Math.min(Math.max(12,r.left),innerWidth-w-12);box.style.left=left+"px";box.style.top=top+"px";
+  },100);
+ },40);
 }
-function clear(){
- if(box)box.remove();if(shade)shade.remove();
- document.querySelectorAll("[data-view-target],#search").forEach(x=>{x.style.zIndex="";x.style.boxShadow=""});
+function render(){
+ clear();const step=steps[i],view=step[4];
+ if(view&&view!=="external"&&view!=="help")activate(view);
+ setTimeout(()=>{
+  const el=target(step);if(!el){next();return}
+  document.body.classList.add("guided-tour-active");
+  shade=document.createElement("div");shade.id="guidedTourShade";spot=document.createElement("div");spot.id="guidedTourSpot";box=document.createElement("div");box.id="guidedTourBox";
+  const pct=Math.round((i+1)/steps.length*100);
+  box.innerHTML=`<div class="gt-kicker">VISITE GUIDÉE COMPLÈTE</div><div style="display:flex;align-items:flex-start;gap:8px"><h3 style="flex:1">${step[1]}</h3><button class="gt-close" aria-label="Fermer">✕</button></div><p>${step[2]}</p><div class="gt-detail">${step[3]}</div><div class="gt-progress"><span style="width:${pct}%"></span></div><div class="gt-meta"><span>Étape ${i+1} sur ${steps.length}</span><span>${pct}%</span></div><div class="gt-actions"><button class="gt-back" ${i===0?"disabled":""}>← Retour</button><button class="gt-main">${i===steps.length-1?"Terminer":"Suivant →"}</button><button class="gt-skip">Quitter</button></div>`;
+  document.body.append(shade,spot,box);
+  box.querySelector(".gt-main").onclick=next;box.querySelector(".gt-back").onclick=back;box.querySelector(".gt-skip").onclick=finish;box.querySelector(".gt-close").onclick=finish;
+  position(el);
+ },140);
 }
-function next(){clear();n++;if(n<steps.length)start();else finish()}
-function finish(){clear();localStorage.setItem(key,"1");n=0}
-window.startGuidedTour=()=>{localStorage.removeItem(key);start()};
-window.addEventListener("load",()=>setTimeout(()=>{if(localStorage.getItem(key)!=="1")start()},1800));
+function next(){clear();if(i<steps.length-1){i++;render()}else finish()}
+function back(){clear();if(i>0)i--;render()}
+function finish(){clear();localStorage.setItem(key,"1");i=0}
+window.startGuidedTour=()=>{i=0;render()};
+window.addEventListener("resize",()=>{if(box&&spot&&steps[i])position(target(steps[i]))});
+window.addEventListener("load",()=>{
+ setTimeout(()=>{
+  if(window.__pendingGuidedTour&&localStorage.getItem(key)!=="1"){
+   const wait=()=>{if(document.getElementById("hydraInvitationOverlay"))setTimeout(wait,300);else{window.__pendingGuidedTour=false;render()}};
+   wait();
+  }
+ },500);
+});
 })();
 </script></body></html>
