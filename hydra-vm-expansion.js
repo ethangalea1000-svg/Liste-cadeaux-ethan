@@ -80,7 +80,7 @@ function commandOutput(raw){
  if(cmd==="HELP"){
   if(typeof window.openHydraHelpCatalog==="function"){window.openHydraHelpCatalog("");return[];}
   const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
-  return catalog.length?["HYDRA COMMAND CENTER","",...catalog.map(x=>String(x.name).toUpperCase().padEnd(24)+" "+String(x.description||"Commande simulée"))]:["HYDRA-SHELL // CHARGEMENT DU CATALOGUE","Le catalogue des commandes est en cours de chargement. Tape HELP à nouveau."];
+  return catalog.length?["HYDRA COMMAND CENTER // "+catalog.length+" COMMANDES",...catalog.flatMap(x=>[String(x.name).toUpperCase(),"  0. FONCTION : "+String(x.function||x.description||"Commande HYDRA."),"  1. PRODUIT  : "+String(x.produces||"Résultat simulé dans la VM."),"  2. SYNTAXE  : "+String(x.syntax||x.name),"  3. EXEMPLE  : "+String(x.example||x.syntax||x.name),""])]:["HYDRA-SHELL // CHARGEMENT DU CATALOGUE","Le catalogue des commandes est en cours de chargement. Tape HELP à nouveau."];
  }
  if(cmd==="MAN"){
   const name=(arg||"HELP").toUpperCase();
