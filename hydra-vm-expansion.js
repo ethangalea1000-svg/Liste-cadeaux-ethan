@@ -77,8 +77,18 @@ function virtualPath(p){p=(p||"").trim().replace(/^['"]|['"]$/g,"").replace(/\\/
 function commandOutput(raw){
  const parts=raw.trim().split(/\s+/),cmd=(parts.shift()||"").toUpperCase(),arg=parts.join(" ").trim();
  if(!cmd)return[];
- if(cmd==="HELP")return["HYDRA-SHELL // COMMANDES SIMULÉES",...Object.keys(COMMANDS).sort().map(k=>k.padEnd(11)+" "+COMMANDS[k])];
- if(cmd==="MAN")return COMMANDS[(arg||"HELP").toUpperCase()]?[arg.toUpperCase()+" — "+COMMANDS[(arg||"HELP").toUpperCase()]]:["MAN : commande inconnue. Tape HELP."];
+ if(cmd==="HELP"){
+  if(typeof window.openHydraHelpCatalog==="function"){window.openHydraHelpCatalog("");return[];}
+  const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
+  return catalog.length?["HYDRA COMMAND CENTER","",...catalog.map(x=>String(x.name).toUpperCase().padEnd(24)+" "+String(x.description||"Commande simulée"))]:["HYDRA-SHELL // CHARGEMENT DU CATALOGUE","Le catalogue des commandes est en cours de chargement. Tape HELP à nouveau."];
+ }
+ if(cmd==="MAN"){
+  const name=(arg||"HELP").toUpperCase();
+  const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
+  const entry=catalog.find(x=>String(x.name).toUpperCase()===name);
+  if(entry)return[name+" — "+String(entry.description||"Commande simulée"),entry.syntax?"Syntaxe : "+entry.syntax:"",entry.example?"Exemple : "+entry.example:""].filter(Boolean);
+  return COMMANDS[name]?[name+" — "+COMMANDS[name]]:["MAN : commande inconnue. Tape HELP."];
+ }
  if(cmd==="CLEAR"||cmd==="CLS"){const o=document.querySelector("#terminalOutput");if(o)o.querySelectorAll(".term-line").forEach(x=>x.remove());return[]}
  if(cmd==="ECHO")return[arg||""];
  if(cmd==="DATE")return[new Date().toLocaleDateString("fr-FR")+" · simulation HYDRA"];
@@ -115,6 +125,9 @@ function commandOutput(raw){
  if(cmd==="ABOUT")return["HYDRA VM · Poste de contrôle du Maître du Jeu · sandbox narrative locale."];
  if(cmd==="VERSION")return["HYDRA VM 2026.09 · SHELL 2.0"];
  if(cmd==="EXIT")return["Terminal fermé. La VM reste active. Utilise le bureau pour continuer."];
+ const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
+ const entry=catalog.find(x=>String(x.name).toUpperCase()===cmd);
+ if(entry)return["HYDRA SIMULATION", "Commande : "+cmd, "Catégorie : "+String(entry.category||"HYDRA"), "", String(entry.description||"Commande disponible."), "", "Exécution simulée : OK", "Aucun système réel n’est modifié."];
  return ["Commande inconnue : "+cmd+". Tape HELP pour la liste complète."];
 }
 function installTerminal(){
