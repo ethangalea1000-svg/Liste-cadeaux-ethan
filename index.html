@@ -1652,7 +1652,7 @@ logSiteVisit("Liste principale");
 (()=> {
 const key="guided-tour-v2";
 const css=`
-#guidedTourShade{position:fixed;inset:0;z-index:99990;background:rgba(7,9,18,.58);backdrop-filter:blur(1.5px);pointer-events:none}
+#guidedTourShade{display:none}
 #guidedTourSpot{position:fixed;z-index:99999;display:block;pointer-events:none;border:4px solid #fff;border-radius:14px;box-shadow:0 0 0 8px rgba(91,92,226,.58),0 0 0 9999px rgba(7,9,18,.62);transition:all .22s ease;box-sizing:border-box}
 #guidedTourBox{position:fixed;z-index:100000;width:min(390px,calc(100vw - 24px));background:#fff;color:#171827;border-radius:20px;padding:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);font-family:inherit}
 #guidedTourBox .gt-kicker{font-size:11px;font-weight:900;letter-spacing:.08em;color:#5b5ce2}
@@ -1727,10 +1727,10 @@ function render(){
  setTimeout(()=>{
   const el=target(step);if(!el){next();return}
   document.body.classList.add("guided-tour-active");
-  shade=document.createElement("div");shade.id="guidedTourShade";spot=document.createElement("div");spot.id="guidedTourSpot";box=document.createElement("div");box.id="guidedTourBox";
+  shade=null;spot=document.createElement("div");spot.id="guidedTourSpot";box=document.createElement("div");box.id="guidedTourBox";
   const pct=Math.round((i+1)/steps.length*100);
   box.innerHTML=`<div class="gt-kicker">VISITE GUIDÉE COMPLÈTE</div><div style="display:flex;align-items:flex-start;gap:8px"><h3 style="flex:1">${step[1]}</h3><button class="gt-close" aria-label="Fermer">✕</button></div><p>${step[2]}</p><div class="gt-detail">${step[3]}</div><div class="gt-progress"><span style="width:${pct}%"></span></div><div class="gt-meta"><span>Étape ${i+1} sur ${steps.length}</span><span>${pct}%</span></div><div class="gt-actions"><button class="gt-back" ${i===0?"disabled":""}>← Retour</button><button class="gt-main">${i===steps.length-1?"Terminer":"Suivant →"}</button><button class="gt-skip">Quitter</button></div>`;
-  document.body.append(shade,spot,box);
+  document.body.append(spot,box);
   box.querySelector(".gt-main").onclick=next;box.querySelector(".gt-back").onclick=back;box.querySelector(".gt-skip").onclick=finish;box.querySelector(".gt-close").onclick=finish;
   position(el);
  },140);
