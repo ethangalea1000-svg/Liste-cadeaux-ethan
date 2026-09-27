@@ -1313,7 +1313,7 @@ const saved=sessionStorage.getItem("hydra_interactive_admin");if(saved){$("codeI
 function initHydraVM(){
   if(window.__hydraVmInit)return;
   window.__hydraVmInit=true;
-  const overlay=$("hydraVM"),boot=$("vmBoot"),desk=$("vmDesktop"),log=$("vmBootLog"),bar=$("vmBootProgress");
+  const overlay=$("hydraVM"),vmBootScreen=$("vmBoot"),desk=$("vmDesktop"),log=$("vmBootLog"),bar=$("vmBootProgress");
   const msgs=["POST CHECK................. OK","Loading HYDRA kernel........ OK","Mounting narrative volume... OK","Syncing dossier index....... OK","Initializing secure shell... OK","Starting local desktop....... OK"];
   let vmClockTimer=null,z=20,drag=null;
   function vmToast(msg){$("vmToast").textContent=msg;$("vmToast").classList.add("show");clearTimeout(window.__vmToastTimer);window.__vmToastTimer=setTimeout(()=>$("vmToast").classList.remove("show"),1800)}
@@ -1344,16 +1344,16 @@ function initHydraVM(){
   }
   function boot(){
     overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
-    desk.classList.remove("active");boot.style.display="grid";log.innerHTML="";bar.style.width="0%";
+    desk.classList.remove("active");vmBootScreen.style.display="grid";log.innerHTML="";bar.style.width="0%";
     let i=0;clearInterval(window.__vmBootTimer);
     window.__vmBootTimer=setInterval(()=>{
       if(i<msgs.length){log.insertAdjacentHTML("beforeend",'<div class="vm-log-line">['+String(i+1).padStart(2,"0")+'] '+msgs[i]+'</div>');bar.style.width=Math.round(((i+1)/msgs.length)*100)+"%";i++;return}
-      clearInterval(window.__vmBootTimer);boot.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);vmToast("HYDRA VM démarrée.");openWin("intel");
+      clearInterval(window.__vmBootTimer);vmBootScreen.style.display="none";desk.classList.add("active");tick();clearInterval(vmClockTimer);vmClockTimer=setInterval(tick,1000);vmToast("HYDRA VM démarrée.");openWin("intel");
     },260);
   }
   function shutdown(){
     const s=$("vmShutdown");s.classList.add("active");clearInterval(vmClockTimer);
-    setTimeout(()=>{s.classList.remove("active");desk.classList.remove("active");boot.style.display="grid";overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";document.querySelectorAll(".vm-window").forEach(x=>{x.classList.remove("active","maximized")});document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));$("vmStartMenu").classList.remove("open");},900);
+    setTimeout(()=>{s.classList.remove("active");desk.classList.remove("active");vmBootScreen.style.display="grid";overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";document.querySelectorAll(".vm-window").forEach(x=>{x.classList.remove("active","maximized")});document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));$("vmStartMenu").classList.remove("open");},900);
   }
   window.__hydraStartVM=boot;
   $("launchVm").onclick=boot;
