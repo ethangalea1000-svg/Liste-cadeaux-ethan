@@ -5460,3 +5460,59 @@ set settings=jsonb_set(settings,'{murder_party,players}',(
   from jsonb_array_elements(settings->'murder_party'->'players') p
 )),updated_at=now()
 where id=1;
+
+
+-- Correctif accès : les URLs #code= doivent recevoir le code en clair depuis l'admin.
+-- Le code reste protégé par son hash pour l'authentification. Les accès déjà dépourvus
+-- de code en clair reçoivent un nouveau code une seule fois.
+do $$
+declare r record; v_code text;
+begin
+  for r in
+    select id from public.list_access_codes
+    where code is null
+       or code_hash is null
+       or code_hash <> encode(extensions.digest(code,'sha256'),'hex')
+  loop
+    v_code := 'HYDRA-'||upper(encode(extensions.gen_random_bytes(16),'hex'));
+    update public.list_access_codes
+    set code=v_code,
+        code_hash=encode(extensions.digest(v_code,'sha256'),'hex')
+    where id=r.id;
+  end loop;
+end $$;
+
+create or replace function public.admin_list_people_access()
+returns table(
+  access_id bigint, person_name text, access_code text, active_access boolean,
+  is_admin_access boolean, access_created_at timestamptz, last_used_at timestamptz,
+  profile_id bigint, relation text, avatar text, bio text,
+  profile_created_at timestamptz, profile_updated_at timestamptz
+)
+language plpgsql security definer set search_path to 'public','pg_temp'
+as $function$
+begin
+  perform public.assert_admin_header();
+  return query
+  select lac.id,lac.label,lac.code,lac.active,lac.is_admin,lac.created_at,lac.last_used_at,
+         gp.id,gp.relation,gp.avatar,gp.bio,gp.created_at,gp.updated_at
+  from public.list_access_codes lac
+  left join public.guest_profiles gp
+    on lower(trim(gp.name))=lower(trim(lac.label))
+  order by lac.created_at desc;
+end;
+$function$;
+
+drop function if exists public.admin_list_access_codes_v2();
+create function public.admin_list_access_codes_v2()
+returns table(id bigint,label text,code text,active boolean,is_admin boolean,created_at timestamptz,last_used_at timestamptz)
+language plpgsql security definer set search_path to 'public'
+as $function$
+begin
+  perform public.assert_admin_header();
+  return query
+  select lac.id,lac.label,lac.code,lac.active,lac.is_admin,lac.created_at,lac.last_used_at
+  from public.list_access_codes lac
+  order by lac.created_at desc;
+end;
+$function$;
