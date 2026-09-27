@@ -79,10 +79,9 @@ function commandOutput(raw){
  if(!cmd)return[];
  if(cmd==="HELP"){
  const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
- if(typeof window.openHydraHelpCatalog==="function"){window.openHydraHelpCatalog("");return[];}
  if(catalog.length){
    const groups={};catalog.forEach(x=>(groups[x.category]??=[]).push(x));
-   return ["HYDRA COMMAND CENTER // "+catalog.length+" COMMANDES",...Object.entries(groups).flatMap(([cat,items])=>["","["+cat+"]",...items.flatMap(x=>[String(x.name).toUpperCase(),"  FONCTION : "+String(x.function||x.description||"Commande simulée"),"  PRODUIT  : "+String(x.produces||"Résultat simulé dans la VM."),"  SYNTAXE  : "+String(x.syntax||x.name),""])])];
+   return ["HYDRA COMMAND CENTER // "+catalog.length+" COMMANDES",...Object.entries(groups).flatMap(([cat,items])=>["","["+cat+"]",...items.flatMap(x=>[String(x.name).toUpperCase(),"  FONCTION : "+String(x.function||x.description||"Commande simulée"),"  PRODUIT  : "+String(x.produces||"Résultat simulé dans la VM."),"  SYNTAXE  : "+String(x.syntax||x.name),"  EXEMPLE  : "+String(x.example||x.syntax||x.name),""])])];
  }
  return ["HYDRA-SHELL // CHARGEMENT DU CATALOGUE","Le catalogue est en cours de chargement. Tape HELP à nouveau."];
 }
@@ -90,7 +89,7 @@ if(cmd.startsWith("HELP ")){
  const q=cmd.slice(5).trim().toLowerCase();
  const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
  const found=catalog.filter(x=>String(x.name).toLowerCase().includes(q)||String(x.category).toLowerCase().includes(q));
- if(found.length)return ["RECHERCHE HELP : "+q,"",...found.flatMap(x=>["["+x.category+"] "+String(x.name).toUpperCase(),"  FONCTION : "+String(x.function||x.description||"Commande simulée"),"  PRODUIT  : "+String(x.produces||"Résultat simulé dans la VM."),"  SYNTAXE  : "+String(x.syntax||x.name),""])];
+ if(found.length)return ["RECHERCHE HELP : "+q,"",...found.flatMap(x=>["["+x.category+"] "+String(x.name).toUpperCase(),"  FONCTION : "+String(x.function||x.description||"Commande simulée"),"  PRODUIT  : "+String(x.produces||"Résultat simulé dans la VM."),"  SYNTAXE  : "+String(x.syntax||x.name),"  EXEMPLE  : "+String(x.example||x.syntax||x.name),""])];
  return ["Aucune commande/catégorie trouvée pour : "+q];
 }
  if(cmd==="MAN")return COMMANDS[(arg||"HELP").toUpperCase()]?[arg.toUpperCase()+" — "+COMMANDS[(arg||"HELP").toUpperCase()]]:["MAN : commande inconnue. Tape HELP."];
