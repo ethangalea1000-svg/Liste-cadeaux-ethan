@@ -246,9 +246,9 @@ body.hydra-vm-native .vm-taskbar{bottom:10px}
     <div class="vm-wallpaper-grid"></div>
     <div class="vm-topbar">
       <div class="vm-brand-mini"><span class="vm-orb">H</span> HYDRA VIRTUAL MACHINE</div>
-      <div class="vm-top-actions"><span class="vm-status-dot"></span><span>LOCAL SANDBOX</span><span class="vm-clock" id="vmClock">00:00:00</span></div>
+      <div class="vm-top-actions"><span class="vm-status-dot"></span><span>LOCAL SANDBOX</span><div class="vm-workspaces" aria-label="Bureaux virtuels"><button class="vm-workspace active" data-vm-workspace="1">1</button><button class="vm-workspace" data-vm-workspace="2">2</button><button class="vm-workspace" data-vm-workspace="3">3</button><button class="vm-workspace" data-vm-workspace="4">4</button></div><span class="vm-clock" id="vmClock">00:00:00</span></div>
     </div>
-    <div class="vm-desktop-grid">
+    <div id="vmContext" class="vm-context" role="menu"><button data-vm-context="open">Ouvrir</button><button data-vm-context="max">Maximiser</button><button data-vm-context="left">Ancrer à gauche</button><button data-vm-context="right">Ancrer à droite</button><button data-vm-context="close">Fermer</button></div><div class="vm-desktop-grid">
       <button class="vm-icon" data-vm-app="intel"><span class="ico">🧠</span><small>Intelligence</small></button>
       <button class="vm-icon" data-vm-app="mail"><span class="ico">✉</span><small>HYDRA Mail</small></button>
       <button class="vm-icon" data-vm-app="finance"><span class="ico">€</span><small>Finance</small></button>
@@ -1577,6 +1577,9 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
   $("launchVm").onclick=boot;
   $("vmExit").onclick=shutdown;
   $("vmStart").onclick=()=>{renderHydraLauncher($("vmStartSearch")?.value||"");$("vmStartMenu").classList.toggle("open");};
+  let contextTarget=null;
+  document.querySelectorAll(".vm-icon").forEach(icon=>icon.addEventListener("contextmenu",e=>{e.preventDefault();contextTarget=icon.dataset.vmApp||icon.dataset.vmSection;const ctx=$("vmContext");ctx.style.left=Math.min(e.clientX,window.innerWidth-210)+"px";ctx.style.top=Math.min(e.clientY,window.innerHeight-240)+"px";ctx.classList.add("open")}));
+  document.querySelectorAll("[data-vm-context]").forEach(b=>b.addEventListener("click",()=>{if(!contextTarget)return;const action=b.dataset.vmContext;if(action==="open")openWin(contextTarget);if(action==="max"){const w=document.querySelector('[data-vm-window="'+contextTarget+'"]');if(w)hydraVmSnap(w,"max")}if(action==="left"){const w=document.querySelector('[data-vm-window="'+contextTarget+'"]');if(w)hydraVmSnap(w,"left")}if(action==="right"){const w=document.querySelector('[data-vm-window="'+contextTarget+'"]');if(w)hydraVmSnap(w,"right")}if(action==="close")closeWin(contextTarget);$("vmContext").classList.remove("open")}));
   document.addEventListener("pointerdown",e=>{const ctx=$("vmContext");if(ctx&&!ctx.contains(e.target)&&!e.target.closest(".vm-icon"))ctx.classList.remove("open")});
   document.querySelectorAll(".vm-window").forEach(w=>w.addEventListener("pointerdown",()=>focusVmWindow(w)));
   document.addEventListener("keydown",e=>{
