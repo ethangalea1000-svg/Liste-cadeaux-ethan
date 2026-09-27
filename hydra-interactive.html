@@ -1449,7 +1449,8 @@ function initHydraVM(){
         return;
       }
       if(cmd==="login admin"){
-        if(cfg.secrets?.unlock_token){window.__hydraTerminalUnlocked=true;termPrint("Privilèges narratifs accordés. Archive accessible.");}
+        const token=String(cfg.secrets?.unlock_token||cfg.secrets?.admin_password||"");
+        if(token){window.__hydraTerminalUnlocked=true;termPrint("Privilèges narratifs accordés. Archive accessible.");}
         else termPrint("Aucun jeton narratif configuré.");
         return;
       }
