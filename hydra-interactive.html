@@ -814,7 +814,7 @@ function getHydraMails(){
   const archived=new Set(hydraMailStorage("hydra_mail_archived",[]));
   const important=hydraMailStorage("hydra_mail_important",{});
   const base=buildHydraBaseMails().map(m=>({...m,folder:archived.has(m.id)?"archive":m.folder,important:important[m.id]!==undefined?!!important[m.id]:m.important,unread:!read.has(m.id) && m.unread}));
-  return base.concat(getHydraExtraMails().map(m=>({...m,unread:!read.has(m.id) && !!m.unread})));
+  return base.concat(window.buildHydraExternalMails?window.buildHydraExternalMails():[],getHydraExtraMails().map(m=>({...m,unread:!read.has(m.id) && !!m.unread})));
 }
 function renderMails(){
   const mails=getHydraMails();
@@ -1421,7 +1421,24 @@ function initHydraVM(){
   function runTerm(raw){
     const cmd=raw.trim().toLowerCase();if(!cmd)return;
     termPrint("hydra@vm:~$ "+raw);
-    if(cmd==="help"||cmd==="?"){termPrint("STATUS · OPEN INTEL · OPEN MAIL · OPEN FINANCE · OPEN BROWSER · OPEN EVIDENCE · SCAN · CLEAR · ABOUT · SHUTDOWN");return}
+    const cfg=window.__hydraTerminalConfig;
+    if(cfg?.commands){
+      if(cmd==="help"){termPrint(cfg.commands.help);return}
+      if(cmd==="ls"){termPrint(cfg.commands.ls);return}
+      if(cmd==="cat note_interne.txt"){termPrint(cfg.commands["cat note_interne.txt"]);return}
+      if(cmd==="cat journal.log"){termPrint(cfg.commands["cat journal.log"]);return}
+      if(cmd==="cat archive_chiffree.dat"){
+        if(window.__hydraTerminalUnlocked){termPrint(cfg.secrets?.unlocked_content||"Archive ouverte.");}
+        else {termPrint(cfg.commands["cat archive_chiffree.dat"]);}
+        return;
+      }
+      if(cmd==="login admin"){
+        if(cfg.secrets?.unlock_token){window.__hydraTerminalUnlocked=true;termPrint("Privilèges narratifs accordés. Archive accessible.");}
+        else termPrint("Aucun jeton narratif configuré.");
+        return;
+      }
+    }
+    if(cmd==="?" ){termPrint("STATUS · OPEN INTEL · OPEN MAIL · OPEN FINANCE · OPEN BROWSER · OPEN EVIDENCE · SCAN · CLEAR · ABOUT · SHUTDOWN");return}
     if(cmd==="status"){termPrint("VM-01 · ONLINE · LOCAL SANDBOX · CORE ONLINE · NARRATIVE SECURE");return}
     if(cmd==="scan"){termPrint("Scanning fictional workspace… 21 dossiers / 4 keys / 0 external connections");return}
     if(cmd==="clear"){$("vmTermOut").innerHTML="";return}
@@ -1431,7 +1448,8 @@ function initHydraVM(){
     if(map[cmd]){openWin(map[cmd]);return}
     termPrint("Commande inconnue. Tape HELP.");
   }
-  function boot(){
+  async function boot(){
+    try{if(window.__hydraConfigReady)await Promise.race([window.__hydraConfigReady,new Promise(r=>setTimeout(r,1800))]);}catch{}
     overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
     desk.classList.remove("active");vmBootScreen.style.display="grid";log.innerHTML="";bar.style.width="0%";
     let i=0;clearInterval(window.__vmBootTimer);
@@ -1508,5 +1526,44 @@ function initHydraVM(){
   document.addEventListener("DOMContentLoaded",()=>{status();pwa();const i=$("hydraCmdInput");i&&i.addEventListener("input",()=>{selected=0;render(i.value)});const c=$("hydraCmdClose");c&&(c.onclick=close)});
   window.__hydraOpenCommandPalette=show;window.__hydraToast=toast;
 })();</script>
-</body>
+<script>
+/* === HYDRA EXTERNAL WEBOS / TERMINAL CONFIGURATION === */
+(function(){
+  const safeJson=async path=>{try{const r=await fetch("./"+path,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}catch(e){return null}};
+  window.__hydraConfigReady=(async()=>{
+    const [webos,terminal]=await Promise.all([safeJson("hydra-webos-config.json"),safeJson("hydra-terminal-config.json")]);
+    window.__hydraWebOSConfig=webos;window.__hydraTerminalConfig=terminal;
+    if(webos) applyWebOSConfig(webos);
+    return {webos,terminal};
+  })();
+  window.buildHydraExternalMails=function(){
+    const cfg=window.__hydraWebOSConfig;if(!cfg?.emails)return[];
+    return cfg.emails.map(m=>({id:"cfg-mail-"+m.id,folder:"inbox",important:!!m.is_locked,unread:true,from:m.from,subject:m.subject,preview:String(m.body||"").replace(/\\n/g," ").slice(0,100),time:m.date,avatar:String(m.from||"?").slice(0,1).toUpperCase(),body:m.body,attachment:m.is_locked?"Dossier_verrouille.sim":null,externalLocked:!!m.is_locked,passwordHint:m.password_hint||""}));
+  };
+  function applyWebOSConfig(cfg){
+    const grid=document.querySelector(".vm-desktop-grid");if(!grid)return;
+    cfg.desktop_icons?.forEach(item=>{
+      if(grid.querySelector("[data-hydra-config-icon='"+CSS.escape(String(item.id))+"']"))return;
+      const b=document.createElement("button");b.type="button";b.className="vm-icon";b.dataset.hydraConfigIcon=item.id;
+      const icon=item.type==="folder"?"📁":item.type==="app_email"?"✉":"📄";
+      b.innerHTML='<span class="ico">'+icon+'</span><small></small>';b.querySelector("small").textContent=item.label||item.id;
+      b.addEventListener("dblclick",()=>openConfiguredItem(item));
+      b.addEventListener("click",()=>vmConfigToast(item.type==="text_file"?"Double-cliquez pour lire le fichier.":"Double-cliquez pour ouvrir."));
+      grid.appendChild(b);
+    });
+  }
+  function vmConfigToast(msg){
+    const t=document.getElementById("vmToast");if(!t)return;t.textContent=msg;t.classList.add("show");clearTimeout(window.__hydraCfgToast);window.__hydraCfgToast=setTimeout(()=>t.classList.remove("show"),1800);
+  }
+  function openConfiguredItem(item){
+    if(item.type==="app_email"){window.activateHydraTab?.("mails",true);window.__hydraStartVM?.();setTimeout(()=>document.querySelector('[data-vm-section="mails"]')?.click(),120);return}
+    if(item.type==="folder"){window.activateHydraTab?.("drive",true);window.__hydraStartVM?.();setTimeout(()=>document.querySelector('[data-vm-section="drive"]')?.click(),120);return}
+    if(item.type==="text_file"){
+      const text=window.__hydraWebOSConfig?.text_files?.[item.id]||"Fichier vide.";
+      const note=document.querySelector("#notes .note-editor textarea");if(note){note.value=text;note.dispatchEvent(new Event("input",{bubbles:true}));}
+      window.activateHydraTab?.("notes",true);window.__hydraStartVM?.();setTimeout(()=>document.querySelector('[data-vm-section="notes"]')?.click(),120);
+    }
+  }
+})();
+</script></body>
 </html>
