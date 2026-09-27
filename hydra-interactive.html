@@ -1304,7 +1304,6 @@ function runTerminalCommand(raw){
    if(Object.prototype.hasOwnProperty.call(terminalCommands,key)) res=terminalCommands[key];
    else res="Commande inconnue. Tape HELP ou TAB pour les suggestions.";
  }
- else res="Commande inconnue. Tape HELP ou TAB pour les suggestions.";
  termPrint(res,"out");$("terminalInput").value="";$("termAutocomplete").classList.remove("open");
 }
 function initTerminal(){
