@@ -10,7 +10,7 @@
     {
       "name": "ls",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — ls.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "ls",
       "example": "ls",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -19,7 +19,7 @@
     {
       "name": "cd",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — cd.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "cd",
       "example": "cd",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -28,7 +28,7 @@
     {
       "name": "pwd",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — pwd.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "pwd",
       "example": "pwd",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -37,7 +37,7 @@
     {
       "name": "tree",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — tree.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "tree",
       "example": "tree",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -46,7 +46,7 @@
     {
       "name": "find",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — find.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "find",
       "example": "find",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -55,7 +55,7 @@
     {
       "name": "locate",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — locate.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "locate",
       "example": "locate",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -64,7 +64,7 @@
     {
       "name": "stat",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — stat.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "stat",
       "example": "stat",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -73,7 +73,7 @@
     {
       "name": "file",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — file.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "file",
       "example": "file",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -82,7 +82,7 @@
     {
       "name": "du",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — du.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "du",
       "example": "du",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -91,7 +91,7 @@
     {
       "name": "df",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — df.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "df",
       "example": "df",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -100,7 +100,7 @@
     {
       "name": "mkdir",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — mkdir.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "mkdir",
       "example": "mkdir",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -109,7 +109,7 @@
     {
       "name": "rmdir",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — rmdir.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "rmdir",
       "example": "rmdir",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -118,7 +118,7 @@
     {
       "name": "touch",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — touch.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "touch",
       "example": "touch",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -127,7 +127,7 @@
     {
       "name": "cp",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — cp.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "cp",
       "example": "cp",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -136,7 +136,7 @@
     {
       "name": "mv",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — mv.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "mv",
       "example": "mv",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -145,7 +145,7 @@
     {
       "name": "ln",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — ln.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "ln",
       "example": "ln",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -154,7 +154,7 @@
     {
       "name": "readlink",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — readlink.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "readlink",
       "example": "readlink",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -163,7 +163,7 @@
     {
       "name": "basename",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — basename.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "basename",
       "example": "basename",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -172,7 +172,7 @@
     {
       "name": "dirname",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — dirname.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "dirname",
       "example": "dirname",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -181,7 +181,7 @@
     {
       "name": "realpath",
       "category": "Navigation & fichiers",
-      "description": "Commande simulée HYDRA — realpath.",
+      "description": "Navigue ou gère les fichiers et dossiers virtuels.",
       "syntax": "realpath",
       "example": "realpath",
       "function": "Navigue ou gère les fichiers et dossiers virtuels.",
@@ -190,7 +190,7 @@
     {
       "name": "cat",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — cat.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "cat",
       "example": "cat",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -199,7 +199,7 @@
     {
       "name": "less",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — less.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "less",
       "example": "less",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -208,7 +208,7 @@
     {
       "name": "more",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — more.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "more",
       "example": "more",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -217,7 +217,7 @@
     {
       "name": "head",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — head.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "head",
       "example": "head",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -226,7 +226,7 @@
     {
       "name": "tail",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — tail.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "tail",
       "example": "tail",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -235,7 +235,7 @@
     {
       "name": "nl",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — nl.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "nl",
       "example": "nl",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -244,7 +244,7 @@
     {
       "name": "wc",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — wc.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "wc",
       "example": "wc",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -253,7 +253,7 @@
     {
       "name": "sort",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — sort.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "sort",
       "example": "sort",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -262,7 +262,7 @@
     {
       "name": "uniq",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — uniq.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "uniq",
       "example": "uniq",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -271,7 +271,7 @@
     {
       "name": "cut",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — cut.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "cut",
       "example": "cut",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -280,7 +280,7 @@
     {
       "name": "paste",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — paste.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "paste",
       "example": "paste",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -289,7 +289,7 @@
     {
       "name": "tr",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — tr.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "tr",
       "example": "tr",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -298,7 +298,7 @@
     {
       "name": "tee",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — tee.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "tee",
       "example": "tee",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -307,7 +307,7 @@
     {
       "name": "strings",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — strings.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "strings",
       "example": "strings",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -316,7 +316,7 @@
     {
       "name": "column",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — column.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "column",
       "example": "column",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -325,7 +325,7 @@
     {
       "name": "fmt",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — fmt.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "fmt",
       "example": "fmt",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -334,7 +334,7 @@
     {
       "name": "fold",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — fold.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "fold",
       "example": "fold",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -343,7 +343,7 @@
     {
       "name": "join",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — join.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "join",
       "example": "join",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -352,7 +352,7 @@
     {
       "name": "diff",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — diff.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "diff",
       "example": "diff",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -361,7 +361,7 @@
     {
       "name": "cmp",
       "category": "Lecture & texte",
-      "description": "Commande simulée HYDRA — cmp.",
+      "description": "Lit, affiche ou transforme du texte dans la VM.",
       "syntax": "cmp",
       "example": "cmp",
       "function": "Lit, affiche ou transforme du texte dans la VM.",
@@ -370,7 +370,7 @@
     {
       "name": "grep",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — grep.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "grep",
       "example": "grep",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -379,7 +379,7 @@
     {
       "name": "egrep",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — egrep.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "egrep",
       "example": "egrep",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -388,7 +388,7 @@
     {
       "name": "fgrep",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — fgrep.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "fgrep",
       "example": "fgrep",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -397,7 +397,7 @@
     {
       "name": "awk",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — awk.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "awk",
       "example": "awk",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -406,7 +406,7 @@
     {
       "name": "sed",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — sed.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "sed",
       "example": "sed",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -415,7 +415,7 @@
     {
       "name": "xargs",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — xargs.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "xargs",
       "example": "xargs",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -424,7 +424,7 @@
     {
       "name": "whereis",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — whereis.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "whereis",
       "example": "whereis",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -433,7 +433,7 @@
     {
       "name": "which",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — which.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "which",
       "example": "which",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -442,7 +442,7 @@
     {
       "name": "type",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — type.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "type",
       "example": "type",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -451,7 +451,7 @@
     {
       "name": "command",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — command.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "command",
       "example": "command",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -460,7 +460,7 @@
     {
       "name": "apropos",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — apropos.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "apropos",
       "example": "apropos",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -469,7 +469,7 @@
     {
       "name": "man",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — man.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "man",
       "example": "man",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -478,7 +478,7 @@
     {
       "name": "whatis",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — whatis.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "whatis",
       "example": "whatis",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -487,7 +487,7 @@
     {
       "name": "history",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — history.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "history",
       "example": "history",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -496,7 +496,7 @@
     {
       "name": "fc",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — fc.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "fc",
       "example": "fc",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -505,7 +505,7 @@
     {
       "name": "alias",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — alias.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "alias",
       "example": "alias",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -514,7 +514,7 @@
     {
       "name": "unalias",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — unalias.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "unalias",
       "example": "unalias",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -523,7 +523,7 @@
     {
       "name": "echo",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — echo.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "echo",
       "example": "echo",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -532,7 +532,7 @@
     {
       "name": "printf",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — printf.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "printf",
       "example": "printf",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -541,7 +541,7 @@
     {
       "name": "clear",
       "category": "Recherche & filtrage",
-      "description": "Commande simulée HYDRA — clear.",
+      "description": "Recherche et filtre des informations dans les données virtuelles.",
       "syntax": "clear",
       "example": "clear",
       "function": "Recherche et filtre des informations dans les données virtuelles.",
@@ -550,7 +550,7 @@
     {
       "name": "uname",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — uname.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "uname",
       "example": "uname",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -559,7 +559,7 @@
     {
       "name": "hostname",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — hostname.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "hostname",
       "example": "hostname",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -568,7 +568,7 @@
     {
       "name": "uptime",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — uptime.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "uptime",
       "example": "uptime",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -577,7 +577,7 @@
     {
       "name": "date",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — date.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "date",
       "example": "date",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -586,7 +586,7 @@
     {
       "name": "cal",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — cal.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "cal",
       "example": "cal",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -595,7 +595,7 @@
     {
       "name": "whoami",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — whoami.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "whoami",
       "example": "whoami",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -604,7 +604,7 @@
     {
       "name": "id",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — id.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "id",
       "example": "id",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -613,7 +613,7 @@
     {
       "name": "groups",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — groups.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "groups",
       "example": "groups",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -622,7 +622,7 @@
     {
       "name": "who",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — who.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "who",
       "example": "who",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -631,7 +631,7 @@
     {
       "name": "w",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — w.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "w",
       "example": "w",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -640,7 +640,7 @@
     {
       "name": "last",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — last.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "last",
       "example": "last",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -649,7 +649,7 @@
     {
       "name": "lastlog",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — lastlog.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "lastlog",
       "example": "lastlog",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -658,7 +658,7 @@
     {
       "name": "free",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — free.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "free",
       "example": "free",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -667,7 +667,7 @@
     {
       "name": "vmstat",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — vmstat.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "vmstat",
       "example": "vmstat",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -676,7 +676,7 @@
     {
       "name": "iostat",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — iostat.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "iostat",
       "example": "iostat",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -685,7 +685,7 @@
     {
       "name": "lscpu",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — lscpu.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "lscpu",
       "example": "lscpu",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -694,7 +694,7 @@
     {
       "name": "lsmem",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — lsmem.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "lsmem",
       "example": "lsmem",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -703,7 +703,7 @@
     {
       "name": "lsblk",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — lsblk.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "lsblk",
       "example": "lsblk",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -712,7 +712,7 @@
     {
       "name": "lspci",
       "category": "Système & matériel",
-      "description": "Commande simulée HYDRA — lspci.",
+      "description": "Consulte l’état et les caractéristiques de l’environnement simulé.",
       "syntax": "lspci",
       "example": "lspci",
       "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
@@ -721,7 +721,7 @@
     {
       "name": "ps",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — ps.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "ps",
       "example": "ps",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -730,7 +730,7 @@
     {
       "name": "top",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — top.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "top",
       "example": "top",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -739,7 +739,7 @@
     {
       "name": "htop",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — htop.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "htop",
       "example": "htop",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -748,7 +748,7 @@
     {
       "name": "pgrep",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — pgrep.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "pgrep",
       "example": "pgrep",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -757,7 +757,7 @@
     {
       "name": "pkill",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — pkill.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "pkill",
       "example": "pkill",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -766,7 +766,7 @@
     {
       "name": "jobs",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — jobs.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "jobs",
       "example": "jobs",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -775,7 +775,7 @@
     {
       "name": "bg",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — bg.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "bg",
       "example": "bg",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -784,7 +784,7 @@
     {
       "name": "fg",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — fg.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "fg",
       "example": "fg",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -793,7 +793,7 @@
     {
       "name": "nice",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — nice.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "nice",
       "example": "nice",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -802,7 +802,7 @@
     {
       "name": "renice",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — renice.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "renice",
       "example": "renice",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -811,7 +811,7 @@
     {
       "name": "nohup",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — nohup.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "nohup",
       "example": "nohup",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -820,7 +820,7 @@
     {
       "name": "sleep",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — sleep.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "sleep",
       "example": "sleep",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -829,7 +829,7 @@
     {
       "name": "watch",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — watch.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "watch",
       "example": "watch",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -838,7 +838,7 @@
     {
       "name": "time",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — time.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "time",
       "example": "time",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -847,7 +847,7 @@
     {
       "name": "timeout",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — timeout.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "timeout",
       "example": "timeout",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -856,7 +856,7 @@
     {
       "name": "wait",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — wait.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "wait",
       "example": "wait",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -865,7 +865,7 @@
     {
       "name": "pidof",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — pidof.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "pidof",
       "example": "pidof",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -874,7 +874,7 @@
     {
       "name": "pstree",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — pstree.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "pstree",
       "example": "pstree",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -883,7 +883,7 @@
     {
       "name": "taskset",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — taskset.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "taskset",
       "example": "taskset",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -892,7 +892,7 @@
     {
       "name": "systemctl",
       "category": "Processus & tâches",
-      "description": "Commande simulée HYDRA — systemctl.",
+      "description": "Observe ou contrôle les tâches et processus simulés.",
       "syntax": "systemctl",
       "example": "systemctl",
       "function": "Observe ou contrôle les tâches et processus simulés.",
@@ -901,7 +901,7 @@
     {
       "name": "ip",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — ip.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "ip",
       "example": "ip",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -910,7 +910,7 @@
     {
       "name": "ping",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — ping.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "ping",
       "example": "ping",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -919,7 +919,7 @@
     {
       "name": "traceroute",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — traceroute.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "traceroute",
       "example": "traceroute",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -928,7 +928,7 @@
     {
       "name": "tracepath",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — tracepath.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "tracepath",
       "example": "tracepath",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -937,7 +937,7 @@
     {
       "name": "ss",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — ss.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "ss",
       "example": "ss",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -946,7 +946,7 @@
     {
       "name": "netstat",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — netstat.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "netstat",
       "example": "netstat",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -955,7 +955,7 @@
     {
       "name": "arp",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — arp.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "arp",
       "example": "arp",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -964,7 +964,7 @@
     {
       "name": "route",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — route.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "route",
       "example": "route",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -973,7 +973,7 @@
     {
       "name": "hostnamectl",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — hostnamectl.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "hostnamectl",
       "example": "hostnamectl",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -982,7 +982,7 @@
     {
       "name": "nslookup",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — nslookup.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "nslookup",
       "example": "nslookup",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -991,7 +991,7 @@
     {
       "name": "dig",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — dig.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "dig",
       "example": "dig",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1000,7 +1000,7 @@
     {
       "name": "host",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — host.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "host",
       "example": "host",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1009,7 +1009,7 @@
     {
       "name": "curl",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — curl.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "curl",
       "example": "curl",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1018,7 +1018,7 @@
     {
       "name": "wget",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — wget.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "wget",
       "example": "wget",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1027,7 +1027,7 @@
     {
       "name": "nc",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — nc.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "nc",
       "example": "nc",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1036,7 +1036,7 @@
     {
       "name": "telnet",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — telnet.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "telnet",
       "example": "telnet",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1045,7 +1045,7 @@
     {
       "name": "ifconfig",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — ifconfig.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "ifconfig",
       "example": "ifconfig",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1054,7 +1054,7 @@
     {
       "name": "ethtool",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — ethtool.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "ethtool",
       "example": "ethtool",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1063,7 +1063,7 @@
     {
       "name": "resolvectl",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — resolvectl.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "resolvectl",
       "example": "resolvectl",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1072,7 +1072,7 @@
     {
       "name": "networkctl",
       "category": "Réseau & diagnostics",
-      "description": "Commande simulée HYDRA — networkctl.",
+      "description": "Analyse les services, connexions et diagnostics réseau simulés.",
       "syntax": "networkctl",
       "example": "networkctl",
       "function": "Analyse les services, connexions et diagnostics réseau simulés.",
@@ -1081,7 +1081,7 @@
     {
       "name": "chmod",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — chmod.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "chmod",
       "example": "chmod",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1090,7 +1090,7 @@
     {
       "name": "chown",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — chown.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "chown",
       "example": "chown",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1099,7 +1099,7 @@
     {
       "name": "chgrp",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — chgrp.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "chgrp",
       "example": "chgrp",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1108,7 +1108,7 @@
     {
       "name": "umask",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — umask.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "umask",
       "example": "umask",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1117,7 +1117,7 @@
     {
       "name": "getfacl",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — getfacl.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "getfacl",
       "example": "getfacl",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1126,7 +1126,7 @@
     {
       "name": "setfacl",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — setfacl.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "setfacl",
       "example": "setfacl",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1135,7 +1135,7 @@
     {
       "name": "passwd",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — passwd.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "passwd",
       "example": "passwd",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1144,7 +1144,7 @@
     {
       "name": "su",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — su.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "su",
       "example": "su",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1153,7 +1153,7 @@
     {
       "name": "sudo",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — sudo.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "sudo",
       "example": "sudo",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1162,7 +1162,7 @@
     {
       "name": "login",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — login.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "login",
       "example": "login",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1171,7 +1171,7 @@
     {
       "name": "logout",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — logout.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "logout",
       "example": "logout",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1180,7 +1180,7 @@
     {
       "name": "users",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — users.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "users",
       "example": "users",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1189,7 +1189,7 @@
     {
       "name": "newgrp",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — newgrp.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "newgrp",
       "example": "newgrp",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1198,7 +1198,7 @@
     {
       "name": "write",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — write.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "write",
       "example": "write",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1207,7 +1207,7 @@
     {
       "name": "mesg",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — mesg.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "mesg",
       "example": "mesg",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1216,7 +1216,7 @@
     {
       "name": "ac",
       "category": "Permissions & comptes",
-      "description": "Commande simulée HYDRA — ac.",
+      "description": "Gère les utilisateurs, sessions et droits simulés.",
       "syntax": "ac",
       "example": "ac",
       "function": "Gère les utilisateurs, sessions et droits simulés.",
@@ -1225,7 +1225,7 @@
     {
       "name": "tar",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — tar.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "tar",
       "example": "tar",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1234,7 +1234,7 @@
     {
       "name": "gzip",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — gzip.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "gzip",
       "example": "gzip",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1243,7 +1243,7 @@
     {
       "name": "gunzip",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — gunzip.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "gunzip",
       "example": "gunzip",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1252,7 +1252,7 @@
     {
       "name": "bzip2",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — bzip2.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "bzip2",
       "example": "bzip2",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1261,7 +1261,7 @@
     {
       "name": "bunzip2",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — bunzip2.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "bunzip2",
       "example": "bunzip2",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1270,7 +1270,7 @@
     {
       "name": "xz",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — xz.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "xz",
       "example": "xz",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1279,7 +1279,7 @@
     {
       "name": "unxz",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — unxz.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "unxz",
       "example": "unxz",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1288,7 +1288,7 @@
     {
       "name": "zip",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — zip.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "zip",
       "example": "zip",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1297,7 +1297,7 @@
     {
       "name": "unzip",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — unzip.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "unzip",
       "example": "unzip",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1306,7 +1306,7 @@
     {
       "name": "zcat",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — zcat.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "zcat",
       "example": "zcat",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1315,7 +1315,7 @@
     {
       "name": "bzcat",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — bzcat.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "bzcat",
       "example": "bzcat",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1324,7 +1324,7 @@
     {
       "name": "xzcat",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — xzcat.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "xzcat",
       "example": "xzcat",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1333,7 +1333,7 @@
     {
       "name": "ar",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — ar.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "ar",
       "example": "ar",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1342,7 +1342,7 @@
     {
       "name": "cpio",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — cpio.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "cpio",
       "example": "cpio",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1351,7 +1351,7 @@
     {
       "name": "rsync",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — rsync.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "rsync",
       "example": "rsync",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1360,7 +1360,7 @@
     {
       "name": "split",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — split.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "split",
       "example": "split",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1369,7 +1369,7 @@
     {
       "name": "shuf",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — shuf.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "shuf",
       "example": "shuf",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1378,7 +1378,7 @@
     {
       "name": "base64",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — base64.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "base64",
       "example": "base64",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1387,7 +1387,7 @@
     {
       "name": "od",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — od.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "od",
       "example": "od",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1396,7 +1396,7 @@
     {
       "name": "xxd",
       "category": "Archives & formats",
-      "description": "Commande simulée HYDRA — xxd.",
+      "description": "Manipule ou inspecte des archives et formats de données simulés.",
       "syntax": "xxd",
       "example": "xxd",
       "function": "Manipule ou inspecte des archives et formats de données simulés.",
@@ -1405,7 +1405,7 @@
     {
       "name": "git",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — git.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "git",
       "example": "git",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1414,7 +1414,7 @@
     {
       "name": "git-status",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — git-status.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "git-status",
       "example": "git-status",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1423,7 +1423,7 @@
     {
       "name": "git-log",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — git-log.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "git-log",
       "example": "git-log",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1432,7 +1432,7 @@
     {
       "name": "git-diff",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — git-diff.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "git-diff",
       "example": "git-diff",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1441,7 +1441,7 @@
     {
       "name": "git-show",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — git-show.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "git-show",
       "example": "git-show",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1450,7 +1450,7 @@
     {
       "name": "git-branch",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — git-branch.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "git-branch",
       "example": "git-branch",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1459,7 +1459,7 @@
     {
       "name": "python",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — python.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "python",
       "example": "python",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1468,7 +1468,7 @@
     {
       "name": "node",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — node.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "node",
       "example": "node",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1477,7 +1477,7 @@
     {
       "name": "npm",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — npm.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "npm",
       "example": "npm",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1486,7 +1486,7 @@
     {
       "name": "npx",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — npx.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "npx",
       "example": "npx",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1495,7 +1495,7 @@
     {
       "name": "jq",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — jq.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "jq",
       "example": "jq",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1504,7 +1504,7 @@
     {
       "name": "jsonlint",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — jsonlint.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "jsonlint",
       "example": "jsonlint",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1513,7 +1513,7 @@
     {
       "name": "make",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — make.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "make",
       "example": "make",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1522,7 +1522,7 @@
     {
       "name": "cmake",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — cmake.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "cmake",
       "example": "cmake",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1531,7 +1531,7 @@
     {
       "name": "gcc",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — gcc.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "gcc",
       "example": "gcc",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1540,7 +1540,7 @@
     {
       "name": "g++",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — g++.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "g++",
       "example": "g++",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1549,7 +1549,7 @@
     {
       "name": "java",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — java.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "java",
       "example": "java",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1558,7 +1558,7 @@
     {
       "name": "javac",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — javac.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "javac",
       "example": "javac",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1567,7 +1567,7 @@
     {
       "name": "env",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — env.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "env",
       "example": "env",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1576,7 +1576,7 @@
     {
       "name": "printenv",
       "category": "Développement & données",
-      "description": "Commande simulée HYDRA — printenv.",
+      "description": "Travaille avec du code, des données et des formats de développement simulés.",
       "syntax": "printenv",
       "example": "printenv",
       "function": "Travaille avec du code, des données et des formats de développement simulés.",
@@ -1585,7 +1585,7 @@
     {
       "name": "hydra",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra",
       "example": "hydra",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1594,7 +1594,7 @@
     {
       "name": "hydra-status",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-status.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-status",
       "example": "hydra-status",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1603,7 +1603,7 @@
     {
       "name": "hydra-scan",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-scan.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-scan",
       "example": "hydra-scan",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1612,7 +1612,7 @@
     {
       "name": "hydra-trace",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-trace.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-trace",
       "example": "hydra-trace",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1621,7 +1621,7 @@
     {
       "name": "hydra-evidence",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-evidence.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-evidence",
       "example": "hydra-evidence",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1630,7 +1630,7 @@
     {
       "name": "hydra-case",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-case.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-case",
       "example": "hydra-case",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1639,7 +1639,7 @@
     {
       "name": "hydra-log",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-log.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-log",
       "example": "hydra-log",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1648,7 +1648,7 @@
     {
       "name": "hydra-map",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-map.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-map",
       "example": "hydra-map",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1657,7 +1657,7 @@
     {
       "name": "hydra-signal",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-signal.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-signal",
       "example": "hydra-signal",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1666,7 +1666,7 @@
     {
       "name": "hydra-matrix",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-matrix.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-matrix",
       "example": "hydra-matrix",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1675,7 +1675,7 @@
     {
       "name": "hydra-fragments",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-fragments.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-fragments",
       "example": "hydra-fragments",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1684,7 +1684,7 @@
     {
       "name": "hydra-correlate",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-correlate.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-correlate",
       "example": "hydra-correlate",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1693,7 +1693,7 @@
     {
       "name": "hydra-timeline",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-timeline.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-timeline",
       "example": "hydra-timeline",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1702,7 +1702,7 @@
     {
       "name": "hydra-alerts",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-alerts.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-alerts",
       "example": "hydra-alerts",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1711,7 +1711,7 @@
     {
       "name": "hydra-report",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-report.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-report",
       "example": "hydra-report",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1720,7 +1720,7 @@
     {
       "name": "hydra-export",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-export.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-export",
       "example": "hydra-export",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1729,7 +1729,7 @@
     {
       "name": "hydra-check",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-check.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-check",
       "example": "hydra-check",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1738,7 +1738,7 @@
     {
       "name": "hydra-verify",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-verify.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-verify",
       "example": "hydra-verify",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1747,7 +1747,7 @@
     {
       "name": "hydra-mission",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-mission.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-mission",
       "example": "hydra-mission",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1756,7 +1756,7 @@
     {
       "name": "hydra-reset",
       "category": "HYDRA & enquête",
-      "description": "Commande simulée HYDRA — hydra-reset.",
+      "description": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
       "syntax": "hydra-reset",
       "example": "hydra-reset",
       "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
@@ -1765,7 +1765,7 @@
     {
       "name": "reset",
       "category": "Session & contrôle",
-      "description": "Commande simulée HYDRA — reset.",
+      "description": "Contrôle la session et l’interface de la VM.",
       "syntax": "reset",
       "example": "reset",
       "function": "Contrôle la session et l’interface de la VM.",
@@ -1774,7 +1774,7 @@
     {
       "name": "reboot",
       "category": "Session & contrôle",
-      "description": "Commande simulée HYDRA — reboot.",
+      "description": "Contrôle la session et l’interface de la VM.",
       "syntax": "reboot",
       "example": "reboot",
       "function": "Contrôle la session et l’interface de la VM.",
@@ -1783,7 +1783,7 @@
     {
       "name": "shutdown",
       "category": "Session & contrôle",
-      "description": "Commande simulée HYDRA — shutdown.",
+      "description": "Contrôle la session et l’interface de la VM.",
       "syntax": "shutdown",
       "example": "shutdown",
       "function": "Contrôle la session et l’interface de la VM.",
@@ -1792,7 +1792,7 @@
     {
       "name": "exit",
       "category": "Session & contrôle",
-      "description": "Commande simulée HYDRA — exit.",
+      "description": "Contrôle la session et l’interface de la VM.",
       "syntax": "exit",
       "example": "exit",
       "function": "Contrôle la session et l’interface de la VM.",
@@ -1801,7 +1801,7 @@
     {
       "name": "help",
       "category": "Session & contrôle",
-      "description": "Commande simulée HYDRA — help.",
+      "description": "Contrôle la session et l’interface de la VM.",
       "syntax": "help",
       "example": "help",
       "function": "Contrôle la session et l’interface de la VM.",
