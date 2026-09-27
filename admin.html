@@ -465,6 +465,25 @@ async function shareAccessLink(code,label){
 }
 window.shareAccessLink=shareAccessLink;
 
+async function copyPersonAccessLink(code,label){
+  const clean=String(code||"").trim();
+  const person=String(label||"").trim()||"cette personne";
+  if(!clean){toast("❌ Aucun lien disponible pour "+person+".");return;}
+  try{ await navigator.clipboard.writeText(accessUrl(clean)); toast("✓ Lien de "+person+" copié."); }
+  catch(e){ window.prompt("Copie le lien pour "+person+":",accessUrl(clean)); }
+}
+
+async function copyPersonAccessMessage(code,label){
+  const clean=String(code||"").trim();
+  const person=String(label||"").trim()||"cette personne";
+  if(!clean){toast("❌ Aucun accès disponible pour "+person+".");return;}
+  const message="Salut "+person+" ! 🎁\n\nVoici ton lien d’accès personnel à la liste de cadeaux. Il te permet de consulter les cadeaux disponibles et de réserver celui que tu souhaites, afin d’éviter les doublons.\n\nÀ bientôt !\n\n"+accessUrl(clean);
+  try{ await navigator.clipboard.writeText(message); toast("✓ Message et lien de "+person+" copiés."); }
+  catch(e){ window.prompt("Copie le message pour "+person+":",message); }
+}
+window.copyPersonAccessLink=copyPersonAccessLink;
+window.copyPersonAccessMessage=copyPersonAccessMessage;
+
 async function loadPeople(){
  try{
   const rows=await rpc("admin_list_people_access",{});
@@ -477,7 +496,7 @@ async function loadPeople(){
       (x.bio?'<div class="message">'+esc(x.bio)+'</div>':"")+
       '<div class="meta" style="margin-top:10px">Accès '+(x.active_access?"actif":"désactivé")+(x.is_admin_access?" · administrateur":"")+(x.last_used_at?' · dernière utilisation '+date(x.last_used_at):"")+'</div>'+
       '<div class="access-link">'+esc(url)+'</div>'+
-      '<div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" onclick="copyAccessLink(this.dataset.accessCode)">📋 Copier</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button></div></article>';
+      '<div class="actions"><button class="btn" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="copyPersonAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">📋 Copier le lien</button><button class="btn" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="copyPersonAccessMessage(this.dataset.accessCode,this.dataset.accessLabel)">💬 Copier le message</button><button class="btn primary" data-access-code="'+esc(x.access_code)+'" data-access-label="'+esc(x.person_name)+'" onclick="shareAccessLink(this.dataset.accessCode,this.dataset.accessLabel)">🔗 Partager</button></div></div></article>';
   }).join(""):empty("Aucune personne déjà créée.");
  }catch(e){
   $("peopleList").innerHTML='<div class="panel" style="background:#fff8e6;border-color:#f0d58c"><strong>⚠️ SQL des accès à actualiser</strong><div class="message">Exécute la dernière version de <strong>SUPABASE_A_COPIER_COLLER.sql</strong> dans Supabase, puis recharge cette page.</div><div class="meta" style="margin-top:8px">'+esc(e?.message||"Erreur inconnue")+'</div></div>';
