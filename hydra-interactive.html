@@ -754,7 +754,7 @@ async function authorize(code){
       return true;
     }catch(loadError){
       adminCode="";
-      sessionStorage.removeItem("hydra_interactive_admin");
+      adminCode="";
       $("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");
       setLoginStatus("❌ Authentifié, mais HYDRA n’a pas pu charger ses données : "+loadError.message,"error");
       return false;
@@ -1599,7 +1599,7 @@ $("refreshBtn").onclick=loadAll;
 $("evidenceSearch").oninput=renderEvidence;$("evidenceFilter").onchange=renderEvidence;$("playerSearch").oninput=renderPlayers;
 document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>{$("livePhase").value=b.dataset.phase;renderLive()});
 $("saveLive").onclick=saveLive;
-$("logoutBtn").onclick=()=>{sessionStorage.removeItem("hydra_interactive_admin");adminCode="";document.body.classList.remove("hydra-vm-native");$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");setLoginStatus("Session verrouillée.","info");};
+$("logoutBtn").onclick=()=>{adminCode="";adminCode="";document.body.classList.remove("hydra-vm-native");$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");setLoginStatus("Session verrouillée.","info");};
 $("loginForm").onsubmit=async e=>{e.preventDefault();await authorize($("codeInput").value)};
 $("codeInput")?.addEventListener("input",()=>{const t=$("loginStatus");if(t&&t.textContent)t.classList.remove("ok","error","warn");});
 
@@ -1779,7 +1779,7 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
       $("app").classList.add("hidden");
       $("gate").classList.remove("hidden");
       $("logoutBtn").classList.add("hidden");
-      sessionStorage.removeItem("hydra_interactive_admin");
+      adminCode="";
       adminCode="";
       $("loginStatus").textContent="Session verrouillée — HYDRA VM arrêtée.";
     },900);
