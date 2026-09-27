@@ -724,10 +724,12 @@ async function createAccess(e){
    const label=$("accessLabel").value.trim();
    if(!label)throw new Error("Indique un nom.");
    const id=await rpc("admin_create_access_code",{p_label:label,p_code:null});
+   const code=String(await rpc("admin_reveal_new_access_code",{p_id:Number(id)})||"").trim();
+   if(!code)throw new Error("Le serveur n’a pas renvoyé le code.");
    $("accessForm").reset();
-   toast("Accès créé. Utilise la fonction de régénération pour obtenir le code.");
+   toast("✅ Nouveau code : "+code);
    await loadAccessCodes();
- }catch(e){toast(e.message)}
+ }catch(e){toast("❌ "+(e?.message||"Création impossible."))}
 }
 async function generateAccessCode(){
   const label=$("accessLabel")?.value?.trim();
