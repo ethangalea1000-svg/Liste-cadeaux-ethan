@@ -113,6 +113,19 @@ const sounds={
 };
 const aliases={docs:'navigate',comms:'navigate',map:'navigate',trust:'navigate',lab:'navigate',surveillance:'alert',news:'navigate',progress:'success',ai:'signal',network:'navigate',drive:'navigate',calendar:'navigate',gallery:'navigate',browser:'navigate',notes:'navigate',forensic:'evidence',intel:'signal',chrono:'navigate',social:'navigate',word:'navigate',sheets:'finance',contacts:'navigate',camera:'alert',qr:'signal',locker:'classified',incidents:'alert',live:'alert',aicore:'signal'};
 const pages={overview:'open',indices:'evidence',virements:'finance',mails:'mail',dossiers:'classified',chrono:'chrono',documents:'docs',live:'alert',intel:'intel',classified:'classified',signal:'signal',forensic:'forensic',puzzle:'puzzle',comms:'comms',radio:'radio',map:'map',trust:'trust',incidents:'incidents',lab:'lab',locker:'locker',surveillance:'surveillance',news:'news',progress:'progress',aicore:'aicore',social:'social',word:'word',sheets:'sheets',drive:'drive',calendar:'calendar',contacts:'contacts',notes:'notes',browser:'browser',camera:'camera',photos:'gallery',qr:'signal',mission:'mission',terminal:'terminal'};
+
+// --- HYDRA BGM : instrumentale originale, sans paroles ---
+const BGM_TRACKS=[
+ {name:'NEON PULSE',src:'music/neon-pulse.mp3',rate:1},
+ {name:'MIDNIGHT DRIVE',src:'music/midnight-drive.mp3',rate:.92},
+ {name:'DIGITAL RUSH',src:'music/digital-rush.mp3',rate:1.08}
+];
+let bgm=null,bgmIndex=0,bgmStarted=false;
+function ensureBgm(){if(bgm)return bgm;bgm=document.createElement('audio');bgm.preload='auto';bgm.loop=true;bgm.volume=.12;bgm.style.display='none';document.body.appendChild(bgm);bgm.addEventListener('ended',()=>{bgmIndex=(bgmIndex+1)%BGM_TRACKS.length;playBgm()});return bgm}
+function playBgm(){if(!S.enabled)return;const a=ensureBgm(),tr=BGM_TRACKS[bgmIndex];a.src=tr.src;a.playbackRate=tr.rate;a.volume=clamp(S.volume*.42);a.play().catch(()=>{});bgmStarted=true}
+function nextBgm(){bgmIndex=(bgmIndex+1)%BGM_TRACKS.length;playBgm()}
+window.hydraAudioNextTrack=nextBgm;
+
 const sitePages={index.html:'open',admin.html:'classified',communaute.html:'comms',confidentialite.html:'docs',extension.html:'signal'};
 
 async function tone(kind='click'){if(!S.enabled)return false;const fn=sounds[kind]||sounds[aliases[kind]]||sounds.click;return fn()}
@@ -122,8 +135,8 @@ function setPage(page){
  currentPage=page;
  if(Date.now()-lastNav>220){chord(page);lastNav=Date.now()}
 }
-function enabled(v){S.enabled=!!v;save();const x=ensure();if(x)master.gain.setTargetAtTime(S.enabled?S.volume:0,x.currentTime,.06);render()}
-function volume(v){S.volume=clamp(Number(v)/100);save();const x=ensure();if(x&&S.enabled)master.gain.setTargetAtTime(S.volume,x.currentTime,.06);render()}
+function enabled(v){S.enabled=!!v;save();const x=ensure();if(x)master.gain.setTargetAtTime(S.enabled?S.volume:0,x.currentTime,.06);if(S.enabled)playBgm();else if(bgm)bgm.pause();render()}
+function volume(v){S.volume=clamp(Number(v)/100);save();const x=ensure();if(x&&S.enabled)master.gain.setTargetAtTime(S.volume,x.currentTime,.06);if(bgm)bgm.volume=S.volume*.42;render()}
 function ambient(v){S.ambient=!!v;save();const x=ensure();if(x&&ambientBus)ambientBus.gain.setTargetAtTime(S.ambient?.018:0,x.currentTime,.2);render()}
 function render(){
  const b=document.getElementById('hydraAudioToggle'),r=document.getElementById('hydraAudioVolume'),l=document.getElementById('hydraAudioLabel'),a=document.getElementById('hydraAudioAmbient');
@@ -139,7 +152,7 @@ function ui(){
  document.body.appendChild(h);
  document.getElementById('hydraAudioToggle').onclick=async()=>{if(!S.enabled)enabled(true);await tone('open')};
  document.getElementById('hydraAudioAmbient').onclick=()=>ambient(!S.ambient);
- document.getElementById('hydraAudioTest').onclick=async()=>{if(!S.enabled)enabled(true);await tone('boot');setTimeout(()=>tone('navigate'),420);setTimeout(()=>tone('success'),650)};
+ document.getElementById('hydraAudioTest').onclick=async()=>{if(!S.enabled)enabled(true);await tone('boot');setTimeout(()=>tone('navigate'),420);setTimeout(()=>tone('success'),650);setTimeout(nextBgm,900)};
  document.getElementById('hydraAudioVolume').oninput=e=>volume(e.target.value);
  render();
 }
@@ -165,5 +178,5 @@ function bind(){
 }
 window.hydraSound=tone;
 window.hydraAudio={start,setEnabled:enabled,setVolume:volume,setAmbient:ambient,setPage,state:S,pages};
-document.addEventListener('DOMContentLoaded',()=>{ui();bind();setTimeout(detectPage,300);setTimeout(detectPage,900)});
+document.addEventListener('DOMContentLoaded',()=>{ui();bind();setTimeout(detectPage,300);setTimeout(detectPage,900);document.addEventListener('pointerdown',()=>{if(S.enabled&&!bgmStarted)playBgm()},{once:true,passive:true})});
 })();
