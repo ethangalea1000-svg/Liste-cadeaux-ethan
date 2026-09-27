@@ -1,6 +1,6 @@
 {
   "commands": {
-    "help": "Centre d’aide HYDRA : HELP ouvre le catalogue complet par catégories. HELP <terme> recherche une catégorie ou une commande.",
+    "help": "Centre d’aide HYDRA : HELP affiche chaque commande avec sa fonction et ce qu’elle produit.",
     "ls": "Fichiers : note_interne.txt, journal.log, archive_chiffree.dat",
     "cat note_interne.txt": "De : RH\nÀ : Tout le personnel\nSuite aux récents incidents, l'accès au serveur confidentiel a été restreint. Le mot de passe système par défaut est le matricule de la victime.",
     "cat journal.log": "[04:23:12] Connexion réussie de l'utilisateur 'Directeur'\n[04:25:45] ALERTE : Téléchargement massif de données vers une IP inconnue\n[04:26:01] Session corrompue brutalement.",
@@ -16,1400 +16,1800 @@
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — ls.",
       "syntax": "ls",
-      "example": "ls"
+      "example": "ls",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche la liste des fichiers et dossiers virtuels."
     },
     {
       "name": "cd",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — cd.",
       "syntax": "cd",
-      "example": "cd"
+      "example": "cd",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Change le dossier virtuel courant."
     },
     {
       "name": "pwd",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — pwd.",
       "syntax": "pwd",
-      "example": "pwd"
+      "example": "pwd",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche le chemin virtuel courant."
     },
     {
       "name": "tree",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — tree.",
       "syntax": "tree",
-      "example": "tree"
+      "example": "tree",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "find",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — find.",
       "syntax": "find",
-      "example": "find"
+      "example": "find",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Retourne les éléments correspondant au terme recherché."
     },
     {
       "name": "locate",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — locate.",
       "syntax": "locate",
-      "example": "locate"
+      "example": "locate",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Retourne les éléments correspondant au terme recherché."
     },
     {
       "name": "stat",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — stat.",
       "syntax": "stat",
-      "example": "stat"
+      "example": "stat",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "file",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — file.",
       "syntax": "file",
-      "example": "file"
+      "example": "file",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "du",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — du.",
       "syntax": "du",
-      "example": "du"
+      "example": "du",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "df",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — df.",
       "syntax": "df",
-      "example": "df"
+      "example": "df",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "mkdir",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — mkdir.",
       "syntax": "mkdir",
-      "example": "mkdir"
+      "example": "mkdir",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "rmdir",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — rmdir.",
       "syntax": "rmdir",
-      "example": "rmdir"
+      "example": "rmdir",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "touch",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — touch.",
       "syntax": "touch",
-      "example": "touch"
+      "example": "touch",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "cp",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — cp.",
       "syntax": "cp",
-      "example": "cp"
+      "example": "cp",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "mv",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — mv.",
       "syntax": "mv",
-      "example": "mv"
+      "example": "mv",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "ln",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — ln.",
       "syntax": "ln",
-      "example": "ln"
+      "example": "ln",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "readlink",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — readlink.",
       "syntax": "readlink",
-      "example": "readlink"
+      "example": "readlink",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "basename",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — basename.",
       "syntax": "basename",
-      "example": "basename"
+      "example": "basename",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "dirname",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — dirname.",
       "syntax": "dirname",
-      "example": "dirname"
+      "example": "dirname",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "realpath",
       "category": "Navigation & fichiers",
       "description": "Commande simulée HYDRA — realpath.",
       "syntax": "realpath",
-      "example": "realpath"
+      "example": "realpath",
+      "function": "Navigue ou gère les fichiers et dossiers virtuels.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "cat",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — cat.",
       "syntax": "cat",
-      "example": "cat"
+      "example": "cat",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche le contenu ou une partie du contenu d’un fichier virtuel."
     },
     {
       "name": "less",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — less.",
       "syntax": "less",
-      "example": "less"
+      "example": "less",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "more",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — more.",
       "syntax": "more",
-      "example": "more"
+      "example": "more",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "head",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — head.",
       "syntax": "head",
-      "example": "head"
+      "example": "head",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche le contenu ou une partie du contenu d’un fichier virtuel."
     },
     {
       "name": "tail",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — tail.",
       "syntax": "tail",
-      "example": "tail"
+      "example": "tail",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche le contenu ou une partie du contenu d’un fichier virtuel."
     },
     {
       "name": "nl",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — nl.",
       "syntax": "nl",
-      "example": "nl"
+      "example": "nl",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "wc",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — wc.",
       "syntax": "wc",
-      "example": "wc"
+      "example": "wc",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "sort",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — sort.",
       "syntax": "sort",
-      "example": "sort"
+      "example": "sort",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "uniq",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — uniq.",
       "syntax": "uniq",
-      "example": "uniq"
+      "example": "uniq",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "cut",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — cut.",
       "syntax": "cut",
-      "example": "cut"
+      "example": "cut",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "paste",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — paste.",
       "syntax": "paste",
-      "example": "paste"
+      "example": "paste",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "tr",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — tr.",
       "syntax": "tr",
-      "example": "tr"
+      "example": "tr",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "tee",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — tee.",
       "syntax": "tee",
-      "example": "tee"
+      "example": "tee",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "strings",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — strings.",
       "syntax": "strings",
-      "example": "strings"
+      "example": "strings",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "column",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — column.",
       "syntax": "column",
-      "example": "column"
+      "example": "column",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "fmt",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — fmt.",
       "syntax": "fmt",
-      "example": "fmt"
+      "example": "fmt",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "fold",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — fold.",
       "syntax": "fold",
-      "example": "fold"
+      "example": "fold",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "join",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — join.",
       "syntax": "join",
-      "example": "join"
+      "example": "join",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "diff",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — diff.",
       "syntax": "diff",
-      "example": "diff"
+      "example": "diff",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "cmp",
       "category": "Lecture & texte",
       "description": "Commande simulée HYDRA — cmp.",
       "syntax": "cmp",
-      "example": "cmp"
+      "example": "cmp",
+      "function": "Lit, affiche ou transforme du texte dans la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "grep",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — grep.",
       "syntax": "grep",
-      "example": "grep"
+      "example": "grep",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Retourne les éléments correspondant au terme recherché."
     },
     {
       "name": "egrep",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — egrep.",
       "syntax": "egrep",
-      "example": "egrep"
+      "example": "egrep",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "fgrep",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — fgrep.",
       "syntax": "fgrep",
-      "example": "fgrep"
+      "example": "fgrep",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "awk",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — awk.",
       "syntax": "awk",
-      "example": "awk"
+      "example": "awk",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "sed",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — sed.",
       "syntax": "sed",
-      "example": "sed"
+      "example": "sed",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "xargs",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — xargs.",
       "syntax": "xargs",
-      "example": "xargs"
+      "example": "xargs",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Retourne le texte ou les données transformés selon les paramètres fournis."
     },
     {
       "name": "whereis",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — whereis.",
       "syntax": "whereis",
-      "example": "whereis"
+      "example": "whereis",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "which",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — which.",
       "syntax": "which",
-      "example": "which"
+      "example": "which",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "type",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — type.",
       "syntax": "type",
-      "example": "type"
+      "example": "type",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche le contenu ou une partie du contenu d’un fichier virtuel."
     },
     {
       "name": "command",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — command.",
       "syntax": "command",
-      "example": "command"
+      "example": "command",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "apropos",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — apropos.",
       "syntax": "apropos",
-      "example": "apropos"
+      "example": "apropos",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "man",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — man.",
       "syntax": "man",
-      "example": "man"
+      "example": "man",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "whatis",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — whatis.",
       "syntax": "whatis",
-      "example": "whatis"
+      "example": "whatis",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "history",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — history.",
       "syntax": "history",
-      "example": "history"
+      "example": "history",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "fc",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — fc.",
       "syntax": "fc",
-      "example": "fc"
+      "example": "fc",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "alias",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — alias.",
       "syntax": "alias",
-      "example": "alias"
+      "example": "alias",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "unalias",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — unalias.",
       "syntax": "unalias",
-      "example": "unalias"
+      "example": "unalias",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "echo",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — echo.",
       "syntax": "echo",
-      "example": "echo"
+      "example": "echo",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche le texte fourni dans la console."
     },
     {
       "name": "printf",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — printf.",
       "syntax": "printf",
-      "example": "printf"
+      "example": "printf",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Affiche le texte fourni dans la console."
     },
     {
       "name": "clear",
       "category": "Recherche & filtrage",
       "description": "Commande simulée HYDRA — clear.",
       "syntax": "clear",
-      "example": "clear"
+      "example": "clear",
+      "function": "Recherche et filtre des informations dans les données virtuelles.",
+      "produces": "Efface les lignes visibles de la console."
     },
     {
       "name": "uname",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — uname.",
       "syntax": "uname",
-      "example": "uname"
+      "example": "uname",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hostname",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — hostname.",
       "syntax": "hostname",
-      "example": "hostname"
+      "example": "hostname",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "uptime",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — uptime.",
       "syntax": "uptime",
-      "example": "uptime"
+      "example": "uptime",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche une information temporelle de la simulation."
     },
     {
       "name": "date",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — date.",
       "syntax": "date",
-      "example": "date"
+      "example": "date",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche une information temporelle de la simulation."
     },
     {
       "name": "cal",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — cal.",
       "syntax": "cal",
-      "example": "cal"
+      "example": "cal",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "whoami",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — whoami.",
       "syntax": "whoami",
-      "example": "whoami"
+      "example": "whoami",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche les informations du compte ou de la session simulée."
     },
     {
       "name": "id",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — id.",
       "syntax": "id",
-      "example": "id"
+      "example": "id",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche les informations du compte ou de la session simulée."
     },
     {
       "name": "groups",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — groups.",
       "syntax": "groups",
-      "example": "groups"
+      "example": "groups",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche les informations du compte ou de la session simulée."
     },
     {
       "name": "who",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — who.",
       "syntax": "who",
-      "example": "who"
+      "example": "who",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche les informations du compte ou de la session simulée."
     },
     {
       "name": "w",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — w.",
       "syntax": "w",
-      "example": "w"
+      "example": "w",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "last",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — last.",
       "syntax": "last",
-      "example": "last"
+      "example": "last",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche les informations du compte ou de la session simulée."
     },
     {
       "name": "lastlog",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — lastlog.",
       "syntax": "lastlog",
-      "example": "lastlog"
+      "example": "lastlog",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "free",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — free.",
       "syntax": "free",
-      "example": "free"
+      "example": "free",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "vmstat",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — vmstat.",
       "syntax": "vmstat",
-      "example": "vmstat"
+      "example": "vmstat",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "iostat",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — iostat.",
       "syntax": "iostat",
-      "example": "iostat"
+      "example": "iostat",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "lscpu",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — lscpu.",
       "syntax": "lscpu",
-      "example": "lscpu"
+      "example": "lscpu",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "lsmem",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — lsmem.",
       "syntax": "lsmem",
-      "example": "lsmem"
+      "example": "lsmem",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "lsblk",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — lsblk.",
       "syntax": "lsblk",
-      "example": "lsblk"
+      "example": "lsblk",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "lspci",
       "category": "Système & matériel",
       "description": "Commande simulée HYDRA — lspci.",
       "syntax": "lspci",
-      "example": "lspci"
+      "example": "lspci",
+      "function": "Consulte l’état et les caractéristiques de l’environnement simulé.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "ps",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — ps.",
       "syntax": "ps",
-      "example": "ps"
+      "example": "ps",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche les processus ou tâches simulés et leur état."
     },
     {
       "name": "top",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — top.",
       "syntax": "top",
-      "example": "top"
+      "example": "top",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche les processus ou tâches simulés et leur état."
     },
     {
       "name": "htop",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — htop.",
       "syntax": "htop",
-      "example": "htop"
+      "example": "htop",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche les processus ou tâches simulés et leur état."
     },
     {
       "name": "pgrep",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — pgrep.",
       "syntax": "pgrep",
-      "example": "pgrep"
+      "example": "pgrep",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche les processus ou tâches simulés et leur état."
     },
     {
       "name": "pkill",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — pkill.",
       "syntax": "pkill",
-      "example": "pkill"
+      "example": "pkill",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "jobs",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — jobs.",
       "syntax": "jobs",
-      "example": "jobs"
+      "example": "jobs",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche les processus ou tâches simulés et leur état."
     },
     {
       "name": "bg",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — bg.",
       "syntax": "bg",
-      "example": "bg"
+      "example": "bg",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "fg",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — fg.",
       "syntax": "fg",
-      "example": "fg"
+      "example": "fg",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "nice",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — nice.",
       "syntax": "nice",
-      "example": "nice"
+      "example": "nice",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "renice",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — renice.",
       "syntax": "renice",
-      "example": "renice"
+      "example": "renice",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "nohup",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — nohup.",
       "syntax": "nohup",
-      "example": "nohup"
+      "example": "nohup",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "sleep",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — sleep.",
       "syntax": "sleep",
-      "example": "sleep"
+      "example": "sleep",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "watch",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — watch.",
       "syntax": "watch",
-      "example": "watch"
+      "example": "watch",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "time",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — time.",
       "syntax": "time",
-      "example": "time"
+      "example": "time",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche une information temporelle de la simulation."
     },
     {
       "name": "timeout",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — timeout.",
       "syntax": "timeout",
-      "example": "timeout"
+      "example": "timeout",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "wait",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — wait.",
       "syntax": "wait",
-      "example": "wait"
+      "example": "wait",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "pidof",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — pidof.",
       "syntax": "pidof",
-      "example": "pidof"
+      "example": "pidof",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche les processus ou tâches simulés et leur état."
     },
     {
       "name": "pstree",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — pstree.",
       "syntax": "pstree",
-      "example": "pstree"
+      "example": "pstree",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "taskset",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — taskset.",
       "syntax": "taskset",
-      "example": "taskset"
+      "example": "taskset",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "systemctl",
       "category": "Processus & tâches",
       "description": "Commande simulée HYDRA — systemctl.",
       "syntax": "systemctl",
-      "example": "systemctl"
+      "example": "systemctl",
+      "function": "Observe ou contrôle les tâches et processus simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "ip",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — ip.",
       "syntax": "ip",
-      "example": "ip"
+      "example": "ip",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "ping",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — ping.",
       "syntax": "ping",
-      "example": "ping"
+      "example": "ping",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "traceroute",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — traceroute.",
       "syntax": "traceroute",
-      "example": "traceroute"
+      "example": "traceroute",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "tracepath",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — tracepath.",
       "syntax": "tracepath",
-      "example": "tracepath"
+      "example": "tracepath",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "ss",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — ss.",
       "syntax": "ss",
-      "example": "ss"
+      "example": "ss",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "netstat",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — netstat.",
       "syntax": "netstat",
-      "example": "netstat"
+      "example": "netstat",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "arp",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — arp.",
       "syntax": "arp",
-      "example": "arp"
+      "example": "arp",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "route",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — route.",
       "syntax": "route",
-      "example": "route"
+      "example": "route",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "hostnamectl",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — hostnamectl.",
       "syntax": "hostnamectl",
-      "example": "hostnamectl"
+      "example": "hostnamectl",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "nslookup",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — nslookup.",
       "syntax": "nslookup",
-      "example": "nslookup"
+      "example": "nslookup",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "dig",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — dig.",
       "syntax": "dig",
-      "example": "dig"
+      "example": "dig",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "host",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — host.",
       "syntax": "host",
-      "example": "host"
+      "example": "host",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "curl",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — curl.",
       "syntax": "curl",
-      "example": "curl"
+      "example": "curl",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "wget",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — wget.",
       "syntax": "wget",
-      "example": "wget"
+      "example": "wget",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "nc",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — nc.",
       "syntax": "nc",
-      "example": "nc"
+      "example": "nc",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "telnet",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — telnet.",
       "syntax": "telnet",
-      "example": "telnet"
+      "example": "telnet",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "ifconfig",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — ifconfig.",
       "syntax": "ifconfig",
-      "example": "ifconfig"
+      "example": "ifconfig",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Retourne un résultat de diagnostic réseau simulé."
     },
     {
       "name": "ethtool",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — ethtool.",
       "syntax": "ethtool",
-      "example": "ethtool"
+      "example": "ethtool",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "resolvectl",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — resolvectl.",
       "syntax": "resolvectl",
-      "example": "resolvectl"
+      "example": "resolvectl",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "networkctl",
       "category": "Réseau & diagnostics",
       "description": "Commande simulée HYDRA — networkctl.",
       "syntax": "networkctl",
-      "example": "networkctl"
+      "example": "networkctl",
+      "function": "Analyse les services, connexions et diagnostics réseau simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "chmod",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — chmod.",
       "syntax": "chmod",
-      "example": "chmod"
+      "example": "chmod",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Retourne le résultat d’une opération de droits simulée."
     },
     {
       "name": "chown",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — chown.",
       "syntax": "chown",
-      "example": "chown"
+      "example": "chown",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Retourne le résultat d’une opération de droits simulée."
     },
     {
       "name": "chgrp",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — chgrp.",
       "syntax": "chgrp",
-      "example": "chgrp"
+      "example": "chgrp",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Retourne le résultat d’une opération de droits simulée."
     },
     {
       "name": "umask",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — umask.",
       "syntax": "umask",
-      "example": "umask"
+      "example": "umask",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Retourne le résultat d’une opération de droits simulée."
     },
     {
       "name": "getfacl",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — getfacl.",
       "syntax": "getfacl",
-      "example": "getfacl"
+      "example": "getfacl",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "setfacl",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — setfacl.",
       "syntax": "setfacl",
-      "example": "setfacl"
+      "example": "setfacl",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "passwd",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — passwd.",
       "syntax": "passwd",
-      "example": "passwd"
+      "example": "passwd",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "su",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — su.",
       "syntax": "su",
-      "example": "su"
+      "example": "su",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Retourne le résultat d’une opération de droits simulée."
     },
     {
       "name": "sudo",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — sudo.",
       "syntax": "sudo",
-      "example": "sudo"
+      "example": "sudo",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Retourne le résultat d’une opération de droits simulée."
     },
     {
       "name": "login",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — login.",
       "syntax": "login",
-      "example": "login"
+      "example": "login",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "logout",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — logout.",
       "syntax": "logout",
-      "example": "logout"
+      "example": "logout",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "users",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — users.",
       "syntax": "users",
-      "example": "users"
+      "example": "users",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche les informations du compte ou de la session simulée."
     },
     {
       "name": "newgrp",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — newgrp.",
       "syntax": "newgrp",
-      "example": "newgrp"
+      "example": "newgrp",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "write",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — write.",
       "syntax": "write",
-      "example": "write"
+      "example": "write",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "mesg",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — mesg.",
       "syntax": "mesg",
-      "example": "mesg"
+      "example": "mesg",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "ac",
       "category": "Permissions & comptes",
       "description": "Commande simulée HYDRA — ac.",
       "syntax": "ac",
-      "example": "ac"
+      "example": "ac",
+      "function": "Gère les utilisateurs, sessions et droits simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "tar",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — tar.",
       "syntax": "tar",
-      "example": "tar"
+      "example": "tar",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Retourne le résultat de l’opération d’archive simulée."
     },
     {
       "name": "gzip",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — gzip.",
       "syntax": "gzip",
-      "example": "gzip"
+      "example": "gzip",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Retourne le résultat de l’opération d’archive simulée."
     },
     {
       "name": "gunzip",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — gunzip.",
       "syntax": "gunzip",
-      "example": "gunzip"
+      "example": "gunzip",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Retourne le résultat de l’opération d’archive simulée."
     },
     {
       "name": "bzip2",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — bzip2.",
       "syntax": "bzip2",
-      "example": "bzip2"
+      "example": "bzip2",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "bunzip2",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — bunzip2.",
       "syntax": "bunzip2",
-      "example": "bunzip2"
+      "example": "bunzip2",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "xz",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — xz.",
       "syntax": "xz",
-      "example": "xz"
+      "example": "xz",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "unxz",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — unxz.",
       "syntax": "unxz",
-      "example": "unxz"
+      "example": "unxz",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "zip",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — zip.",
       "syntax": "zip",
-      "example": "zip"
+      "example": "zip",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Retourne le résultat de l’opération d’archive simulée."
     },
     {
       "name": "unzip",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — unzip.",
       "syntax": "unzip",
-      "example": "unzip"
+      "example": "unzip",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Retourne le résultat de l’opération d’archive simulée."
     },
     {
       "name": "zcat",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — zcat.",
       "syntax": "zcat",
-      "example": "zcat"
+      "example": "zcat",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "bzcat",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — bzcat.",
       "syntax": "bzcat",
-      "example": "bzcat"
+      "example": "bzcat",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "xzcat",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — xzcat.",
       "syntax": "xzcat",
-      "example": "xzcat"
+      "example": "xzcat",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "ar",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — ar.",
       "syntax": "ar",
-      "example": "ar"
+      "example": "ar",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Retourne le résultat de l’opération d’archive simulée."
     },
     {
       "name": "cpio",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — cpio.",
       "syntax": "cpio",
-      "example": "cpio"
+      "example": "cpio",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Retourne le résultat de l’opération d’archive simulée."
     },
     {
       "name": "rsync",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — rsync.",
       "syntax": "rsync",
-      "example": "rsync"
+      "example": "rsync",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "split",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — split.",
       "syntax": "split",
-      "example": "split"
+      "example": "split",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "shuf",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — shuf.",
       "syntax": "shuf",
-      "example": "shuf"
+      "example": "shuf",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "base64",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — base64.",
       "syntax": "base64",
-      "example": "base64"
+      "example": "base64",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "od",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — od.",
       "syntax": "od",
-      "example": "od"
+      "example": "od",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "xxd",
       "category": "Archives & formats",
       "description": "Commande simulée HYDRA — xxd.",
       "syntax": "xxd",
-      "example": "xxd"
+      "example": "xxd",
+      "function": "Manipule ou inspecte des archives et formats de données simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "git",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — git.",
       "syntax": "git",
-      "example": "git"
+      "example": "git",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche ou simule une opération sur le dépôt HYDRA."
     },
     {
       "name": "git-status",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — git-status.",
       "syntax": "git-status",
-      "example": "git-status"
+      "example": "git-status",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche ou simule une opération sur le dépôt HYDRA."
     },
     {
       "name": "git-log",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — git-log.",
       "syntax": "git-log",
-      "example": "git-log"
+      "example": "git-log",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche ou simule une opération sur le dépôt HYDRA."
     },
     {
       "name": "git-diff",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — git-diff.",
       "syntax": "git-diff",
-      "example": "git-diff"
+      "example": "git-diff",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche ou simule une opération sur le dépôt HYDRA."
     },
     {
       "name": "git-show",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — git-show.",
       "syntax": "git-show",
-      "example": "git-show"
+      "example": "git-show",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche ou simule une opération sur le dépôt HYDRA."
     },
     {
       "name": "git-branch",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — git-branch.",
       "syntax": "git-branch",
-      "example": "git-branch"
+      "example": "git-branch",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche ou simule une opération sur le dépôt HYDRA."
     },
     {
       "name": "python",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — python.",
       "syntax": "python",
-      "example": "python"
+      "example": "python",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "node",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — node.",
       "syntax": "node",
-      "example": "node"
+      "example": "node",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "npm",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — npm.",
       "syntax": "npm",
-      "example": "npm"
+      "example": "npm",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "npx",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — npx.",
       "syntax": "npx",
-      "example": "npx"
+      "example": "npx",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "jq",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — jq.",
       "syntax": "jq",
-      "example": "jq"
+      "example": "jq",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "jsonlint",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — jsonlint.",
       "syntax": "jsonlint",
-      "example": "jsonlint"
+      "example": "jsonlint",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "make",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — make.",
       "syntax": "make",
-      "example": "make"
+      "example": "make",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "cmake",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — cmake.",
       "syntax": "cmake",
-      "example": "cmake"
+      "example": "cmake",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "gcc",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — gcc.",
       "syntax": "gcc",
-      "example": "gcc"
+      "example": "gcc",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "g++",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — g++.",
       "syntax": "g++",
-      "example": "g++"
+      "example": "g++",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "java",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — java.",
       "syntax": "java",
-      "example": "java"
+      "example": "java",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "javac",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — javac.",
       "syntax": "javac",
-      "example": "javac"
+      "example": "javac",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "env",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — env.",
       "syntax": "env",
-      "example": "env"
+      "example": "env",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "printenv",
       "category": "Développement & données",
       "description": "Commande simulée HYDRA — printenv.",
       "syntax": "printenv",
-      "example": "printenv"
+      "example": "printenv",
+      "function": "Travaille avec du code, des données et des formats de développement simulés.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra.",
       "syntax": "hydra",
-      "example": "hydra"
+      "example": "hydra",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-status",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-status.",
       "syntax": "hydra-status",
-      "example": "hydra-status"
+      "example": "hydra-status",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-scan",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-scan.",
       "syntax": "hydra-scan",
-      "example": "hydra-scan"
+      "example": "hydra-scan",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-trace",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-trace.",
       "syntax": "hydra-trace",
-      "example": "hydra-trace"
+      "example": "hydra-trace",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-evidence",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-evidence.",
       "syntax": "hydra-evidence",
-      "example": "hydra-evidence"
+      "example": "hydra-evidence",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-case",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-case.",
       "syntax": "hydra-case",
-      "example": "hydra-case"
+      "example": "hydra-case",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-log",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-log.",
       "syntax": "hydra-log",
-      "example": "hydra-log"
+      "example": "hydra-log",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-map",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-map.",
       "syntax": "hydra-map",
-      "example": "hydra-map"
+      "example": "hydra-map",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-signal",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-signal.",
       "syntax": "hydra-signal",
-      "example": "hydra-signal"
+      "example": "hydra-signal",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-matrix",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-matrix.",
       "syntax": "hydra-matrix",
-      "example": "hydra-matrix"
+      "example": "hydra-matrix",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-fragments",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-fragments.",
       "syntax": "hydra-fragments",
-      "example": "hydra-fragments"
+      "example": "hydra-fragments",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-correlate",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-correlate.",
       "syntax": "hydra-correlate",
-      "example": "hydra-correlate"
+      "example": "hydra-correlate",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-timeline",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-timeline.",
       "syntax": "hydra-timeline",
-      "example": "hydra-timeline"
+      "example": "hydra-timeline",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-alerts",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-alerts.",
       "syntax": "hydra-alerts",
-      "example": "hydra-alerts"
+      "example": "hydra-alerts",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-report",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-report.",
       "syntax": "hydra-report",
-      "example": "hydra-report"
+      "example": "hydra-report",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-export",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-export.",
       "syntax": "hydra-export",
-      "example": "hydra-export"
+      "example": "hydra-export",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-check",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-check.",
       "syntax": "hydra-check",
-      "example": "hydra-check"
+      "example": "hydra-check",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-verify",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-verify.",
       "syntax": "hydra-verify",
-      "example": "hydra-verify"
+      "example": "hydra-verify",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-mission",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-mission.",
       "syntax": "hydra-mission",
-      "example": "hydra-mission"
+      "example": "hydra-mission",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "hydra-reset",
       "category": "HYDRA & enquête",
       "description": "Commande simulée HYDRA — hydra-reset.",
       "syntax": "hydra-reset",
-      "example": "hydra-reset"
+      "example": "hydra-reset",
+      "function": "Interroge les systèmes, indices et mécanismes narratifs de HYDRA.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "reset",
       "category": "Session & contrôle",
       "description": "Commande simulée HYDRA — reset.",
       "syntax": "reset",
-      "example": "reset"
+      "example": "reset",
+      "function": "Contrôle la session et l’interface de la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "reboot",
       "category": "Session & contrôle",
       "description": "Commande simulée HYDRA — reboot.",
       "syntax": "reboot",
-      "example": "reboot"
+      "example": "reboot",
+      "function": "Contrôle la session et l’interface de la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "shutdown",
       "category": "Session & contrôle",
       "description": "Commande simulée HYDRA — shutdown.",
       "syntax": "shutdown",
-      "example": "shutdown"
+      "example": "shutdown",
+      "function": "Contrôle la session et l’interface de la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "exit",
       "category": "Session & contrôle",
       "description": "Commande simulée HYDRA — exit.",
       "syntax": "exit",
-      "example": "exit"
+      "example": "exit",
+      "function": "Contrôle la session et l’interface de la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     },
     {
       "name": "help",
       "category": "Session & contrôle",
       "description": "Commande simulée HYDRA — help.",
       "syntax": "help",
-      "example": "help"
+      "example": "help",
+      "function": "Contrôle la session et l’interface de la VM.",
+      "produces": "Affiche un résultat simulé correspondant à la commande et à ses paramètres."
     }
   ]
 }
