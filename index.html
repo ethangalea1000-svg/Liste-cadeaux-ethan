@@ -1641,4 +1641,41 @@ if(urlCode){
 async function logSiteVisit(page){try{await fetch(SUPABASE_URL+"/rest/v1/rpc/log_site_visit",{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_page:page})})}catch{}}
 logSiteVisit("Liste principale");
 </script><div style="text-align:center;color:#8a90a3;font-size:10px;padding:8px">Interface mobile • 2026.09.25</div>
-<script src="./hydra-audio.js" defer></script></body></html>
+<script src="./hydra-audio.js" defer></script><script>
+(()=> {
+const key="guided-tour-v1";
+const steps=[
+["[data-view-target=\"liste\"]","🎁 Liste","Retrouve ici tous les cadeaux et leurs informations."],
+["#search","🔎 Recherche","Utilise la recherche pour trouver rapidement un cadeau."],
+["[data-view-target=\"anniversaire\"]","🎂 Anniversaire","Découvre les jeux, souvenirs et activités de la fête."],
+["[data-view-target=\"hydra\"]","🕵️ HYDRA","Accède à ton dossier personnel si ton accès le permet."],
+["[data-view-target=\"participer\"]","💶 Participer","Retrouve ici les cagnottes et participations."],
+["[data-view-target=\"communaute\"]","💬 Communauté","Consulte les messages et les idées partagées."]
+];
+let n=0,box,shade;
+function start(){
+ const s=steps[n]; const el=document.querySelector(s[0]);
+ if(!el){next();return}
+ const r=el.getBoundingClientRect();
+ shade=document.createElement("div");
+ shade.style.cssText="position:fixed;inset:0;z-index:99990;background:rgba(8,10,20,.48)";
+ box=document.createElement("div");
+ box.style.cssText="position:fixed;z-index:100000;width:min(350px,calc(100vw - 28px));background:#fff;border-radius:18px;padding:18px;box-shadow:0 18px 60px rgba(0,0,0,.28);font-family:inherit";
+ box.innerHTML="<b style='color:#5a56d6;font-size:12px'>VISITE GUIDÉE</b><h3 style='margin:7px 0'>"+s[1]+"</h3><p style='color:#5c6272;line-height:1.5;margin:0'>"+s[2]+"</p><small style='display:block;margin-top:12px;color:#8a90a3'>"+(n+1)+" / "+steps.length+"</small><button id='tourNext' style='margin-top:12px;border:0;border-radius:10px;padding:9px 13px;background:#5a56d6;color:white;font-weight:700'>"+(n===steps.length-1?"Terminer":"Suivant →")+"</button><button id='tourSkip' style='margin:12px 0 0 8px;border:1px solid #ddd;border-radius:10px;padding:9px 13px;background:white'>Passer</button>";
+ document.body.append(shade,box);
+ const left=Math.max(14,Math.min(innerWidth-364,r.left)),top=r.bottom+16;
+ box.style.left=left+"px";box.style.top=(top+230<innerHeight?top:Math.max(14,r.top-230))+"px";
+ el.style.position="relative";el.style.zIndex="99999";el.style.boxShadow="0 0 0 3px #fff,0 8px 30px rgba(0,0,0,.25)";
+ document.querySelector("#tourNext").onclick=next;
+ document.querySelector("#tourSkip").onclick=finish;
+}
+function clear(){
+ if(box)box.remove();if(shade)shade.remove();
+ document.querySelectorAll("[data-view-target],#search").forEach(x=>{x.style.zIndex="";x.style.boxShadow=""});
+}
+function next(){clear();n++;if(n<steps.length)start();else finish()}
+function finish(){clear();localStorage.setItem(key,"1");n=0}
+window.startGuidedTour=()=>{localStorage.removeItem(key);start()};
+window.addEventListener("load",()=>setTimeout(()=>{if(localStorage.getItem(key)!=="1")start()},1800));
+})();
+</script></body></html>
