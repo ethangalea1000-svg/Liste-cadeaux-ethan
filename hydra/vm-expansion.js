@@ -77,7 +77,22 @@ function virtualPath(p){p=(p||"").trim().replace(/^['"]|['"]$/g,"").replace(/\\/
 function commandOutput(raw){
  const parts=raw.trim().split(/\s+/),cmd=(parts.shift()||"").toUpperCase(),arg=parts.join(" ").trim();
  if(!cmd)return[];
- if(cmd==="HELP")return["HYDRA-SHELL // COMMANDES SIMULÉES",...Object.keys(COMMANDS).sort().map(k=>k.padEnd(11)+" "+COMMANDS[k])];
+ if(cmd==="HELP"){
+ const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
+ if(typeof window.openHydraHelpCatalog==="function"){window.openHydraHelpCatalog("");return[];}
+ if(catalog.length){
+   const groups={};catalog.forEach(x=>(groups[x.category]??=[]).push(x));
+   return ["HYDRA COMMAND CENTER // "+catalog.length+" COMMANDES",...Object.entries(groups).flatMap(([cat,items])=>["","["+cat+"]",...items.map(x=>String(x.name).toUpperCase().padEnd(24)+" "+String(x.description||""))])];
+ }
+ return ["HYDRA-SHELL // CHARGEMENT DU CATALOGUE","Le catalogue est en cours de chargement. Tape HELP à nouveau."];
+}
+if(cmd.startsWith("HELP ")){
+ const q=cmd.slice(5).trim().toLowerCase();
+ const catalog=Array.isArray(window.__hydraTerminalConfig?.catalog)?window.__hydraTerminalConfig.catalog:[];
+ const found=catalog.filter(x=>String(x.name).toLowerCase().includes(q)||String(x.category).toLowerCase().includes(q));
+ if(found.length)return ["RECHERCHE HELP : "+q,"",...found.map(x=>"["+x.category+"] "+String(x.name).toUpperCase()+" — "+String(x.description||""))];
+ return ["Aucune commande/catégorie trouvée pour : "+q];
+}
  if(cmd==="MAN")return COMMANDS[(arg||"HELP").toUpperCase()]?[arg.toUpperCase()+" — "+COMMANDS[(arg||"HELP").toUpperCase()]]:["MAN : commande inconnue. Tape HELP."];
  if(cmd==="CLEAR"||cmd==="CLS"){const o=document.querySelector("#terminalOutput");if(o)o.querySelectorAll(".term-line").forEach(x=>x.remove());return[]}
  if(cmd==="ECHO")return[arg||""];
