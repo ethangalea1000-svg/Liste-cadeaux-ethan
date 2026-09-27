@@ -1535,11 +1535,11 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
   document.querySelectorAll("[data-vm-app]").forEach(b=>b.onclick=()=>openWin(b.dataset.vmApp));
   renderHydraLauncher();
   $("vmStartSearch")?.addEventListener("input",e=>renderHydraLauncher(e.target.value));
-  document.querySelectorAll(".vm-icon[data-vm-open]").forEach(icon=>icon.addEventListener("dblclick",()=>openWin(icon.dataset.vmOpen)));
-  document.querySelectorAll(".vm-titlebar").forEach(t=>t.addEventListener("pointerdown",()=>focusVmWindow(t.closest(".vm-window"))));
+  document.querySelectorAll(".vm-icon[data-vm-open],.vm-icon[data-vm-section]").forEach(icon=>icon.addEventListener("dblclick",()=>openWin(icon.dataset.vmOpen||icon.dataset.vmSection)));
+  document.querySelectorAll(".vm-titlebar").forEach(t=>{t.addEventListener("pointerdown",()=>focusVmWindow(t.closest(".vm-window")));t.addEventListener("dblclick",()=>{const w=t.closest(".vm-window");if(!w)return;if(w.classList.contains("maximized")){w.classList.remove("maximized");w.style.left="220px";w.style.top="105px";w.style.width="min(760px,calc(100vw - 270px))";w.style.height="min(520px,calc(100vh - 170px))"}else{w.classList.add("maximized");w.style.left="12px";w.style.top="54px";w.style.width="calc(100vw - 24px)";w.style.height="calc(100vh - 108px)"}focusVmWindow(w)})});
   document.querySelectorAll("[data-vm-section]").forEach(b=>b.onclick=()=>openSectionInVM(b.dataset.vmSection));
   document.querySelectorAll("[data-vm-close]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.vmClose==="__section"){const s=$("vmAppContent").querySelector(".section");if(s)restoreSectionFromVM(s);closeWin("__section");return}closeWin(b.dataset.vmClose)});
-  document.querySelectorAll("[data-vm-min]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.vmMin==="__section"){closeWin("__section");return}closeWin(b.dataset.vmMin)});
+  document.querySelectorAll("[data-vm-min]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.vmMin==="__section"){const w=$("vmWinApp");w.classList.remove("active","vm-focused");w.classList.add("vm-minimized");document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));return}closeWin(b.dataset.vmMin)});
   document.querySelectorAll("[data-vm-max]").forEach(b=>b.onclick=e=>{e.stopPropagation();maxWin(b.dataset.vmMax)});
   document.querySelectorAll("[data-vm-main]").forEach(b=>b.onclick=()=>{const tab=b.dataset.vmMain;openSectionInVM(tab)});  
   $("vmStartSearch").addEventListener("input",e=>{const q=e.target.value.toLowerCase();document.querySelectorAll(".vm-start-item").forEach(b=>b.style.display=b.textContent.toLowerCase().includes(q)?"block":"none")});
