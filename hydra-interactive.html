@@ -737,16 +737,14 @@ async function authorize(code){
     }
     if(!data?.authorized){
       setLoginStatus("❌ Code incorrect ou accès désactivé.","error");
-      sessionStorage.removeItem("hydra_interactive_admin");
+      adminCode="";
       return false;
     }
     if(!onlyEthanAdmin(data)){
       setLoginStatus("❌ Cet accès n’est pas l’administrateur Ethan.","error");
-      sessionStorage.removeItem("hydra_interactive_admin");
       return false;
     }
     adminCode=clean;
-    sessionStorage.setItem("hydra_interactive_admin",adminCode);
     $("gate").classList.add("hidden");$("app").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
     document.body.classList.add("hydra-vm-native");
     try{
@@ -1603,11 +1601,6 @@ document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>{$("livePhase
 $("saveLive").onclick=saveLive;
 $("logoutBtn").onclick=()=>{sessionStorage.removeItem("hydra_interactive_admin");adminCode="";document.body.classList.remove("hydra-vm-native");$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");setLoginStatus("Session verrouillée.","info");};
 $("loginForm").onsubmit=async e=>{e.preventDefault();await authorize($("codeInput").value)};
-const saved=sessionStorage.getItem("hydra_interactive_admin");
-if(saved){
-  $("codeInput").value=saved;
-  authorize(saved).catch(()=>sessionStorage.removeItem("hydra_interactive_admin"));
-}
 $("codeInput")?.addEventListener("input",()=>{const t=$("loginStatus");if(t&&t.textContent)t.classList.remove("ok","error","warn");});
 
 /* === HYDRA VM CONTROLLER === */
