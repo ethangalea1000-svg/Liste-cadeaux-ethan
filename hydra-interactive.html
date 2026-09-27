@@ -724,23 +724,63 @@ function onlyEthanAdmin(data){
   return !!data?.authorized && data?.is_admin===true && String(data?.label||"").trim().toLowerCase()==="ethan — administrateur";
 }
 async function authorize(code){
-  $("loginStatus").textContent="Vérification…";
+  const clean=String(code||"").trim();
+  $("loginStatus").textContent="Connexion à HYDRA / Supabase…";
+  if(!clean){ $("loginStatus").textContent="❌ Entre le code administrateur."; return false; }
   try{
-    const data=await rpcNoAuth("authorize_list_access",{p_code:String(code||"").trim()});
-    if(!onlyEthanAdmin(data)){ $("loginStatus").textContent="❌ Seul Ethan — Administrateur peut ouvrir cette console."; return false; }
-    adminCode=String(code||"").trim();sessionStorage.setItem("hydra_interactive_admin",adminCode);
+    const data=await rpcNoAuth("authorize_list_access",{p_code:clean});
+    if(data?.rate_limited){
+      const sec=Number(data.retry_after_seconds||0);
+      $("loginStatus").textContent="⏳ Trop de tentatives. Réessaie"+(sec?" dans "+sec+" s":" un peu plus tard")+".";
+      return false;
+    }
+    if(!data?.authorized){
+      $("loginStatus").textContent="❌ Code incorrect ou accès désactivé.";
+      sessionStorage.removeItem("hydra_interactive_admin");
+      return false;
+    }
+    if(!onlyEthanAdmin(data)){
+      $("loginStatus").textContent="❌ Cet accès n’est pas l’administrateur Ethan.";
+      sessionStorage.removeItem("hydra_interactive_admin");
+      return false;
+    }
+    adminCode=clean;
+    sessionStorage.setItem("hydra_interactive_admin",adminCode);
     $("gate").classList.add("hidden");$("app").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
     document.body.classList.add("hydra-vm-native");
-    await loadAll();
-    window.__hydraStartVM?.();
-    return true;
-  }catch(e){$("loginStatus").textContent="❌ "+e.message;return false}
+    try{
+      await loadAll();
+      window.__hydraStartVM?.();
+      $("loginStatus").textContent="";
+      return true;
+    }catch(loadError){
+      adminCode="";
+      sessionStorage.removeItem("hydra_interactive_admin");
+      $("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");
+      $("loginStatus").textContent="❌ Authentifié, mais HYDRA n’a pas pu charger ses données : "+loadError.message;
+      return false;
+    }
+  }catch(e){
+    $("loginStatus").textContent="❌ Connexion Supabase impossible : "+e.message;
+    return false;
+  }
 }
 async function rpcNoAuth(name,body={}){
-  const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",cache:"no-store",headers:{apikey:SUPABASE_ANON_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
-  const data=await r.json().catch(()=>null);
-  if(!r.ok)throw new Error(data?.message||"Vérification impossible.");
-  return data;
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),10000);
+  try{
+    const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+name,{
+      method:"POST",cache:"no-store",
+      headers:{apikey:SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify(body),signal:controller.signal
+    });
+    const data=await r.json().catch(()=>null);
+    if(!r.ok) throw new Error(data?.message||data?.hint||data?.details||("HTTP "+r.status));
+    return data;
+  }catch(e){
+    if(e.name==="AbortError") throw new Error("Délai dépassé (Supabase ne répond pas).");
+    throw e;
+  }finally{clearTimeout(timeout)}
 }
 async function loadAll(){
   const savedTab=sessionStorage.getItem("hydra_active_tab")||"overview";
@@ -1561,7 +1601,12 @@ document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>{$("livePhase
 $("saveLive").onclick=saveLive;
 $("logoutBtn").onclick=()=>{sessionStorage.removeItem("hydra_interactive_admin");adminCode="";document.body.classList.remove("hydra-vm-native");$("app").classList.add("hidden");$("gate").classList.remove("hidden");$("logoutBtn").classList.add("hidden");$("loginStatus").textContent="Session verrouillée.";};
 $("loginForm").onsubmit=async e=>{e.preventDefault();await authorize($("codeInput").value)};
-const saved=sessionStorage.getItem("hydra_interactive_admin");if(saved){$("codeInput").value=saved;authorize(saved)}
+const saved=sessionStorage.getItem("hydra_interactive_admin");
+if(saved){
+  $("codeInput").value=saved;
+  authorize(saved).catch(()=>sessionStorage.removeItem("hydra_interactive_admin"));
+}
+$("codeInput")?.addEventListener("input",()=>{$("loginStatus").textContent=""});
 
 /* === HYDRA VM CONTROLLER === */
 function initHydraVM(){
