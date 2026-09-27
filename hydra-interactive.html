@@ -746,7 +746,7 @@ async function loadAll(){
   const savedTab=sessionStorage.getItem("hydra_active_tab")||"overview";
   const savedScroll=Number(sessionStorage.getItem("hydra_scroll_y")||0);
   [cfg,interactionRows]=await Promise.all([rpc("get_birthday_config",{}),rpc("admin_list_birthday_interactions",{}).catch(()=>[])]);
-  players=Array.isArray(cfg?.murder_party?.players)?cfg.murder_party.players:[];
+  players=Array.isArray(cfg?.murder_party?.players)?cfg.murder_party.players:[];await ensureHydraCameraConfig();
   renderAll();
   activateHydraTab(savedTab,false);
   requestAnimationFrame(()=>window.scrollTo({top:Number.isFinite(savedScroll)?savedScroll:0,left:0,behavior:"auto"}));
@@ -1235,12 +1235,20 @@ function initTerminal(){
  renderTermHistory();renderTermSuggestions("");
  setInterval(()=>{const x=$("termClock");if(x)x.textContent=new Date().toLocaleTimeString("fr-FR",{hour12:false})},1000);
 }
-const HYDRA_FAKE_CCTV=[{id:"CAM-01",name:"CENTRE HYDRA",tone:0,events:["21:04 · Agent traverse le couloir.","21:17 · Lumière de sécurité activée.","21:31 · Signal intermittent détecté."]},{id:"CAM-02",name:"ARCHIVE",tone:1,events:["21:12 · Accès archive enregistré.","21:26 · Terminal d’archive actif.","21:42 · Copie numérique détectée."]},{id:"CAM-03",name:"FINANCE",tone:2,events:["21:32 · Mouvement dans la zone.","21:38 · Écran finance consulté.","21:47 · Corrélation Miroir signalée."]},{id:"CAM-04",name:"MIROIR",tone:3,events:["21:47 · Signal intermittent.","21:53 · Éclairage instable.","22:01 · Zone revenue au calme."]}];
+const HYDRA_CAMERA_DEFAULT_CONFIG={mode:"hybrid",fake_feeds:[{id:"CAM-01",name:"CENTRE HYDRA",tone:0,events:["21:04 · Agent traverse le couloir.","21:17 · Lumière de sécurité activée.","21:31 · Signal intermittent détecté."]},{id:"CAM-02",name:"ARCHIVE",tone:1,events:["21:12 · Accès archive enregistré.","21:26 · Terminal d’archive actif.","21:42 · Copie numérique détectée."]},{id:"CAM-03",name:"FINANCE",tone:2,events:["21:32 · Mouvement dans la zone.","21:38 · Écran finance consulté.","21:47 · Corrélation Miroir signalée."]},{id:"CAM-04",name:"MIROIR",tone:3,events:["21:47 · Signal intermittent.","21:53 · Éclairage instable.","22:01 · Zone revenue au calme."]}]};
+async function ensureHydraCameraConfig(){
+ try{
+  if(cfg?.camera?.fake_feeds?.length)return;
+  const next=JSON.parse(JSON.stringify(cfg||{}));next.camera=HYDRA_CAMERA_DEFAULT_CONFIG;
+  await rpc("admin_save_birthday_config",{p_settings:next});cfg=next;toast("Configuration HYDRA CAM synchronisée avec Supabase.");
+ }catch(e){console.warn("HYDRA CAM config",e)}
+}
+const HYDRA_FAKE_CCTV=()=>cfg?.camera?.fake_feeds?.length?cfg.camera.fake_feeds:HYDRA_CAMERA_DEFAULT_CONFIG.fake_feeds;
 let fakeCctvCtx=null,fakeCctvRAF=null,fakeCctvPlaying=false,fakeCctvT=0,fakeCctvFeed=0;
 function initFakeCCTV(){
  const cv=$("fakeCctvCanvas");if(!cv||window.__fakeCctvInit)return;window.__fakeCctvInit=true;fakeCctvCtx=cv.getContext("2d");
- const sel=$("fakeCctvFeed");sel.innerHTML=HYDRA_FAKE_CCTV.map((f,i)=>'<option value="'+i+'">'+f.id+" · "+f.name+"</option>").join("");
- sel.addEventListener("change",()=>{fakeCctvFeed=Number(sel.value);fakeCctvT=0;renderFakeCCTV();logFakeCCTV("Flux changé : "+HYDRA_FAKE_CCTV[fakeCctvFeed].id)});
+ const sel=$("fakeCctvFeed");sel.innerHTML=HYDRA_FAKE_CCTV().map((f,i)=>'<option value="'+i+'">'+f.id+" · "+f.name+"</option>").join("");
+ sel.addEventListener("change",()=>{fakeCctvFeed=Number(sel.value);fakeCctvT=0;renderFakeCCTV();logFakeCCTV("Flux changé : "+HYDRA_FAKE_CCTV()[fakeCctvFeed].id)});
  $("fakeCctvPlay").onclick=()=>{fakeCctvPlaying=true;$("fakeCctvStatus").textContent="Lecture de la simulation.";};
  $("fakeCctvPause").onclick=()=>{fakeCctvPlaying=false;$("fakeCctvStatus").textContent="Simulation en pause.";};
  $("fakeCctvReplay").onclick=()=>{fakeCctvT=0;fakeCctvPlaying=true;logFakeCCTV("Relecture du flux.");};
