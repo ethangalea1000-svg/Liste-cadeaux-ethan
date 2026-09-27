@@ -266,7 +266,7 @@ body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{backgro
 @media(max-width:650px){#floatingHelpBtn{right:10px;top:10px;width:42px;height:42px;font-size:19px}}
 </style>
 <script>
-document.getElementById("floatingHelpBtn")?.addEventListener("click",()=>document.querySelector('[data-view-target="aide"]')?.click());
+document.getElementById("floatingHelpBtn")?.addEventListener("click",()=>{ if(typeof window.__activateAppView==="function"){ window.__activateAppView("aide",true); } else { const aide=document.querySelector('[data-app-view="aide"]'); aide?.scrollIntoView({behavior:"smooth",block:"start"}); } });
 </script>
 <div class="view-helper private-ui" id="viewHelper">
   <div>
