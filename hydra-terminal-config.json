@@ -6,6 +6,1408 @@
     "cat journal.log": "[04:23:12] Connexion réussie de l'utilisateur 'Directeur'\n[04:25:45] ALERTE : Téléchargement massif de données vers une IP inconnue\n[04:26:01] Session corrompue brutalement.",
     "cat archive_chiffree.dat": "ERREUR : Ce fichier est chiffré. Utilisez la commande 'login admin' pour saisir les privilèges."
   },
+  "catalog": [
+    {
+      "name": "ls",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — ls.",
+      "syntax": "ls",
+      "example": "ls"
+    },
+    {
+      "name": "cd",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — cd.",
+      "syntax": "cd",
+      "example": "cd"
+    },
+    {
+      "name": "pwd",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — pwd.",
+      "syntax": "pwd",
+      "example": "pwd"
+    },
+    {
+      "name": "tree",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — tree.",
+      "syntax": "tree",
+      "example": "tree"
+    },
+    {
+      "name": "find",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — find.",
+      "syntax": "find",
+      "example": "find"
+    },
+    {
+      "name": "locate",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — locate.",
+      "syntax": "locate",
+      "example": "locate"
+    },
+    {
+      "name": "stat",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — stat.",
+      "syntax": "stat",
+      "example": "stat"
+    },
+    {
+      "name": "file",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — file.",
+      "syntax": "file",
+      "example": "file"
+    },
+    {
+      "name": "du",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — du.",
+      "syntax": "du",
+      "example": "du"
+    },
+    {
+      "name": "df",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — df.",
+      "syntax": "df",
+      "example": "df"
+    },
+    {
+      "name": "mkdir",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — mkdir.",
+      "syntax": "mkdir",
+      "example": "mkdir"
+    },
+    {
+      "name": "rmdir",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — rmdir.",
+      "syntax": "rmdir",
+      "example": "rmdir"
+    },
+    {
+      "name": "touch",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — touch.",
+      "syntax": "touch",
+      "example": "touch"
+    },
+    {
+      "name": "cp",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — cp.",
+      "syntax": "cp",
+      "example": "cp"
+    },
+    {
+      "name": "mv",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — mv.",
+      "syntax": "mv",
+      "example": "mv"
+    },
+    {
+      "name": "ln",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — ln.",
+      "syntax": "ln",
+      "example": "ln"
+    },
+    {
+      "name": "readlink",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — readlink.",
+      "syntax": "readlink",
+      "example": "readlink"
+    },
+    {
+      "name": "basename",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — basename.",
+      "syntax": "basename",
+      "example": "basename"
+    },
+    {
+      "name": "dirname",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — dirname.",
+      "syntax": "dirname",
+      "example": "dirname"
+    },
+    {
+      "name": "realpath",
+      "category": "Navigation & fichiers",
+      "description": "Commande simulée HYDRA — realpath.",
+      "syntax": "realpath",
+      "example": "realpath"
+    },
+    {
+      "name": "cat",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — cat.",
+      "syntax": "cat",
+      "example": "cat"
+    },
+    {
+      "name": "less",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — less.",
+      "syntax": "less",
+      "example": "less"
+    },
+    {
+      "name": "more",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — more.",
+      "syntax": "more",
+      "example": "more"
+    },
+    {
+      "name": "head",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — head.",
+      "syntax": "head",
+      "example": "head"
+    },
+    {
+      "name": "tail",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — tail.",
+      "syntax": "tail",
+      "example": "tail"
+    },
+    {
+      "name": "nl",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — nl.",
+      "syntax": "nl",
+      "example": "nl"
+    },
+    {
+      "name": "wc",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — wc.",
+      "syntax": "wc",
+      "example": "wc"
+    },
+    {
+      "name": "sort",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — sort.",
+      "syntax": "sort",
+      "example": "sort"
+    },
+    {
+      "name": "uniq",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — uniq.",
+      "syntax": "uniq",
+      "example": "uniq"
+    },
+    {
+      "name": "cut",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — cut.",
+      "syntax": "cut",
+      "example": "cut"
+    },
+    {
+      "name": "paste",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — paste.",
+      "syntax": "paste",
+      "example": "paste"
+    },
+    {
+      "name": "tr",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — tr.",
+      "syntax": "tr",
+      "example": "tr"
+    },
+    {
+      "name": "tee",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — tee.",
+      "syntax": "tee",
+      "example": "tee"
+    },
+    {
+      "name": "strings",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — strings.",
+      "syntax": "strings",
+      "example": "strings"
+    },
+    {
+      "name": "column",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — column.",
+      "syntax": "column",
+      "example": "column"
+    },
+    {
+      "name": "fmt",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — fmt.",
+      "syntax": "fmt",
+      "example": "fmt"
+    },
+    {
+      "name": "fold",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — fold.",
+      "syntax": "fold",
+      "example": "fold"
+    },
+    {
+      "name": "join",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — join.",
+      "syntax": "join",
+      "example": "join"
+    },
+    {
+      "name": "diff",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — diff.",
+      "syntax": "diff",
+      "example": "diff"
+    },
+    {
+      "name": "cmp",
+      "category": "Lecture & texte",
+      "description": "Commande simulée HYDRA — cmp.",
+      "syntax": "cmp",
+      "example": "cmp"
+    },
+    {
+      "name": "grep",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — grep.",
+      "syntax": "grep",
+      "example": "grep"
+    },
+    {
+      "name": "egrep",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — egrep.",
+      "syntax": "egrep",
+      "example": "egrep"
+    },
+    {
+      "name": "fgrep",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — fgrep.",
+      "syntax": "fgrep",
+      "example": "fgrep"
+    },
+    {
+      "name": "awk",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — awk.",
+      "syntax": "awk",
+      "example": "awk"
+    },
+    {
+      "name": "sed",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — sed.",
+      "syntax": "sed",
+      "example": "sed"
+    },
+    {
+      "name": "xargs",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — xargs.",
+      "syntax": "xargs",
+      "example": "xargs"
+    },
+    {
+      "name": "whereis",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — whereis.",
+      "syntax": "whereis",
+      "example": "whereis"
+    },
+    {
+      "name": "which",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — which.",
+      "syntax": "which",
+      "example": "which"
+    },
+    {
+      "name": "type",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — type.",
+      "syntax": "type",
+      "example": "type"
+    },
+    {
+      "name": "command",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — command.",
+      "syntax": "command",
+      "example": "command"
+    },
+    {
+      "name": "apropos",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — apropos.",
+      "syntax": "apropos",
+      "example": "apropos"
+    },
+    {
+      "name": "man",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — man.",
+      "syntax": "man",
+      "example": "man"
+    },
+    {
+      "name": "whatis",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — whatis.",
+      "syntax": "whatis",
+      "example": "whatis"
+    },
+    {
+      "name": "history",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — history.",
+      "syntax": "history",
+      "example": "history"
+    },
+    {
+      "name": "fc",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — fc.",
+      "syntax": "fc",
+      "example": "fc"
+    },
+    {
+      "name": "alias",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — alias.",
+      "syntax": "alias",
+      "example": "alias"
+    },
+    {
+      "name": "unalias",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — unalias.",
+      "syntax": "unalias",
+      "example": "unalias"
+    },
+    {
+      "name": "echo",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — echo.",
+      "syntax": "echo",
+      "example": "echo"
+    },
+    {
+      "name": "printf",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — printf.",
+      "syntax": "printf",
+      "example": "printf"
+    },
+    {
+      "name": "clear",
+      "category": "Recherche & filtrage",
+      "description": "Commande simulée HYDRA — clear.",
+      "syntax": "clear",
+      "example": "clear"
+    },
+    {
+      "name": "uname",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — uname.",
+      "syntax": "uname",
+      "example": "uname"
+    },
+    {
+      "name": "hostname",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — hostname.",
+      "syntax": "hostname",
+      "example": "hostname"
+    },
+    {
+      "name": "uptime",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — uptime.",
+      "syntax": "uptime",
+      "example": "uptime"
+    },
+    {
+      "name": "date",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — date.",
+      "syntax": "date",
+      "example": "date"
+    },
+    {
+      "name": "cal",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — cal.",
+      "syntax": "cal",
+      "example": "cal"
+    },
+    {
+      "name": "whoami",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — whoami.",
+      "syntax": "whoami",
+      "example": "whoami"
+    },
+    {
+      "name": "id",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — id.",
+      "syntax": "id",
+      "example": "id"
+    },
+    {
+      "name": "groups",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — groups.",
+      "syntax": "groups",
+      "example": "groups"
+    },
+    {
+      "name": "who",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — who.",
+      "syntax": "who",
+      "example": "who"
+    },
+    {
+      "name": "w",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — w.",
+      "syntax": "w",
+      "example": "w"
+    },
+    {
+      "name": "last",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — last.",
+      "syntax": "last",
+      "example": "last"
+    },
+    {
+      "name": "lastlog",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — lastlog.",
+      "syntax": "lastlog",
+      "example": "lastlog"
+    },
+    {
+      "name": "free",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — free.",
+      "syntax": "free",
+      "example": "free"
+    },
+    {
+      "name": "vmstat",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — vmstat.",
+      "syntax": "vmstat",
+      "example": "vmstat"
+    },
+    {
+      "name": "iostat",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — iostat.",
+      "syntax": "iostat",
+      "example": "iostat"
+    },
+    {
+      "name": "lscpu",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — lscpu.",
+      "syntax": "lscpu",
+      "example": "lscpu"
+    },
+    {
+      "name": "lsmem",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — lsmem.",
+      "syntax": "lsmem",
+      "example": "lsmem"
+    },
+    {
+      "name": "lsblk",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — lsblk.",
+      "syntax": "lsblk",
+      "example": "lsblk"
+    },
+    {
+      "name": "lspci",
+      "category": "Système & matériel",
+      "description": "Commande simulée HYDRA — lspci.",
+      "syntax": "lspci",
+      "example": "lspci"
+    },
+    {
+      "name": "ps",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — ps.",
+      "syntax": "ps",
+      "example": "ps"
+    },
+    {
+      "name": "top",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — top.",
+      "syntax": "top",
+      "example": "top"
+    },
+    {
+      "name": "htop",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — htop.",
+      "syntax": "htop",
+      "example": "htop"
+    },
+    {
+      "name": "pgrep",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — pgrep.",
+      "syntax": "pgrep",
+      "example": "pgrep"
+    },
+    {
+      "name": "pkill",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — pkill.",
+      "syntax": "pkill",
+      "example": "pkill"
+    },
+    {
+      "name": "jobs",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — jobs.",
+      "syntax": "jobs",
+      "example": "jobs"
+    },
+    {
+      "name": "bg",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — bg.",
+      "syntax": "bg",
+      "example": "bg"
+    },
+    {
+      "name": "fg",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — fg.",
+      "syntax": "fg",
+      "example": "fg"
+    },
+    {
+      "name": "nice",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — nice.",
+      "syntax": "nice",
+      "example": "nice"
+    },
+    {
+      "name": "renice",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — renice.",
+      "syntax": "renice",
+      "example": "renice"
+    },
+    {
+      "name": "nohup",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — nohup.",
+      "syntax": "nohup",
+      "example": "nohup"
+    },
+    {
+      "name": "sleep",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — sleep.",
+      "syntax": "sleep",
+      "example": "sleep"
+    },
+    {
+      "name": "watch",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — watch.",
+      "syntax": "watch",
+      "example": "watch"
+    },
+    {
+      "name": "time",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — time.",
+      "syntax": "time",
+      "example": "time"
+    },
+    {
+      "name": "timeout",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — timeout.",
+      "syntax": "timeout",
+      "example": "timeout"
+    },
+    {
+      "name": "wait",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — wait.",
+      "syntax": "wait",
+      "example": "wait"
+    },
+    {
+      "name": "pidof",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — pidof.",
+      "syntax": "pidof",
+      "example": "pidof"
+    },
+    {
+      "name": "pstree",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — pstree.",
+      "syntax": "pstree",
+      "example": "pstree"
+    },
+    {
+      "name": "taskset",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — taskset.",
+      "syntax": "taskset",
+      "example": "taskset"
+    },
+    {
+      "name": "systemctl",
+      "category": "Processus & tâches",
+      "description": "Commande simulée HYDRA — systemctl.",
+      "syntax": "systemctl",
+      "example": "systemctl"
+    },
+    {
+      "name": "ip",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — ip.",
+      "syntax": "ip",
+      "example": "ip"
+    },
+    {
+      "name": "ping",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — ping.",
+      "syntax": "ping",
+      "example": "ping"
+    },
+    {
+      "name": "traceroute",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — traceroute.",
+      "syntax": "traceroute",
+      "example": "traceroute"
+    },
+    {
+      "name": "tracepath",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — tracepath.",
+      "syntax": "tracepath",
+      "example": "tracepath"
+    },
+    {
+      "name": "ss",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — ss.",
+      "syntax": "ss",
+      "example": "ss"
+    },
+    {
+      "name": "netstat",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — netstat.",
+      "syntax": "netstat",
+      "example": "netstat"
+    },
+    {
+      "name": "arp",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — arp.",
+      "syntax": "arp",
+      "example": "arp"
+    },
+    {
+      "name": "route",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — route.",
+      "syntax": "route",
+      "example": "route"
+    },
+    {
+      "name": "hostnamectl",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — hostnamectl.",
+      "syntax": "hostnamectl",
+      "example": "hostnamectl"
+    },
+    {
+      "name": "nslookup",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — nslookup.",
+      "syntax": "nslookup",
+      "example": "nslookup"
+    },
+    {
+      "name": "dig",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — dig.",
+      "syntax": "dig",
+      "example": "dig"
+    },
+    {
+      "name": "host",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — host.",
+      "syntax": "host",
+      "example": "host"
+    },
+    {
+      "name": "curl",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — curl.",
+      "syntax": "curl",
+      "example": "curl"
+    },
+    {
+      "name": "wget",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — wget.",
+      "syntax": "wget",
+      "example": "wget"
+    },
+    {
+      "name": "nc",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — nc.",
+      "syntax": "nc",
+      "example": "nc"
+    },
+    {
+      "name": "telnet",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — telnet.",
+      "syntax": "telnet",
+      "example": "telnet"
+    },
+    {
+      "name": "ifconfig",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — ifconfig.",
+      "syntax": "ifconfig",
+      "example": "ifconfig"
+    },
+    {
+      "name": "ethtool",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — ethtool.",
+      "syntax": "ethtool",
+      "example": "ethtool"
+    },
+    {
+      "name": "resolvectl",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — resolvectl.",
+      "syntax": "resolvectl",
+      "example": "resolvectl"
+    },
+    {
+      "name": "networkctl",
+      "category": "Réseau & diagnostics",
+      "description": "Commande simulée HYDRA — networkctl.",
+      "syntax": "networkctl",
+      "example": "networkctl"
+    },
+    {
+      "name": "chmod",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — chmod.",
+      "syntax": "chmod",
+      "example": "chmod"
+    },
+    {
+      "name": "chown",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — chown.",
+      "syntax": "chown",
+      "example": "chown"
+    },
+    {
+      "name": "chgrp",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — chgrp.",
+      "syntax": "chgrp",
+      "example": "chgrp"
+    },
+    {
+      "name": "umask",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — umask.",
+      "syntax": "umask",
+      "example": "umask"
+    },
+    {
+      "name": "getfacl",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — getfacl.",
+      "syntax": "getfacl",
+      "example": "getfacl"
+    },
+    {
+      "name": "setfacl",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — setfacl.",
+      "syntax": "setfacl",
+      "example": "setfacl"
+    },
+    {
+      "name": "passwd",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — passwd.",
+      "syntax": "passwd",
+      "example": "passwd"
+    },
+    {
+      "name": "su",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — su.",
+      "syntax": "su",
+      "example": "su"
+    },
+    {
+      "name": "sudo",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — sudo.",
+      "syntax": "sudo",
+      "example": "sudo"
+    },
+    {
+      "name": "login",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — login.",
+      "syntax": "login",
+      "example": "login"
+    },
+    {
+      "name": "logout",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — logout.",
+      "syntax": "logout",
+      "example": "logout"
+    },
+    {
+      "name": "users",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — users.",
+      "syntax": "users",
+      "example": "users"
+    },
+    {
+      "name": "newgrp",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — newgrp.",
+      "syntax": "newgrp",
+      "example": "newgrp"
+    },
+    {
+      "name": "write",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — write.",
+      "syntax": "write",
+      "example": "write"
+    },
+    {
+      "name": "mesg",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — mesg.",
+      "syntax": "mesg",
+      "example": "mesg"
+    },
+    {
+      "name": "ac",
+      "category": "Permissions & comptes",
+      "description": "Commande simulée HYDRA — ac.",
+      "syntax": "ac",
+      "example": "ac"
+    },
+    {
+      "name": "tar",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — tar.",
+      "syntax": "tar",
+      "example": "tar"
+    },
+    {
+      "name": "gzip",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — gzip.",
+      "syntax": "gzip",
+      "example": "gzip"
+    },
+    {
+      "name": "gunzip",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — gunzip.",
+      "syntax": "gunzip",
+      "example": "gunzip"
+    },
+    {
+      "name": "bzip2",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — bzip2.",
+      "syntax": "bzip2",
+      "example": "bzip2"
+    },
+    {
+      "name": "bunzip2",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — bunzip2.",
+      "syntax": "bunzip2",
+      "example": "bunzip2"
+    },
+    {
+      "name": "xz",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — xz.",
+      "syntax": "xz",
+      "example": "xz"
+    },
+    {
+      "name": "unxz",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — unxz.",
+      "syntax": "unxz",
+      "example": "unxz"
+    },
+    {
+      "name": "zip",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — zip.",
+      "syntax": "zip",
+      "example": "zip"
+    },
+    {
+      "name": "unzip",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — unzip.",
+      "syntax": "unzip",
+      "example": "unzip"
+    },
+    {
+      "name": "zcat",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — zcat.",
+      "syntax": "zcat",
+      "example": "zcat"
+    },
+    {
+      "name": "bzcat",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — bzcat.",
+      "syntax": "bzcat",
+      "example": "bzcat"
+    },
+    {
+      "name": "xzcat",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — xzcat.",
+      "syntax": "xzcat",
+      "example": "xzcat"
+    },
+    {
+      "name": "ar",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — ar.",
+      "syntax": "ar",
+      "example": "ar"
+    },
+    {
+      "name": "cpio",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — cpio.",
+      "syntax": "cpio",
+      "example": "cpio"
+    },
+    {
+      "name": "rsync",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — rsync.",
+      "syntax": "rsync",
+      "example": "rsync"
+    },
+    {
+      "name": "split",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — split.",
+      "syntax": "split",
+      "example": "split"
+    },
+    {
+      "name": "shuf",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — shuf.",
+      "syntax": "shuf",
+      "example": "shuf"
+    },
+    {
+      "name": "base64",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — base64.",
+      "syntax": "base64",
+      "example": "base64"
+    },
+    {
+      "name": "od",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — od.",
+      "syntax": "od",
+      "example": "od"
+    },
+    {
+      "name": "xxd",
+      "category": "Archives & formats",
+      "description": "Commande simulée HYDRA — xxd.",
+      "syntax": "xxd",
+      "example": "xxd"
+    },
+    {
+      "name": "git",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — git.",
+      "syntax": "git",
+      "example": "git"
+    },
+    {
+      "name": "git-status",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — git-status.",
+      "syntax": "git-status",
+      "example": "git-status"
+    },
+    {
+      "name": "git-log",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — git-log.",
+      "syntax": "git-log",
+      "example": "git-log"
+    },
+    {
+      "name": "git-diff",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — git-diff.",
+      "syntax": "git-diff",
+      "example": "git-diff"
+    },
+    {
+      "name": "git-show",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — git-show.",
+      "syntax": "git-show",
+      "example": "git-show"
+    },
+    {
+      "name": "git-branch",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — git-branch.",
+      "syntax": "git-branch",
+      "example": "git-branch"
+    },
+    {
+      "name": "python",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — python.",
+      "syntax": "python",
+      "example": "python"
+    },
+    {
+      "name": "node",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — node.",
+      "syntax": "node",
+      "example": "node"
+    },
+    {
+      "name": "npm",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — npm.",
+      "syntax": "npm",
+      "example": "npm"
+    },
+    {
+      "name": "npx",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — npx.",
+      "syntax": "npx",
+      "example": "npx"
+    },
+    {
+      "name": "jq",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — jq.",
+      "syntax": "jq",
+      "example": "jq"
+    },
+    {
+      "name": "jsonlint",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — jsonlint.",
+      "syntax": "jsonlint",
+      "example": "jsonlint"
+    },
+    {
+      "name": "make",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — make.",
+      "syntax": "make",
+      "example": "make"
+    },
+    {
+      "name": "cmake",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — cmake.",
+      "syntax": "cmake",
+      "example": "cmake"
+    },
+    {
+      "name": "gcc",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — gcc.",
+      "syntax": "gcc",
+      "example": "gcc"
+    },
+    {
+      "name": "g++",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — g++.",
+      "syntax": "g++",
+      "example": "g++"
+    },
+    {
+      "name": "java",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — java.",
+      "syntax": "java",
+      "example": "java"
+    },
+    {
+      "name": "javac",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — javac.",
+      "syntax": "javac",
+      "example": "javac"
+    },
+    {
+      "name": "env",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — env.",
+      "syntax": "env",
+      "example": "env"
+    },
+    {
+      "name": "printenv",
+      "category": "Développement & données",
+      "description": "Commande simulée HYDRA — printenv.",
+      "syntax": "printenv",
+      "example": "printenv"
+    },
+    {
+      "name": "hydra",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra.",
+      "syntax": "hydra",
+      "example": "hydra"
+    },
+    {
+      "name": "hydra-status",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-status.",
+      "syntax": "hydra-status",
+      "example": "hydra-status"
+    },
+    {
+      "name": "hydra-scan",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-scan.",
+      "syntax": "hydra-scan",
+      "example": "hydra-scan"
+    },
+    {
+      "name": "hydra-trace",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-trace.",
+      "syntax": "hydra-trace",
+      "example": "hydra-trace"
+    },
+    {
+      "name": "hydra-evidence",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-evidence.",
+      "syntax": "hydra-evidence",
+      "example": "hydra-evidence"
+    },
+    {
+      "name": "hydra-case",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-case.",
+      "syntax": "hydra-case",
+      "example": "hydra-case"
+    },
+    {
+      "name": "hydra-log",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-log.",
+      "syntax": "hydra-log",
+      "example": "hydra-log"
+    },
+    {
+      "name": "hydra-map",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-map.",
+      "syntax": "hydra-map",
+      "example": "hydra-map"
+    },
+    {
+      "name": "hydra-signal",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-signal.",
+      "syntax": "hydra-signal",
+      "example": "hydra-signal"
+    },
+    {
+      "name": "hydra-matrix",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-matrix.",
+      "syntax": "hydra-matrix",
+      "example": "hydra-matrix"
+    },
+    {
+      "name": "hydra-fragments",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-fragments.",
+      "syntax": "hydra-fragments",
+      "example": "hydra-fragments"
+    },
+    {
+      "name": "hydra-correlate",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-correlate.",
+      "syntax": "hydra-correlate",
+      "example": "hydra-correlate"
+    },
+    {
+      "name": "hydra-timeline",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-timeline.",
+      "syntax": "hydra-timeline",
+      "example": "hydra-timeline"
+    },
+    {
+      "name": "hydra-alerts",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-alerts.",
+      "syntax": "hydra-alerts",
+      "example": "hydra-alerts"
+    },
+    {
+      "name": "hydra-report",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-report.",
+      "syntax": "hydra-report",
+      "example": "hydra-report"
+    },
+    {
+      "name": "hydra-export",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-export.",
+      "syntax": "hydra-export",
+      "example": "hydra-export"
+    },
+    {
+      "name": "hydra-check",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-check.",
+      "syntax": "hydra-check",
+      "example": "hydra-check"
+    },
+    {
+      "name": "hydra-verify",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-verify.",
+      "syntax": "hydra-verify",
+      "example": "hydra-verify"
+    },
+    {
+      "name": "hydra-mission",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-mission.",
+      "syntax": "hydra-mission",
+      "example": "hydra-mission"
+    },
+    {
+      "name": "hydra-reset",
+      "category": "HYDRA & enquête",
+      "description": "Commande simulée HYDRA — hydra-reset.",
+      "syntax": "hydra-reset",
+      "example": "hydra-reset"
+    },
+    {
+      "name": "reset",
+      "category": "Session & contrôle",
+      "description": "Commande simulée HYDRA — reset.",
+      "syntax": "reset",
+      "example": "reset"
+    },
+    {
+      "name": "reboot",
+      "category": "Session & contrôle",
+      "description": "Commande simulée HYDRA — reboot.",
+      "syntax": "reboot",
+      "example": "reboot"
+    },
+    {
+      "name": "shutdown",
+      "category": "Session & contrôle",
+      "description": "Commande simulée HYDRA — shutdown.",
+      "syntax": "shutdown",
+      "example": "shutdown"
+    },
+    {
+      "name": "exit",
+      "category": "Session & contrôle",
+      "description": "Commande simulée HYDRA — exit.",
+      "syntax": "exit",
+      "example": "exit"
+    },
+    {
+      "name": "help",
+      "category": "Session & contrôle",
+      "description": "Commande simulée HYDRA — help.",
+      "syntax": "help",
+      "example": "help"
+    }
+  ],
   "secrets": {
     "admin_password": "4815",
     "unlocked_content": "FÉLICITATIONS ACTE 2 : L'archive contient la preuve du chantage. La victime transférait des fonds pour couvrir le suspect principal. Le code du coffre physique de la pièce est : 9-3-4-2."
