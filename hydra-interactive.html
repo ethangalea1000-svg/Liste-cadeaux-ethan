@@ -1354,7 +1354,10 @@ function initHydraVM(){
   function vmToast(msg){$("vmToast").textContent=msg;$("vmToast").classList.add("show");clearTimeout(window.__vmToastTimer);window.__vmToastTimer=setTimeout(()=>$("vmToast").classList.remove("show"),1800)}
   function tick(){const d=new Date();$("vmClock").textContent=d.toLocaleTimeString("fr-FR",{hour12:false});}
   function openSectionInVM(tabName){
-    const section=document.getElementById(tabName), host=$("vmAppContent"), win=$("vmWinApp");
+    const host=$("vmAppContent");
+    const previous=host&&host.querySelector(".section");
+    if(previous && previous.id!==tabName) restoreSectionFromVM(previous);
+    const section=document.getElementById(tabName), win=$("vmWinApp");
     if(!section||!host||!win)return false;
     if(section.parentElement!==host){
       if(section.dataset.vmOriginalParent!=="1"){
@@ -1420,7 +1423,7 @@ function initHydraVM(){
   }
   function shutdown(){
     const s=$("vmShutdown");s.classList.add("active");clearInterval(vmClockTimer);
-    setTimeout(()=>{s.classList.remove("active");desk.classList.remove("active");vmBootScreen.style.display="grid";overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";document.querySelectorAll(".vm-window").forEach(x=>{x.classList.remove("active","maximized")});document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));$("vmStartMenu").classList.remove("open");},900);
+    setTimeout(()=>{s.classList.remove("active");const vmSection=$("vmAppContent")&&$("vmAppContent").querySelector(".section");if(vmSection)restoreSectionFromVM(vmSection);desk.classList.remove("active");vmBootScreen.style.display="grid";overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow="";document.querySelectorAll(".vm-window").forEach(x=>{x.classList.remove("active","maximized")});document.querySelectorAll(".vm-task-btn[data-vm-app]").forEach(x=>x.classList.remove("active"));$("vmStartMenu").classList.remove("open");},900);
   }
   window.__hydraStartVM=boot;
   $("launchVm").onclick=boot;
