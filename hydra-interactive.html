@@ -1855,7 +1855,8 @@ function closeWin(name){const w=document.querySelector('[data-vm-window="'+name+
   const safeJson=async path=>{try{const r=await fetch("./"+path,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}catch(e){return null}};
   window.__hydraConfigReady=(async()=>{
     const [webos,terminal]=await Promise.all([safeJson("hydra-webos-config.json"),safeJson("hydra-terminal-config.json")]);
-    window.__hydraWebOSConfig=webos;window.__hydraTerminalConfig=terminal;\n    syncHydraTerminalCatalog();
+    window.__hydraWebOSConfig=webos;window.__hydraTerminalConfig=terminal;
+    syncHydraTerminalCatalog();
     if(webos) applyWebOSConfig(webos);
     return {webos,terminal};
   })();
