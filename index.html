@@ -232,7 +232,27 @@ body.theme-hydra input,body.theme-hydra select,body.theme-hydra textarea{backgro
 @keyframes hydraOverlayOut{from{opacity:1}to{opacity:0}}
 @media(max-width:600px){.hydra-invitation-overlay{padding:8px}.hydra-parchment{max-height:94vh;padding:38px 22px 30px}.hydra-parchment-facts{grid-template-columns:1fr}.hydra-wax-seal{width:52px;height:52px;font-size:9px}.hydra-parchment-body{font-size:15px}}
 </style>
-</head>
+<style id="site-max-polish">
+:root{--focus:#5b5ce2;--safe-bottom:max(16px,env(safe-area-inset-bottom));--safe-top:max(12px,env(safe-area-inset-top))}
+html{scroll-behavior:smooth}
+body{min-height:100dvh;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+button,a,input,select,textarea{touch-action:manipulation}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(91,92,226,.35);outline-offset:2px}
+button[disabled]{opacity:.55;cursor:not-allowed}
+img{content-visibility:auto}
+.product-image{transition:transform .22s ease,opacity .22s ease}
+.card:hover .product-image{transform:scale(1.025)}
+.card{transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(20,25,50,.12)}
+.app-tabs{padding-bottom:calc(8px + env(safe-area-inset-bottom)*.15)}
+@media(max-width:700px){.app-tabs{overflow-x:auto;scrollbar-width:none}.app-tabs::-webkit-scrollbar{display:none}.app-tab{flex:0 0 auto;min-width:112px}.toast{right:12px;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));text-align:center}.floating-help{bottom:calc(16px + env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+/* Tour: no blur and no darkening over the selected element. */
+#guidedTourSpot{box-shadow:none!important;border:3px solid #fff!important;background:transparent!important}
+#guidedTourShade{display:none!important}
+.guided-tour-dimmer{position:fixed;z-index:99998;pointer-events:none;background:rgba(7,9,18,.68)}
+#guidedTourBox{z-index:100000!important}
+</style></head>
 <body>
 <a class="skip-link" href="#mainContent">Aller directement au contenu</a>
 <header class="hero"><div class="wrap"><nav class="topnav"><a id="navCommunity" href="communaute.html">💬 Communauté</a><a id="navPrivacy" href="confidentialite.html">🔒 Confidentialité</a></nav><span class="tag" id="siteTag">🎁 Noël & Anniversaire 2026</span><h1 id="siteHeroTitle">La liste d’Ethan</h1><p id="siteHeroDescription">Une liste simple : choisissez une envie, regardez son prix indicatif et marquez-la comme réservée pour éviter les doublons.</p><div class="actions"><button class="primary" id="shareBtn">Partager la liste</button><button class="secondary" id="resetBtn">Actualiser</button><button class="secondary" id="redoCodeBtn" type="button">🔄 Refaire le code</button></div></div></header>
@@ -1653,7 +1673,7 @@ logSiteVisit("Liste principale");
 const key="guided-tour-v2";
 const css=`
 #guidedTourShade{display:none}
-#guidedTourSpot{position:fixed;z-index:99999;display:block;pointer-events:none;border:4px solid #fff;border-radius:14px;box-shadow:0 0 0 8px rgba(91,92,226,.58),0 0 0 9999px rgba(7,9,18,.62);transition:all .22s ease;box-sizing:border-box}
+#guidedTourSpot{position:fixed;z-index:99999;display:block;pointer-events:none;border:4px solid #fff;border-radius:14px;box-shadow:none;transition:all .22s ease;box-sizing:border-box}
 #guidedTourBox{position:fixed;z-index:100000;width:min(390px,calc(100vw - 24px));background:#fff;color:#171827;border-radius:20px;padding:18px;box-shadow:0 24px 80px rgba(0,0,0,.32);font-family:inherit}
 #guidedTourBox .gt-kicker{font-size:11px;font-weight:900;letter-spacing:.08em;color:#5b5ce2}
 #guidedTourBox h3{margin:6px 0 7px;font-size:20px;line-height:1.15}
@@ -1747,6 +1767,41 @@ window.addEventListener("load",()=>{
    wait();
   }
  },500);
+});
+})();
+</script><script id="site-max-polish-js">
+(()=>{'use strict';
+if(window.__siteMaxPolish)return;window.__siteMaxPolish=true;
+const ready=fn=>document.readyState==='loading'?document.addEventListener('DOMContentLoaded',fn,{once:true}):fn();
+ready(()=>{
+  // Make lazy-loaded images resilient and accessible.
+  document.querySelectorAll('img').forEach(img=>{
+    if(!img.hasAttribute('decoding'))img.decoding='async';
+    if(!img.hasAttribute('loading')&&!img.closest('.hero'))img.loading='lazy';
+    img.addEventListener('error',()=>{img.classList.add('image-failed')},{once:true});
+  });
+  // Prevent accidental double submissions across the public forms.
+  document.querySelectorAll('form').forEach(form=>{
+    form.addEventListener('submit',()=>{
+      const buttons=form.querySelectorAll('button[type="submit"]');
+      buttons.forEach(b=>{if(!b.disabled){b.dataset.originalText=b.textContent;b.disabled=true;b.setAttribute('aria-busy','true');}});
+      setTimeout(()=>buttons.forEach(b=>{if(b.dataset.originalText&&!document.hidden){b.disabled=false;b.removeAttribute('aria-busy');}}),9000);
+    });
+  });
+  // Better external-link security and consistent new-tab behavior.
+  document.querySelectorAll('a[target="_blank"]').forEach(a=>{if(!a.rel.includes('noopener'))a.rel=(a.rel+' noopener noreferrer').trim()});
+  // Keyboard escape closes transient overlays when they expose a close button.
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape')return;
+    const close=document.querySelector('#guidedTourBox .gt-close,.modal-close,[data-close-modal]');
+    if(close&&typeof close.click==='function')close.click();
+  });
+  // Keep the active app tab visible on narrow screens.
+  const obs=new MutationObserver(()=>{
+    const active=document.querySelector('.app-tab.is-active');
+    if(active&&innerWidth<701)active.scrollIntoView({block:'nearest',inline:'center'});
+  });
+  obs.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
 });
 })();
 </script></body></html>
